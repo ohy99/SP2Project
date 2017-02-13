@@ -88,13 +88,14 @@
     <ClCompile Include="Source\LoadOBJ.cpp" />
     <ClCompile Include="Source\LoadTextData.cpp" />
     <ClCompile Include="Source\LoadTGA.cpp" />
+    <ClCompile Include="Source\Test.cpp" />
     <ClCompile Include="Source\main.cpp" />
+    <ClCompile Include="Source\MainScene.cpp" />
     <ClCompile Include="Source\Mesh.cpp" />
     <ClCompile Include="Source\MeshBuilder.cpp" />
     <ClCompile Include="Source\LoadATOM.cpp" />
     <ClCompile Include="Source\RenderMesh.cpp" />
     <ClCompile Include="Source\shader.cpp" />
-    <ClCompile Include="Source\TestingScene.cpp" />
     <ClCompile Include="Source\Utility.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -107,6 +108,8 @@
     <ClInclude Include="Source\LoadOBJ.h" />
     <ClInclude Include="Source\LoadTextData.h" />
     <ClInclude Include="Source\LoadTGA.h" />
+    <ClInclude Include="Source\Test.h" />
+    <ClInclude Include="Source\MainScene.h" />
     <ClInclude Include="Source\Material.h" />
     <ClInclude Include="Source\Mesh.h" />
     <ClInclude Include="Source\MeshBuilder.h" />
@@ -114,9 +117,7 @@
     <ClInclude Include="Source\RenderMesh.h" />
     <ClInclude Include="Source\Scene.h" />
     <ClInclude Include="Source\SceneManager.h" />
-    <ClInclude Include="Source\SceneModel.h" />
     <ClInclude Include="Source\shader.hpp" />
-    <ClInclude Include="Source\TestingScene.h" />
     <ClInclude Include="Source\Utility.h" />
     <ClInclude Include="Source\Vertex.h" />
   </ItemGroup>

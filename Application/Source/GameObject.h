@@ -6,9 +6,9 @@
 class GameObject abstract
 {
 protected:
-	GameObject() {};
+	GameObject(std::string name) { name_ = name; };
 	~GameObject() {};
-	std::string name_;
+	std::string name_; // Name of the object
 };
 
 #endif

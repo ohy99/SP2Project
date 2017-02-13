@@ -25,6 +25,5 @@ public:
 	}
 };
 
-SceneManager* SceneManager::Instance = 0;
 
 #endif

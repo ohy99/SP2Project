@@ -12,11 +12,13 @@
 #include <stdlib.h>
 
 #include "SceneManager.h"
-#include "TestingScene.h"
+#include "MainScene.h"
+#include "Test.h"
 
 #include "DetectMemoryLeak.h"
 
 GLFWwindow* Application::m_window = 0;
+SceneManager* SceneManager::Instance = 0;
 const unsigned char Application::FPS = 60; // FPS of this game
 const unsigned int Application::frameTime = 1000 / FPS; // time for each frame
 StopWatch Application::m_timer;
@@ -114,18 +116,16 @@ void Application::Init()
 void Application::Run()
 {
 	//Main Loop
-	Scene *scene1 = new Test();
-	Scene *scene2 = new Test();
+	Scene *scene1 = new MainScene();
+	Scene *scene2 = new MainScene();
 	//Scene *scene = scene1;
 	scene1->Init();
 	scene2->Init();
 
-	SceneManager* scene;
-
 	//Scene *scene = new A3Scene();
-	scene->getInstance()->AddScene(scene1);
-	scene->getInstance()->AddScene(scene2);
-	scene->getInstance()->SetNextSceneID(1);
+	SceneManager::getInstance()->AddScene(scene1);
+	SceneManager::getInstance()->AddScene(scene2);
+	SceneManager::getInstance()->SetNextSceneID(1);
 
 	//set cursor pos
 	glfwSetCursorPos(m_window, windowWidth / 2, windowHeight / 2);
@@ -137,7 +137,7 @@ void Application::Run()
 	while (!glfwWindowShouldClose(m_window) && !IsKeyPressed(VK_ESCAPE))
 	{
 
-		scene->getInstance()->Update();
+		SceneManager::getInstance()->Update();
 		//Swap buffers
 		glfwSwapBuffers(m_window);
 		//Get and organize events, like keyboard and mouse input, window resizing, etc...
@@ -146,7 +146,7 @@ void Application::Run()
         m_timer.waitUntil(frameTime);       // Frame rate limiter. Limits each frame to a specified time in ms.   
 
 	} //Check if the ESC key had been pressed or if the window had been closed
-	scene->getInstance()->~SceneManager();
+	SceneManager::getInstance()->~SceneManager();
 
 
 
