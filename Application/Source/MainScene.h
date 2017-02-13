@@ -2,7 +2,7 @@
 #define MAIN_SCENE_H
 
 #include "Scene.h"
-//#include "SceneManager.h"
+#include "SceneManager.h"
 
 #include "Camera.h"
 #include "Camera3.h"

@@ -1,9 +1,0 @@
-﻿Build started 4/2/2017 6:21:24 PM.
-     1>Project "F:\DM2122_Framework\Common\Common.vcxproj" on node 2 (Build target(s)).
-     1>Lib:
-         Common.vcxproj -> F:\DM2122_Framework\Release\Common.lib
-     1>Done Building Project "F:\DM2122_Framework\Common\Common.vcxproj" (Build target(s)).
-
-Build succeeded.
-
-Time Elapsed 00:00:00.09

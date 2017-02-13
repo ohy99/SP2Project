@@ -10,9 +10,6 @@
 #include "Utility.h"
 #include "LoadTGA.h"
 #include "LoadTextData.h"
-#include "RangeWeapon.h"
-
-#include "SceneManager.h"
 
 MainScene::Text_Data MainScene::Text[TEXT_TYPE::Text_Count];
 Mesh* MainScene::GroundMesh = 0;

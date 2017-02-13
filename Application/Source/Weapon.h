@@ -7,7 +7,7 @@ class Weapon : public Item
 {
 public: 
 	Weapon(const std::string& name, int damage) : Item(name), damage(damage) { ; } // To initialise the name & damage of the weapon
-	virtual ~Weapon() {}
+	virtual ~Weapon() { ; }
 
 	// Getter
 	int getWeaponDamage() // To return the damage of the weapon
