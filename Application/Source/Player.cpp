@@ -1,4 +1,7 @@
 #include "Player.h"
+#include "Application.h"
+#include "Mesh.h"
+#include "MainScene.h"
 
 Player* Player::Instance_ = 0;
 Player::Player() : GameObject("Player") 
@@ -25,12 +28,73 @@ void Player::setPosition(Vector3& pos)
 }
 
 
-void Player::update(double dt)
+void Player::update(double dt, Camera* cam)
 {
 
+	std::vector<GameObject*> nearObjs;
+
+	//PreCheck collision
+	//Mesh projected("Projected");
+	//projected.setHb(true, PMesh[MESH_TYPE::Body]->TempMin, PMesh[MESH_TYPE::Body]->TempMax, PMesh[MESH_TYPE::Body]->pos, PMesh[MESH_TYPE::Body]->dir);
+
+	static float moveSPD = 1.5f;
+
+	if (Application::IsKeyPressed('W'))
+	{
+		/*bool bam = false;
+		projected.pos.x += (dir_.x * dt * moveSPD);
+		projected.pos.z += (dir_.z * dt * moveSPD);
+
+		for (size_t i = 0; i < nearObjs.size(); i++)
+		{
+			if (projected.isCollide(nearObjs[i]->CollisionMesh_) == true)
+			{
+				bam = true;
+				break;
+			}
+		}
+
+		if (bam == false)
+		{
+			pos_.x += (dir_.x * dt * moveSPD);
+			pos_.z += (dir_.z * dt * moveSPD);
+		}*/
+	}
+	if (Application::IsKeyPressed('S'))
+	{
+
+	}
+	if (Application::IsKeyPressed('A'))
+	{
+
+	}
+	if (Application::IsKeyPressed('D'))
+	{
+
+	}
 }
 
 void Player::render()
 {
+
+}
+
+
+void Player::getPointedObj(Camera* cam)
+{
+	Position TargetPoint;
+	TargetPoint.Set(cam->getTarget().x, cam->getTarget().y, cam->getTarget().z);
+	Pointed_Obj = NULL;
+
+
+	for (auto it : MainScene::Game_Objects_)
+	{
+		if (it->CollisionMesh_->isPointInsideAABB(TargetPoint) == true)
+		{
+			Pointed_Obj = it;
+			break;
+		}
+
+	}
 
 }

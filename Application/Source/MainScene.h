@@ -14,6 +14,7 @@
 #include <vector>
 
 #include "Player.h"
+#include "GameObject.h"
 
 class MainScene : public Scene
 {
@@ -107,6 +108,7 @@ public:
 	static void RenderMeshOnScreen(Mesh* mesh, int x, int y, int sizex, int sizey);
 	static unsigned m_parameters[U_TOTAL];
 	static MS modelStack, viewStack, projectionStack;
+	static std::vector<GameObject*> Game_Objects_;
 
 private:
 	unsigned m_vertexArrayID;

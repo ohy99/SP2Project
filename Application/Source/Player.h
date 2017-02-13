@@ -5,16 +5,17 @@
 #include <vector>
 #include "Vector3.h"
 #include "Weapon.h"
+#include "Camera.h"
 
 class Player : public GameObject
 {
-	enum Weapon_types
+	enum WEAPON_TYPE
 	{
 		Melee,
 		Ranged,
 		wt_Count
 	};
-	enum States
+	enum STATES
 	{
 		Idle,
 		Walk,
@@ -22,7 +23,7 @@ class Player : public GameObject
 		Shoot,
 		States_Count
 	};
-	enum Mesh_Types
+	enum MESH_TYPE
 	{
 		Body,
 		Arm,
@@ -31,18 +32,23 @@ class Player : public GameObject
 	};
 	int hp_;
 	Vector3 pos_;
+	Vector3 dir_;
 	static Player* Instance_;
-	States state_;
+	STATES state_;
+	
+	GameObject* Pointed_Obj;
 
-	Weapon* weapons_[Weapon_types::wt_Count];
+	Weapon* weapons_[WEAPON_TYPE::wt_Count];
 	Weapon* currentWeapon_;
+	Mesh* PMesh[MESH_TYPE::mt_Count];
 	Player();
 public:
 	static Player* getInstance();
 	void setPosition(Vector3& pos);
 
-	void update(double dt);
+	void update(double dt, Camera* cam);
 	void render();
+	void getPointedObj(Camera* cam);
 };
 
 #endif

@@ -18,6 +18,7 @@ MainScene::Text_Data MainScene::Text[TEXT_TYPE::Text_Count];
 Mesh* MainScene::GroundMesh = 0;
 unsigned MainScene::m_parameters[U_TOTAL];
 MS MainScene::modelStack, MainScene::viewStack, MainScene::projectionStack;
+std::vector<GameObject*> MainScene::Game_Objects_(10, NULL);
 MainScene::MainScene()
 {
 }
@@ -197,7 +198,7 @@ void MainScene::Update(double dt)
 		once = true;
 	}
 
-	Player::getInstance()->update(dt);
+	Player::getInstance()->update(dt, camera);
 
 	double c_posx, c_posy;
 	glfwGetCursorPos(Application::m_window, &c_posx, &c_posy);
