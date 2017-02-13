@@ -19,8 +19,8 @@ public:
 
 private:
 	int ammo, totalAmmo, maxAmmo; // ammo stores the number of ammo in the gun, totalAmmo stores the total number of ammo you have for this particular gun
-								  // maxAmmo is just the total number that that particular gun can hold. Eg. Pistol can hold up to 10 Ammo max before reloading,
-								  //																	AK47 can hold up to 30 Ammo max before reloading etc..
+                                  // maxAmmo is just the total number that that particular gun can hold. Eg. Pistol can hold up to 10 Ammo max before reloading,
+                                  //																	AK47 can hold up to 30 Ammo max before reloading etc..
 };
 
 #endif 
