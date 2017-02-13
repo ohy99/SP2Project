@@ -10,6 +10,7 @@
 #include "Utility.h"
 #include "LoadTGA.h"
 #include "LoadTextData.h"
+#include "RangeWeapon.h"
 
 #include "SceneManager.h"
 

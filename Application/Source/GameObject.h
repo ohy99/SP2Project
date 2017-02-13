@@ -6,9 +6,15 @@
 class GameObject abstract
 {
 protected:
-	GameObject(std::string name) { name_ = name; };
-	~GameObject() {};
-	std::string name_; // Name of the object
+	GameObject(const std::string& name) : kName(name) {};
+	const std::string kName; // Name of the object
+
+public: 
+	virtual ~GameObject() {};
+	std::string getName(void)
+	{
+		return kName;
+	}
 };
 
 #endif
