@@ -11,7 +11,10 @@ protected:
 
 public: 
 	virtual ~GameObject() {};
-	std::string getName(void);
+	std::string getName(void)
+	{
+		return kName;
+	}
 };
 
 #endif

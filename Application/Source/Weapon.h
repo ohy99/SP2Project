@@ -6,8 +6,27 @@
 class Weapon : public Item
 {
 public: 
-	Weapon(std::string& name) : Item(name) {}
+	Weapon(const std::string& name, int damage) : Item(name), damage(damage) { ; } // To initialise the name & damage of the weapon
 	virtual ~Weapon() {}
+
+	// Getter
+	int getWeaponDamage() // To return the damage of the weapon
+	{
+		return damage;
+	}
+	std::string getWeaponName()
+	{
+		return kName;
+	}
+
+	// Setter
+	void setWeaponDamage(int damage) // When player drinks attack boost potion
+	{
+		this->damage = this->damage + damage;
+	}
+
+protected:
+	int damage;
 };
 
 #endif
