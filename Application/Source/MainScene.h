@@ -12,8 +12,8 @@
 #include "Light.h"
 
 #include <vector>
-#include "Test.h"
 
+#include "Player.h"
 
 class MainScene : public Scene
 {
@@ -122,7 +122,6 @@ private:
 
 	Light light[8];
 
-	Test meh;
 	
 	//void RenderText(Text_Data* TextData, std::string text, Color color);
 	//void RenderTextOnScreen(Text_Data* TextData, std::string text, Color color, float size, float x, float y);
