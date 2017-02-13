@@ -6,7 +6,7 @@
 class RangeWeapon : public Weapon
 {
 public:
-	RangeWeapon(const std::string& name) : Weapon(name) { ; }
+	RangeWeapon(const std::string& name, int damage) : Weapon(name, damage) { ; }
 	virtual ~RangeWeapon() { ; }
 
 	// Setter

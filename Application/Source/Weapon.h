@@ -14,10 +14,6 @@ public:
 	{
 		return damage;
 	}
-	std::string getWeaponName()
-	{
-		return kName;
-	}
 
 	// Setter
 	void setWeaponDamage(int damage) // When player drinks attack boost potion
