@@ -41,9 +41,6 @@
     <ClCompile Include="Source\Camera3.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source\RenderMesh.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Source\LoadATOM.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -95,9 +92,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Source\Camera3.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\RenderMesh.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Source\LoadATOM.h">

@@ -94,7 +94,6 @@
     <ClCompile Include="Source\Mesh.cpp" />
     <ClCompile Include="Source\MeshBuilder.cpp" />
     <ClCompile Include="Source\LoadATOM.cpp" />
-    <ClCompile Include="Source\RenderMesh.cpp" />
     <ClCompile Include="Source\shader.cpp" />
     <ClCompile Include="Source\Utility.cpp" />
   </ItemGroup>
@@ -114,7 +113,6 @@
     <ClInclude Include="Source\Mesh.h" />
     <ClInclude Include="Source\MeshBuilder.h" />
     <ClInclude Include="Source\LoadATOM.h" />
-    <ClInclude Include="Source\RenderMesh.h" />
     <ClInclude Include="Source\Scene.h" />
     <ClInclude Include="Source\SceneManager.h" />
     <ClInclude Include="Source\shader.hpp" />
