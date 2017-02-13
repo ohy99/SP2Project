@@ -22,6 +22,13 @@ class Player : public GameObject
 		Shoot,
 		States_Count
 	};
+	enum Mesh_Types
+	{
+		Body,
+		Arm,
+		Head,
+		mt_Count
+	};
 	int hp_;
 	Vector3 pos_;
 	static Player* Instance_;
@@ -29,10 +36,13 @@ class Player : public GameObject
 
 	Weapon* weapons_[Weapon_types::wt_Count];
 	Weapon* currentWeapon_;
-	Player() : GameObject("Player") {}
+	Player();
 public:
-	static Player* getInstance() { if (Instance_) return Instance_; else return (Instance_ = new Player()); }
-	void setPosition();
+	static Player* getInstance();
+	void setPosition(Vector3& pos);
+
+	void update(double dt);
+	void render();
 };
 
 #endif

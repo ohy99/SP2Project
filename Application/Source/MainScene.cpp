@@ -159,13 +159,6 @@ void MainScene::Init()
 	camera = new Camera3;
 	camera->Init(Vector3(0, 0, 7), Vector3(0, 0, 0), Vector3(0, 1, 0));
 
-	//	player->getInstance();
-	//	player->getInstance()->init();
-	//	camera = new A3Cam(player);
-
-	//	initEnvironment();
-	//	car->getInstance();
-	meh.Init();
 
 	Mtx44 projection;
 	projection.SetToPerspective(45.f, 4.f / 3.f, 0.1f, 1000.f);
@@ -204,6 +197,7 @@ void MainScene::Update(double dt)
 		once = true;
 	}
 
+	Player::getInstance()->update(dt);
 
 	double c_posx, c_posy;
 	glfwGetCursorPos(Application::m_window, &c_posx, &c_posy);
@@ -219,7 +213,6 @@ void MainScene::Update(double dt)
 
 	FramesPerSec = 1 / dt;
 
-	meh.Update(dt);
 }
 
 void MainScene::Render()
@@ -238,8 +231,8 @@ void MainScene::Render()
 
 
 	RenderMesh(meshList[GEO_AXES], false);
-	meh.Render();
 
+	Player::getInstance()->render();
 
 	RenderSkybox();
 	//	renderEnvironment();
