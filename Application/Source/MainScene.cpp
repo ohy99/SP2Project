@@ -135,6 +135,13 @@ void MainScene::Init()
 	GroundMesh->setHb(true, Position(-500, -100, -500), Position(500, 0, 500), Vector3(0, 0, 0), Vector3(0, 1, 0));
 	//Set hitbox of groundmesh to be flat on XZ plane
 
+	//Ground Mesh -- Red Dirt -- Base Camp
+	meshList[GEO_GroundMesh_RedDirt] = MeshBuilder::GenerateGround("Ground Mesh", Color(1, 1, 1), 1.0f, 1.0f);
+	meshList[GEO_GroundMesh_RedDirt]->material.kAmbient.Set(0.6f, 0.6f, 0.6f);
+	meshList[GEO_GroundMesh_RedDirt]->material.kDiffuse.Set(0.3f, 0.3f, 0.3f);
+	meshList[GEO_GroundMesh_RedDirt]->material.kSpecular.Set(0.1f, 0.1f, 0.1f);
+	meshList[GEO_GroundMesh_RedDirt]->material.kShininess = 1.0f;
+	meshList[GEO_GroundMesh_RedDirt]->textureID = LoadTGA("Image//GroundMesh_RedDirt_Texture.tga");
 
 	//INIT TEXTES
 	Text[TEXT_TYPE::Calibri].Text_Mesh = MeshBuilder::GenerateText("Calibri", 16, 16);
@@ -234,6 +241,13 @@ void MainScene::Render()
 
 	RenderSkybox();
 	//	renderEnvironment();
+
+	//Ground Mesh
+	modelStack.PushMatrix();
+	modelStack.Scale(400, 400, 400);
+	modelStack.Rotate(90, -1, 0, 0);
+	RenderMesh(meshList[GEO_GroundMesh_RedDirt], true);
+	modelStack.PopMatrix();
 
 }
 
