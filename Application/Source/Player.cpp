@@ -13,6 +13,7 @@ Player::Player() : GameObject("Player")
 
 	//Weapon* weapons_[Weapon_types::wt_Count];
 	//Weapon* currentWeapon_;
+
 }
 
 Player* Player::getInstance() 
@@ -77,6 +78,8 @@ void Player::update(double dt, Camera* cam)
 void Player::render()
 {
 
+	//if (Pointed_Obj)
+	//	MainScene::RenderTextOnScreen(&MainScene::Text[MainScene::TEXT_TYPE::Century], Pointed_Obj->getName(), Color(1, 0, 0), 1, 1, 1);
 }
 
 
@@ -98,3 +101,15 @@ void Player::getPointedObj(Camera* cam)
 	}
 
 }
+//static Player* getInstance();
+//void setPosition(Vector3& pos);
+//
+//void update(double dt, Camera* cam);
+//void render();
+//void getPointedObj(Camera* cam);
+//
+//void isHitUpdate(int dmg);
+//
+//
+//bool isDead();
+//~Player();

@@ -11,9 +11,9 @@ class Player : public GameObject
 {
 	enum WEAPON_TYPE
 	{
-		Melee,
-		Ranged,
-		wt_Count
+		MELEE,
+		RANGED,
+		WT_COUNT
 	};
 	enum STATES
 	{
@@ -33,13 +33,18 @@ class Player : public GameObject
 	int hp_;
 	Vector3 pos_;
 	Vector3 dir_;
+	float dirRotateAngle;
 	static Player* Instance_;
 	STATES state_;
-	
+	float hitDelay = 0.0f;
+
 	GameObject* Pointed_Obj;
 
-	Weapon* weapons_[WEAPON_TYPE::wt_Count];
+	Weapon* weapons_[WEAPON_TYPE::WT_COUNT];
 	Weapon* currentWeapon_;
+
+	//Outfit
+	//Inventory
 	Mesh* PMesh[MESH_TYPE::mt_Count];
 	Player();
 public:
@@ -49,6 +54,13 @@ public:
 	void update(double dt, Camera* cam);
 	void render();
 	void getPointedObj(Camera* cam);
+
+	//void isHitUpdate(int dmg);
+
+	Mesh* getCollisionMesh() { return PMesh[MESH_TYPE::Body]; };
+
+	//bool isDead();
+	//~Player();
 };
 
 #endif

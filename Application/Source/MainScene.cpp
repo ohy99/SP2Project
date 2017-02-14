@@ -10,6 +10,7 @@
 #include "Utility.h"
 #include "LoadTGA.h"
 #include "LoadTextData.h"
+#include "LoadATOM.h"
 
 MainScene::Text_Data MainScene::Text[TEXT_TYPE::Text_Count];
 Mesh* MainScene::GroundMesh = 0;
@@ -126,13 +127,15 @@ void MainScene::Init()
 	meshList[GEO_QUAD]->material.kSpecular.Set(0.1f, 0.1f, 0.1f);
 	meshList[GEO_QUAD]->material.kShininess = 1.0f;
 
+	meshList[GEO_CIRCLE] = MeshBuilder::GenerateOBJ("doc test", "OBJ//Doc.obj");
+
 	GroundMesh = MeshBuilder::GenerateQuad("GroundMesh", Color(1.f, 1.f, 1.f), 500, 500);
 	//GroundMesh->textureID = LoadTGA("IMAGE//Grassgreen.tga");
 	//GroundMesh->material.kAmbient.Set(0.6f, 0.6f, 0.6f);
 	//GroundMesh->material.kDiffuse.Set(0.3f, 0.3f, 0.3f);
 	//GroundMesh->material.kSpecular.Set(0.1f, 0.1f, 0.1f);
 	//GroundMesh->material.kShininess = 1.0f;
-	GroundMesh->setHb(true, Position(-500, -100, -500), Position(500, 0, 500), Vector3(0, 0, 0), Vector3(0, 1, 0));
+	GroundMesh->setHb(true, Vector3(-500, -100, -500), Vector3(500, 0, 500), Vector3(0, 0, 0), Vector3(0, 1, 0));
 	//Set hitbox of groundmesh to be flat on XZ plane
 
 	//Ground Mesh -- Red Dirt -- Base Camp
@@ -249,6 +252,12 @@ void MainScene::Render()
 	RenderMesh(meshList[GEO_GroundMesh_RedDirt], true);
 	modelStack.PopMatrix();
 
+	static unsigned atframe = 0;
+	modelStack.PushMatrix();
+	LoadAtom("ATOM//DocIdle.atom", &modelStack, atframe, "pCylinder1");
+	RenderMesh(meshList[GEO_CIRCLE], true);
+	modelStack.PopMatrix();
+	atframe = ++atframe % 150;
 }
 
 void MainScene::Exit()
@@ -432,7 +441,7 @@ void MainScene::RenderMeshOnScreen(Mesh* mesh, int x, int y, int sizex, int size
 {
 	glDisable(GL_DEPTH_TEST);
 	Mtx44 ortho;
-	ortho.SetToOrtho(0, 80, 0, 60, -10, 10); //size of screen UI
+	ortho.SetToOrtho(0, Application::getWindowWidth(), 0, Application::getWindowHeight(), -10, 10); //size of screen UI
 	projectionStack.PushMatrix();
 	projectionStack.LoadMatrix(ortho);
 	viewStack.PushMatrix();

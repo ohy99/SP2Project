@@ -3,12 +3,14 @@
 #include <map>
 
 #include "LoadOBJ.h"
+#include "Vector3.h"
 
 bool LoadOBJ(
 	const char *file_path, 
 	std::vector<Position> & out_vertices, 
 	std::vector<TexCoord> & out_uvs, 
-	std::vector<Vector3> & out_normals
+	std::vector<Vector3> & out_normals,
+	Vector3& out_HitboxMin, Vector3& out_HitboxMax
 )
 {
 	//Fill up code from OBJ lecture notes
@@ -24,6 +26,11 @@ bool LoadOBJ(
 	std::vector<TexCoord> temp_uvs;
 	std::vector<Vector3> temp_normals;
 
+	//assuming that the object is always on the origin and there are vertices smaller/bigger than 0,0,0
+	Vector3 temp_min(0, 0, 0);
+	Vector3 temp_max(0, 0, 0);
+
+
 	while (!fileStream.eof()) {
 		char buf[256];
 		fileStream.getline(buf, 256);
@@ -33,6 +40,19 @@ bool LoadOBJ(
 			Position vertex;
 			sscanf_s((buf + 2), "%f%f%f", &vertex.x, &vertex.y, &vertex.z);
 			temp_vertices.push_back(vertex);
+			if (vertex.x < temp_min.x)
+				temp_min.x = vertex.x;
+			if (vertex.y < temp_min.y)
+				temp_min.y = vertex.y;
+			if (vertex.z < temp_min.z)
+				temp_min.z = vertex.z;
+
+			if (vertex.x < temp_max.x)
+				temp_max.x = vertex.x;
+			if (vertex.y < temp_max.y)
+				temp_max.y = vertex.y;
+			if (vertex.z < temp_max.z)
+				temp_max.z = vertex.z;
 		}
 		else if (strncmp("vt ", buf, 3) == 0) 
 		{ //process texcoord
@@ -109,7 +129,8 @@ bool LoadOBJ(
 		out_uvs.push_back(uv);
 		out_normals.push_back(normal);
 	}
-
+	out_HitboxMin = temp_min;
+	out_HitboxMax = temp_max;
 
 	return true;
 }

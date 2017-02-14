@@ -10,7 +10,7 @@
 \brief	Provides methods to generate mesh of different shapes
 */
 /******************************************************************************/
-class MeshBuilder
+class MeshBuilder : public Mesh
 {
 public:
 	static Mesh* GenerateAxes(const std::string &meshName, float lengthX, float lengthY, float lengthZ);

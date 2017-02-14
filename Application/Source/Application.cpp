@@ -20,6 +20,10 @@ GLFWwindow* Application::m_window = 0;
 SceneManager* SceneManager::Instance = 0;
 const unsigned char Application::FPS = 60; // FPS of this game
 const unsigned int Application::frameTime = 1000 / FPS; // time for each frame
+
+//change window size here
+double Application::windowWidth = 1024;
+double Application::windowHeight = 768;
 StopWatch Application::m_timer;
 
 //Define an error callback
@@ -80,8 +84,6 @@ void Application::Init()
 
 
 	//Create a window and create its OpenGL context
-	windowWidth = 1024;
-	windowHeight = 768;
 	m_window = glfwCreateWindow(windowWidth, windowHeight, "Computer Graphics", NULL, NULL);
 
 	//If the window couldn't be created

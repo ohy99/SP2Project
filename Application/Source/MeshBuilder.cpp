@@ -500,10 +500,11 @@ Mesh* MeshBuilder::GenerateCylinder(const std::string &meshName, Color color, un
 Mesh* MeshBuilder::GenerateOBJ(const std::string &meshName, const std::string &file_path)
 {
 	//Read vertices, texcoords & normals from OBJ
+	Mesh *mesh = new Mesh(meshName);
 	std::vector<Position> vertices;
 	std::vector<TexCoord> uvs;
 	std::vector<Vector3> normals;
-	bool success = LoadOBJ(file_path.c_str(), vertices, uvs, normals);
+	bool success = LoadOBJ(file_path.c_str(), vertices, uvs, normals, mesh->Hitbox_Min, mesh->Hitbox_Min);
 	if (!success)
 		return NULL;
 	//Index the vertices, texcoords & normals properly
@@ -513,7 +514,6 @@ Mesh* MeshBuilder::GenerateOBJ(const std::string &meshName, const std::string &f
 	//Create the mesh and call glBindBuffer, glBufferData
 	//Use triangle list and remember to set index size
 
-	Mesh *mesh = new Mesh(meshName);
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->indexBuffer); //bind index buffer
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, index_buffer_data.size() * sizeof(GLuint), &index_buffer_data[0], GL_STATIC_DRAW);
