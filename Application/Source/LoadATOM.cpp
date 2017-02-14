@@ -15,8 +15,8 @@ bool LoadAtom(const char *file_path, MS* modelStack, unsigned atThisFrame)
 	unsigned fps = 0;
 	std::string linearUnit = "cm";
 	std::string angularUnit = "deg";
-	unsigned startTime = 0;//start frame
-	unsigned endTime = 30;//end frame animation
+	//unsigned startTime = 0;//start frame
+	//unsigned endTime = 30;//end frame animation
 
 	std::string atfSTR = std::to_string(atThisFrame);
 	if (atfSTR.size() < 2)
