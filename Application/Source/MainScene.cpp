@@ -235,9 +235,6 @@ void MainScene::Render()
 		camera->getUp().x, camera->getUp().y, camera->getUp().z);
 	modelStack.LoadIdentity();
 
-	
-
-
 	RenderMesh(meshList[GEO_AXES], false);
 
 	Player::getInstance()->render();
