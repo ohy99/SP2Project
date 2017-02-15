@@ -30,13 +30,14 @@ class Player : public GameObject
 		Head,
 		mt_Count
 	};
-	int hp_;
+	int currHP_, maxHP_; // values of currHP_ changes as you take damage, maxHP_ remains constant unless player have health boost that increase maxHP
 	Vector3 pos_;
 	Vector3 dir_;
 	float dirRotateAngle;
 	static Player* Instance_;
 	STATES state_;
 	float hitDelay = 0.0f;
+	float moveSPD = 1.5f;
 
 	GameObject* Pointed_Obj;
 
@@ -47,6 +48,7 @@ class Player : public GameObject
 	//Inventory
 	Mesh* PMesh[MESH_TYPE::mt_Count];
 	Player();
+
 public:
 	static Player* getInstance();
 	void setPosition(Vector3& pos);
