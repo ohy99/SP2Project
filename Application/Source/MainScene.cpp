@@ -127,7 +127,7 @@ void MainScene::Init()
 	meshList[GEO_QUAD]->material.kSpecular.Set(0.1f, 0.1f, 0.1f);
 	meshList[GEO_QUAD]->material.kShininess = 1.0f;
 
-	meshList[GEO_CIRCLE] = MeshBuilder::GenerateOBJ("doc test", "OBJ//Doc.obj");
+	//meshList[GEO_CIRCLE] = MeshBuilder::GenerateOBJ("doc test", "OBJ//Doc.obj");
 
 	GroundMesh = MeshBuilder::GenerateQuad("GroundMesh", Color(1.f, 1.f, 1.f), 500, 500);
 	//GroundMesh->textureID = LoadTGA("IMAGE//Grassgreen.tga");
@@ -261,7 +261,7 @@ void MainScene::Update(double dt)
 		once = true;
 	}
 
-	Player::getInstance()->update(dt, camera);
+	Player::getInstance()->Update(dt, camera);
 
 	double c_posx, c_posy;
 	glfwGetCursorPos(Application::m_window, &c_posx, &c_posy);
@@ -293,7 +293,7 @@ void MainScene::Render()
 
 	RenderMesh(meshList[GEO_AXES], false);
 
-	Player::getInstance()->render();
+	Player::getInstance()->Render();
 
 	RenderSkybox();
 	//	renderEnvironment();
@@ -305,7 +305,6 @@ void MainScene::Render()
 	RenderMesh(meshList[GEO_GroundMesh_RedDirt], true);
 	modelStack.PopMatrix();
 
-<<<<<<< HEAD
 	RenderBaseCamp();
 
 }
@@ -344,14 +343,13 @@ void MainScene::RenderBaseCamp(){
 	modelStack.Translate(0, 0, 3);
 	RenderMesh(meshList[GEO_Teleporter], true);
 	modelStack.PopMatrix();
-=======
-	static unsigned atframe = 0;
-	modelStack.PushMatrix();
-	LoadAtom("ATOM//DocIdle.atom", &modelStack, atframe, "pCylinder1");
-	RenderMesh(meshList[GEO_CIRCLE], true);
-	modelStack.PopMatrix();
-	atframe = ++atframe % 150;
->>>>>>> a7df2fc92c9fc334470f9c0572e691f7492a1b73
+
+	//static unsigned atframe = 0;
+	//modelStack.PushMatrix();
+	//LoadAtom("ATOM//DocIdle.atom", &modelStack, atframe, "pCylinder1");
+	//RenderMesh(meshList[GEO_CIRCLE], true);
+	//modelStack.PopMatrix();
+	//atframe = ++atframe % 150;
 }
 
 void MainScene::Exit()

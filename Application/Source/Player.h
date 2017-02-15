@@ -55,8 +55,8 @@ public:
 	static Player* getInstance();
 	void setPosition(Vector3& pos);
 
-	void update(double dt, Camera* cam);
-	void render();
+	void Update(double dt, Camera* cam);
+	void Render();
 	void getPointedObj(Camera* cam);
 
 	//void isHitUpdate(int dmg);

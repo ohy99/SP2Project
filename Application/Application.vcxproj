@@ -96,6 +96,7 @@
     <ClCompile Include="Source\MeshBuilder.cpp" />
     <ClCompile Include="Source\LoadATOM.cpp" />
     <ClCompile Include="Source\shader.cpp" />
+    <ClCompile Include="Source\UI.cpp" />
     <ClCompile Include="Source\Utility.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -121,6 +122,7 @@
     <ClInclude Include="Source\Scene.h" />
     <ClInclude Include="Source\SceneManager.h" />
     <ClInclude Include="Source\shader.hpp" />
+    <ClInclude Include="Source\UI.h" />
     <ClInclude Include="Source\Usables.h" />
     <ClInclude Include="Source\Utility.h" />
     <ClInclude Include="Source\Vertex.h" />

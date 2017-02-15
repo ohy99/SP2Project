@@ -29,7 +29,7 @@ void Player::setPosition(Vector3& pos)
 }
 
 
-void Player::update(double dt, Camera* cam)
+void Player::Update(double dt, Camera* cam)
 {
 
 	std::vector<GameObject*> nearObjs;
@@ -73,7 +73,7 @@ void Player::update(double dt, Camera* cam)
 	}
 }
 
-void Player::render()
+void Player::Render()
 {
 
 	//if (Pointed_Obj)
