@@ -4,7 +4,7 @@
 
 
 //Capable of doing animation for 1 object only
-bool LoadAtom(const char *file_path, MS* modelStack, unsigned atThisFrame)
+bool LoadAtom(const char *file_path, MS* modelStack, unsigned atThisFrame, const std::string& dagNode)
 {
 	std::ifstream fileStream(file_path, std::ios::binary);
 	if (!fileStream.is_open()) {
@@ -41,6 +41,8 @@ bool LoadAtom(const char *file_path, MS* modelStack, unsigned atThisFrame)
 	bool isCheckingTransform = false;
 	float transformValues[count] = { 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f };
 	bool isCheckingKey = false;
+	bool isCheckingDagNode = false;
+	bool atDagNode = false;
 	char previousLine[256];
 
 	while (!fileStream.eof()) {
@@ -55,120 +57,139 @@ bool LoadAtom(const char *file_path, MS* modelStack, unsigned atThisFrame)
 				fps = 30;
 			//Add more types if needed
 		}
-		//if (strncmp("dagNode {", buf, 9) == 0) Ignore dagnode for now
-
-		if (strncmp("  anim translate.translateX", buf, 27) == 0)
+		if (strncmp("dagNode {", buf, 9) == 0 && !isCheckingDagNode)
 		{
-			atTransformation = tx;
-			isCheckingTransform = true;
-			//transform[tx] = true;
+			isCheckingDagNode = true;
 			continue;
 		}
-		else if (strncmp("  anim translate.translateY", buf, 27) == 0)
+		if (isCheckingDagNode && !atDagNode)
 		{
-			atTransformation = ty;
-			isCheckingTransform = true;
-			continue;
-		}
-		else if (strncmp("  anim translate.translateZ", buf, 27) == 0)
-		{
-			atTransformation = tz;
-			isCheckingTransform = true;
-			continue;
-		}
-		else if (strncmp("  anim rotate.rotateX", buf, 21) == 0)
-		{
-			atTransformation = rx;
-			isCheckingTransform = true;
-			continue;
-		}
-		else if (strncmp("  anim rotate.rotateY", buf, 21) == 0)
-		{
-			atTransformation = ry;
-			isCheckingTransform = true;
-			continue;
-		}
-		else if (strncmp("  anim rotate.rotateZ", buf, 21) == 0)
-		{
-			atTransformation = rz;
-			isCheckingTransform = true;
-			continue;
-		}
-		else if (strncmp("  anim scale.scaleX", buf, 21) == 0)
-		{
-			atTransformation = sx;
-			isCheckingTransform = true;
-			continue;
-		}
-		else if (strncmp("  anim scale.scaleY", buf, 21) == 0)
-		{
-			atTransformation = sy;
-			isCheckingTransform = true;
-			continue;
-		}
-		else if (strncmp("  anim scale.scaleZ", buf, 21) == 0)
-		{
-			atTransformation = sz;
-			isCheckingTransform = true;
-			continue;
+			char dagNodeStr[128];
+			sscanf_s((buf + 2), "%s", dagNodeStr, (unsigned)_countof(dagNodeStr));
+			if (dagNodeStr == dagNode)
+				atDagNode = true;
+			else
+				isCheckingDagNode = false;
 		}
 
-
-		if (isCheckingTransform)
+		if (atDagNode == true)
 		{
-			if (strncmp("    keys {", buf, 10) == 0)
+			if (strncmp("  anim translate.translateX", buf, 27) == 0)
 			{
-				isCheckingKey = true;
+				atTransformation = tx;
+				isCheckingTransform = true;
+				//transform[tx] = true;
 				continue;
 			}
-			if (isCheckingKey == true)
+			else if (strncmp("  anim translate.translateY", buf, 27) == 0)
 			{
-				unsigned int frameNum = 0;
-				static float defaultValue = 0;
-				sscanf_s((buf + 6), "%d", &frameNum);
-				if (strncmp("0", buf + 6, 1) == 0)//6 whitespaces, checking the default value
-					sscanf_s((buf + 8), "%f", &defaultValue);
-				
-				if (strncmp(atf, buf + 6, 2) == 0)//6 whitespaces
+				atTransformation = ty;
+				isCheckingTransform = true;
+				continue;
+			}
+			else if (strncmp("  anim translate.translateZ", buf, 27) == 0)
+			{
+				atTransformation = tz;
+				isCheckingTransform = true;
+				continue;
+			}
+			else if (strncmp("  anim rotate.rotateX", buf, 21) == 0)
+			{
+				atTransformation = rx;
+				isCheckingTransform = true;
+				continue;
+			}
+			else if (strncmp("  anim rotate.rotateY", buf, 21) == 0)
+			{
+				atTransformation = ry;
+				isCheckingTransform = true;
+				continue;
+			}
+			else if (strncmp("  anim rotate.rotateZ", buf, 21) == 0)
+			{
+				atTransformation = rz;
+				isCheckingTransform = true;
+				continue;
+			}
+			else if (strncmp("  anim scale.scaleX", buf, 21) == 0)
+			{
+				atTransformation = sx;
+				isCheckingTransform = true;
+				continue;
+			}
+			else if (strncmp("  anim scale.scaleY", buf, 21) == 0)
+			{
+				atTransformation = sy;
+				isCheckingTransform = true;
+				continue;
+			}
+			else if (strncmp("  anim scale.scaleZ", buf, 21) == 0)
+			{
+				atTransformation = sz;
+				isCheckingTransform = true;
+				continue;
+			}
+
+
+			if (isCheckingTransform)
+			{
+				if (strncmp("    keys {", buf, 10) == 0)
 				{
-					float value;
-					bool numOfBuf = 0;
-					if (atThisFrame >= 10)
-						numOfBuf = 1;
-					sscanf_s((buf + 8 + numOfBuf), "%f", &value);
-					transformValues[atTransformation] = (value);// -defaultValue);
-					isCheckingTransform = false;
-					isCheckingKey = false;
-					defaultValue = 0.0f;
+					isCheckingKey = true;
 					continue;
 				}
-				if (atThisFrame < frameNum)//if frame needed is less than current frame
+				if (isCheckingKey == true)
 				{
-					float value;
-					bool numOfBuf = 0;
-					if (frameNum >= 10)
-						numOfBuf = 1;
-					sscanf_s((buf + 8 + numOfBuf), "%f", &value);
+					unsigned int frameNum = 0;
+					static float defaultValue = 0;
+					sscanf_s((buf + 6), "%d", &frameNum);
+					if (strncmp("0", buf + 6, 1) == 0)//6 whitespaces, checking the default value
+						sscanf_s((buf + 8), "%f", &defaultValue);
 
-					unsigned int prevKeyFrame = 0;
-					bool numOfprevKFBuf = 0;
-					float prevKeyFrameValue = 0.0f;
-					sscanf_s((previousLine + 6), "%d", &prevKeyFrame);
-					if (prevKeyFrame >= 10)
-						numOfprevKFBuf = 1;
-					sscanf_s((previousLine + 8 + numOfprevKFBuf), "%f", &prevKeyFrameValue);
+					if (strncmp(atf, buf + 6, 2) == 0)//6 whitespaces
+					{
+						float value;
+						bool numOfBuf = 0;
+						if (atThisFrame >= 10)
+							numOfBuf = 1;
+						sscanf_s((buf + 8 + numOfBuf), "%f", &value);
+						transformValues[atTransformation] = (value);// -defaultValue);
+						isCheckingTransform = false;
+						isCheckingKey = false;
+						defaultValue = 0.0f;
+						continue;
+					}
+					if (atThisFrame < frameNum)//if frame needed is less than current frame
+					{
+						float value;
+						bool numOfBuf = 0;
+						if (frameNum >= 10)
+							numOfBuf = 1;
+						sscanf_s((buf + 8 + numOfBuf), "%f", &value);
 
-					transformValues[atTransformation] = prevKeyFrameValue + (float)((float)((float)(atThisFrame - prevKeyFrame) / (float)(frameNum - prevKeyFrame)) * (float)(value - prevKeyFrameValue));// -defaultValue;
+						unsigned int prevKeyFrame = 0;
+						bool numOfprevKFBuf = 0;
+						float prevKeyFrameValue = 0.0f;
+						sscanf_s((previousLine + 6), "%d", &prevKeyFrame);
+						if (prevKeyFrame >= 10)
+							numOfprevKFBuf = 1;
+						sscanf_s((previousLine + 8 + numOfprevKFBuf), "%f", &prevKeyFrameValue);
 
-					isCheckingTransform = false;
-					isCheckingKey = false;
-					defaultValue = 0.0f;
-					continue;
+						transformValues[atTransformation] = prevKeyFrameValue + (float)((float)((float)(atThisFrame - prevKeyFrame) / (float)(frameNum - prevKeyFrame)) * (float)(value - prevKeyFrameValue));// -defaultValue;
+
+						isCheckingTransform = false;
+						isCheckingKey = false;
+						defaultValue = 0.0f;
+						continue;
+					}
+					strncpy(previousLine, buf, 256);
 				}
-				strncpy(previousLine, buf, 256);
 			}
 		}
 	}
+	if (atDagNode == false)
+		return 0;
+
 	modelStack->Translate(transformValues[tx], transformValues[ty], transformValues[tz]);
 	modelStack->Rotate(transformValues[rz], 0, 0, 1);
 	modelStack->Rotate(transformValues[ry], 0, 1, 0);

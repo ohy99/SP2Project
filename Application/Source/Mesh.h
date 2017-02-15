@@ -39,8 +39,8 @@ public:
 	unsigned textureID;
 
 	bool collisionEnabled;
-	Position Hitbox_Max;
-	Position Hitbox_Min;
+	Vector3 Hitbox_Max;
+	Vector3 Hitbox_Min;
 	Vector3 pos;
 	Vector3 dir;
 	Position TempMin, TempMax;
@@ -49,10 +49,10 @@ public:
 	Vector3 up;
 	bool isHit = false;
 
-	void setHb(bool collision, Position min, Position max, Vector3 pos, Vector3 dir) {
-		collisionEnabled = collision; Hitbox_Min = min; Hitbox_Max = max; this->pos = pos; this->dir = dir; TempMin = Hitbox_Min; TempMax = Hitbox_Max;
+	void setHb(bool collision, Vector3 min, Vector3 max, Vector3 pos, Vector3 dir) {
+		collisionEnabled = collision; Hitbox_Min = min; Hitbox_Max = max; this->pos = pos; this->dir = dir;
 	}
-	void setHb(bool collision, Position min, Position max, Vector3 pos, Vector3 dir, Vector3 right, Vector3 up) {
+	void setHb(bool collision, Vector3 min, Vector3 max, Vector3 pos, Vector3 dir, Vector3 right, Vector3 up) {
 		collisionEnabled = collision; Hitbox_Min = min; Hitbox_Max = max; this->pos = pos; this->dir = dir; this->right = right; this->up = up;
 	}
 

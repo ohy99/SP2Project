@@ -2,7 +2,7 @@
 #define LOADATOM_H
 
 #include "MatrixStack.h"
-
-bool LoadAtom(const char *file_path, MS* modelStack, unsigned atThisFrame);
+#include <string>
+bool LoadAtom(const char *file_path, MS* modelStack, unsigned atThisFrame, const std::string& dagNode);
 
 #endif

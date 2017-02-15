@@ -17,6 +17,9 @@ public:
 	void Exit();
 	static bool IsKeyPressed(unsigned short key);
 
+	static inline double getWindowWidth() { return windowWidth; }
+	static inline double getWindowHeight() { return windowHeight; }
+
 	static StopWatch m_timer;
 	static GLFWwindow* m_window;
 	static const unsigned char FPS; // FPS of this game
@@ -24,7 +27,7 @@ public:
 private:
 
 	//Declare a window object
-	double windowWidth, windowHeight;
+	static double windowWidth, windowHeight;
 };
 
 #endif
