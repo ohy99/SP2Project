@@ -140,13 +140,69 @@ void MainScene::Init()
 	GroundMesh->setHb(true, Vector3(-500, -100, -500), Vector3(500, 0, 500), Vector3(0, 0, 0), Vector3(0, 1, 0));
 	//Set hitbox of groundmesh to be flat on XZ plane
 
-	//Ground Mesh -- Red Dirt -- Base Camp
+	//Ground Mesh ---- Red Dirt --------------- Start
 	meshList[GEO_GroundMesh_RedDirt] = MeshBuilder::GenerateGround("Ground Mesh", Color(1, 1, 1), 1.0f, 1.0f);
 	meshList[GEO_GroundMesh_RedDirt]->material.kAmbient.Set(0.6f, 0.6f, 0.6f);
 	meshList[GEO_GroundMesh_RedDirt]->material.kDiffuse.Set(0.3f, 0.3f, 0.3f);
 	meshList[GEO_GroundMesh_RedDirt]->material.kSpecular.Set(0.1f, 0.1f, 0.1f);
 	meshList[GEO_GroundMesh_RedDirt]->material.kShininess = 1.0f;
 	meshList[GEO_GroundMesh_RedDirt]->textureID = LoadTGA("Image//GroundMesh_RedDirt_Texture.tga");
+	//Ground Mesh ---- Red Dirt ----------------- End
+
+
+
+
+	//Skybox ------------ Base Camp Start
+	//Left Skybox 
+	meshList[GEO_LEFT] = MeshBuilder::GenerateQuad("Left", Color(1, 1, 1), 1.0f, 1.0f);
+	meshList[GEO_LEFT]->textureID = LoadTGA("Image//sky1_left.tga");
+
+	//Right Skybox 
+	meshList[GEO_RIGHT] = MeshBuilder::GenerateQuad("Right", Color(1, 1, 1), 1.0f, 1.0f);
+	meshList[GEO_RIGHT]->textureID = LoadTGA("Image//sky1_right.tga");
+
+	//Front Skybox 
+	meshList[GEO_FRONT] = MeshBuilder::GenerateQuad("Front", Color(1, 1, 1), 1.0f, 1.0f);
+	meshList[GEO_FRONT]->textureID = LoadTGA("Image//sky1_front.tga");
+
+	//Back Skybox 
+	meshList[GEO_BACK] = MeshBuilder::GenerateQuad("Back", Color(1, 1, 1), 1.0f, 1.0f);
+	meshList[GEO_BACK]->textureID = LoadTGA("Image//sky1_back.tga");
+
+	//Top Skybox 
+	meshList[GEO_TOP] = MeshBuilder::GenerateQuad("Top", Color(1, 1, 1), 1.0f, 1.0f);
+	meshList[GEO_TOP]->textureID = LoadTGA("Image//sky1_up.tga");
+
+	//Bottom Skybox 
+	meshList[GEO_BOTTOM] = MeshBuilder::GenerateQuad("Bottom", Color(1, 1, 1), 1.0f, 1.0f);
+	meshList[GEO_BOTTOM]->textureID = LoadTGA("Image//sky1_down.tga");
+	//Skybox ------------- Base Camp End
+
+
+
+
+	//Barricade -------------------- Start
+	meshList[GEO_Barricade] = MeshBuilder::GenerateOBJ("Barricade", "OBJ//Barricade_OBJ.obj");
+	meshList[GEO_Barricade]->material.kAmbient.Set(0.6f, 0.6f, 0.6f);
+	meshList[GEO_Barricade]->material.kDiffuse.Set(0.3f, 0.3f, 0.3f);
+	meshList[GEO_Barricade]->material.kSpecular.Set(0.1f, 0.1f, 0.1f);
+	meshList[GEO_Barricade]->material.kShininess = 1.0f;
+	meshList[GEO_Barricade]->textureID = LoadTGA("Image//Barricade_UV_Texture.tga");
+	//Barricade -------------------- End
+
+
+
+
+	//Teleporter ------------------ START
+	meshList[GEO_Teleporter] = MeshBuilder::GenerateOBJ("Teleporter", "OBJ//InteractableItem_Teleporter_OBJ.obj");
+	meshList[GEO_Teleporter]->material.kAmbient.Set(0.6f, 0.6f, 0.6f);
+	meshList[GEO_Teleporter]->material.kDiffuse.Set(0.3f, 0.3f, 0.3f);
+	meshList[GEO_Teleporter]->material.kSpecular.Set(0.1f, 0.1f, 0.1f);
+	meshList[GEO_Teleporter]->material.kShininess = 1.0f;
+	meshList[GEO_Teleporter]->textureID = LoadTGA("Image//InteractableItem_Teleporter_UV_Texture.tga");
+	//Teleporter -----------------------END
+
+
 
 	//INIT TEXTES
 	Text[TEXT_TYPE::Calibri].Text_Mesh = MeshBuilder::GenerateText("Calibri", 16, 16);
@@ -247,18 +303,60 @@ void MainScene::Render()
 
 	//Ground Mesh
 	modelStack.PushMatrix();
-	modelStack.Scale(400, 400, 400);
+	modelStack.Scale(1000, 1000, 1000);
 	modelStack.Rotate(90, -1, 0, 0);
 	RenderMesh(meshList[GEO_GroundMesh_RedDirt], true);
+	modelStack.PopMatrix();
+
+
+	RenderBaseCamp();
+
+}
+
+void MainScene::RenderBaseCamp(){
+
+	//Barricade START ------------------------------------------------- Around the camp
+	modelStack.PushMatrix();
+	modelStack.Scale(10, 1, 1);
+	RenderMesh(meshList[GEO_Barricade], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(25, 0, 25);
+	modelStack.Rotate(90, 0, 1, 0);
+	modelStack.Scale(10, 1, 1);
+	RenderMesh(meshList[GEO_Barricade], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(-25, 0, 25);
+	modelStack.Rotate(90, 0, 1, 0);
+	modelStack.Scale(10, 1, 1);
+	RenderMesh(meshList[GEO_Barricade], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(0, 0, 50);
+	modelStack.Scale(10, 1, 1);
+	RenderMesh(meshList[GEO_Barricade], true);
+	modelStack.PopMatrix();
+	//Barricade END ------------------------------------------------------
+
+	//Teleporter
+	modelStack.PushMatrix();
+	modelStack.Translate(0, 0, 3);
+	RenderMesh(meshList[GEO_Teleporter], true);
 	modelStack.PopMatrix();
 
 	static unsigned atframe = 0;
 	timeelapsed;
 
-
+	modelStack.PushMatrix();
+	modelStack.Translate(0, 0, 5);
 	modelStack.PushMatrix();
 	RenderMesh(meshList[GEO_CIRCLE], true);
 	modelStack.PopMatrix();
+
 
 	modelStack.PushMatrix();
 	LoadAtom("ATOM//DocAnimation.atom", &modelStack, timeelapsed, "RightArm");
@@ -283,6 +381,7 @@ void MainScene::Render()
 	modelStack.Translate(meshList[GEO_CIRCLE]->Hitbox_Max.x, meshList[GEO_CIRCLE]->Hitbox_Max.y, meshList[GEO_CIRCLE]->Hitbox_Max.z);
 	modelStack.Scale(0.1f, 0.1f, 0.1f);
 	RenderText(&Text[TEXT_TYPE::Calibri], "+", Color(1, 0, 0));
+	modelStack.PopMatrix();
 	modelStack.PopMatrix();
 
 	RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::to_string(timeelapsed / (double)((double)1 / (double)30)), Color(1, 1, 0), 1.5f, 45, 30);
@@ -354,48 +453,48 @@ void MainScene::RenderMesh(Mesh *mesh, bool enableLight)
 }
 void MainScene::RenderSkybox()
 {
-	//modelStack.PushMatrix();
-	//modelStack.Translate(0, 0, -248);
-	//modelStack.Scale(500.0f, 500.0f, 500.0f);
-	//RenderMesh(meshList[GEO_FRONT], false);
-	//modelStack.PopMatrix();
+	modelStack.PushMatrix();
+	modelStack.Translate(0, 0, -248);
+	modelStack.Scale(500.0f, 500.0f, 500.0f);
+	RenderMesh(meshList[GEO_FRONT], false);
+	modelStack.PopMatrix();
 
-	//modelStack.PushMatrix();
-	//modelStack.Translate(0, 0, 248);
-	//modelStack.Rotate(180.0f, 0, 1, 0);
-	//modelStack.Scale(500.0f, 500.0f, 500.0f);
-	//RenderMesh(meshList[GEO_BACK], false);
-	//modelStack.PopMatrix();
+	modelStack.PushMatrix();
+	modelStack.Translate(0, 0, 248);
+	modelStack.Rotate(180.0f, 0, 1, 0);
+	modelStack.Scale(500.0f, 500.0f, 500.0f);
+	RenderMesh(meshList[GEO_BACK], false);
+	modelStack.PopMatrix();
 
-	//modelStack.PushMatrix();
-	//modelStack.Translate(-248, 0, 0);
-	//modelStack.Rotate(90.0f, 0, 1, 0);
-	//modelStack.Scale(500.0f, 500.0f, 500.0f);
-	//RenderMesh(meshList[GEO_LEFT], false);
-	//modelStack.PopMatrix();
+	modelStack.PushMatrix();
+	modelStack.Translate(-248, 0, 0);
+	modelStack.Rotate(90.0f, 0, 1, 0);
+	modelStack.Scale(500.0f, 500.0f, 500.0f);
+	RenderMesh(meshList[GEO_LEFT], false);
+	modelStack.PopMatrix();
 
-	//modelStack.PushMatrix();
-	//modelStack.Translate(248, 0, 0);
-	//modelStack.Rotate(-90.0f, 0, 1, 0);
-	//modelStack.Scale(500.0f, 500.0f, 500.0f);
-	//RenderMesh(meshList[GEO_RIGHT], false);
-	//modelStack.PopMatrix();
+	modelStack.PushMatrix();
+	modelStack.Translate(248, 0, 0);
+	modelStack.Rotate(-90.0f, 0, 1, 0);
+	modelStack.Scale(500.0f, 500.0f, 500.0f);
+	RenderMesh(meshList[GEO_RIGHT], false);
+	modelStack.PopMatrix();
 
-	//modelStack.PushMatrix();
-	//modelStack.Translate(0, 248, 0);
-	////modelStack.Rotate(-90.0f, 0, 1, 0);
-	//modelStack.Rotate(90.0f, 1, 0, 0);
-	//modelStack.Scale(500.0f, 500.0f, 500.0f);
-	//RenderMesh(meshList[GEO_TOP], false);
-	//modelStack.PopMatrix();
+	modelStack.PushMatrix();
+	modelStack.Translate(0, 248, 0);
+	modelStack.Rotate(90.0f, 0, 1, 0);
+	modelStack.Rotate(90.0f, 1, 0, 0);
+	modelStack.Scale(500.0f, 500.0f, 500.0f);
+	RenderMesh(meshList[GEO_TOP], false);
+	modelStack.PopMatrix();
 
-	//modelStack.PushMatrix();
-	//modelStack.Translate(0, -248, 0);
-	////modelStack.Rotate(-90.0f, 0, 1, 0);
-	//modelStack.Rotate(-90.0f, 1, 0, 0);
-	//modelStack.Scale(500.0f, 500.0f, 500.0f);
-	//RenderMesh(meshList[GEO_BOTTOM], false);
-	//modelStack.PopMatrix();
+	modelStack.PushMatrix();
+	modelStack.Translate(0, -248, 0);
+	modelStack.Rotate(90.0f, 0, 1, 0);
+	modelStack.Rotate(-90.0f, 1, 0, 0);
+	modelStack.Scale(500.0f, 500.0f, 500.0f);
+	RenderMesh(meshList[GEO_BOTTOM], false);
+	modelStack.PopMatrix();
 
 
 }
