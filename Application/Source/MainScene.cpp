@@ -127,7 +127,9 @@ void MainScene::Init()
 	meshList[GEO_QUAD]->material.kSpecular.Set(0.1f, 0.1f, 0.1f);
 	meshList[GEO_QUAD]->material.kShininess = 1.0f;
 
-	meshList[GEO_CIRCLE] = MeshBuilder::GenerateOBJ("doc test", "OBJ//Doc.obj");
+	meshList[GEO_CIRCLE] = MeshBuilder::GenerateOBJ("doc test", "OBJ//DocBody.obj");
+	meshList[GEO_CUBE] = MeshBuilder::GenerateOBJ("doc test", "OBJ//LeftArm1.obj");
+	meshList[GEO_CYLINDER] = MeshBuilder::GenerateOBJ("doc test", "OBJ//RightArm1.obj");
 
 	GroundMesh = MeshBuilder::GenerateQuad("GroundMesh", Color(1.f, 1.f, 1.f), 500, 500);
 	//GroundMesh->textureID = LoadTGA("IMAGE//Grassgreen.tga");
@@ -176,7 +178,7 @@ void MainScene::Init()
 	glfwSetInputMode(Application::m_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 }
 
-
+double timeelapsed = 0.0;
 void MainScene::Update(double dt)
 {
 
@@ -221,6 +223,7 @@ void MainScene::Update(double dt)
 
 	FramesPerSec = 1 / dt;
 
+	timeelapsed += dt;
 }
 
 void MainScene::Render()
@@ -250,11 +253,45 @@ void MainScene::Render()
 	modelStack.PopMatrix();
 
 	static unsigned atframe = 0;
+	timeelapsed;
+
+
 	modelStack.PushMatrix();
-	LoadAtom("ATOM//DocIdle.atom", &modelStack, atframe, "pCylinder1");
 	RenderMesh(meshList[GEO_CIRCLE], true);
 	modelStack.PopMatrix();
-	atframe = ++atframe % 150;
+
+	modelStack.PushMatrix();
+	LoadAtom("ATOM//DocAnimation.atom", &modelStack, timeelapsed, "RightArm");
+	RenderMesh(meshList[GEO_CYLINDER], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	LoadAtom("ATOM//DocAnimation.atom", &modelStack, timeelapsed, "LeftArm");
+	RenderMesh(meshList[GEO_CUBE], true);
+	modelStack.PopMatrix();
+
+
+
+
+	modelStack.PushMatrix();
+	modelStack.Translate(meshList[GEO_CIRCLE]->Hitbox_Min.x, meshList[GEO_CIRCLE]->Hitbox_Min.y, meshList[GEO_CIRCLE]->Hitbox_Min.z);
+	modelStack.Scale(0.1f, 0.1f, 0.1f);
+	RenderText(&Text[TEXT_TYPE::Calibri], "+", Color(1, 0, 0));
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(meshList[GEO_CIRCLE]->Hitbox_Max.x, meshList[GEO_CIRCLE]->Hitbox_Max.y, meshList[GEO_CIRCLE]->Hitbox_Max.z);
+	modelStack.Scale(0.1f, 0.1f, 0.1f);
+	RenderText(&Text[TEXT_TYPE::Calibri], "+", Color(1, 0, 0));
+	modelStack.PopMatrix();
+
+	RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::to_string(timeelapsed / (double)((double)1 / (double)30)), Color(1, 1, 0), 1.5f, 45, 30);
+	atframe = ++atframe % 130;
+
+	if (timeelapsed >= ((double)130 * (double)((double)1 / (double)30)))
+		timeelapsed = 0;
+	RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::to_string(FramesPerSec), Color(1, 0, 0), 1.5f, 45, 38);
+
 }
 
 void MainScene::Exit()

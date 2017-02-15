@@ -39,7 +39,8 @@ bool LoadOBJ(
 			//process vertex position
 			Position vertex;
 			sscanf_s((buf + 2), "%f%f%f", &vertex.x, &vertex.y, &vertex.z);
-			temp_vertices.push_back(vertex);
+			temp_vertices.push_back(vertex);
+
 			if (vertex.x < temp_min.x)
 				temp_min.x = vertex.x;
 			if (vertex.y < temp_min.y)
@@ -47,11 +48,11 @@ bool LoadOBJ(
 			if (vertex.z < temp_min.z)
 				temp_min.z = vertex.z;
 
-			if (vertex.x < temp_max.x)
+			if (vertex.x > temp_max.x)
 				temp_max.x = vertex.x;
-			if (vertex.y < temp_max.y)
+			if (vertex.y > temp_max.y)
 				temp_max.y = vertex.y;
-			if (vertex.z < temp_max.z)
+			if (vertex.z > temp_max.z)
 				temp_max.z = vertex.z;
 		}
 		else if (strncmp("vt ", buf, 3) == 0) 
@@ -87,7 +88,10 @@ bool LoadOBJ(
 				normalIndices.push_back(normalIndex[0]);
 				normalIndices.push_back(normalIndex[1]);
 				normalIndices.push_back(normalIndex[2]);
-			}			else if (matches == 12)			{				vertexIndices.push_back(vertexIndex[0]);
+			}
+			else if (matches == 12)
+			{
+				vertexIndices.push_back(vertexIndex[0]);
 				vertexIndices.push_back(vertexIndex[1]);
 				vertexIndices.push_back(vertexIndex[2]);
 				uvIndices.push_back(uvIndex[0]);
@@ -95,7 +99,9 @@ bool LoadOBJ(
 				uvIndices.push_back(uvIndex[2]);
 				normalIndices.push_back(normalIndex[0]);
 				normalIndices.push_back(normalIndex[1]);
-				normalIndices.push_back(normalIndex[2]);				vertexIndices.push_back(vertexIndex[2]);
+				normalIndices.push_back(normalIndex[2]);
+
+				vertexIndices.push_back(vertexIndex[2]);
 				vertexIndices.push_back(vertexIndex[3]);
 				vertexIndices.push_back(vertexIndex[0]);
 				uvIndices.push_back(uvIndex[2]);
@@ -103,11 +109,14 @@ bool LoadOBJ(
 				uvIndices.push_back(uvIndex[0]);
 				normalIndices.push_back(normalIndex[2]);
 				normalIndices.push_back(normalIndex[3]);
-				normalIndices.push_back(normalIndex[0]);			}			else 
+				normalIndices.push_back(normalIndex[0]);
+			}
+			else 
 			{
 				std::cout << "Error line: " << buf << std::endl;
 				std::cout << "File can't be read by parser\n";
-				return false;
+				return false;
+
 			}
 		}
 	}
