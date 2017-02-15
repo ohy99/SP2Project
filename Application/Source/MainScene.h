@@ -32,6 +32,8 @@ class MainScene : public Scene
 		GEO_LIGHTBALL,
 		GEO_LIGHTBALL1,
 		GEO_GroundMesh_RedDirt,
+		GEO_Barricade,
+		GEO_Teleporter,
 
 		GEO_LEFT,
 		GEO_RIGHT,
@@ -122,6 +124,7 @@ private:
 	Camera *camera;
 
 	void RenderSkybox();
+	void RenderBaseCamp();
 
 	Light light[8];
 

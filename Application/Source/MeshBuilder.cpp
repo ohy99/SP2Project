@@ -93,18 +93,19 @@ Mesh* MeshBuilder::GenerateGround(const std::string &meshName, Color(color), flo
 	std::vector<Vertex> vertex_buffer_data;
 	std::vector<unsigned> index_buffer_data;
 
+	int texCoord = 350;
 	float lengthZ = 0.0f;
 
 	//-lengthX/2 to lengthX/2
 	//front
 
-	v.pos.Set(-lengthX / 2.0f, lengthY / 2.0f, lengthZ / 2.0f); v.color = color; v.normal.Set(0, 0, 1); v.texCoord.Set(0, 12); vertex_buffer_data.push_back(v);
+	v.pos.Set(-lengthX / 2.0f, lengthY / 2.0f, lengthZ / 2.0f); v.color = color; v.normal.Set(0, 0, 1); v.texCoord.Set(0, texCoord); vertex_buffer_data.push_back(v);
 	v.pos.Set(-lengthX / 2.0f, -lengthY / 2.0f, lengthZ / 2.0f); v.color = color; v.normal.Set(0, 0, 1); v.texCoord.Set(0, 0); vertex_buffer_data.push_back(v);
-	v.pos.Set(lengthX / 2.0f, lengthY / 2.0f, lengthZ / 2.0f); v.color = color; v.normal.Set(0, 0, 1); v.texCoord.Set(12, 12); vertex_buffer_data.push_back(v);
+	v.pos.Set(lengthX / 2.0f, lengthY / 2.0f, lengthZ / 2.0f); v.color = color; v.normal.Set(0, 0, 1); v.texCoord.Set(texCoord, texCoord); vertex_buffer_data.push_back(v);
 
-	v.pos.Set(lengthX / 2.0f, lengthY / 2.0f, lengthZ / 2.0f); v.color = color; v.normal.Set(0, 0, 1); v.texCoord.Set(12, 12); vertex_buffer_data.push_back(v);
+	v.pos.Set(lengthX / 2.0f, lengthY / 2.0f, lengthZ / 2.0f); v.color = color; v.normal.Set(0, 0, 1); v.texCoord.Set(texCoord, texCoord); vertex_buffer_data.push_back(v);
 	v.pos.Set(-lengthX / 2.0f, -lengthY / 2.0f, lengthZ / 2.0f); v.color = color; v.normal.Set(0, 0, 1); v.texCoord.Set(0, 0); vertex_buffer_data.push_back(v);
-	v.pos.Set(lengthX / 2.0f, -lengthY / 2.0f, lengthZ / 2.0f); v.color = color; v.normal.Set(0, 0, 1); v.texCoord.Set(12, 0); vertex_buffer_data.push_back(v);
+	v.pos.Set(lengthX / 2.0f, -lengthY / 2.0f, lengthZ / 2.0f); v.color = color; v.normal.Set(0, 0, 1); v.texCoord.Set(texCoord, 0); vertex_buffer_data.push_back(v);
 
 
 	for (unsigned i = 0; i < vertex_buffer_data.size(); ++i)
