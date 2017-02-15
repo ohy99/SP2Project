@@ -505,7 +505,7 @@ Mesh* MeshBuilder::GenerateOBJ(const std::string &meshName, const std::string &f
 	std::vector<Position> vertices;
 	std::vector<TexCoord> uvs;
 	std::vector<Vector3> normals;
-	bool success = LoadOBJ(file_path.c_str(), vertices, uvs, normals, mesh->Hitbox_Min, mesh->Hitbox_Min);
+	bool success = LoadOBJ(file_path.c_str(), vertices, uvs, normals, mesh->Hitbox_Min, mesh->Hitbox_Max);
 	if (!success)
 		return NULL;
 	//Index the vertices, texcoords & normals properly

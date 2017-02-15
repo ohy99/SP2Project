@@ -131,7 +131,13 @@ void MainScene::Init()
 	meshList[GEO_QUAD]->material.kSpecular.Set(0.1f, 0.1f, 0.1f);
 	meshList[GEO_QUAD]->material.kShininess = 1.0f;
 
+<<<<<<< HEAD
 	//meshList[GEO_CIRCLE] = MeshBuilder::GenerateOBJ("doc test", "OBJ//Doc.obj");
+=======
+	meshList[GEO_CIRCLE] = MeshBuilder::GenerateOBJ("doc test", "OBJ//DocBody.obj");
+	meshList[GEO_CUBE] = MeshBuilder::GenerateOBJ("doc test", "OBJ//LeftArm1.obj");
+	meshList[GEO_CYLINDER] = MeshBuilder::GenerateOBJ("doc test", "OBJ//RightArm1.obj");
+>>>>>>> 5864ca98cc5bb9c7a812373ab178a45d62d983ae
 
 	GroundMesh = MeshBuilder::GenerateQuad("GroundMesh", Color(1.f, 1.f, 1.f), 500, 500);
 	//GroundMesh->textureID = LoadTGA("IMAGE//Grassgreen.tga");
@@ -206,6 +212,28 @@ void MainScene::Init()
 
 
 
+
+	//Medical Tent ------------------- START
+	meshList[GEO_MedicalTent] = MeshBuilder::GenerateOBJ("Medical Tent", "OBJ//MedicalCamp_OBJ.obj");
+	meshList[GEO_MedicalTent]->material.kAmbient.Set(0.6f, 0.6f, 0.6f);
+	meshList[GEO_MedicalTent]->material.kDiffuse.Set(0.3f, 0.3f, 0.3f);
+	meshList[GEO_MedicalTent]->material.kSpecular.Set(0.1f, 0.1f, 0.1f);
+	meshList[GEO_MedicalTent]->material.kShininess = 1.0f;
+	meshList[GEO_MedicalTent]->textureID = LoadTGA("Image//MedicalCamp_UV_Texture.tga");
+	//Medical Tent ------------------- END
+
+
+
+	//Testing Models -------------------- START
+	meshList[GEO_TestModels] = MeshBuilder::GenerateOBJ("Testing Models", "OBJ//InteractableItem_BrokenRobot_OBJ.obj");
+	meshList[GEO_TestModels]->material.kAmbient.Set(0.6f, 0.6f, 0.6f);
+	meshList[GEO_TestModels]->material.kDiffuse.Set(0.3f, 0.3f, 0.3f);
+	meshList[GEO_TestModels]->material.kSpecular.Set(0.1f, 0.1f, 0.1f);
+	meshList[GEO_TestModels]->material.kShininess = 1.0f;
+	meshList[GEO_TestModels]->textureID = LoadTGA("Image//InteractableItem_BrokenRobot_UV_Texture.tga");
+	//Testing Models ------------------------- END
+
+
 	//INIT TEXTES
 	Text[TEXT_TYPE::Calibri].Text_Mesh = MeshBuilder::GenerateText("Calibri", 16, 16);
 	Text[TEXT_TYPE::Calibri].Text_Mesh->textureID = LoadTGA("Image//calibri.tga");
@@ -239,7 +267,7 @@ void MainScene::Init()
 	glfwSetInputMode(Application::m_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 }
 
-
+double timeelapsed = 0.0;
 void MainScene::Update(double dt)
 {
 	int width, height;
@@ -308,6 +336,7 @@ void MainScene::Update(double dt)
 
 	FramesPerSec = 1 / dt;
 
+	timeelapsed += dt;
 }
 
 void MainScene::Render()
@@ -336,9 +365,12 @@ void MainScene::Render()
 	RenderMesh(meshList[GEO_GroundMesh_RedDirt], true);
 	modelStack.PopMatrix();
 
+<<<<<<< HEAD
 	if (isPause)
 		renderMeshOnScreen.renderPause();
 
+=======
+>>>>>>> 5864ca98cc5bb9c7a812373ab178a45d62d983ae
 	RenderBaseCamp();
 
 }
@@ -378,12 +410,74 @@ void MainScene::RenderBaseCamp(){
 	RenderMesh(meshList[GEO_Teleporter], true);
 	modelStack.PopMatrix();
 
+<<<<<<< HEAD
+=======
+	//Medical Tent
+	modelStack.PushMatrix();
+	modelStack.Translate(0, 0, 10);
+	RenderMesh(meshList[GEO_MedicalTent], true);
+	modelStack.PopMatrix();
+
+	//Testing Models
+	modelStack.PushMatrix();
+	modelStack.Translate(0, 0, 15);
+	RenderMesh(meshList[GEO_TestModels], true);
+	modelStack.PopMatrix();
+
+>>>>>>> 5864ca98cc5bb9c7a812373ab178a45d62d983ae
 	//static unsigned atframe = 0;
 	//modelStack.PushMatrix();
 	//LoadAtom("ATOM//DocIdle.atom", &modelStack, atframe, "pCylinder1");
 	//RenderMesh(meshList[GEO_CIRCLE], true);
 	//modelStack.PopMatrix();
 	//atframe = ++atframe % 150;
+<<<<<<< HEAD
+=======
+
+	static unsigned atframe = 0;
+	timeelapsed;
+
+	modelStack.PushMatrix();
+	modelStack.Translate(0, 0, 5);
+	modelStack.PushMatrix();
+	RenderMesh(meshList[GEO_CIRCLE], true);
+	modelStack.PopMatrix();
+
+
+	modelStack.PushMatrix();
+	LoadAtom("ATOM//DocAnimation.atom", &modelStack, timeelapsed, "RightArm");
+	RenderMesh(meshList[GEO_CYLINDER], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	LoadAtom("ATOM//DocAnimation.atom", &modelStack, timeelapsed, "LeftArm");
+	RenderMesh(meshList[GEO_CUBE], true);
+	modelStack.PopMatrix();
+
+
+
+
+	modelStack.PushMatrix();
+	modelStack.Translate(meshList[GEO_CIRCLE]->Hitbox_Min.x, meshList[GEO_CIRCLE]->Hitbox_Min.y, meshList[GEO_CIRCLE]->Hitbox_Min.z);
+	modelStack.Scale(0.1f, 0.1f, 0.1f);
+	RenderText(&Text[TEXT_TYPE::Calibri], "+", Color(1, 0, 0));
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(meshList[GEO_CIRCLE]->Hitbox_Max.x, meshList[GEO_CIRCLE]->Hitbox_Max.y, meshList[GEO_CIRCLE]->Hitbox_Max.z);
+	modelStack.Scale(0.1f, 0.1f, 0.1f);
+	RenderText(&Text[TEXT_TYPE::Calibri], "+", Color(1, 0, 0));
+	modelStack.PopMatrix();
+	modelStack.PopMatrix();
+
+	RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::to_string(timeelapsed / (double)((double)1 / (double)30)), Color(1, 1, 0), 1.5f, 45, 30);
+	atframe = ++atframe % 130;
+
+	if (timeelapsed >= ((double)130 * (double)((double)1 / (double)30)))
+		timeelapsed = 0;
+	RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::to_string(FramesPerSec), Color(1, 0, 0), 1.5f, 45, 38);
+
+>>>>>>> 5864ca98cc5bb9c7a812373ab178a45d62d983ae
 }
 
 void MainScene::Exit()
