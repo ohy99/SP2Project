@@ -5,6 +5,7 @@
 #include <vector>
 #include "Vector3.h"
 #include "Weapon.h"
+#include "Potions.h"
 #include "Camera.h"
 
 class Player : public GameObject
@@ -30,7 +31,7 @@ class Player : public GameObject
 		Head,
 		mt_Count
 	};
-	int currHP_, maxHP_; // values of currHP_ changes as you take damage, maxHP_ remains constant unless player have health boost that increase maxHP
+	int HP_; 
 	Vector3 pos_;
 	Vector3 dir_;
 	float dirRotateAngle;
@@ -43,7 +44,8 @@ class Player : public GameObject
 
 	Weapon* weapons_[WEAPON_TYPE::WT_COUNT];
 	Weapon* currentWeapon_;
-
+	Potions* potions; // 
+	
 	//Outfit
 	//Inventory
 	Mesh* PMesh[MESH_TYPE::mt_Count];

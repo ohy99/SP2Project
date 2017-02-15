@@ -38,8 +38,6 @@ void Player::update(double dt, Camera* cam)
 	//Mesh projected("Projected");
 	//projected.setHb(true, PMesh[MESH_TYPE::Body]->TempMin, PMesh[MESH_TYPE::Body]->TempMax, PMesh[MESH_TYPE::Body]->pos, PMesh[MESH_TYPE::Body]->dir);
 
-	static float moveSPD = 1.5f;
-
 	if (Application::IsKeyPressed('W'))
 	{
 		/*bool bam = false;
