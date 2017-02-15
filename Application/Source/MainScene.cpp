@@ -202,6 +202,28 @@ void MainScene::Init()
 
 
 
+
+	//Medical Tent ------------------- START
+	meshList[GEO_MedicalTent] = MeshBuilder::GenerateOBJ("Medical Tent", "OBJ//MedicalCamp_OBJ.obj");
+	meshList[GEO_MedicalTent]->material.kAmbient.Set(0.6f, 0.6f, 0.6f);
+	meshList[GEO_MedicalTent]->material.kDiffuse.Set(0.3f, 0.3f, 0.3f);
+	meshList[GEO_MedicalTent]->material.kSpecular.Set(0.1f, 0.1f, 0.1f);
+	meshList[GEO_MedicalTent]->material.kShininess = 1.0f;
+	meshList[GEO_MedicalTent]->textureID = LoadTGA("Image//MedicalCamp_UV_Texture.tga");
+	//Medical Tent ------------------- END
+
+
+
+	//Testing Models -------------------- START
+	meshList[GEO_TestModels] = MeshBuilder::GenerateOBJ("Testing Models", "OBJ//InteractableItem_BrokenRobot_OBJ.obj");
+	meshList[GEO_TestModels]->material.kAmbient.Set(0.6f, 0.6f, 0.6f);
+	meshList[GEO_TestModels]->material.kDiffuse.Set(0.3f, 0.3f, 0.3f);
+	meshList[GEO_TestModels]->material.kSpecular.Set(0.1f, 0.1f, 0.1f);
+	meshList[GEO_TestModels]->material.kShininess = 1.0f;
+	meshList[GEO_TestModels]->textureID = LoadTGA("Image//InteractableItem_BrokenRobot_UV_Texture.tga");
+	//Testing Models ------------------------- END
+
+
 	//INIT TEXTES
 	Text[TEXT_TYPE::Calibri].Text_Mesh = MeshBuilder::GenerateText("Calibri", 16, 16);
 	Text[TEXT_TYPE::Calibri].Text_Mesh->textureID = LoadTGA("Image//calibri.tga");
@@ -305,7 +327,6 @@ void MainScene::Render()
 	RenderMesh(meshList[GEO_GroundMesh_RedDirt], true);
 	modelStack.PopMatrix();
 
-<<<<<<< HEAD
 	RenderBaseCamp();
 
 }
@@ -344,14 +365,26 @@ void MainScene::RenderBaseCamp(){
 	modelStack.Translate(0, 0, 3);
 	RenderMesh(meshList[GEO_Teleporter], true);
 	modelStack.PopMatrix();
-=======
-	static unsigned atframe = 0;
+
+	//Medical Tent
 	modelStack.PushMatrix();
-	LoadAtom("ATOM//DocIdle.atom", &modelStack, atframe, "pCylinder1");
-	RenderMesh(meshList[GEO_CIRCLE], true);
+	modelStack.Translate(0, 0, 10);
+	RenderMesh(meshList[GEO_MedicalTent], true);
 	modelStack.PopMatrix();
-	atframe = ++atframe % 150;
->>>>>>> a7df2fc92c9fc334470f9c0572e691f7492a1b73
+
+	//Testing Models
+	modelStack.PushMatrix();
+	modelStack.Translate(0, 0, 15);
+	RenderMesh(meshList[GEO_TestModels], true);
+	modelStack.PopMatrix();
+
+	//static unsigned atframe = 0;
+	//modelStack.PushMatrix();
+	//LoadAtom("ATOM//DocIdle.atom", &modelStack, atframe, "pCylinder1");
+	//RenderMesh(meshList[GEO_CIRCLE], true);
+	//modelStack.PopMatrix();
+	//atframe = ++atframe % 150;
+
 }
 
 void MainScene::Exit()

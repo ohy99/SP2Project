@@ -34,6 +34,8 @@ class MainScene : public Scene
 		GEO_GroundMesh_RedDirt,
 		GEO_Barricade,
 		GEO_Teleporter,
+		GEO_MedicalTent,
+		GEO_TestModels,
 
 		GEO_LEFT,
 		GEO_RIGHT,
