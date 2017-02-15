@@ -9,7 +9,19 @@ public:
 	UI() { ; }
 	~UI() { ; }
 
-	MainScene 
+	void Init();
+	void renderPause();
+
+private:
+	enum GEOMETRY_TYPE
+	{
+		QUAD, 
+
+		NUM_GEOMETRY,
+	};
+
+	Mesh* meshList[NUM_GEOMETRY];
+	MainScene userInterface;
 };
 
 #endif

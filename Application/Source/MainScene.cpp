@@ -12,11 +12,15 @@
 #include "LoadTextData.h"
 #include "LoadATOM.h"
 
+#include "UI.h"
+
 MainScene::Text_Data MainScene::Text[TEXT_TYPE::Text_Count];
 Mesh* MainScene::GroundMesh = 0;
 unsigned MainScene::m_parameters[U_TOTAL];
 MS MainScene::modelStack, MainScene::viewStack, MainScene::projectionStack;
 std::vector<GameObject*> MainScene::Game_Objects_(10, NULL);
+UI renderMeshOnScreen;
+
 MainScene::MainScene()
 {
 }
@@ -218,7 +222,10 @@ void MainScene::Init()
 	Text[TEXT_TYPE::SegoeMarker].Text_Mesh = MeshBuilder::GenerateText("SegoeMarker", 16, 16);
 	Text[TEXT_TYPE::SegoeMarker].Text_Mesh->textureID = LoadTGA("Image//Segoe Marker.tga");
 	LoadTextData("Image//Segoe Marker Data.csv", Text[TEXT_TYPE::SegoeMarker].TextWidth);
-
+	
+	renderMeshOnScreen.Init();
+	wasEscPressed = false;
+	isPause = false;
 
 	camera = new Camera3;
 	camera->Init(Vector3(0, 0, 7), Vector3(0, 0, 0), Vector3(0, 1, 0));
@@ -235,6 +242,9 @@ void MainScene::Init()
 
 void MainScene::Update(double dt)
 {
+	int width, height;
+	glfwGetWindowSize(Application::m_window, &width, &height);
+	isEscPressed = Application::IsKeyPressed(VK_ESCAPE);
 
 	if (Application::IsKeyPressed(VK_NUMPAD1) || Application::IsKeyPressed('1'))
 	{
@@ -261,19 +271,40 @@ void MainScene::Update(double dt)
 		once = true;
 	}
 
+	if (isEscPressed && !wasEscPressed) // When you press ESC
+	{
+		if (!isPause)
+		{
+			isPause = true;
+			glfwSetInputMode(Application::m_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+			glfwSetCursorPos(Application::m_window, width / 2, height / 2);
+		}
+		else
+		{
+			isPause = false;
+			glfwSetInputMode(Application::m_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+			glfwSetCursorPos(Application::m_window, width / 2, height / 2);
+		}
+
+		wasEscPressed = isEscPressed;
+	}
+		
+	if (!isEscPressed && wasEscPressed) // When you release the ESC button
+		wasEscPressed = isEscPressed;
+
 	Player::getInstance()->Update(dt, camera);
 
-	double c_posx, c_posy;
-	glfwGetCursorPos(Application::m_window, &c_posx, &c_posy);
-	int width, height;
-	glfwGetWindowSize(Application::m_window, &width, &height);
+	if (!isPause)
+	{
+		double c_posx, c_posy;
+		glfwGetCursorPos(Application::m_window, &c_posx, &c_posy);
+		glfwSetCursorPos(Application::m_window, width / 2, height / 2);
 
-	glfwSetCursorPos(Application::m_window, width / 2, height / 2);
-
-	double dx, dy;
-	dx = dt * double(width / 2 - c_posx);
-	dy = dt * double(height / 2 - c_posy);
-	camera->Update(dt, dx, dy);
+		double dx, dy;
+		dx = dt * double(width / 2 - c_posx);
+		dy = dt * double(height / 2 - c_posy);
+		camera->Update(dt, dx, dy);
+	}
 
 	FramesPerSec = 1 / dt;
 
@@ -304,6 +335,9 @@ void MainScene::Render()
 	modelStack.Rotate(90, -1, 0, 0);
 	RenderMesh(meshList[GEO_GroundMesh_RedDirt], true);
 	modelStack.PopMatrix();
+
+	if (isPause)
+		renderMeshOnScreen.renderPause();
 
 	RenderBaseCamp();
 
@@ -531,7 +565,7 @@ void MainScene::RenderTextOnScreen(Text_Data* TextData, std::string text, Color 
 }
 void MainScene::RenderMeshOnScreen(Mesh* mesh, int x, int y, int sizex, int sizey)
 {
-	glDisable(GL_DEPTH_TEST);
+	//glDisable(GL_DEPTH_TEST);
 	Mtx44 ortho;
 	ortho.SetToOrtho(0, Application::getWindowWidth(), 0, Application::getWindowHeight(), -10, 10); //size of screen UI
 	projectionStack.PushMatrix();
@@ -548,5 +582,5 @@ void MainScene::RenderMeshOnScreen(Mesh* mesh, int x, int y, int sizex, int size
 	projectionStack.PopMatrix();
 	viewStack.PopMatrix();
 	modelStack.PopMatrix();
-	glEnable(GL_DEPTH_TEST);
+	//glEnable(GL_DEPTH_TEST);
 }
