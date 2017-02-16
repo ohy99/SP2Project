@@ -182,31 +182,59 @@ void MainScene::Init()
 
 
 	//Barricade -------------------- Start
-	meshList[GEO_Barricade] = MeshBuilder::GenerateOBJ("Barricade", "OBJ//Barricade_OBJ.obj");
-	meshList[GEO_Barricade]->material.kAmbient.Set(0.6f, 0.6f, 0.6f);
-	meshList[GEO_Barricade]->material.kDiffuse.Set(0.3f, 0.3f, 0.3f);
-	meshList[GEO_Barricade]->material.kSpecular.Set(0.1f, 0.1f, 0.1f);
-	meshList[GEO_Barricade]->material.kShininess = 1.0f;
-	meshList[GEO_Barricade]->textureID = LoadTGA("Image//Barricade_UV_Texture.tga");
+	meshList[GEO_Barricade1] = MeshBuilder::GenerateOBJ("Barricade", "OBJ//Barricade1_OBJ.obj");
+	meshList[GEO_Barricade1]->material.kAmbient.Set(0.6f, 0.6f, 0.6f);
+	meshList[GEO_Barricade1]->material.kDiffuse.Set(0.3f, 0.3f, 0.3f);
+	meshList[GEO_Barricade1]->material.kSpecular.Set(0.1f, 0.1f, 0.1f);
+	meshList[GEO_Barricade1]->material.kShininess = 1.0f;
+	meshList[GEO_Barricade1]->textureID = LoadTGA("Image//Barricade_UV_Texture.tga");
+
+	meshList[GEO_Barricade2] = MeshBuilder::GenerateOBJ("Barricade", "OBJ//Barricade2_OBJ.obj");
+	meshList[GEO_Barricade2]->material.kAmbient.Set(0.6f, 0.6f, 0.6f);
+	meshList[GEO_Barricade2]->material.kDiffuse.Set(0.3f, 0.3f, 0.3f);
+	meshList[GEO_Barricade2]->material.kSpecular.Set(0.1f, 0.1f, 0.1f);
+	meshList[GEO_Barricade2]->material.kShininess = 1.0f;
+	meshList[GEO_Barricade2]->textureID = LoadTGA("Image//Barricade_UV_Texture.tga");
+
+	meshList[GEO_Barricade3] = MeshBuilder::GenerateOBJ("Barricade", "OBJ//Barricade3_OBJ.obj");
+	meshList[GEO_Barricade3]->material.kAmbient.Set(0.6f, 0.6f, 0.6f);
+	meshList[GEO_Barricade3]->material.kDiffuse.Set(0.3f, 0.3f, 0.3f);
+	meshList[GEO_Barricade3]->material.kSpecular.Set(0.1f, 0.1f, 0.1f);
+	meshList[GEO_Barricade3]->material.kShininess = 1.0f;
+	meshList[GEO_Barricade3]->textureID = LoadTGA("Image//Barricade_UV_Texture.tga");
+
+	meshList[GEO_Barricade4] = MeshBuilder::GenerateOBJ("Barricade", "OBJ//Barricade4_OBJ.obj");
+	meshList[GEO_Barricade4]->material.kAmbient.Set(0.6f, 0.6f, 0.6f);
+	meshList[GEO_Barricade4]->material.kDiffuse.Set(0.3f, 0.3f, 0.3f);
+	meshList[GEO_Barricade4]->material.kSpecular.Set(0.1f, 0.1f, 0.1f);
+	meshList[GEO_Barricade4]->material.kShininess = 1.0f;
+	meshList[GEO_Barricade4]->textureID = LoadTGA("Image//Barricade_UV_Texture.tga");
 	//Barricade -------------------- End
 
 
 
 
 	//Teleporter ------------------ START
-	meshList[GEO_Teleporter] = MeshBuilder::GenerateOBJ("Teleporter", "OBJ//InteractableItem_Teleporter_OBJ.obj");
+	meshList[GEO_Teleporter] = MeshBuilder::GenerateOBJ("Teleporter", "OBJ//Teleporter_OBJ.obj");
 	meshList[GEO_Teleporter]->material.kAmbient.Set(0.6f, 0.6f, 0.6f);
 	meshList[GEO_Teleporter]->material.kDiffuse.Set(0.3f, 0.3f, 0.3f);
 	meshList[GEO_Teleporter]->material.kSpecular.Set(0.1f, 0.1f, 0.1f);
 	meshList[GEO_Teleporter]->material.kShininess = 1.0f;
 	meshList[GEO_Teleporter]->textureID = LoadTGA("Image//InteractableItem_Teleporter_UV_Texture.tga");
+
+	meshList[GEO_Teleporter1] = MeshBuilder::GenerateOBJ("Teleporter", "OBJ//Teleporter1_OBJ.obj");
+	meshList[GEO_Teleporter1]->material.kAmbient.Set(0.6f, 0.6f, 0.6f);
+	meshList[GEO_Teleporter1]->material.kDiffuse.Set(0.3f, 0.3f, 0.3f);
+	meshList[GEO_Teleporter1]->material.kSpecular.Set(0.1f, 0.1f, 0.1f);
+	meshList[GEO_Teleporter1]->material.kShininess = 1.0f;
+	meshList[GEO_Teleporter1]->textureID = LoadTGA("Image//InteractableItem_Teleporter_UV_Texture.tga");
 	//Teleporter -----------------------END
 
 
 
 
 	//Medical Tent ------------------- START
-	meshList[GEO_MedicalTent] = MeshBuilder::GenerateOBJ("Medical Tent", "OBJ//MedicalCamp_OBJ.obj");
+	meshList[GEO_MedicalTent] = MeshBuilder::GenerateOBJ("Medical Tent", "OBJ//MedicalTent_OBJ.obj");
 	meshList[GEO_MedicalTent]->material.kAmbient.Set(0.6f, 0.6f, 0.6f);
 	meshList[GEO_MedicalTent]->material.kDiffuse.Set(0.3f, 0.3f, 0.3f);
 	meshList[GEO_MedicalTent]->material.kSpecular.Set(0.1f, 0.1f, 0.1f);
@@ -216,14 +244,64 @@ void MainScene::Init()
 
 
 
-	//Testing Models -------------------- START
-	meshList[GEO_TestModels] = MeshBuilder::GenerateOBJ("Testing Models", "OBJ//InteractableItem_BrokenRobot_OBJ.obj");
-	meshList[GEO_TestModels]->material.kAmbient.Set(0.6f, 0.6f, 0.6f);
-	meshList[GEO_TestModels]->material.kDiffuse.Set(0.3f, 0.3f, 0.3f);
-	meshList[GEO_TestModels]->material.kSpecular.Set(0.1f, 0.1f, 0.1f);
-	meshList[GEO_TestModels]->material.kShininess = 1.0f;
-	meshList[GEO_TestModels]->textureID = LoadTGA("Image//InteractableItem_BrokenRobot_UV_Texture.tga");
-	//Testing Models ------------------------- END
+	//Barracks -------------------- START
+	meshList[GEO_Barracks] = MeshBuilder::GenerateOBJ("Barracks", "OBJ//Barracks_OBJ.obj");
+	meshList[GEO_Barracks]->material.kAmbient.Set(0.6f, 0.6f, 0.6f);
+	meshList[GEO_Barracks]->material.kDiffuse.Set(0.3f, 0.3f, 0.3f);
+	meshList[GEO_Barracks]->material.kSpecular.Set(0.1f, 0.1f, 0.1f);
+	meshList[GEO_Barracks]->material.kShininess = 1.0f;
+	meshList[GEO_Barracks]->textureID = LoadTGA("Image//Barracks_UV_Texture.tga");
+	//Barracks ------------------------- END
+
+
+
+
+	//Crates ------------------------------- START
+	meshList[GEO_Crates] = MeshBuilder::GenerateOBJ("Barracks", "OBJ//Crates_OBJ.obj");
+	meshList[GEO_Crates]->material.kAmbient.Set(0.6f, 0.6f, 0.6f);
+	meshList[GEO_Crates]->material.kDiffuse.Set(0.3f, 0.3f, 0.3f);
+	meshList[GEO_Crates]->material.kSpecular.Set(0.1f, 0.1f, 0.1f);
+	meshList[GEO_Crates]->material.kShininess = 1.0f;
+	meshList[GEO_Crates]->textureID = LoadTGA("Image//Crate_UV_Texture.tga");
+
+	meshList[GEO_Crates1] = MeshBuilder::GenerateOBJ("Barracks", "OBJ//Crates1_OBJ.obj");
+	meshList[GEO_Crates1]->material.kAmbient.Set(0.6f, 0.6f, 0.6f);
+	meshList[GEO_Crates1]->material.kDiffuse.Set(0.3f, 0.3f, 0.3f);
+	meshList[GEO_Crates1]->material.kSpecular.Set(0.1f, 0.1f, 0.1f);
+	meshList[GEO_Crates1]->material.kShininess = 1.0f;
+	meshList[GEO_Crates1]->textureID = LoadTGA("Image//Crate_UV_Texture.tga");
+	//Crates ------------------------------------------- END
+
+
+
+
+	//Solar Panels------------------------------------- START
+	meshList[GEO_SolarPanel] = MeshBuilder::GenerateOBJ("Barracks", "OBJ//SolarPanel_OBJ.obj");
+	meshList[GEO_SolarPanel]->material.kAmbient.Set(0.6f, 0.6f, 0.6f);
+	meshList[GEO_SolarPanel]->material.kDiffuse.Set(0.3f, 0.3f, 0.3f);
+	meshList[GEO_SolarPanel]->material.kSpecular.Set(0.1f, 0.1f, 0.1f);
+	meshList[GEO_SolarPanel]->material.kShininess = 1.0f;
+	meshList[GEO_SolarPanel]->textureID = LoadTGA("Image//SolarUV_Texture.tga");
+
+	meshList[GEO_SolarPanel1] = MeshBuilder::GenerateOBJ("Barracks", "OBJ//SolarPanel1_OBJ.obj");
+	meshList[GEO_SolarPanel1]->material.kAmbient.Set(0.6f, 0.6f, 0.6f);
+	meshList[GEO_SolarPanel1]->material.kDiffuse.Set(0.3f, 0.3f, 0.3f);
+	meshList[GEO_SolarPanel1]->material.kSpecular.Set(0.1f, 0.1f, 0.1f);
+	meshList[GEO_SolarPanel1]->material.kShininess = 1.0f;
+	meshList[GEO_SolarPanel1]->textureID = LoadTGA("Image//SolarUV_Texture.tga");
+	//Solar Panels ------------------------------------- END
+
+
+
+
+	//Powerbox ----------------------------------- START
+	meshList[GEO_PowerBox] = MeshBuilder::GenerateOBJ("Barracks", "OBJ//Powerbox_OBJ.obj");
+	meshList[GEO_PowerBox]->material.kAmbient.Set(0.6f, 0.6f, 0.6f);
+	meshList[GEO_PowerBox]->material.kDiffuse.Set(0.3f, 0.3f, 0.3f);
+	meshList[GEO_PowerBox]->material.kSpecular.Set(0.1f, 0.1f, 0.1f);
+	meshList[GEO_PowerBox]->material.kShininess = 1.0f;
+	meshList[GEO_PowerBox]->textureID = LoadTGA("Image//Powerbox_UV_Texture.tga");
+	//Powerbox ----------------------------------- END
 
 
 	//INIT TEXTES
@@ -338,47 +416,58 @@ void MainScene::RenderBaseCamp(){
 
 	//Barricade START ------------------------------------------------- Around the camp
 	modelStack.PushMatrix();
-	modelStack.Scale(10, 1, 1);
-	RenderMesh(meshList[GEO_Barricade], true);
+	RenderMesh(meshList[GEO_Barricade1], true);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-	modelStack.Translate(25, 0, 25);
-	modelStack.Rotate(90, 0, 1, 0);
-	modelStack.Scale(10, 1, 1);
-	RenderMesh(meshList[GEO_Barricade], true);
+	RenderMesh(meshList[GEO_Barricade2], true);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-	modelStack.Translate(-25, 0, 25);
-	modelStack.Rotate(90, 0, 1, 0);
-	modelStack.Scale(10, 1, 1);
-	RenderMesh(meshList[GEO_Barricade], true);
+	RenderMesh(meshList[GEO_Barricade3], true);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-	modelStack.Translate(0, 0, 50);
-	modelStack.Scale(10, 1, 1);
-	RenderMesh(meshList[GEO_Barricade], true);
+	RenderMesh(meshList[GEO_Barricade4], true);
 	modelStack.PopMatrix();
 	//Barricade END ------------------------------------------------------
 
-	//Teleporter
+	//Teleporter 1 -- To world map -- Where player find the blueprints
 	modelStack.PushMatrix();
-	modelStack.Translate(0, 0, 3);
 	RenderMesh(meshList[GEO_Teleporter], true);
 	modelStack.PopMatrix();
 
+	//Teleporter 2 -- To final boss?? -- Fight the final boss to put an item somewhere?? 
+	modelStack.PushMatrix();
+	RenderMesh(meshList[GEO_Teleporter1], true);
+	modelStack.PopMatrix();
+
+
 	//Medical Tent
 	modelStack.PushMatrix();
-	modelStack.Translate(0, 0, 10);
 	RenderMesh(meshList[GEO_MedicalTent], true);
 	modelStack.PopMatrix();
 
-	//Testing Models
+	//Barracks
 	modelStack.PushMatrix();
-	modelStack.Translate(0, 0, 15);
-	RenderMesh(meshList[GEO_TestModels], true);
+	RenderMesh(meshList[GEO_Barracks], true);
+	modelStack.PopMatrix();
+
+	//Crates
+	modelStack.PushMatrix();
+	RenderMesh(meshList[GEO_Crates], true);
+	RenderMesh(meshList[GEO_Crates1], true);
+	modelStack.PopMatrix();
+
+	//Solar panels
+	modelStack.PushMatrix();
+	RenderMesh(meshList[GEO_SolarPanel], true);
+	RenderMesh(meshList[GEO_SolarPanel1], true);
+	modelStack.PopMatrix();
+
+	//Powerbox
+	modelStack.PushMatrix();
+	RenderMesh(meshList[GEO_PowerBox], true);
 	modelStack.PopMatrix();
 
 	//static unsigned atframe = 0;
