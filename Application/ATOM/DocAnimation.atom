@@ -5,7 +5,7 @@ timeUnit ntsc;
 linearUnit cm;
 angularUnit deg;
 startTime 0;
-endTime 150;
+endTime 130;
 dagNode {
   pCube1 1 1;
   static rotate.rx rotateX 0;

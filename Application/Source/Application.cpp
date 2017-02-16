@@ -26,6 +26,10 @@ double Application::windowWidth = 1024;
 double Application::windowHeight = 768;
 StopWatch Application::m_timer;
 
+std::vector<Scene*> SceneManager::scenes;
+int SceneManager::currSceneID = 0;
+int SceneManager::nextSceneID = 0;
+
 //Define an error callback
 static void error_callback(int error, const char* description)
 {

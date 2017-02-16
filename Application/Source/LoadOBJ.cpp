@@ -26,7 +26,7 @@ bool LoadOBJ(
 	std::vector<TexCoord> temp_uvs;
 	std::vector<Vector3> temp_normals;
 
-	//assuming that the object is always on the origin and there are vertices smaller/bigger than 0,0,0
+	bool unset = true;
 	Vector3 temp_min(0, 0, 0);
 	Vector3 temp_max(0, 0, 0);
 
@@ -41,6 +41,13 @@ bool LoadOBJ(
 			sscanf_s((buf + 2), "%f%f%f", &vertex.x, &vertex.y, &vertex.z);
 			temp_vertices.push_back(vertex);
 
+			if (unset)
+			{
+				//if first enter to get vertex value, set the first vertex as min and max
+				temp_min.Set(vertex.x, vertex.y, vertex.z);
+				temp_max.Set(vertex.x, vertex.y, vertex.z);
+				unset = false;
+			}
 			if (vertex.x < temp_min.x)
 				temp_min.x = vertex.x;
 			if (vertex.y < temp_min.y)

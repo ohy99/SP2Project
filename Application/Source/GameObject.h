@@ -3,24 +3,17 @@
 
 #include <string>
 #include "Mesh.h"
-
+//#include "SceneManager.h"
 
 class GameObject abstract
 {
 protected:
-	GameObject(const std::string& name) : kName(name) { /*MainScene::Game_Objects_.push_back(this);*/ };
+	GameObject(const std::string& name) : kName(name) { /*SceneManager::getInstance()->getCurrentScene()->AddObjToCurrentScene(this);*/ };
 	const std::string kName; // Name of the object
 public: 
-	virtual ~GameObject() { 
-		//std::vector<GameObject*>::iterator it;
-		//it = std::find(MainScene::Game_Objects_.begin(), MainScene::Game_Objects_.end(), this);
-		//MainScene::Game_Objects_.erase(it);
-	};
-	std::string getName(void)
-	{
-		return kName;
-	}
-	Mesh* CollisionMesh_;
+	virtual ~GameObject() { };
+	std::string getName(void) {	return kName; }
+	Mesh* CollisionMesh_ = 0;
 };
 
 #endif

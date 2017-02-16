@@ -2,6 +2,7 @@
 #include "Application.h"
 #include "Mesh.h"
 #include "MainScene.h"
+#include "Scene.h"
 
 Player* Player::Instance_ = 0;
 Player::Player() : GameObject("Player") 
@@ -33,7 +34,7 @@ void Player::update(double dt, Camera* cam)
 {
 
 	std::vector<GameObject*> nearObjs;
-
+//	SceneManager::getCurrentScene()->getCurrentSceneObjs();
 	//PreCheck collision
 	//Mesh projected("Projected");
 	//projected.setHb(true, PMesh[MESH_TYPE::Body]->TempMin, PMesh[MESH_TYPE::Body]->TempMax, PMesh[MESH_TYPE::Body]->pos, PMesh[MESH_TYPE::Body]->dir);
@@ -89,16 +90,16 @@ void Player::getPointedObj(Camera* cam)
 	TargetPoint.Set(cam->getTarget().x, cam->getTarget().y, cam->getTarget().z);
 	Pointed_Obj = NULL;
 
+	
+	//for (auto it : MainScene::Game_Objects_)
+	//{
+	//	if (it->CollisionMesh_->isPointInsideAABB(TargetPoint) == true)
+	//	{
+	//		Pointed_Obj = it;
+	//		break;
+	//	}
 
-	for (auto it : MainScene::Game_Objects_)
-	{
-		if (it->CollisionMesh_->isPointInsideAABB(TargetPoint) == true)
-		{
-			Pointed_Obj = it;
-			break;
-		}
-
-	}
+	//}
 
 }
 //static Player* getInstance();
@@ -108,8 +109,18 @@ void Player::getPointedObj(Camera* cam)
 //void render();
 //void getPointedObj(Camera* cam);
 //
-//void isHitUpdate(int dmg);
-//
-//
+void Player::isHitUpdate(int dmg)
+{
+	if (hitDelay >= 1.0f)
+	{
+		if (this->hp_ > 0)
+			this->hp_ - dmg;
+		if (this->hp_ < 0)
+			this->hp_ = 0;
+		hitDelay = 0.0f;
+	}
+}
+
+
 //bool isDead();
 //~Player();

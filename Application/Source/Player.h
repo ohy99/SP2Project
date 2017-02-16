@@ -55,10 +55,10 @@ public:
 	void render();
 	void getPointedObj(Camera* cam);
 
-	//void isHitUpdate(int dmg);
+	void isHitUpdate(int dmg);
 
 	Mesh* getCollisionMesh() { return PMesh[MESH_TYPE::Body]; };
-
+	inline int getHp() { return hp_; }
 	//bool isDead();
 	//~Player();
 };

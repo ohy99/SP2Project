@@ -17,7 +17,7 @@
 *if (timeelapsed >= ((double)FRAMELIMIT * (double)((double)1 / (double)NUMBER OF FRAMEPERSEC)))
 *		timeelapsed = 0;
 **************************************************************/
-bool LoadAtom(const char *file_path, MS* modelStack, double timeElapsed, const std::string& dagNode)
+bool LoadAtom(const char *file_path, MS* modelStack, double* timeElapsed, const std::string& dagNode)
 {
 	unsigned fps = 0;//INITIALIZING FPS
 
@@ -55,6 +55,7 @@ bool LoadAtom(const char *file_path, MS* modelStack, double timeElapsed, const s
 	char previousLine[256];
 	char dagNodeStr[128];
 	unsigned checkTransform = 0;
+	unsigned endTimeFrame = 0;
 
 	while (!fileStream.eof()) {//CHECKING FOR END OF FILE
 		char buf[256];
@@ -69,14 +70,23 @@ bool LoadAtom(const char *file_path, MS* modelStack, double timeElapsed, const s
 				fps = 30;//SETTING OF FPS FOR REQUIRED ANIMATION SPEED
 			//Add more types if needed
 
-			atThisFrame = (unsigned)(timeElapsed / ((double)((double)1 / (double)fps)));//GETTING THE REQUIRED FRAME NUMBER FOR TRANSFORMATION USING TIME
+		}
+
+		if (strncmp("endTime ", buf, 8) == 0)//get the endTime Frame
+		{
+			sscanf_s((buf + 8), "%d", &endTimeFrame);
+			
+			if (*timeElapsed > (double)((double)endTimeFrame / (double)fps))//IF TIME ELAPSED IS MORE THAN THE LAST FRAME, RESET
+				*timeElapsed = 0.0;
+
+			atThisFrame = (unsigned)(*timeElapsed / ((double)((double)1 / (double)fps)));//GETTING THE REQUIRED FRAME NUMBER FOR TRANSFORMATION USING TIME
 			atfSTR = std::to_string(atThisFrame);//CONVERTING FRAME STARTING NUMBER TO STRING
 			if (atfSTR.size() < 2)
 				atfSTR += " ";//ADD A SPACE IF IT IS LESS THAN 2 DIGITS
 			atf = atfSTR.c_str();//CONVERTING STRING TO CHAR POINTER
 
-
 		}
+
 		if (strncmp("dagNode {", buf, 9) == 0 && !isCheckingDagNode)//CHECKING IF BUF STRING IS SAME AS dagNode
 		{
 			isCheckingDagNode = true;
