@@ -29,7 +29,7 @@ void Player::setPosition(Vector3& pos)
 }
 
 
-void Player::update(double dt, Camera* cam)
+void Player::Update(double dt, Camera* cam)
 {
 
 	std::vector<GameObject*> nearObjs;
@@ -37,8 +37,6 @@ void Player::update(double dt, Camera* cam)
 	//PreCheck collision
 	//Mesh projected("Projected");
 	//projected.setHb(true, PMesh[MESH_TYPE::Body]->TempMin, PMesh[MESH_TYPE::Body]->TempMax, PMesh[MESH_TYPE::Body]->pos, PMesh[MESH_TYPE::Body]->dir);
-
-	static float moveSPD = 1.5f;
 
 	if (Application::IsKeyPressed('W'))
 	{
@@ -75,7 +73,7 @@ void Player::update(double dt, Camera* cam)
 	}
 }
 
-void Player::render()
+void Player::Render()
 {
 
 	//if (Pointed_Obj)
