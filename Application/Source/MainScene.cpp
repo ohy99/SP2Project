@@ -17,10 +17,18 @@
 
 #include "RenderMesh.h"
 
-MainScene::Text_Data MainScene::Text[TEXT_TYPE::Text_Count];
-unsigned MainScene::m_parameters[U_TOTAL];
+#include "UI.h"
+
+//MainScene::Text_Data MainScene::Text[TEXT_TYPE::Text_Count];
+//unsigned MainScene::m_parameters[U_TOTAL];
 MS MainScene::modelStack, MainScene::viewStack, MainScene::projectionStack;
+
 //std::vector<GameObject*> MainScene::Game_Objects_(10, NULL);
+
+//std::vector<GameObject*> MainScene::Game_Objects_(10, NULL);
+UI renderMeshOnScreen;
+
+
 MainScene::MainScene()
 {
 }
@@ -192,29 +200,137 @@ void MainScene::Init()
 
 
 	//Barricade -------------------- Start
-	meshList[GEO_Barricade] = MeshBuilder::GenerateOBJ("Barricade", "OBJ//Barricade_OBJ.obj");
-	meshList[GEO_Barricade]->material.kAmbient.Set(0.6f, 0.6f, 0.6f);
-	meshList[GEO_Barricade]->material.kDiffuse.Set(0.3f, 0.3f, 0.3f);
-	meshList[GEO_Barricade]->material.kSpecular.Set(0.1f, 0.1f, 0.1f);
-	meshList[GEO_Barricade]->material.kShininess = 1.0f;
-	meshList[GEO_Barricade]->textureID = LoadTGA("Image//Barricade_UV_Texture.tga");
+	meshList[GEO_Barricade1] = MeshBuilder::GenerateOBJ("Barricade", "OBJ//Barricade1_OBJ.obj");
+	meshList[GEO_Barricade1]->material.kAmbient.Set(0.6f, 0.6f, 0.6f);
+	meshList[GEO_Barricade1]->material.kDiffuse.Set(0.3f, 0.3f, 0.3f);
+	meshList[GEO_Barricade1]->material.kSpecular.Set(0.1f, 0.1f, 0.1f);
+	meshList[GEO_Barricade1]->material.kShininess = 1.0f;
+	meshList[GEO_Barricade1]->textureID = LoadTGA("Image//Barricade_UV_Texture.tga");
+
+	meshList[GEO_Barricade2] = MeshBuilder::GenerateOBJ("Barricade", "OBJ//Barricade2_OBJ.obj");
+	meshList[GEO_Barricade2]->material.kAmbient.Set(0.6f, 0.6f, 0.6f);
+	meshList[GEO_Barricade2]->material.kDiffuse.Set(0.3f, 0.3f, 0.3f);
+	meshList[GEO_Barricade2]->material.kSpecular.Set(0.1f, 0.1f, 0.1f);
+	meshList[GEO_Barricade2]->material.kShininess = 1.0f;
+	meshList[GEO_Barricade2]->textureID = LoadTGA("Image//Barricade_UV_Texture.tga");
+
+	meshList[GEO_Barricade3] = MeshBuilder::GenerateOBJ("Barricade", "OBJ//Barricade3_OBJ.obj");
+	meshList[GEO_Barricade3]->material.kAmbient.Set(0.6f, 0.6f, 0.6f);
+	meshList[GEO_Barricade3]->material.kDiffuse.Set(0.3f, 0.3f, 0.3f);
+	meshList[GEO_Barricade3]->material.kSpecular.Set(0.1f, 0.1f, 0.1f);
+	meshList[GEO_Barricade3]->material.kShininess = 1.0f;
+	meshList[GEO_Barricade3]->textureID = LoadTGA("Image//Barricade_UV_Texture.tga");
+
+	meshList[GEO_Barricade4] = MeshBuilder::GenerateOBJ("Barricade", "OBJ//Barricade4_OBJ.obj");
+	meshList[GEO_Barricade4]->material.kAmbient.Set(0.6f, 0.6f, 0.6f);
+	meshList[GEO_Barricade4]->material.kDiffuse.Set(0.3f, 0.3f, 0.3f);
+	meshList[GEO_Barricade4]->material.kSpecular.Set(0.1f, 0.1f, 0.1f);
+	meshList[GEO_Barricade4]->material.kShininess = 1.0f;
+	meshList[GEO_Barricade4]->textureID = LoadTGA("Image//Barricade_UV_Texture.tga");
 	//Barricade -------------------- End
 
 
 
 
 	//Teleporter ------------------ START
-	meshList[GEO_Teleporter] = MeshBuilder::GenerateOBJ("Teleporter", "OBJ//InteractableItem_Teleporter_OBJ.obj");
+	meshList[GEO_Teleporter] = MeshBuilder::GenerateOBJ("Teleporter", "OBJ//Teleporter_OBJ.obj");
 	meshList[GEO_Teleporter]->material.kAmbient.Set(0.6f, 0.6f, 0.6f);
 	meshList[GEO_Teleporter]->material.kDiffuse.Set(0.3f, 0.3f, 0.3f);
 	meshList[GEO_Teleporter]->material.kSpecular.Set(0.1f, 0.1f, 0.1f);
 	meshList[GEO_Teleporter]->material.kShininess = 1.0f;
 	meshList[GEO_Teleporter]->textureID = LoadTGA("Image//InteractableItem_Teleporter_UV_Texture.tga");
+
+	meshList[GEO_Teleporter1] = MeshBuilder::GenerateOBJ("Teleporter", "OBJ//Teleporter1_OBJ.obj");
+	meshList[GEO_Teleporter1]->material.kAmbient.Set(0.6f, 0.6f, 0.6f);
+	meshList[GEO_Teleporter1]->material.kDiffuse.Set(0.3f, 0.3f, 0.3f);
+	meshList[GEO_Teleporter1]->material.kSpecular.Set(0.1f, 0.1f, 0.1f);
+	meshList[GEO_Teleporter1]->material.kShininess = 1.0f;
+	meshList[GEO_Teleporter1]->textureID = LoadTGA("Image//InteractableItem_Teleporter_UV_Texture.tga");
 	//Teleporter -----------------------END
+
 
 	NPC* Doc = new NPC_DOC();
 	//Game_Objects_.push_back(Doc);
 	CampNPC.push_back(Doc);
+
+
+
+
+	//Medical Tent ------------------- START
+	meshList[GEO_MedicalTent] = MeshBuilder::GenerateOBJ("Medical Tent", "OBJ//MedicalTent_OBJ.obj");
+	meshList[GEO_MedicalTent]->material.kAmbient.Set(0.6f, 0.6f, 0.6f);
+	meshList[GEO_MedicalTent]->material.kDiffuse.Set(0.3f, 0.3f, 0.3f);
+	meshList[GEO_MedicalTent]->material.kSpecular.Set(0.1f, 0.1f, 0.1f);
+	meshList[GEO_MedicalTent]->material.kShininess = 1.0f;
+	meshList[GEO_MedicalTent]->textureID = LoadTGA("Image//MedicalCamp_UV_Texture.tga");
+	//Medical Tent ------------------- END
+
+
+
+	//Barracks -------------------- START
+	meshList[GEO_Barracks] = MeshBuilder::GenerateOBJ("Barracks", "OBJ//Barracks_OBJ.obj");
+	meshList[GEO_Barracks]->material.kAmbient.Set(0.6f, 0.6f, 0.6f);
+	meshList[GEO_Barracks]->material.kDiffuse.Set(0.3f, 0.3f, 0.3f);
+	meshList[GEO_Barracks]->material.kSpecular.Set(0.1f, 0.1f, 0.1f);
+	meshList[GEO_Barracks]->material.kShininess = 1.0f;
+	meshList[GEO_Barracks]->textureID = LoadTGA("Image//Barracks_UV_Texture.tga");
+	//Barracks ------------------------- END
+
+
+
+
+	//Crates ------------------------------- START
+	meshList[GEO_Crates] = MeshBuilder::GenerateOBJ("Barracks", "OBJ//Crates_OBJ.obj");
+	meshList[GEO_Crates]->material.kAmbient.Set(0.6f, 0.6f, 0.6f);
+	meshList[GEO_Crates]->material.kDiffuse.Set(0.3f, 0.3f, 0.3f);
+	meshList[GEO_Crates]->material.kSpecular.Set(0.1f, 0.1f, 0.1f);
+	meshList[GEO_Crates]->material.kShininess = 1.0f;
+	meshList[GEO_Crates]->textureID = LoadTGA("Image//Crate_UV_Texture.tga");
+
+	meshList[GEO_Crates1] = MeshBuilder::GenerateOBJ("Barracks", "OBJ//Crates1_OBJ.obj");
+	meshList[GEO_Crates1]->material.kAmbient.Set(0.6f, 0.6f, 0.6f);
+	meshList[GEO_Crates1]->material.kDiffuse.Set(0.3f, 0.3f, 0.3f);
+	meshList[GEO_Crates1]->material.kSpecular.Set(0.1f, 0.1f, 0.1f);
+	meshList[GEO_Crates1]->material.kShininess = 1.0f;
+	meshList[GEO_Crates1]->textureID = LoadTGA("Image//Crate_UV_Texture.tga");
+	//Crates ------------------------------------------- END
+
+
+
+
+	//Solar Panels------------------------------------- START
+	meshList[GEO_SolarPanel] = MeshBuilder::GenerateOBJ("Barracks", "OBJ//SolarPanel_OBJ.obj");
+	meshList[GEO_SolarPanel]->material.kAmbient.Set(0.6f, 0.6f, 0.6f);
+	meshList[GEO_SolarPanel]->material.kDiffuse.Set(0.3f, 0.3f, 0.3f);
+	meshList[GEO_SolarPanel]->material.kSpecular.Set(0.1f, 0.1f, 0.1f);
+	meshList[GEO_SolarPanel]->material.kShininess = 1.0f;
+	meshList[GEO_SolarPanel]->textureID = LoadTGA("Image//SolarUV_Texture.tga");
+
+	meshList[GEO_SolarPanel1] = MeshBuilder::GenerateOBJ("Barracks", "OBJ//SolarPanel1_OBJ.obj");
+	meshList[GEO_SolarPanel1]->material.kAmbient.Set(0.6f, 0.6f, 0.6f);
+	meshList[GEO_SolarPanel1]->material.kDiffuse.Set(0.3f, 0.3f, 0.3f);
+	meshList[GEO_SolarPanel1]->material.kSpecular.Set(0.1f, 0.1f, 0.1f);
+	meshList[GEO_SolarPanel1]->material.kShininess = 1.0f;
+	meshList[GEO_SolarPanel1]->textureID = LoadTGA("Image//SolarUV_Texture.tga");
+	//Solar Panels ------------------------------------- END
+
+
+
+
+	//Powerbox ----------------------------------- START
+	meshList[GEO_PowerBox] = MeshBuilder::GenerateOBJ("Barracks", "OBJ//Powerbox_OBJ.obj");
+	meshList[GEO_PowerBox]->material.kAmbient.Set(0.6f, 0.6f, 0.6f);
+	meshList[GEO_PowerBox]->material.kDiffuse.Set(0.3f, 0.3f, 0.3f);
+	meshList[GEO_PowerBox]->material.kSpecular.Set(0.1f, 0.1f, 0.1f);
+	meshList[GEO_PowerBox]->material.kShininess = 1.0f;
+	meshList[GEO_PowerBox]->textureID = LoadTGA("Image//Powerbox_UV_Texture.tga");
+	//Powerbox ----------------------------------- END
+
+
+	renderMeshOnScreen.Init();
+	wasEscPressed = false;
+	isPause = false;
+
 
 	camera = new Camera3;
 	camera->Init(Vector3(0, 0, 7), Vector3(0, 0, 0), Vector3(0, 1, 0));
@@ -230,6 +346,13 @@ void MainScene::Init()
 
 void MainScene::Update(double dt)
 {
+
+
+	int width, height;
+	glfwGetWindowSize(Application::m_window, &width, &height);
+	isEscPressed = Application::IsKeyPressed(VK_ESCAPE);
+
+
 	if (Application::IsKeyPressed(VK_NUMPAD1) || Application::IsKeyPressed('1'))
 	{
 		glEnable(GL_CULL_FACE);
@@ -255,8 +378,32 @@ void MainScene::Update(double dt)
 		once = true;
 	}
 
-	Player::getInstance()->update(dt, camera);
 
+
+
+
+	if (isEscPressed && !wasEscPressed) // When you press ESC
+	{
+		if (!isPause)
+		{
+			isPause = true;
+			glfwSetInputMode(Application::m_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+			glfwSetCursorPos(Application::m_window, width / 2, height / 2);
+		}
+		else
+		{
+			isPause = false;
+			glfwSetInputMode(Application::m_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+			glfwSetCursorPos(Application::m_window, width / 2, height / 2);
+		}
+
+		wasEscPressed = isEscPressed;
+	}
+		
+	if (!isEscPressed && wasEscPressed) // When you release the ESC button
+		wasEscPressed = isEscPressed;
+
+	Player::getInstance()->update(dt, camera);
 
 	for (size_t i = 0; i < CampNPC.size(); i++)
 	{
@@ -264,17 +411,17 @@ void MainScene::Update(double dt)
 	}
 
 
-	double c_posx, c_posy;
-	glfwGetCursorPos(Application::m_window, &c_posx, &c_posy);
-	int width, height;
-	glfwGetWindowSize(Application::m_window, &width, &height);
+	if (!isPause)
+	{
+		double c_posx, c_posy;
+		glfwGetCursorPos(Application::m_window, &c_posx, &c_posy);
+		glfwSetCursorPos(Application::m_window, width / 2, height / 2);
 
-	glfwSetCursorPos(Application::m_window, width / 2, height / 2);
-
-	double dx, dy;
-	dx = dt * double(width / 2 - c_posx);
-	dy = dt * double(height / 2 - c_posy);
-	camera->Update(dt, dx, dy);
+		double dx, dy;
+		dx = dt * double(width / 2 - c_posx);
+		dy = dt * double(height / 2 - c_posy);
+		camera->Update(dt, dx, dy);
+	}
 
 	FramesPerSec = 1 / dt;
 
@@ -314,47 +461,75 @@ void MainScene::Render()
 	}
 
 
-	RenderBaseCamp();
+	if (isPause)
+		renderMeshOnScreen.renderPause(&projectionStack, &viewStack, &modelStack, m_parameters);
 
+
+	RenderBaseCamp();
+	RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::to_string(FramesPerSec), Color(1, 0, 0), 1.5f, 45, 38, &projectionStack, &viewStack, &modelStack, m_parameters);
 }
 
 void MainScene::RenderBaseCamp(){
 
 	//Barricade START ------------------------------------------------- Around the camp
 	modelStack.PushMatrix();
-	modelStack.Scale(10, 1, 1);
-	RenderMeshClass::RenderMesh(meshList[GEO_Barricade], true, &projectionStack, &viewStack, &modelStack, m_parameters);
+	RenderMeshClass::RenderMesh(meshList[GEO_Barricade1], true, &projectionStack, &viewStack, &modelStack, m_parameters);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-	modelStack.Translate(25, 0, 25);
-	modelStack.Rotate(90, 0, 1, 0);
-	modelStack.Scale(10, 1, 1);
-	RenderMeshClass::RenderMesh(meshList[GEO_Barricade], true, &projectionStack, &viewStack, &modelStack, m_parameters);
+	RenderMeshClass::RenderMesh(meshList[GEO_Barricade2], true, &projectionStack, &viewStack, &modelStack, m_parameters);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-	modelStack.Translate(-25, 0, 25);
-	modelStack.Rotate(90, 0, 1, 0);
-	modelStack.Scale(10, 1, 1);
-	RenderMeshClass::RenderMesh(meshList[GEO_Barricade], true, &projectionStack, &viewStack, &modelStack, m_parameters);
+	RenderMeshClass::RenderMesh(meshList[GEO_Barricade3], true, &projectionStack, &viewStack, &modelStack, m_parameters);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-	modelStack.Translate(0, 0, 50);
-	modelStack.Scale(10, 1, 1);
-	RenderMeshClass::RenderMesh(meshList[GEO_Barricade], true, &projectionStack, &viewStack, &modelStack, m_parameters);
+	RenderMeshClass::RenderMesh(meshList[GEO_Barricade4], true, &projectionStack, &viewStack, &modelStack, m_parameters);
 	modelStack.PopMatrix();
 	//Barricade END ------------------------------------------------------
 
-	//Teleporter
+	//Teleporter 1 -- To world map -- Where player find the blueprints
 	modelStack.PushMatrix();
-	modelStack.Translate(0, 0, 3);
 	RenderMeshClass::RenderMesh(meshList[GEO_Teleporter], true, &projectionStack, &viewStack, &modelStack, m_parameters);
+	modelStack.PopMatrix();
+	
+
+
+	//Teleporter 2 -- To final boss?? -- Fight the final boss to put an item somewhere?? 
+	modelStack.PushMatrix();
+	RenderMeshClass::RenderMesh(meshList[GEO_Teleporter1], true, &projectionStack, &viewStack, &modelStack, m_parameters);
 	modelStack.PopMatrix();
 
 
-	RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::to_string(FramesPerSec), Color(1, 0, 0), 1.5f, 45, 38, &projectionStack, &viewStack, &modelStack, m_parameters);
+
+	//Medical Tent
+	modelStack.PushMatrix();
+	RenderMeshClass::RenderMesh(meshList[GEO_MedicalTent], true, &projectionStack, &viewStack, &modelStack, m_parameters);
+	modelStack.PopMatrix();
+
+	//Barracks
+	modelStack.PushMatrix();
+	RenderMeshClass::RenderMesh(meshList[GEO_Barracks], true, &projectionStack, &viewStack, &modelStack, m_parameters);
+	modelStack.PopMatrix();
+
+	//Crates
+	modelStack.PushMatrix();
+	RenderMeshClass::RenderMesh(meshList[GEO_Crates], true, &projectionStack, &viewStack, &modelStack, m_parameters);
+	RenderMeshClass::RenderMesh(meshList[GEO_Crates1], true, &projectionStack, &viewStack, &modelStack, m_parameters);
+	modelStack.PopMatrix();
+
+	//Solar panels
+	modelStack.PushMatrix();
+	RenderMeshClass::RenderMesh(meshList[GEO_SolarPanel], true, &projectionStack, &viewStack, &modelStack, m_parameters);
+	RenderMeshClass::RenderMesh(meshList[GEO_SolarPanel1], true, &projectionStack, &viewStack, &modelStack, m_parameters);
+	modelStack.PopMatrix();
+
+	//Powerbox
+	modelStack.PushMatrix();
+	RenderMeshClass::RenderMesh(meshList[GEO_PowerBox], true, &projectionStack, &viewStack, &modelStack, m_parameters);
+	modelStack.PopMatrix();
+
 }
 
 void MainScene::Exit()
@@ -417,6 +592,7 @@ void MainScene::RenderSkybox()
 
 
 }
+
 
 //void MainScene::RenderMesh(Mesh *mesh, bool enableLight)
 //{

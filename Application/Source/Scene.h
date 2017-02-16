@@ -4,6 +4,8 @@
 #include <vector>
 //#include "GameObject.h"
 #include "Mesh.h"
+#include "LoadTextData.h"
+#include "LoadTGA.h"
 
 class Scene abstract
 {
@@ -72,7 +74,7 @@ public:
 		float TextWidth[256];
 	};
 	static Text_Data Text[TEXT_TYPE::Text_Count];
-	
+
 	//virtual void AddObjToCurrentScene(GameObject* newGObj) { Game_Objects_.push_back(newGObj); }
 protected:
 	//std::vector<GameObject*> Game_Objects_;

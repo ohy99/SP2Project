@@ -33,8 +33,19 @@ class MainScene : public Scene
 		GEO_LIGHTBALL,
 		GEO_LIGHTBALL1,
 		GEO_GroundMesh_RedDirt,
-		GEO_Barricade,
+		GEO_Barricade1,
+		GEO_Barricade2,
+		GEO_Barricade3,
+		GEO_Barricade4,
 		GEO_Teleporter,
+		GEO_Teleporter1,
+		GEO_MedicalTent,
+		GEO_Barracks,
+		GEO_Crates,
+		GEO_Crates1,
+		GEO_SolarPanel,
+		GEO_SolarPanel1,
+		GEO_PowerBox,
 
 		GEO_LEFT,
 		GEO_RIGHT,
@@ -74,8 +85,14 @@ private:
 
 	Light light[8];
 
+
 	std::vector<NPC*> CampNPC;
 	//std::vector
+
+	bool isPause;
+	bool isEscPressed, wasEscPressed;
+	
+
 	//void RenderText(Text_Data* TextData, std::string text, Color color);
 	//void RenderTextOnScreen(Text_Data* TextData, std::string text, Color color, float size, float x, float y);
 	//void RenderMeshOnScreen(Mesh* mesh, int x, int y, int sizex, int sizey);
