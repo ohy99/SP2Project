@@ -1,7 +1,8 @@
 #ifndef UI_H
 #define UI_H
 
-#include "MainScene.h"
+#include "Mesh.h"
+#include "MatrixStack.h"
 
 class UI
 {

@@ -9,5 +9,5 @@ void UI::Init()
 
 void UI::renderPause(MS* projectionStack, MS* viewStack, MS* modelStack, unsigned * m_parameters)
 {
-	RenderMeshClass::RenderMeshOnScreen(meshList[QUAD], 1, 1, 700, 700, projectionStack, viewStack, modelStack, m_parameters);
+	RenderMeshClass::RenderMeshOnScreen(meshList[QUAD], 500, 380, 0, 700, 700, projectionStack, viewStack, modelStack, m_parameters);
 }

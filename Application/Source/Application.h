@@ -20,6 +20,9 @@ public:
 	static inline double getWindowWidth() { return windowWidth; }
 	static inline double getWindowHeight() { return windowHeight; }
 
+	static inline void setWindowSize(int w, int h) { windowWidth = w; windowHeight = h; }
+
+
 	static StopWatch m_timer;
 	static GLFWwindow* m_window;
 	static const unsigned char FPS; // FPS of this game

@@ -70,6 +70,7 @@ Application::~Application()
 void resize_callback(GLFWwindow* window, int w, int h)
 {
 	glViewport(0, 0, w, h);	//Update opengl the new window size
+	Application::setWindowSize(w, h);
 }
 
 void Application::Init()
