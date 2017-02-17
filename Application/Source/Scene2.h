@@ -1,5 +1,5 @@
-#ifndef MAIN_SCENE_H
-#define MAIN_SCENE_H
+#ifndef SCENE2_H
+#define SCENE2_H
 
 #include "Scene.h"
 #include "SceneManager.h"
@@ -18,7 +18,7 @@
 #include "Environment.h"
 
 
-class MainScene : public Scene
+class Scene2 : public Scene
 {
 	enum GEOMETRY_TYPE
 	{
@@ -59,8 +59,8 @@ class MainScene : public Scene
 	};
 
 public:
-	MainScene();
-	~MainScene();
+	Scene2();
+	~Scene2();
 
 	virtual void Init();
 	virtual void Update(double dt);
@@ -92,7 +92,7 @@ private:
 
 	bool isPause;
 	bool isEscPressed, wasEscPressed;
-	
+
 
 	//void RenderText(Text_Data* TextData, std::string text, Color color);
 	//void RenderTextOnScreen(Text_Data* TextData, std::string text, Color color, float size, float x, float y);

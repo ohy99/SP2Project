@@ -74,6 +74,7 @@ public:
 		float TextWidth[256];
 	};
 	static Text_Data Text[TEXT_TYPE::Text_Count];
+	static unsigned m_programID;
 
 	//virtual void AddObjToCurrentScene(GameObject* newGObj) { Game_Objects_.push_back(newGObj); }
 protected:

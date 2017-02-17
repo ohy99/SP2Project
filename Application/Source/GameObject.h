@@ -10,6 +10,9 @@ class GameObject abstract
 protected:
 	GameObject(const std::string& name) : kName(name) { /*SceneManager::getInstance()->getCurrentScene()->AddObjToCurrentScene(this);*/ };
 	const std::string kName; // Name of the object
+	unsigned ObjID;
+	std::string ObjName;
+	std::string TextureName;
 public: 
 	virtual ~GameObject() { };
 	std::string getName(void) {	return kName; }

@@ -14,6 +14,8 @@ NPC_DOC::NPC_DOC() : AllyNPC("NPC_DOC")
 	NPC_Doc_mesh[NPC_DOCPARTS::RIGHTARM] = MeshBuilder::GenerateOBJ("DOC_BODY", "OBJ//DocRightArm.obj");
 	anim_TimeElapsed = 0.0;
 	NPC_Doc_mesh[NPC_DOCPARTS::BODY]->pos.Set(5, 0, 5);
+
+	CollisionMesh_ = NPC_Doc_mesh[NPC_DOCPARTS::BODY];
 }
 NPC_DOC::~NPC_DOC()
 {
