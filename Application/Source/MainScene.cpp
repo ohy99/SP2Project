@@ -26,7 +26,6 @@ MS MainScene::modelStack, MainScene::viewStack, MainScene::projectionStack;
 //std::vector<GameObject*> MainScene::Game_Objects_(10, NULL);
 
 //std::vector<GameObject*> MainScene::Game_Objects_(10, NULL);
-UI renderMeshOnScreen;
 
 
 MainScene::MainScene()
@@ -327,10 +326,10 @@ void MainScene::Init()
 	//Powerbox ----------------------------------- END
 
 
-	renderMeshOnScreen.Init();
+	renderUI.Init();
 	wasEscPressed = false;
 	isPause = false;
-
+	MainMenu.Init();
 
 	camera = new Camera3;
 	camera->Init(Vector3(0, 0, 7), Vector3(0, 0, 0), Vector3(0, 1, 0));
@@ -341,7 +340,7 @@ void MainScene::Init()
 	projectionStack.LoadMatrix(projection);
 
 	// Hide the mouse and enable unlimited mouvement
-	glfwSetInputMode(Application::m_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+	glfwSetInputMode(Application::m_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 }
 
 void MainScene::Update(double dt)
@@ -384,20 +383,23 @@ void MainScene::Update(double dt)
 
 	if (isEscPressed && !wasEscPressed) // When you press ESC
 	{
-		if (!isPause)
+		if (!MainMenu.isMainMenu)
 		{
-			isPause = true;
-			glfwSetInputMode(Application::m_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-			glfwSetCursorPos(Application::m_window, width / 2, height / 2);
-		}
-		else
-		{
-			isPause = false;
-			glfwSetInputMode(Application::m_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-			glfwSetCursorPos(Application::m_window, width / 2, height / 2);
-		}
+			if (!isPause)
+			{
+				isPause = true;
+				glfwSetInputMode(Application::m_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+				glfwSetCursorPos(Application::m_window, width / 2, height / 2);				
+			}
+			else
+			{
+				isPause = false;
+				glfwSetInputMode(Application::m_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+				glfwSetCursorPos(Application::m_window, width / 2, height / 2);
+			}
 
-		wasEscPressed = isEscPressed;
+			wasEscPressed = isEscPressed;
+		}
 	}
 		
 	if (!isEscPressed && wasEscPressed) // When you release the ESC button
@@ -411,11 +413,13 @@ void MainScene::Update(double dt)
 	}
 
 
-	if (!isPause)
+	if (!isPause && !MainMenu.isMainMenu)
 	{
 		double c_posx, c_posy;
 		glfwGetCursorPos(Application::m_window, &c_posx, &c_posy);
 		glfwSetCursorPos(Application::m_window, width / 2, height / 2);
+
+		glfwSetInputMode(Application::m_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
 		double dx, dy;
 		dx = dt * double(width / 2 - c_posx);
@@ -424,8 +428,9 @@ void MainScene::Update(double dt)
 	}
 
 	FramesPerSec = 1 / dt;
-
-
+	MainMenu.Update(dt);
+	
+	glfwGetCursorPos(Application::m_window, &x, &y);
 }
 
 void MainScene::Render()
@@ -440,33 +445,49 @@ void MainScene::Render()
 		camera->getUp().x, camera->getUp().y, camera->getUp().z);
 	modelStack.LoadIdentity();
 
-	RenderMeshClass::RenderMesh(meshList[GEO_AXES], false, &projectionStack, &viewStack, &modelStack, m_parameters);
+	std::string posx = "x cur pos :" + std::to_string(x);
+	std::string posy = "y cur pos :" + std::to_string(y);
 
-	Player::getInstance()->render();
+	if (MainMenu.isMainMenu)
+	{		
 
-	RenderSkybox();
-	//	renderEnvironment();
-
-	//Ground Mesh
-	modelStack.PushMatrix();
-	modelStack.Scale(1000, 1000, 1000);
-	modelStack.Rotate(90, -1, 0, 0);
-	RenderMeshClass::RenderMesh(meshList[GEO_GroundMesh_RedDirt], true, &projectionStack, &viewStack, &modelStack, m_parameters);
-	modelStack.PopMatrix();
-
-	
-	for (size_t i = 0; i < CampNPC.size(); i++)
-	{
-		CampNPC.at(i)->render(&projectionStack, &viewStack, &modelStack, m_parameters);
+		MainMenu.Render();
+		RenderMeshClass::RenderTextOnScreen(&Scene::Text[Scene::TEXT_TYPE::Century], posx, Color(1, 1, 1), 5, 25, 50, &projectionStack, &viewStack, &modelStack, m_parameters);
+		RenderMeshClass::RenderTextOnScreen(&Scene::Text[Scene::TEXT_TYPE::Century], posy, Color(1, 1, 1), 5, 25, 45, &projectionStack, &viewStack, &modelStack, m_parameters);
 	}
+		
 
 
-	if (isPause)
-		renderMeshOnScreen.renderPause(&projectionStack, &viewStack, &modelStack, m_parameters);
+	else
+	{
+		RenderMeshClass::RenderMesh(meshList[GEO_AXES], false, &projectionStack, &viewStack, &modelStack, m_parameters);
+
+		Player::getInstance()->render();
+
+		RenderSkybox();
+		//	renderEnvironment();
+
+		//Ground Mesh
+		modelStack.PushMatrix();
+		modelStack.Scale(1000, 1000, 1000);
+		modelStack.Rotate(90, -1, 0, 0);
+		RenderMeshClass::RenderMesh(meshList[GEO_GroundMesh_RedDirt], true, &projectionStack, &viewStack, &modelStack, m_parameters);
+		modelStack.PopMatrix();
 
 
-	RenderBaseCamp();
-	RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::to_string(FramesPerSec), Color(1, 0, 0), 1.5f, 45, 38, &projectionStack, &viewStack, &modelStack, m_parameters);
+		for (size_t i = 0; i < CampNPC.size(); i++)
+		{
+			CampNPC.at(i)->render(&projectionStack, &viewStack, &modelStack, m_parameters);
+		}
+
+
+		if (isPause)
+			renderUI.renderPause(&projectionStack, &viewStack, &modelStack, m_parameters);
+
+
+		RenderBaseCamp();
+		RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::to_string(FramesPerSec), Color(1, 0, 0), 1.5f, 45, 38, &projectionStack, &viewStack, &modelStack, m_parameters);
+	}
 }
 
 void MainScene::RenderBaseCamp(){

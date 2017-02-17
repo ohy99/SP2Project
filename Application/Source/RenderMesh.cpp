@@ -118,9 +118,9 @@ void RenderMeshClass::RenderTextOnScreen(Scene::Text_Data* TextData, std::string
 	viewStack->PopMatrix();
 	modelStack->PopMatrix();
 }
-void RenderMeshClass::RenderMeshOnScreen(Mesh* mesh, int x, int y, int sizex, int sizey, MS* projectionStack, MS* viewStack, MS* modelStack, unsigned * m_parameters)
+void RenderMeshClass::RenderMeshOnScreen(Mesh* mesh, int x, int y, int z, int sizex, int sizey, MS* projectionStack, MS* viewStack, MS* modelStack, unsigned * m_parameters)
 {
-	glDisable(GL_DEPTH_TEST);
+	//glDisable(GL_DEPTH_TEST);
 	Mtx44 ortho;
 	ortho.SetToOrtho(0, Application::getWindowWidth(), 0, Application::getWindowHeight(), -10, 10); //size of screen UI
 	projectionStack->PushMatrix();
@@ -131,11 +131,11 @@ void RenderMeshClass::RenderMeshOnScreen(Mesh* mesh, int x, int y, int sizex, in
 	modelStack->LoadIdentity();
 	//to do: scale and translate accordingly
 
-	modelStack->Translate(x, y, 0);
+	modelStack->Translate(x, y, z);
 	modelStack->Scale(sizex, sizey, 1);
 	RenderMesh(mesh, false, projectionStack, viewStack, modelStack, m_parameters); //UI should not have light
 	projectionStack->PopMatrix();
 	viewStack->PopMatrix();
 	modelStack->PopMatrix();
-	glEnable(GL_DEPTH_TEST);
+	//glEnable(GL_DEPTH_TEST);
 }
