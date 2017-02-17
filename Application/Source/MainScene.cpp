@@ -26,7 +26,6 @@ MS MainScene::modelStack, MainScene::viewStack, MainScene::projectionStack;
 //std::vector<GameObject*> MainScene::Game_Objects_(10, NULL);
 
 //std::vector<GameObject*> MainScene::Game_Objects_(10, NULL);
-UI renderMeshOnScreen;
 
 
 MainScene::MainScene()
@@ -327,7 +326,7 @@ void MainScene::Init()
 	//Powerbox ----------------------------------- END
 
 
-	renderMeshOnScreen.Init();
+	renderUI.Init();
 	wasEscPressed = false;
 	isPause = false;
 	MainMenu.Init();
@@ -449,17 +448,15 @@ void MainScene::Render()
 	std::string posx = "x cur pos :" + std::to_string(x);
 	std::string posy = "y cur pos :" + std::to_string(y);
 
-
-	
-
 	if (MainMenu.isMainMenu)
 	{		
+
+		MainMenu.Render();
 		RenderMeshClass::RenderTextOnScreen(&Scene::Text[Scene::TEXT_TYPE::Century], posx, Color(1, 1, 1), 5, 25, 50, &projectionStack, &viewStack, &modelStack, m_parameters);
 		RenderMeshClass::RenderTextOnScreen(&Scene::Text[Scene::TEXT_TYPE::Century], posy, Color(1, 1, 1), 5, 25, 45, &projectionStack, &viewStack, &modelStack, m_parameters);
-		MainMenu.Render();
-
 	}
 		
+
 
 	else
 	{
@@ -485,7 +482,7 @@ void MainScene::Render()
 
 
 		if (isPause)
-			renderMeshOnScreen.renderPause(&projectionStack, &viewStack, &modelStack, m_parameters);
+			renderUI.renderPause(&projectionStack, &viewStack, &modelStack, m_parameters);
 
 
 		RenderBaseCamp();

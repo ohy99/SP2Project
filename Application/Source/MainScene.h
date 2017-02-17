@@ -15,6 +15,7 @@
 
 #include "Player.h"
 #include "MainScreen.h"
+#include "UI.h"
 #include "NPC.h"
 
 
@@ -93,6 +94,7 @@ private:
 	bool isEscPressed, wasEscPressed;
 
 	MainScreen MainMenu;
+	UI renderUI;
 
 	double x, y;
 	//void RenderText(Text_Data* TextData, std::string text, Color color);
