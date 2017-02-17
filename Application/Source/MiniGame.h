@@ -16,7 +16,6 @@
 #include "Player.h"
 #include "MainScreen.h"
 #include "UI.h"
-#include "NPC.h"
 
 
 class MiniGame : public Scene

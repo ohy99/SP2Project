@@ -54,7 +54,8 @@ void Camera::Reset()
 /******************************************************************************/
 /*!
 \brief
-To be called every frame. Camera will get user inputs and update its position and orientation
+To be called every frame. Camera will get user inputs and 
+its position and orientation
 
 \param dt - frame time
 */

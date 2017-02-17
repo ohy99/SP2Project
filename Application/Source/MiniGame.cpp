@@ -239,6 +239,8 @@ void MiniGame::Update(double dt)
 			wasEscPressed = isEscPressed;
 	}
 
+	Player::getInstance()->update(dt, camera);
+
 	if (!isEscPressed && wasEscPressed) // When you release the ESC button
 		wasEscPressed = isEscPressed;
 
@@ -249,8 +251,6 @@ void MiniGame::Update(double dt)
 		glfwSetCursorPos(Application::m_window, width / 2, height / 2);
 
 		glfwSetInputMode(Application::m_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-
-		Player::getInstance()->update(dt, camera);
 
 		double dx, dy;
 		dx = dt * double(width / 2 - c_posx);
@@ -275,7 +275,7 @@ void MiniGame::Render()
 
 	RenderMeshClass::RenderMesh(meshList[GEO_AXES], false, &projectionStack, &viewStack, &modelStack, m_parameters);
 
-	Player::getInstance()->render();
+	Player::getInstance()->render(&projectionStack, &viewStack, &modelStack, m_parameters);
 
 	RenderSkybox();
 

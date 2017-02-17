@@ -442,8 +442,6 @@ void MainScene::Update(double dt)
 
 	FramesPerSec = 1 / dt;
 	MainMenu.Update(dt);
-	
-	glfwGetCursorPos(Application::m_window, &x, &y);
 }
 
 void MainScene::Render()
@@ -458,17 +456,9 @@ void MainScene::Render()
 		camera->getUp().x, camera->getUp().y, camera->getUp().z);
 	modelStack.LoadIdentity();
 
-	std::string posx = "x cur pos :" + std::to_string(x);
-	std::string posy = "y cur pos :" + std::to_string(y);
-
 	if (MainMenu.isMainMenu)
-	{
-
-
 		MainMenu.Render();
-		RenderMeshClass::RenderTextOnScreen(&Scene::Text[Scene::TEXT_TYPE::Century], posx, Color(1, 1, 1), 5, 25, 50, &projectionStack, &viewStack, &modelStack, m_parameters);
-		RenderMeshClass::RenderTextOnScreen(&Scene::Text[Scene::TEXT_TYPE::Century], posy, Color(1, 1, 1), 5, 25, 45, &projectionStack, &viewStack, &modelStack, m_parameters);
-	}
+
 	else
 	{
 		RenderMeshClass::RenderMesh(meshList[GEO_AXES], false, &projectionStack, &viewStack, &modelStack, m_parameters);
