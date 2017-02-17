@@ -13,6 +13,7 @@
 
 #include "SceneManager.h"
 #include "MainScene.h"
+#include "MiniGame.h"
 
 #include "DetectMemoryLeak.h"
 
@@ -125,7 +126,7 @@ void Application::Init()
 void Application::Run()
 {
 	//Main Loop
-	Scene *scene1 = new MainScene();
+	Scene *scene1 = new MiniGame();
 	Scene *scene2 = new MainScene();
 	//Scene *scene = scene1;
 	scene1->Init();
