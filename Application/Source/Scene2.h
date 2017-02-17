@@ -1,5 +1,5 @@
-#ifndef MAIN_SCENE_H
-#define MAIN_SCENE_H
+#ifndef SCENE2_H
+#define SCENE2_H
 
 #include "Scene.h"
 #include "SceneManager.h"
@@ -14,13 +14,11 @@
 #include <vector>
 
 #include "Player.h"
-#include "MainScreen.h"
-#include "UI.h"
 #include "NPC.h"
 #include "Environment.h"
 
 
-class MainScene : public Scene
+class Scene2 : public Scene
 {
 	enum GEOMETRY_TYPE
 	{
@@ -61,8 +59,8 @@ class MainScene : public Scene
 	};
 
 public:
-	MainScene();
-	~MainScene();
+	Scene2();
+	~Scene2();
 
 	virtual void Init();
 	virtual void Update(double dt);
@@ -71,6 +69,7 @@ public:
 	//virtual std::vector<GameObject*> getCurrentSceneObjs(){ return Game_Objects_; }
 
 	static MS modelStack, viewStack, projectionStack;
+
 
 private:
 	unsigned m_vertexArrayID;
@@ -94,10 +93,7 @@ private:
 	bool isPause;
 	bool isEscPressed, wasEscPressed;
 
-	MainScreen MainMenu;
-	UI renderUI;
 
-	double x, y;
 	//void RenderText(Text_Data* TextData, std::string text, Color color);
 	//void RenderTextOnScreen(Text_Data* TextData, std::string text, Color color, float size, float x, float y);
 	//void RenderMeshOnScreen(Mesh* mesh, int x, int y, int sizex, int sizey);

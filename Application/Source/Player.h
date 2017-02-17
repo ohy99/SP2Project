@@ -7,6 +7,8 @@
 #include "Weapon.h"
 #include "Potions.h"
 #include "Camera.h"
+#include "MatrixStack.h"
+#include "FPSCam.h"
 
 class Player : public GameObject
 {
@@ -34,11 +36,13 @@ class Player : public GameObject
 	int hp_; 
 	Vector3 pos_;
 	Vector3 dir_;
+	Vector3 right_;
 	float dirRotateAngle;
+	Vector3 dirRotateAxis;
 	static Player* Instance_;
 	STATES state_;
 	float hitDelay = 0.0f;
-	float moveSPD = 1.5f;
+	float moveSPD = 2.0f;
 
 	GameObject* Pointed_Obj;
 
@@ -51,18 +55,21 @@ class Player : public GameObject
 	Mesh* PMesh[MESH_TYPE::mt_Count];
 	Player();
 
+	static std::vector<GameObject*> CollisionObjects;
 public:
 	static Player* getInstance();
 	void setPosition(Vector3& pos);
 
 	void update(double dt, Camera* cam);
-	void render();
+	void render(MS* projectionStack, MS* viewStack, MS* modelStack, unsigned * m_parameters);
 	void getPointedObj(Camera* cam);
 
 	void isHitUpdate(int dmg);
 
 	Mesh* getCollisionMesh() { return PMesh[MESH_TYPE::Body]; };
 	inline int getHp() { return hp_; }
+	void PlayerMovement(double dt);
+	static inline void addCollisionObject(GameObject* obj) { CollisionObjects.push_back(obj); }
 	//bool isDead();
 	//~Player();
 };

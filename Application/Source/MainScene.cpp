@@ -14,6 +14,7 @@
 //#include "GameObject.h"
 
 #include "NPC_Doc.h"
+#include "Environment.h"
 
 #include "RenderMesh.h"
 
@@ -26,6 +27,11 @@ MS MainScene::modelStack, MainScene::viewStack, MainScene::projectionStack;
 //std::vector<GameObject*> MainScene::Game_Objects_(10, NULL);
 
 //std::vector<GameObject*> MainScene::Game_Objects_(10, NULL);
+UI renderMeshOnScreen;
+std::vector<EnvironmentObj*> MainScene::Env_Obj;
+std::vector<NPC*> MainScene::CampNPC;
+
+
 
 
 MainScene::MainScene()
@@ -199,39 +205,26 @@ void MainScene::Init()
 
 
 	//Barricade -------------------- Start
-	meshList[GEO_Barricade1] = MeshBuilder::GenerateOBJ("Barricade", "OBJ//Barricade1_OBJ.obj");
-	meshList[GEO_Barricade1]->material.kAmbient.Set(0.6f, 0.6f, 0.6f);
-	meshList[GEO_Barricade1]->material.kDiffuse.Set(0.3f, 0.3f, 0.3f);
-	meshList[GEO_Barricade1]->material.kSpecular.Set(0.1f, 0.1f, 0.1f);
-	meshList[GEO_Barricade1]->material.kShininess = 1.0f;
-	meshList[GEO_Barricade1]->textureID = LoadTGA("Image//Barricade_UV_Texture.tga");
+	EnvironmentObj* Barricade1 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Barricade", "OBJ//Barricade1_OBJ.obj"));
+	Barricade1->CollisionMesh_->textureID = LoadTGA("Image//Barricade_UV_Texture.tga");
+	EnvironmentObj* Barricade2 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Barricade", "OBJ//Barricade2_OBJ.obj"));
+	Barricade2->CollisionMesh_->textureID = LoadTGA("Image//Barricade_UV_Texture.tga");
+	EnvironmentObj* Barricade3 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Barricade", "OBJ//Barricade3_OBJ.obj"));
+	Barricade3->CollisionMesh_->textureID = LoadTGA("Image//Barricade_UV_Texture.tga");
+	EnvironmentObj* Barricade4 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Barricade", "OBJ//Barricade4_OBJ.obj"));
+	Barricade4->CollisionMesh_->textureID = LoadTGA("Image//Barricade_UV_Texture.tga");
 
-	meshList[GEO_Barricade2] = MeshBuilder::GenerateOBJ("Barricade", "OBJ//Barricade2_OBJ.obj");
-	meshList[GEO_Barricade2]->material.kAmbient.Set(0.6f, 0.6f, 0.6f);
-	meshList[GEO_Barricade2]->material.kDiffuse.Set(0.3f, 0.3f, 0.3f);
-	meshList[GEO_Barricade2]->material.kSpecular.Set(0.1f, 0.1f, 0.1f);
-	meshList[GEO_Barricade2]->material.kShininess = 1.0f;
-	meshList[GEO_Barricade2]->textureID = LoadTGA("Image//Barricade_UV_Texture.tga");
-
-	meshList[GEO_Barricade3] = MeshBuilder::GenerateOBJ("Barricade", "OBJ//Barricade3_OBJ.obj");
-	meshList[GEO_Barricade3]->material.kAmbient.Set(0.6f, 0.6f, 0.6f);
-	meshList[GEO_Barricade3]->material.kDiffuse.Set(0.3f, 0.3f, 0.3f);
-	meshList[GEO_Barricade3]->material.kSpecular.Set(0.1f, 0.1f, 0.1f);
-	meshList[GEO_Barricade3]->material.kShininess = 1.0f;
-	meshList[GEO_Barricade3]->textureID = LoadTGA("Image//Barricade_UV_Texture.tga");
-
-	meshList[GEO_Barricade4] = MeshBuilder::GenerateOBJ("Barricade", "OBJ//Barricade4_OBJ.obj");
-	meshList[GEO_Barricade4]->material.kAmbient.Set(0.6f, 0.6f, 0.6f);
-	meshList[GEO_Barricade4]->material.kDiffuse.Set(0.3f, 0.3f, 0.3f);
-	meshList[GEO_Barricade4]->material.kSpecular.Set(0.1f, 0.1f, 0.1f);
-	meshList[GEO_Barricade4]->material.kShininess = 1.0f;
-	meshList[GEO_Barricade4]->textureID = LoadTGA("Image//Barricade_UV_Texture.tga");
+	Env_Obj.push_back(Barricade1);
+	Env_Obj.push_back(Barricade2);
+	Env_Obj.push_back(Barricade3);
+	Env_Obj.push_back(Barricade4);
 	//Barricade -------------------- End
 
 
 
 
 	//Teleporter ------------------ START
+
 	meshList[GEO_Teleporter] = MeshBuilder::GenerateOBJ("Teleporter", "OBJ//Teleporter_OBJ.obj");
 	meshList[GEO_Teleporter]->material.kAmbient.Set(0.6f, 0.6f, 0.6f);
 	meshList[GEO_Teleporter]->material.kDiffuse.Set(0.3f, 0.3f, 0.3f);
@@ -256,12 +249,18 @@ void MainScene::Init()
 
 
 	//Medical Tent ------------------- START
-	meshList[GEO_MedicalTent] = MeshBuilder::GenerateOBJ("Medical Tent", "OBJ//MedicalTent_OBJ.obj");
-	meshList[GEO_MedicalTent]->material.kAmbient.Set(0.6f, 0.6f, 0.6f);
-	meshList[GEO_MedicalTent]->material.kDiffuse.Set(0.3f, 0.3f, 0.3f);
-	meshList[GEO_MedicalTent]->material.kSpecular.Set(0.1f, 0.1f, 0.1f);
-	meshList[GEO_MedicalTent]->material.kShininess = 1.0f;
-	meshList[GEO_MedicalTent]->textureID = LoadTGA("Image//MedicalCamp_UV_Texture.tga");
+	EnvironmentObj* MedicalTent = new EnvironmentObj(MeshBuilder::GenerateOBJ("Medical Tent", "OBJ//MedicalTent_OBJ.obj"));
+	MedicalTent->CollisionMesh_->textureID = LoadTGA("Image//MedicalCamp_UV_Texture.tga");
+
+	//meshList[GEO_MedicalTent] = MeshBuilder::GenerateOBJ("Medical Tent", "OBJ//MedicalTent_OBJ.obj");
+	//meshList[GEO_MedicalTent]->material.kAmbient.Set(0.6f, 0.6f, 0.6f);
+	//meshList[GEO_MedicalTent]->material.kDiffuse.Set(0.3f, 0.3f, 0.3f);
+	//meshList[GEO_MedicalTent]->material.kSpecular.Set(0.1f, 0.1f, 0.1f);
+	//meshList[GEO_MedicalTent]->material.kShininess = 1.0f;
+	//meshList[GEO_MedicalTent]->textureID = LoadTGA("Image//MedicalCamp_UV_Texture.tga");
+
+	Env_Obj.push_back(MedicalTent);
+
 	//Medical Tent ------------------- END
 
 
@@ -317,13 +316,22 @@ void MainScene::Init()
 
 
 	//Powerbox ----------------------------------- START
+	EnvironmentObj* PowerBox = new EnvironmentObj(MeshBuilder::GenerateOBJ("PB", "OBJ//Powerbox_OBJ.obj"));
+	PowerBox->CollisionMesh_->textureID = LoadTGA("Image//Powerbox_UV_Texture.tga");
+
 	meshList[GEO_PowerBox] = MeshBuilder::GenerateOBJ("Barracks", "OBJ//Powerbox_OBJ.obj");
 	meshList[GEO_PowerBox]->material.kAmbient.Set(0.6f, 0.6f, 0.6f);
 	meshList[GEO_PowerBox]->material.kDiffuse.Set(0.3f, 0.3f, 0.3f);
 	meshList[GEO_PowerBox]->material.kSpecular.Set(0.1f, 0.1f, 0.1f);
 	meshList[GEO_PowerBox]->material.kShininess = 1.0f;
 	meshList[GEO_PowerBox]->textureID = LoadTGA("Image//Powerbox_UV_Texture.tga");
+
+	Env_Obj.push_back(PowerBox);
+
 	//Powerbox ----------------------------------- END
+	for (auto it : Env_Obj)
+		Player::addCollisionObject(it);
+
 
 
 	renderUI.Init();
@@ -377,7 +385,12 @@ void MainScene::Update(double dt)
 		once = true;
 	}
 
-
+	bool fpsonce = false;
+	if (Application::IsKeyPressed('V') && fpsonce == false)
+	{
+		camera = FPSCam::getInstance();
+		fpsonce = true;
+	}
 
 
 
@@ -449,20 +462,17 @@ void MainScene::Render()
 	std::string posy = "y cur pos :" + std::to_string(y);
 
 	if (MainMenu.isMainMenu)
-	{		
+	{
+
 
 		MainMenu.Render();
 		RenderMeshClass::RenderTextOnScreen(&Scene::Text[Scene::TEXT_TYPE::Century], posx, Color(1, 1, 1), 5, 25, 50, &projectionStack, &viewStack, &modelStack, m_parameters);
 		RenderMeshClass::RenderTextOnScreen(&Scene::Text[Scene::TEXT_TYPE::Century], posy, Color(1, 1, 1), 5, 25, 45, &projectionStack, &viewStack, &modelStack, m_parameters);
 	}
-		
-
-
 	else
 	{
 		RenderMeshClass::RenderMesh(meshList[GEO_AXES], false, &projectionStack, &viewStack, &modelStack, m_parameters);
-
-		Player::getInstance()->render();
+		Player::getInstance()->render(&projectionStack, &viewStack, &modelStack, m_parameters);
 
 		RenderSkybox();
 		//	renderEnvironment();
@@ -475,10 +485,12 @@ void MainScene::Render()
 		modelStack.PopMatrix();
 
 
+
 		for (size_t i = 0; i < CampNPC.size(); i++)
 		{
 			CampNPC.at(i)->render(&projectionStack, &viewStack, &modelStack, m_parameters);
 		}
+		RenderBaseCamp();
 
 
 		if (isPause)
@@ -488,26 +500,26 @@ void MainScene::Render()
 		RenderBaseCamp();
 		RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::to_string(FramesPerSec), Color(1, 0, 0), 1.5f, 45, 38, &projectionStack, &viewStack, &modelStack, m_parameters);
 	}
+
 }
 
 void MainScene::RenderBaseCamp(){
 
 	//Barricade START ------------------------------------------------- Around the camp
-	modelStack.PushMatrix();
-	RenderMeshClass::RenderMesh(meshList[GEO_Barricade1], true, &projectionStack, &viewStack, &modelStack, m_parameters);
-	modelStack.PopMatrix();
+	//modelStack.PushMatrix();
+	//RenderMeshClass::RenderMesh(meshList[GEO_Barricade1], true, &projectionStack, &viewStack, &modelStack, m_parameters);
+	//modelStack.PopMatrix();
+	for (size_t i = 0; i < Env_Obj.size(); i++)
+	{
+		modelStack.PushMatrix();
+		RenderMeshClass::RenderMesh(Env_Obj.at(i)->CollisionMesh_, true, &projectionStack, &viewStack, &modelStack, m_parameters);
+		modelStack.PopMatrix();
 
-	modelStack.PushMatrix();
-	RenderMeshClass::RenderMesh(meshList[GEO_Barricade2], true, &projectionStack, &viewStack, &modelStack, m_parameters);
-	modelStack.PopMatrix();
+	}
+	//modelStack.PushMatrix();
+	//RenderMeshClass::RenderMesh(meshList[GEO_Barricade1], true, &projectionStack, &viewStack, &modelStack, m_parameters);
+	//modelStack.PopMatrix();
 
-	modelStack.PushMatrix();
-	RenderMeshClass::RenderMesh(meshList[GEO_Barricade3], true, &projectionStack, &viewStack, &modelStack, m_parameters);
-	modelStack.PopMatrix();
-
-	modelStack.PushMatrix();
-	RenderMeshClass::RenderMesh(meshList[GEO_Barricade4], true, &projectionStack, &viewStack, &modelStack, m_parameters);
-	modelStack.PopMatrix();
 	//Barricade END ------------------------------------------------------
 
 	//Teleporter 1 -- To world map -- Where player find the blueprints
@@ -524,10 +536,10 @@ void MainScene::RenderBaseCamp(){
 
 
 
-	//Medical Tent
-	modelStack.PushMatrix();
-	RenderMeshClass::RenderMesh(meshList[GEO_MedicalTent], true, &projectionStack, &viewStack, &modelStack, m_parameters);
-	modelStack.PopMatrix();
+	////Medical Tent
+	//modelStack.PushMatrix();
+	//RenderMeshClass::RenderMesh(meshList[GEO_MedicalTent], true, &projectionStack, &viewStack, &modelStack, m_parameters);
+	//modelStack.PopMatrix();
 
 	//Barracks
 	modelStack.PushMatrix();
@@ -547,9 +559,9 @@ void MainScene::RenderBaseCamp(){
 	modelStack.PopMatrix();
 
 	//Powerbox
-	modelStack.PushMatrix();
-	RenderMeshClass::RenderMesh(meshList[GEO_PowerBox], true, &projectionStack, &viewStack, &modelStack, m_parameters);
-	modelStack.PopMatrix();
+	//modelStack.PushMatrix();
+	//RenderMeshClass::RenderMesh(meshList[GEO_PowerBox], true, &projectionStack, &viewStack, &modelStack, m_parameters);
+	//modelStack.PopMatrix();
 
 }
 
@@ -613,143 +625,3 @@ void MainScene::RenderSkybox()
 
 
 }
-
-
-//void MainScene::RenderMesh(Mesh *mesh, bool enableLight)
-//{
-//	Mtx44 MVP, modelView, modelView_inverse_transpose;
-//
-//	if (mesh->textureID > 0)
-//	{
-//		glUniform1i(MainScene::m_parameters[MainScene::UNIFORM_TYPE::U_COLOR_TEXTURE_ENABLED], 1);
-//		glActiveTexture(GL_TEXTURE0);
-//		glBindTexture(GL_TEXTURE_2D, mesh->textureID);
-//		glUniform1i(MainScene::m_parameters[MainScene::UNIFORM_TYPE::U_COLOR_TEXTURE], 0);
-//	}
-//	else
-//	{
-//		glUniform1i(MainScene::m_parameters[MainScene::UNIFORM_TYPE::U_COLOR_TEXTURE_ENABLED], 0);
-//	}
-//
-//
-//	MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top();
-//	glUniformMatrix4fv(MainScene::m_parameters[MainScene::UNIFORM_TYPE::U_MVP], 1, GL_FALSE, &MVP.a[0]);
-//	modelView = viewStack.Top() * modelStack.Top();
-//	glUniformMatrix4fv(MainScene::m_parameters[MainScene::UNIFORM_TYPE::U_MODELVIEW], 1, GL_FALSE, &modelView.a[0]);
-//	if (enableLight)
-//	{
-//
-//		glUniform1i(MainScene::m_parameters[MainScene::UNIFORM_TYPE::U_LIGHTENABLED], 1);
-//		modelView_inverse_transpose = modelView.GetInverse().GetTranspose();
-//		glUniformMatrix4fv(MainScene::m_parameters[MainScene::UNIFORM_TYPE::U_MODELVIEW_INVERSE_TRANSPOSE], 1, GL_FALSE, &modelView_inverse_transpose.a[0]);
-//
-//		//load material
-//		glUniform3fv(MainScene::m_parameters[MainScene::UNIFORM_TYPE::U_MATERIAL_AMBIENT], 1, &mesh->material.kAmbient.r);
-//		glUniform3fv(MainScene::m_parameters[MainScene::UNIFORM_TYPE::U_MATERIAL_DIFFUSE], 1, &mesh->material.kDiffuse.r);
-//		glUniform3fv(MainScene::m_parameters[MainScene::UNIFORM_TYPE::U_MATERIAL_SPECULAR], 1, &mesh->material.kSpecular.r);
-//		glUniform1f(MainScene::m_parameters[MainScene::UNIFORM_TYPE::U_MATERIAL_SHININESS], mesh->material.kShininess);
-//	}
-//	else
-//	{
-//		glUniform1i(MainScene::m_parameters[UNIFORM_TYPE::U_LIGHTENABLED], 0);
-//	}
-//	mesh->Render();
-//	if (mesh->textureID > 0)
-//	{
-//		glBindTexture(GL_TEXTURE_2D, 0);
-//	}
-//}
-
-//void MainScene::RenderText(Text_Data* TextData, std::string text, Color color)
-//{
-//	if (!TextData->Text_Mesh || TextData->Text_Mesh->textureID <= 0) //Proper error check
-//		return;
-//
-//	glDisable(GL_DEPTH_TEST);
-//	glUniform1i(m_parameters[U_TEXT_ENABLED], 1);
-//	glUniform3fv(m_parameters[U_TEXT_COLOR], 1, &color.r);
-//	glUniform1i(m_parameters[U_LIGHTENABLED], 0);
-//	glUniform1i(m_parameters[U_COLOR_TEXTURE_ENABLED], 1);
-//	glActiveTexture(GL_TEXTURE0);
-//	glBindTexture(GL_TEXTURE_2D, TextData->Text_Mesh->textureID);
-//	glUniform1i(m_parameters[U_COLOR_TEXTURE], 0);
-//	float nextCharWidth = 0.0f;
-//	for (unsigned i = 0; i < text.length(); ++i)
-//	{
-//		char Character = text[i];
-//		Mtx44 characterSpacing;
-//		characterSpacing.SetToTranslation(nextCharWidth, 0, 0); //1.0f is the spacing of each character, you may change this value
-//		nextCharWidth += TextData->TextWidth[Character];
-//		Mtx44 MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top() * characterSpacing;
-//		glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
-//
-//		TextData->Text_Mesh->Render((unsigned)text[i] * 6, 6);
-//	}
-//	glBindTexture(GL_TEXTURE_2D, 0);
-//	glUniform1i(m_parameters[U_TEXT_ENABLED], 0);
-//	glEnable(GL_DEPTH_TEST);
-//}
-//void MainScene::RenderTextOnScreen(Text_Data* TextData, std::string text, Color color, float size, float x, float y)
-//{
-//	if (!TextData->Text_Mesh || TextData->Text_Mesh->textureID <= 0) //Proper error check
-//		return;
-//
-//	glDisable(GL_DEPTH_TEST);
-//	Mtx44 ortho;
-//	ortho.SetToOrtho(0, 80, 0, 60, -10, 10); //size of screen UI
-//	projectionStack.PushMatrix();
-//	projectionStack.LoadMatrix(ortho);
-//	viewStack.PushMatrix();
-//	viewStack.LoadIdentity(); //No need camera for ortho mode
-//	modelStack.PushMatrix();
-//	modelStack.LoadIdentity(); //Reset modelStack
-//	modelStack.Scale(size, size, size);
-//	modelStack.Translate(x, y, 0);
-//
-//	glUniform1i(m_parameters[U_TEXT_ENABLED], 1);
-//	glUniform3fv(m_parameters[U_TEXT_COLOR], 1, &color.r);
-//	glUniform1i(m_parameters[U_LIGHTENABLED], 0);
-//	glUniform1i(m_parameters[U_COLOR_TEXTURE_ENABLED], 1);
-//	glActiveTexture(GL_TEXTURE0);
-//	glBindTexture(GL_TEXTURE_2D, TextData->Text_Mesh->textureID);
-//	glUniform1i(m_parameters[U_COLOR_TEXTURE], 0);
-//	float nextCharWidth = 0.0f;
-//	for (unsigned i = 0; i < text.length(); ++i)
-//	{
-//		char Character = text[i];
-//		Mtx44 characterSpacing;
-//		characterSpacing.SetToTranslation(nextCharWidth, 0, 0); //1.0f is the spacing of each character, you may change this value
-//		nextCharWidth += TextData->TextWidth[Character];
-//		Mtx44 MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top() * characterSpacing;
-//		glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
-//
-//		TextData->Text_Mesh->Render((unsigned)text[i] * 6, 6);
-//	}
-//	glBindTexture(GL_TEXTURE_2D, 0);
-//	glUniform1i(m_parameters[U_TEXT_ENABLED], 0);
-//	glEnable(GL_DEPTH_TEST);
-//	projectionStack.PopMatrix();
-//	viewStack.PopMatrix();
-//	modelStack.PopMatrix();
-//}
-//void MainScene::RenderMeshOnScreen(Mesh* mesh, int x, int y, int sizex, int sizey)
-//{
-//	glDisable(GL_DEPTH_TEST);
-//	Mtx44 ortho;
-//	ortho.SetToOrtho(0, Application::getWindowWidth(), 0, Application::getWindowHeight(), -10, 10); //size of screen UI
-//	projectionStack.PushMatrix();
-//	projectionStack.LoadMatrix(ortho);
-//	viewStack.PushMatrix();
-//	viewStack.LoadIdentity(); //No need camera for ortho mode
-//	modelStack.PushMatrix();
-//	modelStack.LoadIdentity();
-//	//to do: scale and translate accordingly
-//
-//	modelStack.Translate(x, y, 0);
-//	modelStack.Scale(sizex, sizey, 1);
-//	RenderMesh(mesh, false); //UI should not have light
-//	projectionStack.PopMatrix();
-//	viewStack.PopMatrix();
-//	modelStack.PopMatrix();
-//	glEnable(GL_DEPTH_TEST);
-//}

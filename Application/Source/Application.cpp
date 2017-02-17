@@ -33,6 +33,7 @@ int SceneManager::nextSceneID = 0;
 
 Scene::Text_Data Scene::Text[Scene::TEXT_TYPE::Text_Count];
 unsigned Scene::m_parameters[U_TOTAL];
+unsigned Scene::m_programID;
 
 //Define an error callback
 static void error_callback(int error, const char* description)
