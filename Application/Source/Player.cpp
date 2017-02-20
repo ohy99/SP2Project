@@ -78,18 +78,6 @@ void Player::getPointedObj(Camera* cam)
 	Position TargetPoint;
 	TargetPoint.Set(cam->getTarget().x, cam->getTarget().y, cam->getTarget().z);
 	Pointed_Obj = NULL;
-
-	
-	//for (auto it : MainScene::Game_Objects_)
-	//{
-	//	if (it->CollisionMesh_->isPointInsideAABB(TargetPoint) == true)
-	//	{
-	//		Pointed_Obj = it;
-	//		break;
-	//	}
-
-	//}
-
 }
 
 void Player::isHitUpdate(int dmg)
