@@ -19,13 +19,8 @@
 
 #include "UI.h"
 
-//MiniGame::Text_Data MiniGame::Text[TEXT_TYPE::Text_Count];
-//unsigned MiniGame::m_parameters[U_TOTAL];
 MS MiniGame::modelStack, MiniGame::viewStack, MiniGame::projectionStack;
-
-//std::vector<GameObject*> MiniGame::Game_Objects_(10, NULL);
-
-//std::vector<GameObject*> MiniGame::Game_Objects_(10, NULL);
+std::vector<Vector3> roadPosition;
 
 
 MiniGame::MiniGame()
@@ -182,12 +177,24 @@ void MiniGame::Init()
 	meshList[GEO_BOTTOM]->textureID = LoadTGA("Image//sky1_down.tga");
 	//Skybox ------------- Base Camp End
 
+	roadCount = 0.f;
+
+	for (int i = 0; i < 20; i++)
+	{
+		road = MeshBuilder::GenerateOBJ("road", "OBJ//road.obj");
+		meshList[ROAD] = road;
+		road->textureID = LoadTGA("Image//road.tga");
+
+		roadPosition.push_back(Vector3(0.f, 0.f, roadCount));
+		roadCount += 10.f;
+	}
+
 	renderUI.Init();
 	wasEscPressed = false;
 	isPause = false;
 
 	camera = new CameraMG;
-	camera->Init(Vector3(0, 0, 7), Vector3(0, 0, 0), Vector3(0, 1, 0));
+	camera->Init(Vector3(0.f, 0.f, 7.f), Vector3(0.f, 0.f, 50.f), Vector3(0.f, 1.f, 0.f));
 
 
 	Mtx44 projection;
@@ -203,23 +210,6 @@ void MiniGame::Update(double dt)
 	int width, height;
 	glfwGetWindowSize(Application::m_window, &width, &height);
 	isEscPressed = Application::IsKeyPressed(VK_ESCAPE);
-
-	if (Application::IsKeyPressed(VK_NUMPAD1) || Application::IsKeyPressed('1'))
-	{
-		glEnable(GL_CULL_FACE);
-	}
-	if (Application::IsKeyPressed(VK_NUMPAD2) || Application::IsKeyPressed('2'))
-	{
-		glDisable(GL_CULL_FACE);
-	}
-	if (Application::IsKeyPressed(VK_NUMPAD3) || Application::IsKeyPressed('3'))
-	{
-		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); //default fill mode
-	}
-	if (Application::IsKeyPressed(VK_NUMPAD4) || Application::IsKeyPressed('4'))
-	{
-		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); //wireframe mode
-	}
 
 	if (isEscPressed && !wasEscPressed) // When you press ESC
 	{
@@ -239,8 +229,6 @@ void MiniGame::Update(double dt)
 			wasEscPressed = isEscPressed;
 	}
 
-	Player::getInstance()->update(dt, camera);
-
 	if (!isEscPressed && wasEscPressed) // When you release the ESC button
 		wasEscPressed = isEscPressed;
 
@@ -251,6 +239,8 @@ void MiniGame::Update(double dt)
 		glfwSetCursorPos(Application::m_window, width / 2, height / 2);
 
 		glfwSetInputMode(Application::m_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+
+		MGPlayer::getInstance()->Update(dt, camera);
 
 		double dx, dy;
 		dx = dt * double(width / 2 - c_posx);
@@ -273,11 +263,18 @@ void MiniGame::Render()
 		camera->getUp().x, camera->getUp().y, camera->getUp().z);
 	modelStack.LoadIdentity();
 
+
+
 	RenderMeshClass::RenderMesh(meshList[GEO_AXES], false, &projectionStack, &viewStack, &modelStack, m_parameters);
 
-	Player::getInstance()->render(&projectionStack, &viewStack, &modelStack, m_parameters);
+	MGPlayer::getInstance()->Render(&projectionStack, &viewStack, &modelStack, m_parameters);
 
+	modelStack.PushMatrix();
+	modelStack.Translate(camera->getPosition().x, camera->getPosition().y, camera->getPosition().z);
 	RenderSkybox();
+	modelStack.PopMatrix();
+
+	RenderMiniGame();
 
 	if (isPause)
 		renderUI.renderPause(&projectionStack, &viewStack, &modelStack, m_parameters);
@@ -298,6 +295,19 @@ void MiniGame::Exit()
 	glDeleteVertexArrays(1, &m_vertexArrayID);
 	glDeleteProgram(m_programID);
 }
+
+void MiniGame::RenderMiniGame()
+{
+	// Road
+	for (int i = 0; i < 20; i++)
+	{
+		modelStack.PushMatrix();
+		modelStack.Translate(0.f, 0.f, roadPosition[i].z);
+		RenderMeshClass::RenderMesh(meshList[ROAD], false, &projectionStack, &viewStack, &modelStack, m_parameters);
+		modelStack.PopMatrix();
+	}
+}
+
 void MiniGame::RenderSkybox()
 {
 	modelStack.PushMatrix();

@@ -13,6 +13,7 @@
 
 #include <vector>
 
+#include "MGPlayer.h"
 #include "Player.h"
 #include "MainScreen.h"
 #include "UI.h"
@@ -34,6 +35,8 @@ class MiniGame : public Scene
 		GEO_BOTTOM,
 		GEO_FRONT,
 		GEO_BACK,
+
+		ROAD,
 
 		NUM_GEOMETRY,
 	};
@@ -58,6 +61,7 @@ private:
 	Camera *camera;
 
 	void RenderSkybox();
+	void RenderMiniGame();
 
 	Light light[8];
 
@@ -67,7 +71,9 @@ private:
 	UI renderUI;
 
 	double x, y;
+	float roadCount;
 
+	Mesh* road;
 };
 
 #endif

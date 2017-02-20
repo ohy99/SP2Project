@@ -3,6 +3,7 @@
 
 #include "GameObject.h"
 #include <vector>
+#include "MatrixStack.h"
 #include "Mesh.h"
 #include "Camera.h"
 
@@ -10,11 +11,15 @@ class MGPlayer : public GameObject
 {
 public:
 	void Update(double dt, Camera* camera);
+	void Render(MS* projectionStack, MS* viewStack, MS* modelStack, unsigned * m_parameters);
 	void MGPlayerMovements(double dt);
 
 	static MGPlayer* getInstance();
-	static std::vector<GameObject*> CollisionObject;
+	void setPlayerPosition(Vector3& pos);
+
+	static std::vector<GameObject*> CollisionObjects;
 	Mesh* getCollisionMesh() { return PMesh[MESH_TYPE::BODY]; } 
+	static inline void addCollisionObject(GameObject* obj) { CollisionObjects.push_back(obj); }
 
 private:
 	enum MESH_TYPE
@@ -24,14 +29,23 @@ private:
 	};
 
 	MGPlayer();
+	~MGPlayer();
 
 	Vector3 pos_;
-	Vector3 view_;
+	Vector3 dir_;
 	Vector3 right_;
 
 	Mesh* PMesh[MESH_TYPE::MT_COUNT];
 
+	static MGPlayer* Instance;
+
 	float moveSpeed;
+	float lane;
+
+	bool isHit;
+	bool isDead();
+
+	bool isDPressed, wasDPressed, isAPressed, wasAPressed;
 };
 
 #endif

@@ -49,7 +49,6 @@ void Player::update(double dt, Camera* cam)
 	else
 		dirRotateAxis.Set(0, 1, 0);
 	CollisionMesh_ = PMesh[MESH_TYPE::Body];
-//	SceneManager::getCurrentScene()->getCurrentSceneObjs();
 
 	PlayerMovement(dt);
 	getPointedObj(cam);

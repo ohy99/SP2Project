@@ -4,6 +4,8 @@
 
 #include <iostream>
 #include <string>
+#include "MGPlayer.h"
+#include "Player.h"
 
 
 CameraMG::CameraMG()
@@ -91,7 +93,18 @@ void CameraMG::Update(double dt, double dx, double dy)
 
 	//int state = glfwGetMouseButton(Application::m_window, GLFW_MOUSE_BUTTON_LEFT);
 
-		this->position.x += (float)(dir.x * dt * 10.f);
-		this->position.z += (float)(dir.z * dt * 10.f);
-		//this->position.y += (float)(dir.y * dt * 10.0f);
+	//if (state)
+	//{
+	//	//this->position.x += (float)(dir.x * dt * 10.f);
+	//	//this->position.z += (float)(dir.z * dt * 10.f);
+	//	//this->position.y += (float)(dir.y * dt * 10.0f);
+	//}
+
+	
+
+	this->position = MGPlayer::getInstance()->CollisionMesh_->pos;
+	this->position.y += 1.8f;
+
+	//this->position = Player::getInstance()->CollisionMesh_->pos;
+	//this->position.y += 1.8f;
 }

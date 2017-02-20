@@ -92,6 +92,7 @@
     <ClCompile Include="Source\LoadTextData.cpp" />
     <ClCompile Include="Source\LoadTGA.cpp" />
     <ClCompile Include="Source\MainScreen.cpp" />
+    <ClCompile Include="Source\MGPlayer.cpp" />
     <ClCompile Include="Source\MiniGame.cpp" />
     <ClCompile Include="Source\NPC_Doc.cpp" />
     <ClCompile Include="Source\Player.cpp" />
