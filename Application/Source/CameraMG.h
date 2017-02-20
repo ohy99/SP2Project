@@ -19,6 +19,8 @@ class CameraMG : public Camera
 	float Cam_Phi = 0.0f;
 	float Cam_Theta = 180.0f;
 
+	float maxVerticalAngle, maxHorizontalAngle;
+
 	bool boundCheck(Vector3 path, double dt);
 
 	Position Bounds;

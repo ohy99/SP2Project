@@ -199,5 +199,8 @@
     <ClInclude Include="Source\CameraMG.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Distance.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

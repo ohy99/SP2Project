@@ -6,6 +6,7 @@
 #include "MatrixStack.h"
 #include "Mesh.h"
 #include "Camera.h"
+#include "Distance.h"
 
 class MGPlayer : public GameObject
 {
@@ -44,6 +45,8 @@ private:
 
 	bool isHit;
 	bool isDead();
+
+	Distance distance;
 
 	bool isDPressed, wasDPressed, isAPressed, wasAPressed;
 };

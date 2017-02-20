@@ -15,7 +15,9 @@
 
 #include "MGPlayer.h"
 #include "Player.h"
+#include "Distance.h"
 #include "MainScreen.h"
+#include "Environment.h"
 #include "UI.h"
 
 
@@ -37,6 +39,7 @@ class MiniGame : public Scene
 		GEO_BACK,
 
 		ROAD,
+		LORRY,
 
 		NUM_GEOMETRY,
 	};
@@ -69,11 +72,15 @@ private:
 	bool isEscPressed, wasEscPressed;
 
 	UI renderUI;
+	static std::vector<EnvironmentObj*> Obstacles;
+
 
 	double x, y;
-	float roadCount;
+	float roadDistance;
 
+	Distance roadDis;
 	Mesh* road;
+	Mesh* lorry;
 };
 
 #endif

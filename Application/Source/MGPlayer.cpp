@@ -9,14 +9,14 @@
 MGPlayer* MGPlayer::Instance = 0;
 std::vector<GameObject*> MGPlayer::CollisionObjects;
 
-MGPlayer::MGPlayer() : GameObject("Player"), moveSpeed(10.f), lane(1.f), isHit(false), wasDPressed(false), wasAPressed(false)
+MGPlayer::MGPlayer() : GameObject("Player"), moveSpeed(20.f), lane(1.f), isHit(false), wasDPressed(false), wasAPressed(false)
 {
 	PMesh[MESH_TYPE::BODY] = MeshBuilder::GenerateOBJ("", "OBJ//goat.obj");
 	PMesh[MESH_TYPE::BODY]->collisionEnabled = true;
-	PMesh[MESH_TYPE::BODY]->up = Vector3(0, 1, 0);
-	PMesh[MESH_TYPE::BODY]->dir = Vector3(0, 0, 1);
-	PMesh[MESH_TYPE::BODY]->right = Vector3(1, 0, 0);
-	dir_.Set(0, 0, 1);
+	PMesh[MESH_TYPE::BODY]->up = Vector3(0.f, 1.f, 0.f);
+	PMesh[MESH_TYPE::BODY]->dir = Vector3(0.f, 0.f, 1.f);
+	PMesh[MESH_TYPE::BODY]->right = Vector3(1.f, 0.f, 0.f);
+	dir_.Set(0.f, 0.f, 1.f);
 }
 
 MGPlayer::~MGPlayer()
@@ -59,22 +59,23 @@ void MGPlayer::Update(double dt, Camera* cam)
 
 void MGPlayer::Render(MS* projectionStack, MS* viewStack, MS* modelStack, unsigned * m_parameters)
 {
-	modelStack->PushMatrix();
-	modelStack->Translate(pos_.x, pos_.y, pos_.z);
-	//modelStack->Rotate(dirRotateAngle, dirRotateAxis.x, dirRotateAxis.y, dirRotateAxis.z);
-	RenderMeshClass::RenderMesh(PMesh[MESH_TYPE::BODY], true, projectionStack, viewStack, modelStack, m_parameters);
-	modelStack->PopMatrix();
+	//modelStack->PushMatrix();
+	//modelStack->Translate(pos_.x, pos_.y, pos_.z);
+	////modelStack->Rotate(dirRotateAngle, dirRotateAxis.x, dirRotateAxis.y, dirRotateAxis.z);
+	//RenderMeshClass::RenderMesh(PMesh[MESH_TYPE::BODY], true, projectionStack, viewStack, modelStack, m_parameters);
+	//modelStack->PopMatrix();
 }
 
 void MGPlayer::MGPlayerMovements(double dt)
 {
 	if (!isHit)
 	{
-		PMesh[MESH_TYPE::BODY]->setHb(true, PMesh[MESH_TYPE::BODY]->Hitbox_Min, PMesh[MESH_TYPE::BODY]->Hitbox_Max, PMesh[MESH_TYPE::BODY]->pos, PMesh[MESH_TYPE::BODY]->dir);
+		Mesh projected("Projected");
+		projected.setHb(true, PMesh[MESH_TYPE::BODY]->Hitbox_Min, PMesh[MESH_TYPE::BODY]->Hitbox_Max, PMesh[MESH_TYPE::BODY]->pos, PMesh[MESH_TYPE::BODY]->dir);
 
 		for (size_t i = 0; i < CollisionObjects.size(); i++)
 		{
-			if (PMesh[MESH_TYPE::BODY]->isCollide(CollisionObjects[i]->CollisionMesh_))
+			if (projected.isCollide(CollisionObjects[i]->CollisionMesh_))
 			{
 				isHit = true;
 				break;

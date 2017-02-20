@@ -114,6 +114,7 @@
     <ClInclude Include="Source\Camera3.h" />
     <ClInclude Include="Source\CameraMG.h" />
     <ClInclude Include="Source\DetectMemoryLeak.h" />
+    <ClInclude Include="Source\Distance.h" />
     <ClInclude Include="Source\EnemyAI.h" />
     <ClInclude Include="Source\Environment.h" />
     <ClInclude Include="Source\FPSCam.h" />

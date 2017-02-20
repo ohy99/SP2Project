@@ -11,6 +11,7 @@
 #include "LoadTGA.h"
 #include "LoadTextData.h"
 #include "LoadATOM.h"
+#include "Environment.h"
 //#include "GameObject.h"
 
 #include "NPC_Doc.h"
@@ -19,8 +20,12 @@
 
 #include "UI.h"
 
-MS MiniGame::modelStack, MiniGame::viewStack, MiniGame::projectionStack;
+std::vector<bool> isActive;
 std::vector<Vector3> roadPosition;
+
+std::vector<EnvironmentObj*> MiniGame::Obstacles;
+
+MS MiniGame::modelStack, MiniGame::viewStack, MiniGame::projectionStack;
 
 
 MiniGame::MiniGame()
@@ -177,7 +182,7 @@ void MiniGame::Init()
 	meshList[GEO_BOTTOM]->textureID = LoadTGA("Image//sky1_down.tga");
 	//Skybox ------------- Base Camp End
 
-	roadCount = 0.f;
+	roadDistance = 0.f;
 
 	for (int i = 0; i < 20; i++)
 	{
@@ -185,9 +190,24 @@ void MiniGame::Init()
 		meshList[ROAD] = road;
 		road->textureID = LoadTGA("Image//road.tga");
 
-		roadPosition.push_back(Vector3(0.f, 0.f, roadCount));
-		roadCount += 10.f;
+		roadPosition.push_back(Vector3(0.f, 0.f, roadDistance));
+		isActive.push_back(true);
+		roadDistance += 10.f;
 	}
+
+	//
+	//lorry = MeshBuilder::GenerateOBJ("lorry", "OBJ//lorry.obj");
+	//meshList[LORRY] = lorry;
+	//lorry->textureID = LoadTGA("Image//lorry.tga");
+	EnvironmentObj* lorry = new EnvironmentObj(MeshBuilder::GenerateOBJ("lorry", "OBJ//lorry.obj"));
+	lorry->CollisionMesh_->textureID = LoadTGA("Image//lorry.tga");
+
+	Obstacles.push_back(lorry);
+
+	//
+
+	for (auto it : Obstacles)
+		MGPlayer::addCollisionObject(it);
 
 	renderUI.Init();
 	wasEscPressed = false;
@@ -195,7 +215,6 @@ void MiniGame::Init()
 
 	camera = new CameraMG;
 	camera->Init(Vector3(0.f, 0.f, 7.f), Vector3(0.f, 0.f, 50.f), Vector3(0.f, 1.f, 0.f));
-
 
 	Mtx44 projection;
 	projection.SetToPerspective(45.f, 4.f / 3.f, 0.1f, 1000.f);
@@ -246,6 +265,22 @@ void MiniGame::Update(double dt)
 		dx = dt * double(width / 2 - c_posx);
 		dy = dt * double(height / 2 - c_posy);
 		camera->Update(dt, dx, dy);
+	}
+
+	for (int i = 0; i < 20; i++)
+	{
+		if (isActive[i])
+		{
+			if (camera->getPosition().z > roadPosition[i].z + 10.f)
+				isActive[i] = false;
+		}
+
+		else
+		{
+			roadPosition[i].z += 200;
+			isActive[i] = true;
+		}
+
 	}
 
 	FramesPerSec = 1 / dt; 
@@ -305,6 +340,21 @@ void MiniGame::RenderMiniGame()
 		modelStack.Translate(0.f, 0.f, roadPosition[i].z);
 		RenderMeshClass::RenderMesh(meshList[ROAD], false, &projectionStack, &viewStack, &modelStack, m_parameters);
 		modelStack.PopMatrix();
+	}
+
+	// Obstacles
+	//modelStack.PushMatrix();
+	//modelStack.Translate(0.f, 0.f, 60.f);
+	//RenderMeshClass::RenderMesh(meshList[LORRY], false, &projectionStack, &viewStack, &modelStack, m_parameters);
+	//modelStack.PopMatrix();
+
+	for (size_t i = 0; i < Obstacles.size(); i++)
+	{
+		modelStack.PushMatrix();
+		//modelStack.Translate(0.f, 0.f, 60.f);
+		RenderMeshClass::RenderMesh(Obstacles.at(i)->CollisionMesh_, true, &projectionStack, &viewStack, &modelStack, m_parameters);
+		modelStack.PopMatrix();
+
 	}
 }
 
