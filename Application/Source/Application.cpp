@@ -127,7 +127,7 @@ void Application::Init()
 void Application::Run()
 {
 	//Main Loop
-	Scene *scene1 = new MainScene();
+	Scene *scene1 = new MiniGame();
 	SceneManager::getInstance()->AddScene(scene1);
 	Scene *scene2 = new MainScene();
 	SceneManager::getInstance()->AddScene(scene2);

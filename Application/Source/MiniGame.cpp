@@ -186,7 +186,7 @@ void MiniGame::Init()
 	wasEscPressed = false;
 	isPause = false;
 
-	camera = new Camera3;
+	camera = new CameraMG;
 	camera->Init(Vector3(0, 0, 7), Vector3(0, 0, 0), Vector3(0, 1, 0));
 
 

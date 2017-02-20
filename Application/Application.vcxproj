@@ -85,6 +85,7 @@
     <ClCompile Include="Source\Application.cpp" />
     <ClCompile Include="Source\Camera.cpp" />
     <ClCompile Include="Source\Camera3.cpp" />
+    <ClCompile Include="Source\CameraMG.cpp" />
     <ClCompile Include="Source\Environment.cpp" />
     <ClCompile Include="Source\FPSCam.cpp" />
     <ClCompile Include="Source\LoadOBJ.cpp" />
@@ -110,6 +111,7 @@
     <ClInclude Include="Source\Application.h" />
     <ClInclude Include="Source\Camera.h" />
     <ClInclude Include="Source\Camera3.h" />
+    <ClInclude Include="Source\CameraMG.h" />
     <ClInclude Include="Source\DetectMemoryLeak.h" />
     <ClInclude Include="Source\EnemyAI.h" />
     <ClInclude Include="Source\Environment.h" />

@@ -5,7 +5,7 @@
 #include "SceneManager.h"
 
 #include "Camera.h"
-#include "Camera3.h"
+#include "CameraMG.h"
 #include "Mesh.h"
 //#include "MeshBuilder.h"
 #include "MatrixStack.h"
