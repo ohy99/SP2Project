@@ -224,20 +224,13 @@ void MainScene::Init()
 
 
 	//Teleporter ------------------ START
+	EnvironmentObj* Teleporter = new EnvironmentObj(MeshBuilder::GenerateOBJ("Teleporter", "OBJ//Teleporter_OBJ.obj"));
+	Teleporter->CollisionMesh_->textureID = LoadTGA("Image//InteractableItem_Teleporter_UV_Texture.tga");
+	EnvironmentObj* Teleporter1 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Teleporter1", "OBJ//Teleporter1_OBJ.obj"));
+	Teleporter1->CollisionMesh_->textureID = LoadTGA("Image//InteractableItem_Teleporter_UV_Texture.tga");
 
-	meshList[GEO_Teleporter] = MeshBuilder::GenerateOBJ("Teleporter", "OBJ//Teleporter_OBJ.obj");
-	meshList[GEO_Teleporter]->material.kAmbient.Set(0.6f, 0.6f, 0.6f);
-	meshList[GEO_Teleporter]->material.kDiffuse.Set(0.3f, 0.3f, 0.3f);
-	meshList[GEO_Teleporter]->material.kSpecular.Set(0.1f, 0.1f, 0.1f);
-	meshList[GEO_Teleporter]->material.kShininess = 1.0f;
-	meshList[GEO_Teleporter]->textureID = LoadTGA("Image//InteractableItem_Teleporter_UV_Texture.tga");
-
-	meshList[GEO_Teleporter1] = MeshBuilder::GenerateOBJ("Teleporter", "OBJ//Teleporter1_OBJ.obj");
-	meshList[GEO_Teleporter1]->material.kAmbient.Set(0.6f, 0.6f, 0.6f);
-	meshList[GEO_Teleporter1]->material.kDiffuse.Set(0.3f, 0.3f, 0.3f);
-	meshList[GEO_Teleporter1]->material.kSpecular.Set(0.1f, 0.1f, 0.1f);
-	meshList[GEO_Teleporter1]->material.kShininess = 1.0f;
-	meshList[GEO_Teleporter1]->textureID = LoadTGA("Image//InteractableItem_Teleporter_UV_Texture.tga");
+	Env_Obj.push_back(Teleporter);
+	Env_Obj.push_back(Teleporter1);
 	//Teleporter -----------------------END
 
 
@@ -252,45 +245,42 @@ void MainScene::Init()
 	EnvironmentObj* MedicalTent = new EnvironmentObj(MeshBuilder::GenerateOBJ("Medical Tent", "OBJ//MedicalTent_OBJ.obj"));
 	MedicalTent->CollisionMesh_->textureID = LoadTGA("Image//MedicalCamp_UV_Texture.tga");
 
-	//meshList[GEO_MedicalTent] = MeshBuilder::GenerateOBJ("Medical Tent", "OBJ//MedicalTent_OBJ.obj");
-	//meshList[GEO_MedicalTent]->material.kAmbient.Set(0.6f, 0.6f, 0.6f);
-	//meshList[GEO_MedicalTent]->material.kDiffuse.Set(0.3f, 0.3f, 0.3f);
-	//meshList[GEO_MedicalTent]->material.kSpecular.Set(0.1f, 0.1f, 0.1f);
-	//meshList[GEO_MedicalTent]->material.kShininess = 1.0f;
-	//meshList[GEO_MedicalTent]->textureID = LoadTGA("Image//MedicalCamp_UV_Texture.tga");
-
 	Env_Obj.push_back(MedicalTent);
-
 	//Medical Tent ------------------- END
 
 
 
 	//Barracks -------------------- START
-	meshList[GEO_Barracks] = MeshBuilder::GenerateOBJ("Barracks", "OBJ//Barracks_OBJ.obj");
-	meshList[GEO_Barracks]->material.kAmbient.Set(0.6f, 0.6f, 0.6f);
-	meshList[GEO_Barracks]->material.kDiffuse.Set(0.3f, 0.3f, 0.3f);
-	meshList[GEO_Barracks]->material.kSpecular.Set(0.1f, 0.1f, 0.1f);
-	meshList[GEO_Barracks]->material.kShininess = 1.0f;
-	meshList[GEO_Barracks]->textureID = LoadTGA("Image//Barracks_UV_Texture.tga");
+	EnvironmentObj* Barrack1 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Barrack1", "OBJ//Barracks1_OBJ.obj"));
+	Barrack1->CollisionMesh_->textureID = LoadTGA("Image//Barracks_UV_Texture.tga");
+	EnvironmentObj* Barrack2 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Barrack2", "OBJ//Barracks2_OBJ.obj"));
+	Barrack2->CollisionMesh_->textureID = LoadTGA("Image//Barracks_UV_Texture.tga");
+	EnvironmentObj* Barrack3 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Barrack3", "OBJ//Barracks3_OBJ.obj"));
+	Barrack3->CollisionMesh_->textureID = LoadTGA("Image//Barracks_UV_Texture.tga");
+	EnvironmentObj* Barrack4 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Barrack4", "OBJ//Barracks4_OBJ.obj"));
+	Barrack4->CollisionMesh_->textureID = LoadTGA("Image//Barracks_UV_Texture.tga");
+
+	Env_Obj.push_back(Barrack1);
+	Env_Obj.push_back(Barrack2);
+	Env_Obj.push_back(Barrack3);
+	Env_Obj.push_back(Barrack4);
 	//Barracks ------------------------- END
 
 
-
+	//vcxprof -> discard
 
 	//Crates ------------------------------- START
-	meshList[GEO_Crates] = MeshBuilder::GenerateOBJ("Barracks", "OBJ//Crates_OBJ.obj");
-	meshList[GEO_Crates]->material.kAmbient.Set(0.6f, 0.6f, 0.6f);
-	meshList[GEO_Crates]->material.kDiffuse.Set(0.3f, 0.3f, 0.3f);
-	meshList[GEO_Crates]->material.kSpecular.Set(0.1f, 0.1f, 0.1f);
-	meshList[GEO_Crates]->material.kShininess = 1.0f;
-	meshList[GEO_Crates]->textureID = LoadTGA("Image//Crate_UV_Texture.tga");
-
 	meshList[GEO_Crates1] = MeshBuilder::GenerateOBJ("Barracks", "OBJ//Crates1_OBJ.obj");
 	meshList[GEO_Crates1]->material.kAmbient.Set(0.6f, 0.6f, 0.6f);
 	meshList[GEO_Crates1]->material.kDiffuse.Set(0.3f, 0.3f, 0.3f);
 	meshList[GEO_Crates1]->material.kSpecular.Set(0.1f, 0.1f, 0.1f);
 	meshList[GEO_Crates1]->material.kShininess = 1.0f;
 	meshList[GEO_Crates1]->textureID = LoadTGA("Image//Crate_UV_Texture.tga");
+
+	EnvironmentObj* Crate1 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Crate1", "OBJ//Crates_OBJ.obj");
+	Crate1->CollisionMesh_->textureID = LoadTGA("Image//Crate_UV_Texture.tga");
+
+	Env_Obj.push_back(Crate1);
 	//Crates ------------------------------------------- END
 
 
@@ -505,10 +495,6 @@ void MainScene::Render()
 
 void MainScene::RenderBaseCamp(){
 
-	//Barricade START ------------------------------------------------- Around the camp
-	//modelStack.PushMatrix();
-	//RenderMeshClass::RenderMesh(meshList[GEO_Barricade1], true, &projectionStack, &viewStack, &modelStack, m_parameters);
-	//modelStack.PopMatrix();
 	for (size_t i = 0; i < Env_Obj.size(); i++)
 	{
 		modelStack.PushMatrix();
@@ -516,35 +502,7 @@ void MainScene::RenderBaseCamp(){
 		modelStack.PopMatrix();
 
 	}
-	//modelStack.PushMatrix();
-	//RenderMeshClass::RenderMesh(meshList[GEO_Barricade1], true, &projectionStack, &viewStack, &modelStack, m_parameters);
-	//modelStack.PopMatrix();
 
-	//Barricade END ------------------------------------------------------
-
-	//Teleporter 1 -- To world map -- Where player find the blueprints
-	modelStack.PushMatrix();
-	RenderMeshClass::RenderMesh(meshList[GEO_Teleporter], true, &projectionStack, &viewStack, &modelStack, m_parameters);
-	modelStack.PopMatrix();
-	
-
-
-	//Teleporter 2 -- To final boss?? -- Fight the final boss to put an item somewhere?? 
-	modelStack.PushMatrix();
-	RenderMeshClass::RenderMesh(meshList[GEO_Teleporter1], true, &projectionStack, &viewStack, &modelStack, m_parameters);
-	modelStack.PopMatrix();
-
-
-
-	////Medical Tent
-	//modelStack.PushMatrix();
-	//RenderMeshClass::RenderMesh(meshList[GEO_MedicalTent], true, &projectionStack, &viewStack, &modelStack, m_parameters);
-	//modelStack.PopMatrix();
-
-	//Barracks
-	modelStack.PushMatrix();
-	RenderMeshClass::RenderMesh(meshList[GEO_Barracks], true, &projectionStack, &viewStack, &modelStack, m_parameters);
-	modelStack.PopMatrix();
 
 	//Crates
 	modelStack.PushMatrix();
