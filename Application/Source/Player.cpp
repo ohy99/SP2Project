@@ -8,6 +8,8 @@
 
 Player* Player::Instance_ = 0;
 std::vector<GameObject*> Player::CollisionObjects;
+std::vector<EnvironmentObj*> Player::Teleport;
+
 Player::Player() : GameObject("Player") 
 {
 	//int hp_;
@@ -32,6 +34,7 @@ Player* Player::getInstance()
 	else 
 		return (Instance_ = new Player()); 
 }
+
 void Player::setPosition(Vector3& pos)
 {
 	pos_ = pos;
@@ -49,10 +52,11 @@ void Player::update(double dt, Camera* cam)
 	else
 		dirRotateAxis.Set(0, 1, 0);
 	CollisionMesh_ = PMesh[MESH_TYPE::Body];
-//	SceneManager::getCurrentScene()->getCurrentSceneObjs();
 
 	PlayerMovement(dt);
 	getPointedObj(cam);
+
+	checkTeleport();
 
 }
 
@@ -188,3 +192,16 @@ void Player::PlayerMovement(double dt)
 
 //bool isDead();
 //~Player();
+
+void Player::checkTeleport(){
+
+	for (size_t i = 0; i < Teleport.size(); i++)
+	{
+		if (CollisionMesh_->isCollide(Teleport.at(i)->CollisionMesh_))
+		{
+			SceneManager::getInstance()->SetNextSceneID(1);
+			SceneManager::getInstance()->SetNextScene();
+		}
+
+	}
+}
