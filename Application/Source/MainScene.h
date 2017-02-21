@@ -39,6 +39,7 @@ class MainScene : public Scene
 		GEO_Teleporter,
 		GEO_Teleporter1,
 		GEO_Barrack,
+		GEO_Crates1,
 
 		GEO_LEFT,
 		GEO_RIGHT,

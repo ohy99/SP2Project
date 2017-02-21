@@ -292,7 +292,6 @@ void MainScene::Init()
 
 
 	//Crates ------------------------------- START
-<<<<<<< HEAD
 	meshList[GEO_Crates1] = MeshBuilder::GenerateOBJ("Barracks", "OBJ//Crates1_OBJ.obj");
 	meshList[GEO_Crates1]->material.kAmbient.Set(0.6f, 0.6f, 0.6f);
 	meshList[GEO_Crates1]->material.kDiffuse.Set(0.3f, 0.3f, 0.3f);
@@ -300,12 +299,9 @@ void MainScene::Init()
 	meshList[GEO_Crates1]->material.kShininess = 1.0f;
 	meshList[GEO_Crates1]->textureID = LoadTGA("Image//Crate_UV_Texture.tga");
 
-	EnvironmentObj* Crate1 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Crate1", "OBJ//Crates_OBJ.obj"));
-=======
 	EnvironmentObj* Crate = new EnvironmentObj(MeshBuilder::GenerateOBJ("Crates", "OBJ//Crates_OBJ.obj"));
 	Crate->CollisionMesh_->textureID = LoadTGA("Image//Crate_UV_Texture.tga");
 	EnvironmentObj* Crate1 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Crate1", "OBJ//Crates1_OBJ.obj"));
->>>>>>> 7e1014aefe7cb8882b346ca4a7379b4f04e11af2
 	Crate1->CollisionMesh_->textureID = LoadTGA("Image//Crate_UV_Texture.tga");
 
 	Env_Obj.push_back(Crate);

@@ -129,12 +129,7 @@ void Application::Init()
 void Application::Run()
 {
 	//Main Loop
-<<<<<<< HEAD
-	Scene *scene1 = new MainScene();
-=======
-
 	Scene *scene1 = new UndergroundScene();
->>>>>>> 7e1014aefe7cb8882b346ca4a7379b4f04e11af2
 	SceneManager::getInstance()->AddScene(scene1);
 	Scene *scene2 = new WorldScene();
 	SceneManager::getInstance()->AddScene(scene2);
