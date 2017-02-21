@@ -9,6 +9,9 @@
 #include "Camera.h"
 #include "MatrixStack.h"
 #include "FPSCam.h"
+#include "EnemyAI.h"
+
+
 
 class Player : public GameObject
 {
@@ -49,6 +52,7 @@ class Player : public GameObject
 	Weapon* weapons_[WEAPON_TYPE::WT_COUNT];
 	Weapon* currentWeapon_;
 	Potions* potions; // 
+	//AttackType* attack;
 	
 	//Outfit
 	//Inventory
@@ -56,7 +60,10 @@ class Player : public GameObject
 	Player();
 
 	static std::vector<GameObject*> CollisionObjects;
+
 public:
+	~Player();
+	static std::vector<EnemyAI*> enemies_;
 	static Player* getInstance();
 	void setPosition(Vector3& pos);
 
@@ -66,12 +73,22 @@ public:
 
 	void isHitUpdate(int dmg);
 
+
 	Mesh* getCollisionMesh() { return PMesh[MESH_TYPE::Body]; };
 	inline int getHp() { return hp_; }
 	void PlayerMovement(double dt);
 	static inline void addCollisionObject(GameObject* obj) { CollisionObjects.push_back(obj); }
+	static void clearCollisionObj(){ while (CollisionObjects.size() > 0) CollisionObjects.pop_back();  
+	while (enemies_.size()) enemies_.pop_back();
+	}
+
+	GameObject* getPointedObj() { return Pointed_Obj; }
+	Weapon* getCurrWeap() { return currentWeapon_; }
 	//bool isDead();
 	//~Player();
+
+	void MeleeAttack(double dt);
+	void RangedAttack(double dt);
 };
 
 #endif

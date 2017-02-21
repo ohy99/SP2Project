@@ -18,10 +18,9 @@ public:
 	~SceneManager() { while (scenes.size()) scenes.pop_back(); };
 	void AddScene(Scene *scene) { scenes.push_back(scene); }
 	void SetNextSceneID(int sceneID) { nextSceneID = sceneID; }
-	void SetNextScene() { currSceneID = nextSceneID; }
+	void SetNextScene() { scenes.at(currSceneID)->Exit(); currSceneID = nextSceneID; scenes.at(currSceneID)->Init(); }
 	static Scene* getCurrentScene() { return scenes.at(currSceneID); }
 	void Update() {
-
 		scenes.at(currSceneID)->Update(Application::m_timer.getElapsedTime());
 		scenes.at(currSceneID)->Render();
 	}
