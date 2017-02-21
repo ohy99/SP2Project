@@ -5,7 +5,7 @@
 #include "SceneManager.h"
 
 #include "Camera.h"
-#include "Camera3.h"
+#include "CameraMG.h"
 #include "Mesh.h"
 //#include "MeshBuilder.h"
 #include "MatrixStack.h"
@@ -13,8 +13,11 @@
 
 #include <vector>
 
+#include "MGPlayer.h"
 #include "Player.h"
+#include "Distance.h"
 #include "MainScreen.h"
+#include "Environment.h"
 #include "UI.h"
 
 
@@ -34,6 +37,9 @@ class MiniGame : public Scene
 		GEO_BOTTOM,
 		GEO_FRONT,
 		GEO_BACK,
+
+		ROAD,
+		LORRY,
 
 		NUM_GEOMETRY,
 	};
@@ -58,6 +64,7 @@ private:
 	Camera *camera;
 
 	void RenderSkybox();
+	void RenderMiniGame();
 
 	Light light[8];
 
@@ -65,9 +72,15 @@ private:
 	bool isEscPressed, wasEscPressed;
 
 	UI renderUI;
+	static std::vector<EnvironmentObj*> Obstacles;
+
 
 	double x, y;
+	float roadDistance;
 
+	Distance roadDis;
+	Mesh* road;
+	Mesh* lorry;
 };
 
 #endif

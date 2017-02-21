@@ -11,6 +11,7 @@
 #include "LoadTGA.h"
 #include "LoadTextData.h"
 #include "LoadATOM.h"
+#include "Environment.h"
 //#include "GameObject.h"
 
 #include "NPC_Doc.h"
@@ -19,13 +20,12 @@
 
 #include "UI.h"
 
-//MiniGame::Text_Data MiniGame::Text[TEXT_TYPE::Text_Count];
-//unsigned MiniGame::m_parameters[U_TOTAL];
+std::vector<bool> isActive;
+std::vector<Vector3> roadPosition;
+
+std::vector<EnvironmentObj*> MiniGame::Obstacles;
+
 MS MiniGame::modelStack, MiniGame::viewStack, MiniGame::projectionStack;
-
-//std::vector<GameObject*> MiniGame::Game_Objects_(10, NULL);
-
-//std::vector<GameObject*> MiniGame::Game_Objects_(10, NULL);
 
 
 MiniGame::MiniGame()
@@ -182,13 +182,39 @@ void MiniGame::Init()
 	meshList[GEO_BOTTOM]->textureID = LoadTGA("Image//sky1_down.tga");
 	//Skybox ------------- Base Camp End
 
+	roadDistance = 0.f;
+
+	for (int i = 0; i < 20; i++)
+	{
+		road = MeshBuilder::GenerateOBJ("road", "OBJ//road.obj");
+		meshList[ROAD] = road;
+		road->textureID = LoadTGA("Image//road.tga");
+
+		roadPosition.push_back(Vector3(0.f, 0.f, roadDistance));
+		isActive.push_back(true);
+		roadDistance += 10.f;
+	}
+
+	//
+	//lorry = MeshBuilder::GenerateOBJ("lorry", "OBJ//lorry.obj");
+	//meshList[LORRY] = lorry;
+	//lorry->textureID = LoadTGA("Image//lorry.tga");
+	EnvironmentObj* lorry = new EnvironmentObj(MeshBuilder::GenerateOBJ("lorry", "OBJ//lorry.obj"));
+	lorry->CollisionMesh_->textureID = LoadTGA("Image//lorry.tga");
+
+	Obstacles.push_back(lorry);
+
+	//
+
+	for (auto it : Obstacles)
+		MGPlayer::addCollisionObject(it);
+
 	renderUI.Init();
 	wasEscPressed = false;
 	isPause = false;
 
-	camera = new Camera3;
-	camera->Init(Vector3(0, 0, 7), Vector3(0, 0, 0), Vector3(0, 1, 0));
-
+	camera = new CameraMG;
+	camera->Init(Vector3(0.f, 0.f, 7.f), Vector3(0.f, 0.f, 50.f), Vector3(0.f, 1.f, 0.f));
 
 	Mtx44 projection;
 	projection.SetToPerspective(45.f, 4.f / 3.f, 0.1f, 1000.f);
@@ -203,23 +229,6 @@ void MiniGame::Update(double dt)
 	int width, height;
 	glfwGetWindowSize(Application::m_window, &width, &height);
 	isEscPressed = Application::IsKeyPressed(VK_ESCAPE);
-
-	if (Application::IsKeyPressed(VK_NUMPAD1) || Application::IsKeyPressed('1'))
-	{
-		glEnable(GL_CULL_FACE);
-	}
-	if (Application::IsKeyPressed(VK_NUMPAD2) || Application::IsKeyPressed('2'))
-	{
-		glDisable(GL_CULL_FACE);
-	}
-	if (Application::IsKeyPressed(VK_NUMPAD3) || Application::IsKeyPressed('3'))
-	{
-		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); //default fill mode
-	}
-	if (Application::IsKeyPressed(VK_NUMPAD4) || Application::IsKeyPressed('4'))
-	{
-		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); //wireframe mode
-	}
 
 	if (isEscPressed && !wasEscPressed) // When you press ESC
 	{
@@ -239,8 +248,6 @@ void MiniGame::Update(double dt)
 			wasEscPressed = isEscPressed;
 	}
 
-	Player::getInstance()->update(dt, camera);
-
 	if (!isEscPressed && wasEscPressed) // When you release the ESC button
 		wasEscPressed = isEscPressed;
 
@@ -252,10 +259,28 @@ void MiniGame::Update(double dt)
 
 		glfwSetInputMode(Application::m_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
+		MGPlayer::getInstance()->Update(dt, camera);
+
 		double dx, dy;
 		dx = dt * double(width / 2 - c_posx);
 		dy = dt * double(height / 2 - c_posy);
 		camera->Update(dt, dx, dy);
+	}
+
+	for (int i = 0; i < 20; i++)
+	{
+		if (isActive[i])
+		{
+			if (camera->getPosition().z > roadPosition[i].z + 10.f)
+				isActive[i] = false;
+		}
+
+		else
+		{
+			roadPosition[i].z += 200;
+			isActive[i] = true;
+		}
+
 	}
 
 	FramesPerSec = 1 / dt; 
@@ -273,11 +298,18 @@ void MiniGame::Render()
 		camera->getUp().x, camera->getUp().y, camera->getUp().z);
 	modelStack.LoadIdentity();
 
+
+
 	RenderMeshClass::RenderMesh(meshList[GEO_AXES], false, &projectionStack, &viewStack, &modelStack, m_parameters);
 
-	Player::getInstance()->render(&projectionStack, &viewStack, &modelStack, m_parameters);
+	MGPlayer::getInstance()->Render(&projectionStack, &viewStack, &modelStack, m_parameters);
 
+	modelStack.PushMatrix();
+	modelStack.Translate(camera->getPosition().x, camera->getPosition().y, camera->getPosition().z);
 	RenderSkybox();
+	modelStack.PopMatrix();
+
+	RenderMiniGame();
 
 	if (isPause)
 		renderUI.renderPause(&projectionStack, &viewStack, &modelStack, m_parameters);
@@ -298,6 +330,34 @@ void MiniGame::Exit()
 	glDeleteVertexArrays(1, &m_vertexArrayID);
 	glDeleteProgram(m_programID);
 }
+
+void MiniGame::RenderMiniGame()
+{
+	// Road
+	for (int i = 0; i < 20; i++)
+	{
+		modelStack.PushMatrix();
+		modelStack.Translate(0.f, 0.f, roadPosition[i].z);
+		RenderMeshClass::RenderMesh(meshList[ROAD], false, &projectionStack, &viewStack, &modelStack, m_parameters);
+		modelStack.PopMatrix();
+	}
+
+	// Obstacles
+	//modelStack.PushMatrix();
+	//modelStack.Translate(0.f, 0.f, 60.f);
+	//RenderMeshClass::RenderMesh(meshList[LORRY], false, &projectionStack, &viewStack, &modelStack, m_parameters);
+	//modelStack.PopMatrix();
+
+	for (size_t i = 0; i < Obstacles.size(); i++)
+	{
+		modelStack.PushMatrix();
+		//modelStack.Translate(0.f, 0.f, 60.f);
+		RenderMeshClass::RenderMesh(Obstacles.at(i)->CollisionMesh_, true, &projectionStack, &viewStack, &modelStack, m_parameters);
+		modelStack.PopMatrix();
+
+	}
+}
+
 void MiniGame::RenderSkybox()
 {
 	modelStack.PushMatrix();
