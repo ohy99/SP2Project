@@ -9,6 +9,7 @@
 #include "Camera.h"
 #include "MatrixStack.h"
 #include "FPSCam.h"
+#include "Environment.h"
 
 class Player : public GameObject
 {
@@ -42,7 +43,7 @@ class Player : public GameObject
 	static Player* Instance_;
 	STATES state_;
 	float hitDelay = 0.0f;
-	float moveSPD = 2.0f;
+	float moveSPD = 10.0f;
 
 	GameObject* Pointed_Obj;
 
@@ -70,6 +71,9 @@ public:
 	inline int getHp() { return hp_; }
 	void PlayerMovement(double dt);
 	static inline void addCollisionObject(GameObject* obj) { CollisionObjects.push_back(obj); }
+
+	void checkTeleport();
+	static std::vector<EnvironmentObj*> Teleport;
 	//bool isDead();
 	//~Player();
 };
