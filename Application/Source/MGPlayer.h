@@ -17,6 +17,9 @@ public:
 
 	static MGPlayer* getInstance();
 	void setPlayerPosition(Vector3& pos);
+	Vector3 getPlayerPosition() { return pos_; }
+
+	float playerScore(float scoreMultiplier);
 
 	static std::vector<GameObject*> CollisionObjects;
 	Mesh* getCollisionMesh() { return PMesh[MESH_TYPE::BODY]; } 
@@ -40,15 +43,14 @@ private:
 
 	static MGPlayer* Instance;
 
-	float moveSpeed;
 	float lane;
+	float moveSpeed;
 
 	bool isHit;
 	bool isDead();
+	bool isDPressed, wasDPressed, isAPressed, wasAPressed;
 
 	Distance distance;
-
-	bool isDPressed, wasDPressed, isAPressed, wasAPressed;
 };
 
 #endif

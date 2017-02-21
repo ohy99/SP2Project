@@ -12,6 +12,7 @@
 #include "LoadTextData.h"
 #include "LoadATOM.h"
 #include "Environment.h"
+#include <ctime>
 //#include "GameObject.h"
 
 #include "NPC_Doc.h"
@@ -22,6 +23,9 @@
 
 std::vector<bool> isActive;
 std::vector<Vector3> roadPosition;
+std::vector<bool> isObstacleActive;
+
+std::vector<char> count; // rand the number of lorry on one lane, max 2
 
 std::vector<EnvironmentObj*> MiniGame::Obstacles;
 
@@ -141,12 +145,12 @@ void MiniGame::Init()
 	Text[TEXT_TYPE::SegoeMarker].Text_Mesh->textureID = LoadTGA("Image//Segoe Marker.tga");
 	LoadTextData("Image//Segoe Marker Data.csv", Text[TEXT_TYPE::SegoeMarker].TextWidth);
 
-	meshList[GEO_AXES] = MeshBuilder::GenerateAxes("Axes", 1000, 1000, 1000);
+	meshList[GEO_AXES] = MeshBuilder::GenerateAxes("Axes", 1000.f, 1000.f, 1000.f);
 
 
 
-	meshList[GEO_LIGHTBALL] = MeshBuilder::GenerateSphere("LightBall", Color(1, 1, 1), 12, 12, 1);
-	meshList[GEO_LIGHTBALL1] = MeshBuilder::GenerateCylinder("LightBall1", Color(1, 1, 1), 12, 1, 0, 1);
+	meshList[GEO_LIGHTBALL] = MeshBuilder::GenerateSphere("LightBall", Color(1.f, 1.f, 1.f), 12, 12, 1.f);
+	meshList[GEO_LIGHTBALL1] = MeshBuilder::GenerateCylinder("LightBall1", Color(1.f, 1.f, 1.f), 12, 1.f, 0.f, 1.f);
 
 	//	meshList[GEO_SPHERE] = MeshBuilder::GenerateSphere(...);
 	meshList[GEO_QUAD] = MeshBuilder::GenerateQuad("image", Color(0.9f, 0.9f, 0.9f), 1.0f, 1.0f);
@@ -158,31 +162,33 @@ void MiniGame::Init()
 
 	//Skybox ------------ Base Camp Start
 	//Left Skybox 
-	meshList[GEO_LEFT] = MeshBuilder::GenerateQuad("Left", Color(1, 1, 1), 1.0f, 1.0f);
+	meshList[GEO_LEFT] = MeshBuilder::GenerateQuad("Left", Color(1.f, 1.f, 1.f), 1.0f, 1.0f);
 	meshList[GEO_LEFT]->textureID = LoadTGA("Image//sky1_left.tga");
 
 	//Right Skybox 
-	meshList[GEO_RIGHT] = MeshBuilder::GenerateQuad("Right", Color(1, 1, 1), 1.0f, 1.0f);
+	meshList[GEO_RIGHT] = MeshBuilder::GenerateQuad("Right", Color(1.f, 1.f, 1.f), 1.0f, 1.0f);
 	meshList[GEO_RIGHT]->textureID = LoadTGA("Image//sky1_right.tga");
 
 	//Front Skybox 
-	meshList[GEO_FRONT] = MeshBuilder::GenerateQuad("Front", Color(1, 1, 1), 1.0f, 1.0f);
+	meshList[GEO_FRONT] = MeshBuilder::GenerateQuad("Front", Color(1.f, 1.f, 1.f), 1.0f, 1.0f);
 	meshList[GEO_FRONT]->textureID = LoadTGA("Image//sky1_front.tga");
 
 	//Back Skybox 
-	meshList[GEO_BACK] = MeshBuilder::GenerateQuad("Back", Color(1, 1, 1), 1.0f, 1.0f);
+	meshList[GEO_BACK] = MeshBuilder::GenerateQuad("Back", Color(1.f, 1.f, 1.f), 1.0f, 1.0f);
 	meshList[GEO_BACK]->textureID = LoadTGA("Image//sky1_back.tga");
 
 	//Top Skybox 
-	meshList[GEO_TOP] = MeshBuilder::GenerateQuad("Top", Color(1, 1, 1), 1.0f, 1.0f);
+	meshList[GEO_TOP] = MeshBuilder::GenerateQuad("Top", Color(1.f, 1.f, 1.f), 1.0f, 1.0f);
 	meshList[GEO_TOP]->textureID = LoadTGA("Image//sky1_up.tga");
 
 	//Bottom Skybox 
-	meshList[GEO_BOTTOM] = MeshBuilder::GenerateQuad("Bottom", Color(1, 1, 1), 1.0f, 1.0f);
+	meshList[GEO_BOTTOM] = MeshBuilder::GenerateQuad("Bottom", Color(1.f, 1.f, 1.f), 1.0f, 1.0f);
 	meshList[GEO_BOTTOM]->textureID = LoadTGA("Image//sky1_down.tga");
 	//Skybox ------------- Base Camp End
 
 	roadDistance = 0.f;
+	obstaclePosX = 0.f;
+	obstaclePosZ = 40.f;
 
 	for (int i = 0; i < 20; i++)
 	{
@@ -190,28 +196,94 @@ void MiniGame::Init()
 		meshList[ROAD] = road;
 		road->textureID = LoadTGA("Image//road.tga");
 
+		counter = rand() % 2; // rand 0 - 1
+
 		roadPosition.push_back(Vector3(0.f, 0.f, roadDistance));
 		isActive.push_back(true);
+		count.push_back(counter);
 		roadDistance += 10.f;
 	}
 
-	//
-	//lorry = MeshBuilder::GenerateOBJ("lorry", "OBJ//lorry.obj");
-	//meshList[LORRY] = lorry;
-	//lorry->textureID = LoadTGA("Image//lorry.tga");
-	EnvironmentObj* lorry = new EnvironmentObj(MeshBuilder::GenerateOBJ("lorry", "OBJ//lorry.obj"));
-	lorry->CollisionMesh_->textureID = LoadTGA("Image//lorry.tga");
+	srand(time(NULL));
 
-	Obstacles.push_back(lorry);
+	for (int i = 0; i < 16; i++)
+	{
+		lorry = new EnvironmentObj(MeshBuilder::GenerateOBJ("lorry", "OBJ//lorry.obj"));
+		lorry->CollisionMesh_->textureID = LoadTGA("Image//lorry.tga");
 
-	//
+		Obstacles.push_back(lorry);
+		isObstacleActive.push_back(false);
+	}
 
-	for (auto it : Obstacles)
-		MGPlayer::addCollisionObject(it);
+	for (size_t i = 0; i < Obstacles.size(); i++)
+	{
+		obstaclePosX = rand() % 3; // rand 0 - 1
+		order[0] = obstaclePosX;
+
+		obstaclePosX = rand() % 3; // rand 0 - 1
+
+		if (obstaclePosX == order[0])
+		{
+			order[1] = (int)(obstaclePosX + 1) % 3;
+		}
+
+		if (!isObstacleActive[i])
+		{
+			isObstacleActive[i] = true;
+
+			if ((int)count[i] == 0)
+			{
+				Obstacles[i]->CollisionMesh_->pos.x = -7.f + ((int)order[0] * 7.f);
+				Obstacles[i]->CollisionMesh_->pos.z = obstaclePosZ;
+			}
+
+
+			else if ((int)count[i] == 1)
+			{
+				if (i + 1 <= 15)
+				{
+					Obstacles[i]->CollisionMesh_->pos.x = -7.f + ((int)order[0] * 7.f);
+					Obstacles[i]->CollisionMesh_->pos.z = obstaclePosZ;
+					Obstacles[i + 1]->CollisionMesh_->pos.x = -7.f + ((int)order[1] * 7.f);
+					Obstacles[i + 1]->CollisionMesh_->pos.z = obstaclePosZ;
+
+					isObstacleActive[i + 1] = true;
+					i++;
+				}
+
+				else
+				{
+					Obstacles[i]->CollisionMesh_->pos.x = -7.f + ((int)order[1] * 7.f);
+					Obstacles[i]->CollisionMesh_->pos.z = obstaclePosZ;
+
+					isObstacleActive[i] = true;
+				}
+			}
+		}
+
+		obstaclePosZ += 20.f;
+	}
+
+	//for (auto it : Obstacles)
+	//{
+	//	MGPlayer::addCollisionObject(it);
+	//}
+
+	for (size_t i = 0; i < Obstacles.size(); i++)
+	{
+		if (isObstacleActive[i])
+			MGPlayer::addCollisionObject(Obstacles[i]);
+
+		else
+			continue;
+	}
 
 	renderUI.Init();
-	wasEscPressed = false;
 	isPause = false;
+	wasEscPressed = false;
+
+	score = 0.f;
+	bonusScore = 0.25f; // Default score
 
 	camera = new CameraMG;
 	camera->Init(Vector3(0.f, 0.f, 7.f), Vector3(0.f, 0.f, 50.f), Vector3(0.f, 1.f, 0.f));
@@ -226,7 +298,6 @@ void MiniGame::Init()
 
 void MiniGame::Update(double dt)
 {
-	int width, height;
 	glfwGetWindowSize(Application::m_window, &width, &height);
 	isEscPressed = Application::IsKeyPressed(VK_ESCAPE);
 
@@ -280,8 +351,68 @@ void MiniGame::Update(double dt)
 			roadPosition[i].z += 200;
 			isActive[i] = true;
 		}
-
 	}
+
+	for (size_t i = 0; i < Obstacles.size(); i++)
+	{
+		if (isObstacleActive[i])
+		{
+			if (camera->getPosition().z > Obstacles[i]->CollisionMesh_->pos.z + 10.f)
+				isObstacleActive[i] = false;
+		}
+
+		else
+		{
+			obstaclePosX = rand() % 3; // rand 0 - 1
+			order[0] = obstaclePosX;
+
+			obstaclePosX = rand() % 3; // rand 0 - 1
+
+			if (obstaclePosX == order[0])
+			{
+				order[1] = (int)(obstaclePosX + 1) % 3;
+			}
+
+			if (!isObstacleActive[i])
+			{
+				isObstacleActive[i] = true;
+
+				if ((int)count[i] == 0)
+				{
+					Obstacles[i]->CollisionMesh_->pos.x = -7.f + ((int)order[0] * 7.f);
+					Obstacles[i]->CollisionMesh_->pos.z = obstaclePosZ;
+				}
+
+
+				else if ((int)count[i] == 1)
+				{
+					if (i + 1 <= 15)
+					{
+						Obstacles[i]->CollisionMesh_->pos.x = -7.f + ((int)order[0] * 7.f);
+						Obstacles[i]->CollisionMesh_->pos.z = obstaclePosZ;
+						Obstacles[i + 1]->CollisionMesh_->pos.x = -7.f + ((int)order[1] * 7.f);
+						Obstacles[i + 1]->CollisionMesh_->pos.z = obstaclePosZ;
+
+						isObstacleActive[i + 1] = true;
+						i++;
+					}
+
+					else
+					{
+						Obstacles[i]->CollisionMesh_->pos.x = -7.f + ((int)order[1] * 7.f);
+						Obstacles[i]->CollisionMesh_->pos.z = obstaclePosZ;
+
+						isObstacleActive[i] = true;
+					}
+				}
+			}
+
+			obstaclePosZ += 20.f;
+			isObstacleActive[i] = true;
+		}
+	}
+
+	score = MGPlayer::getInstance()->playerScore(bonusScore);
 
 	FramesPerSec = 1 / dt; 
 }
@@ -314,7 +445,9 @@ void MiniGame::Render()
 	if (isPause)
 		renderUI.renderPause(&projectionStack, &viewStack, &modelStack, m_parameters);
 
-	RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::to_string(FramesPerSec), Color(1, 0, 0), 1.5f, 45, 38, &projectionStack, &viewStack, &modelStack, m_parameters);
+	RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::to_string(FramesPerSec), Color(1.f, 0.f, 0.f), 1.5f, 45.f, 38.f, &projectionStack, &viewStack, &modelStack, m_parameters);
+	Score = "Total score:" + std::to_string(score);
+	RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], Score, Color(1.f, 1.f, 1.f), 3.8f, 48.f, 56.5f, &projectionStack, &viewStack, &modelStack, m_parameters);
 }
 
 void MiniGame::Exit()
@@ -350,11 +483,13 @@ void MiniGame::RenderMiniGame()
 
 	for (size_t i = 0; i < Obstacles.size(); i++)
 	{
-		modelStack.PushMatrix();
-		//modelStack.Translate(0.f, 0.f, 60.f);
-		RenderMeshClass::RenderMesh(Obstacles.at(i)->CollisionMesh_, true, &projectionStack, &viewStack, &modelStack, m_parameters);
-		modelStack.PopMatrix();
-
+		if (isObstacleActive[i])
+		{
+			modelStack.PushMatrix();
+			modelStack.Translate(Obstacles.at(i)->CollisionMesh_->pos.x, Obstacles.at(i)->CollisionMesh_->pos.y, Obstacles.at(i)->CollisionMesh_->pos.z);
+			RenderMeshClass::RenderMesh(Obstacles.at(i)->CollisionMesh_, true, &projectionStack, &viewStack, &modelStack, m_parameters);
+			modelStack.PopMatrix();
+		}
 	}
 }
 

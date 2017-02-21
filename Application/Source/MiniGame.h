@@ -74,13 +74,23 @@ private:
 	UI renderUI;
 	static std::vector<EnvironmentObj*> Obstacles;
 
+	int width, height;
+
+	char order[2]; // rand the order of lorry, 0 & 1
+	char counter;
 
 	double x, y;
-	float roadDistance;
 
-	Distance roadDis;
+	float score;
+	float bonusScore;
+	float roadDistance;
+	float obstaclePosX, obstaclePosZ;
+
+	std::string Score;
+
 	Mesh* road;
-	Mesh* lorry;
+	Distance roadDis;
+	EnvironmentObj* lorry;
 };
 
 #endif

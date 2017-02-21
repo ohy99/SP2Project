@@ -9,7 +9,7 @@
 MGPlayer* MGPlayer::Instance = 0;
 std::vector<GameObject*> MGPlayer::CollisionObjects;
 
-MGPlayer::MGPlayer() : GameObject("Player"), moveSpeed(20.f), lane(1.f), isHit(false), wasDPressed(false), wasAPressed(false)
+MGPlayer::MGPlayer() : GameObject("Player"), lane(1.f), moveSpeed(20.f), isHit(false), wasDPressed(false), wasAPressed(false)
 {
 	PMesh[MESH_TYPE::BODY] = MeshBuilder::GenerateOBJ("", "OBJ//goat.obj");
 	PMesh[MESH_TYPE::BODY]->collisionEnabled = true;
@@ -54,6 +54,7 @@ void MGPlayer::Update(double dt, Camera* cam)
 
 	isDPressed = Application::IsKeyPressed('D');
 	isAPressed = Application::IsKeyPressed('A');
+
 	MGPlayerMovements(dt);
 }
 
@@ -133,4 +134,9 @@ bool MGPlayer::isDead()
 
 	else
 		return true;
+}
+
+float MGPlayer::playerScore(float scoreMultiplier)
+{
+	return (pos_.z * scoreMultiplier);
 }
