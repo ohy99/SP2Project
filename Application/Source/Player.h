@@ -74,6 +74,10 @@ public:
 
 	void checkTeleport();
 	static std::vector<EnvironmentObj*> Teleport;
+
+	void TeleportToInsideBarrack();
+	static std::vector<EnvironmentObj*> Teleport_Barrack;
+
 	//bool isDead();
 	//~Player();
 };

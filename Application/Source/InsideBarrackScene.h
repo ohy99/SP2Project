@@ -1,5 +1,5 @@
-#ifndef MAIN_SCENE_H
-#define MAIN_SCENE_H
+#ifndef InsideBarrackScene_H
+#define InsideBarrackScene_H
 
 #include "Scene.h"
 #include "SceneManager.h"
@@ -20,7 +20,7 @@
 #include "Environment.h"
 
 
-class MainScene : public Scene
+class InsideBarrackScene : public Scene
 {
 	enum GEOMETRY_TYPE
 	{
@@ -36,9 +36,7 @@ class MainScene : public Scene
 		GEO_LIGHTBALL,
 		GEO_LIGHTBALL1,
 		GEO_GroundMesh_RedDirt,
-		GEO_Teleporter,
-		GEO_Teleporter1,
-		GEO_Barrack,
+		GEO_DOOR,
 
 		GEO_LEFT,
 		GEO_RIGHT,
@@ -51,44 +49,47 @@ class MainScene : public Scene
 	};
 
 public:
-	MainScene();
-	~MainScene();
+	InsideBarrackScene();
+	~InsideBarrackScene();
 
 	virtual void Init();
 	virtual void Update(double dt);
 	virtual void Render();
 	virtual void Exit();
+
 	//virtual std::vector<GameObject*> getCurrentSceneObjs(){ return Game_Objects_; }
 
 	static MS modelStack, viewStack, projectionStack;
 
-	static EnvironmentObj* Teleporter;
+	//static EnvironmentObj* Teleporter;
 	static EnvironmentObj* Barrack;
 
 private:
 	unsigned m_vertexArrayID;
 	Mesh* meshList[NUM_GEOMETRY];
+
 	//unsigned m_programID;
 	//unsigned m_parameters[U_TOTAL];
 	/*MS modelStack, viewStack, projectionStack;*/
+
 	double FramesPerSec;
 
 	Camera *camera;
 
 	void RenderSkybox();
-	void RenderBaseCamp();
 
 	Light light[8];
 
 	static std::vector<EnvironmentObj*> Env_Obj;
-	static std::vector<NPC*> CampNPC;
+
+	//static std::vector<NPC*> CampNPC;
 	//std::vector
 
 	bool isPause;
 	bool isEscPressed, wasEscPressed;
 
-	MainScreen MainMenu;
-	UI renderUI;
+	//MainScreen MainMenu;
+	//UI renderUI;
 
 	double x, y;
 	//void RenderText(Text_Data* TextData, std::string text, Color color);
@@ -96,5 +97,6 @@ private:
 	//void RenderMeshOnScreen(Mesh* mesh, int x, int y, int sizex, int sizey);
 
 };
+
 
 #endif

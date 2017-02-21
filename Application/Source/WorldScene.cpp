@@ -47,6 +47,7 @@ WorldScene::~WorldScene()
 void WorldScene::Init()
 {
 	// Init VBO here
+	Player::getInstance()->setPosition(Vector3(0, 0, 0));
 
 	glClearColor(0.0f, 0.5f, 0.66f, 0.0f);
 

@@ -1,4 +1,4 @@
-#include "MainScene.h"
+#include "InsideBarrackScene.h"
 #include "GL\glew.h"
 
 #include <GLFW\glfw3.h>
@@ -11,6 +11,7 @@
 #include "LoadTGA.h"
 #include "LoadTextData.h"
 #include "LoadATOM.h"
+
 //#include "GameObject.h"
 
 #include "NPC_Doc.h"
@@ -20,31 +21,34 @@
 
 #include "UI.h"
 
-//MainScene::Text_Data MainScene::Text[TEXT_TYPE::Text_Count];
-//unsigned MainScene::m_parameters[U_TOTAL];
-MS MainScene::modelStack, MainScene::viewStack, MainScene::projectionStack;
+//InsideBarrackScene::Text_Data InsideBarrackScene::Text[TEXT_TYPE::Text_Count];
+//unsigned InsideBarrackScene::m_parameters[U_TOTAL];
 
-//std::vector<GameObject*> MainScene::Game_Objects_(10, NULL);
+MS InsideBarrackScene::modelStack, InsideBarrackScene::viewStack, InsideBarrackScene::projectionStack;
 
-//std::vector<GameObject*> MainScene::Game_Objects_(10, NULL);
-UI renderMeshOnScreen;
-std::vector<EnvironmentObj*> MainScene::Env_Obj;
-std::vector<NPC*> MainScene::CampNPC;
-EnvironmentObj* MainScene::Teleporter;
-EnvironmentObj* MainScene::Barrack;
+//std::vector<GameObject*> InsideBarrackScene::Game_Objects_(10, NULL);
+
+//std::vector<GameObject*> InsideBarrackScene::Game_Objects_(10, NULL);
+//UI renderMeshOnScreen;
+
+std::vector<EnvironmentObj*> InsideBarrackScene::Env_Obj;
+EnvironmentObj* InsideBarrackScene::Barrack;
+
+//std::vector<NPC*> InsideBarrackScene::CampNPC;
 
 
-MainScene::MainScene()
+InsideBarrackScene::InsideBarrackScene()
 {
 }
 
-MainScene::~MainScene()
+InsideBarrackScene::~InsideBarrackScene()
 {
 }
 
-void MainScene::Init()
+void InsideBarrackScene::Init()
 {
 	// Init VBO here
+	Player::getInstance()->setPosition(Vector3(0, 0, 0));
 
 	glClearColor(0.0f, 0.5f, 0.66f, 0.0f);
 
@@ -175,7 +179,66 @@ void MainScene::Init()
 
 
 
-	//Skybox ------------ Base Camp Start
+	//Walls, Door, Ceiling ------------------------------- START
+	EnvironmentObj* Wall1 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Wall1", "OBJ//InsideBarrackScene//Wall1_OBJ.obj"));
+	Wall1->CollisionMesh_->textureID = LoadTGA("Image//InsideBarrackScene//InsideBarracks_Wall_UV_Texture.tga");
+	EnvironmentObj* Wall2 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Wall2", "OBJ//InsideBarrackScene//Wall2_OBJ.obj"));
+	Wall2->CollisionMesh_->textureID = LoadTGA("Image//InsideBarrackScene//InsideBarracks_Wall_UV_Texture.tga");
+	EnvironmentObj* Wall3 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Wall3", "OBJ//InsideBarrackScene//Wall3_OBJ.obj"));
+	Wall3->CollisionMesh_->textureID = LoadTGA("Image//InsideBarrackScene//InsideBarracks_Wall_UV_Texture.tga");
+	Barrack = new EnvironmentObj(MeshBuilder::GenerateOBJ("Door1", "OBJ//InsideBarrackScene//Door1_OBJ.obj"));
+	Barrack->CollisionMesh_->textureID = LoadTGA("Image//InsideBarrackScene//InsideBarracks_Door_UV_Texture.tga");
+	EnvironmentObj* Ceiling1 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Ceiling1", "OBJ//InsideBarrackScene//Ceiling1_OBJ.obj"));
+	Ceiling1->CollisionMesh_->textureID = LoadTGA("Image//InsideBarrackScene//InsideBarracks_Door_UV_Texture.tga");
+
+	meshList[GEO_DOOR] = MeshBuilder::GenerateOBJ("Door1", "OBJ//InsideBarrackScene//Door1_OBJ.obj");
+	meshList[GEO_DOOR]->textureID = LoadTGA("Image//InsideBarrackScene//InsideBarracks_Door_UV_Texture.tga");
+
+	Env_Obj.push_back(Wall1);
+	Env_Obj.push_back(Wall2);
+	Env_Obj.push_back(Wall3);
+	Env_Obj.push_back(Ceiling1);
+
+	Player::getInstance()->Teleport_Barrack.push_back(Barrack);
+	//Walls, Door, Ceiling ------------------------------- END
+
+
+
+
+	//Support Beams ------------------------------- START
+	EnvironmentObj* Beam1 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Beam1", "OBJ//InsideBarrackScene//SupportBeam1_OBJ.obj"));
+	Beam1->CollisionMesh_->textureID = LoadTGA("Image//InsideBarrackScene//InsideBarracks_SupportingBeam_UV_Texture.tga");
+	EnvironmentObj* Beam2 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Beam1", "OBJ//InsideBarrackScene//SupportBeam2_OBJ.obj"));
+	Beam2->CollisionMesh_->textureID = LoadTGA("Image//InsideBarrackScene//InsideBarracks_SupportingBeam_UV_Texture.tga");
+	EnvironmentObj* Beam3 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Beam1", "OBJ//InsideBarrackScene//SupportBeam3_OBJ.obj"));
+	Beam3->CollisionMesh_->textureID = LoadTGA("Image//InsideBarrackScene//InsideBarracks_SupportingBeam_UV_Texture.tga");
+	EnvironmentObj* Beam4 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Beam1", "OBJ//InsideBarrackScene//SupportBeam4_OBJ.obj"));
+	Beam4->CollisionMesh_->textureID = LoadTGA("Image//InsideBarrackScene//InsideBarracks_SupportingBeam_UV_Texture.tga");
+
+
+	Env_Obj.push_back(Beam1);
+	Env_Obj.push_back(Beam2);
+	Env_Obj.push_back(Beam3);
+	Env_Obj.push_back(Beam4);
+	//Support Beams ------------------------------ END
+
+
+
+
+	//Resting Area ------------------------------- START
+	EnvironmentObj* Bed1 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Bed1", "OBJ//InsideBarrackScene//Bed1_OBJ.obj"));
+	Bed1->CollisionMesh_->textureID = LoadTGA("Image//InsideBarrackScene//InsideBarracks_SleepingStation_UV_Texture.tga");
+	EnvironmentObj* Bed2 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Bed2", "OBJ//InsideBarrackScene//Bed2_OBJ.obj"));
+	Bed2->CollisionMesh_->textureID = LoadTGA("Image//InsideBarrackScene//InsideBarracks_SleepingStation_UV_Texture.tga");
+
+	Env_Obj.push_back(Bed1);
+	Env_Obj.push_back(Bed2);
+	//Resting Area ------------------------------- END
+
+
+
+
+	//Skybox ------------- Start
 	//Left Skybox 
 	meshList[GEO_LEFT] = MeshBuilder::GenerateQuad("Left", Color(1, 1, 1), 1.0f, 1.0f);
 	meshList[GEO_LEFT]->textureID = LoadTGA("Image//sky1_left.tga");
@@ -199,137 +262,7 @@ void MainScene::Init()
 	//Bottom Skybox 
 	meshList[GEO_BOTTOM] = MeshBuilder::GenerateQuad("Bottom", Color(1, 1, 1), 1.0f, 1.0f);
 	meshList[GEO_BOTTOM]->textureID = LoadTGA("Image//sky1_down.tga");
-	//Skybox ------------- Base Camp End
-
-
-
-
-	//Barricade -------------------- Start
-	EnvironmentObj* Barricade1 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Barricade", "OBJ//Barricade1_OBJ.obj"));
-	Barricade1->CollisionMesh_->textureID = LoadTGA("Image//Barricade_UV_Texture.tga");
-	EnvironmentObj* Barricade2 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Barricade", "OBJ//Barricade2_OBJ.obj"));
-	Barricade2->CollisionMesh_->textureID = LoadTGA("Image//Barricade_UV_Texture.tga");
-	EnvironmentObj* Barricade3 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Barricade", "OBJ//Barricade3_OBJ.obj"));
-	Barricade3->CollisionMesh_->textureID = LoadTGA("Image//Barricade_UV_Texture.tga");
-	EnvironmentObj* Barricade4 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Barricade", "OBJ//Barricade4_OBJ.obj"));
-	Barricade4->CollisionMesh_->textureID = LoadTGA("Image//Barricade_UV_Texture.tga");
-
-	Env_Obj.push_back(Barricade1);
-	Env_Obj.push_back(Barricade2);
-	Env_Obj.push_back(Barricade3);
-	Env_Obj.push_back(Barricade4);
-	//Barricade -------------------- End
-
-
-
-
-	//Teleporter ------------------ START
-	Teleporter = new EnvironmentObj(MeshBuilder::GenerateOBJ("Teleporter", "OBJ//Teleporter_OBJ.obj"));
-	Teleporter->CollisionMesh_->textureID = LoadTGA("Image//InteractableItem_Teleporter_UV_Texture.tga");
-	//Teleporter1 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Teleporter1", "OBJ//Teleporter1_OBJ.obj"));
-	//Teleporter1->CollisionMesh_->textureID = LoadTGA("Image//InteractableItem_Teleporter_UV_Texture.tga");
-
-	meshList[GEO_Teleporter] = MeshBuilder::GenerateOBJ("Teleporter", "OBJ//Teleporter_OBJ.obj");
-	meshList[GEO_Teleporter]->textureID = LoadTGA("Image//InteractableItem_Teleporter_UV_Texture.tga");
-	
-
-	//Env_Obj.push_back(Teleporter);
-	//Env_Obj.push_back(Teleporter1);
-
-	Player::getInstance()->Teleport.push_back(Teleporter);
-	//Teleporter -----------------------END
-
-
-
-
-	NPC* Doc = new NPC_DOC();
-	//Game_Objects_.push_back(Doc);
-	CampNPC.push_back(Doc);
-
-
-
-
-	//Medical Tents ------------------- START
-	EnvironmentObj* MedicalTent1 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Medical Tent1", "OBJ//MedicalTent1_OBJ.obj"));
-	MedicalTent1->CollisionMesh_->textureID = LoadTGA("Image//MedicalCamp_UV_Texture.tga");
-	EnvironmentObj* MedicalTent2 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Medical Tent2", "OBJ//MedicalTent2_OBJ.obj"));
-	MedicalTent2->CollisionMesh_->textureID = LoadTGA("Image//MedicalCamp_UV_Texture.tga");
-	EnvironmentObj* MedicalTent3 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Medical Tent3", "OBJ//MedicalTent3_OBJ.obj"));
-	MedicalTent3->CollisionMesh_->textureID = LoadTGA("Image//MedicalCamp_UV_Texture.tga");
-	EnvironmentObj* MedicalTent4 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Medical Tent4", "OBJ//MedicalTent4_OBJ.obj"));
-	MedicalTent4->CollisionMesh_->textureID = LoadTGA("Image//MedicalCamp_UV_Texture.tga");
-
-	Env_Obj.push_back(MedicalTent1);
-	Env_Obj.push_back(MedicalTent2);
-	Env_Obj.push_back(MedicalTent3);
-	Env_Obj.push_back(MedicalTent4);
-	//Medical Tent ------------------- END
-
-
-
-
-	//Barracks -------------------- START
-	EnvironmentObj* Barrack1 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Barrack1", "OBJ//Barracks1_OBJ.obj"));
-	Barrack1->CollisionMesh_->textureID = LoadTGA("Image//Barracks_UV_Texture.tga");
-	Barrack = new EnvironmentObj(MeshBuilder::GenerateOBJ("Barrack2", "OBJ//Barracks2_OBJ.obj"));
-	Barrack->CollisionMesh_->textureID = LoadTGA("Image//Barracks_UV_Texture.tga");
-	EnvironmentObj* Barrack3 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Barrack3", "OBJ//Barracks3_OBJ.obj"));
-	Barrack3->CollisionMesh_->textureID = LoadTGA("Image//Barracks_UV_Texture.tga");
-	EnvironmentObj* Barrack4 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Barrack4", "OBJ//Barracks4_OBJ.obj"));
-	Barrack4->CollisionMesh_->textureID = LoadTGA("Image//Barracks_UV_Texture.tga");
-
-	meshList[GEO_Barrack] = MeshBuilder::GenerateOBJ("Barrack2", "OBJ//Barracks2_OBJ.obj");
-	meshList[GEO_Barrack]->textureID = LoadTGA("Image//Barracks_UV_Texture.tga");
-
-	Env_Obj.push_back(Barrack1);
-	Env_Obj.push_back(Barrack3);
-	Env_Obj.push_back(Barrack4);
-
-	Player::getInstance()->Teleport_Barrack.push_back(Barrack);
-	//Barracks ------------------------- END
-
-
-
-
-	//Crates ------------------------------- START
-	EnvironmentObj* Crate = new EnvironmentObj(MeshBuilder::GenerateOBJ("Crates", "OBJ//Crates_OBJ.obj"));
-	Crate->CollisionMesh_->textureID = LoadTGA("Image//Crate_UV_Texture.tga");
-	EnvironmentObj* Crate1 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Crate1", "OBJ//Crates1_OBJ.obj"));
-	Crate1->CollisionMesh_->textureID = LoadTGA("Image//Crate_UV_Texture.tga");
-
-	Env_Obj.push_back(Crate);
-	Env_Obj.push_back(Crate1);
-	//Crates ------------------------------------------- END
-
-
-
-
-	//Solar Panels------------------------------------- START
-	EnvironmentObj* SolarPanel1 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Solar Panel1", "OBJ//SolarPanel1_OBJ.obj"));
-	SolarPanel1->CollisionMesh_->textureID = LoadTGA("Image//SolarUV_Texture.tga");
-	EnvironmentObj* SolarPanel2 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Solar Panel2", "OBJ//SolarPanel2_OBJ.obj"));
-	SolarPanel2->CollisionMesh_->textureID = LoadTGA("Image//SolarUV_Texture.tga");
-	EnvironmentObj* SolarPanel3 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Solar Panel3", "OBJ//SolarPanel3_OBJ.obj"));
-	SolarPanel3->CollisionMesh_->textureID = LoadTGA("Image//SolarUV_Texture.tga");
-	EnvironmentObj* SolarPanel4 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Solar Panel4", "OBJ//SolarPanel4_OBJ.obj"));
-	SolarPanel4->CollisionMesh_->textureID = LoadTGA("Image//SolarUV_Texture.tga");
-
-	Env_Obj.push_back(SolarPanel1);
-	Env_Obj.push_back(SolarPanel2);
-	Env_Obj.push_back(SolarPanel3);
-	Env_Obj.push_back(SolarPanel4);
-	//Solar Panels ------------------------------------- END
-
-
-
-
-	//Powerbox ----------------------------------- START
-	EnvironmentObj* PowerBox = new EnvironmentObj(MeshBuilder::GenerateOBJ("PB", "OBJ//Powerbox_OBJ.obj"));
-	PowerBox->CollisionMesh_->textureID = LoadTGA("Image//Powerbox_UV_Texture.tga");
-
-	Env_Obj.push_back(PowerBox);
-	//Powerbox ----------------------------------- END
-
+	//Skybox ------------- End
 
 
 
@@ -337,11 +270,10 @@ void MainScene::Init()
 		Player::addCollisionObject(it);
 
 
-
-	renderUI.Init();
+	//renderUI.Init();
 	wasEscPressed = false;
 	isPause = false;
-	MainMenu.Init();
+	//MainMenu.Init();
 
 	camera = new Camera3;
 	camera->Init(Vector3(0, 0, 7), Vector3(0, 0, 0), Vector3(0, 1, 0));
@@ -355,9 +287,8 @@ void MainScene::Init()
 	glfwSetInputMode(Application::m_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 }
 
-void MainScene::Update(double dt)
+void InsideBarrackScene::Update(double dt)
 {
-
 
 	int width, height;
 	glfwGetWindowSize(Application::m_window, &width, &height);
@@ -400,37 +331,37 @@ void MainScene::Update(double dt)
 
 	if (isEscPressed && !wasEscPressed) // When you press ESC
 	{
-		if (!MainMenu.isMainMenu)
+		//if (!MainMenu.isMainMenu)
+		//{
+		if (!isPause)
 		{
-			if (!isPause)
-			{
-				isPause = true;
-				glfwSetInputMode(Application::m_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-				glfwSetCursorPos(Application::m_window, width / 2, height / 2);				
-			}
-			else
-			{
-				isPause = false;
-				glfwSetInputMode(Application::m_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-				glfwSetCursorPos(Application::m_window, width / 2, height / 2);
-			}
-
-			wasEscPressed = isEscPressed;
+			isPause = true;
+			glfwSetInputMode(Application::m_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+			glfwSetCursorPos(Application::m_window, width / 2, height / 2);
 		}
+		else
+		{
+			isPause = false;
+			glfwSetInputMode(Application::m_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+			glfwSetCursorPos(Application::m_window, width / 2, height / 2);
+		}
+
+		wasEscPressed = isEscPressed;
+		//}
 	}
-		
+
 	if (!isEscPressed && wasEscPressed) // When you release the ESC button
 		wasEscPressed = isEscPressed;
 
 	Player::getInstance()->update(dt, camera);
 
-	for (size_t i = 0; i < CampNPC.size(); i++)
-	{
-		CampNPC.at(i)->update(dt);
-	}
+	//for (size_t i = 0; i < CampNPC.size(); i++)
+	//{
+	//	CampNPC.at(i)->update(dt);
+	//}
 
 
-	if (!isPause && !MainMenu.isMainMenu)
+	if (!isPause /*&& !mainmenu.ismainmenu*/)
 	{
 		double c_posx, c_posy;
 		glfwGetCursorPos(Application::m_window, &c_posx, &c_posy);
@@ -445,10 +376,11 @@ void MainScene::Update(double dt)
 	}
 
 	FramesPerSec = 1 / dt;
-	MainMenu.Update(dt);
+
+	//MainMenu.Update(dt);
 }
 
-void MainScene::Render()
+void InsideBarrackScene::Render()
 {
 	// Render VBO here
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -460,51 +392,36 @@ void MainScene::Render()
 		camera->getUp().x, camera->getUp().y, camera->getUp().z);
 	modelStack.LoadIdentity();
 
-	if (MainMenu.isMainMenu)
-		MainMenu.Render();
+	//if (MainMenu.isMainMenu)
+	//	MainMenu.Render();
 
-	else
-	{
-		RenderMeshClass::RenderMesh(meshList[GEO_AXES], false, &projectionStack, &viewStack, &modelStack, m_parameters);
-		Player::getInstance()->render(&projectionStack, &viewStack, &modelStack, m_parameters);
+	//else
+	//{
 
-		RenderSkybox();
-		//	renderEnvironment();
+	RenderSkybox();
+	//renderEnvironment();
 
-		//Ground Mesh
-		modelStack.PushMatrix();
-		modelStack.Scale(1000, 1000, 1000);
-		modelStack.Rotate(90, -1, 0, 0);
-		RenderMeshClass::RenderMesh(meshList[GEO_GroundMesh_RedDirt], true, &projectionStack, &viewStack, &modelStack, m_parameters);
-		modelStack.PopMatrix();
-
-
-
-		for (size_t i = 0; i < CampNPC.size(); i++)
-		{
-			CampNPC.at(i)->render(&projectionStack, &viewStack, &modelStack, m_parameters);
-		}
-		RenderBaseCamp();
-
-
-		if (isPause)
-			renderUI.renderPause(&projectionStack, &viewStack, &modelStack, m_parameters);
-
-
-		RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::to_string(FramesPerSec), Color(1, 0, 0), 1.5f, 45, 38, &projectionStack, &viewStack, &modelStack, m_parameters);
-	}
-
-}
-
-void MainScene::RenderBaseCamp(){
-
+	//Ground Mesh
 	modelStack.PushMatrix();
-	RenderMeshClass::RenderMesh(meshList[GEO_Teleporter], false, &projectionStack, &viewStack, &modelStack, m_parameters);
+	modelStack.Scale(100, 100, 100);
+	modelStack.Rotate(90, -1, 0, 0);
+	RenderMeshClass::RenderMesh(meshList[GEO_GroundMesh_RedDirt], true, &projectionStack, &viewStack, &modelStack, m_parameters);
 	modelStack.PopMatrix();
 
-	modelStack.PushMatrix();
-	RenderMeshClass::RenderMesh(meshList[GEO_Barrack], false, &projectionStack, &viewStack, &modelStack, m_parameters);
-	modelStack.PopMatrix();
+
+
+	//for (size_t i = 0; i < CampNPC.size(); i++)
+	//{
+	//	CampNPC.at(i)->render(&projectionStack, &viewStack, &modelStack, m_parameters);
+	//}
+
+
+
+	//if (isPause)
+	//renderUI.renderPause(&projectionStack, &viewStack, &modelStack, m_parameters);
+
+
+	//}
 
 	for (size_t i = 0; i < Env_Obj.size(); i++)
 	{
@@ -513,11 +430,21 @@ void MainScene::RenderBaseCamp(){
 		modelStack.PopMatrix();
 
 	}
-	
+
+	modelStack.PushMatrix();
+	RenderMeshClass::RenderMesh(meshList[GEO_DOOR], true, & projectionStack, &viewStack, &modelStack, m_parameters);
+	modelStack.PopMatrix();
+
+	RenderMeshClass::RenderMesh(meshList[GEO_AXES], false, &projectionStack, &viewStack, &modelStack, m_parameters);
+	Player::getInstance()->render(&projectionStack, &viewStack, &modelStack, m_parameters);
+
+	RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::to_string(FramesPerSec), Color(1, 0, 0), 1.5f, 45, 38, &projectionStack, &viewStack, &modelStack, m_parameters);
+
 
 }
 
-void MainScene::Exit()
+
+void InsideBarrackScene::Exit()
 {
 	for (size_t i = 0; i < GEOMETRY_TYPE::NUM_GEOMETRY; i++)
 	{
@@ -530,7 +457,8 @@ void MainScene::Exit()
 	glDeleteVertexArrays(1, &m_vertexArrayID);
 	glDeleteProgram(m_programID);
 }
-void MainScene::RenderSkybox()
+
+void InsideBarrackScene::RenderSkybox()
 {
 	modelStack.PushMatrix();
 	modelStack.Translate(0, 0, -248);
