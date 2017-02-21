@@ -11,7 +11,12 @@
 
 Player* Player::Instance_ = 0;
 std::vector<GameObject*> Player::CollisionObjects;
+
 std::vector<EnemyAI*> Player::enemies_;
+
+std::vector<Teleporter*> Player::Teleport;
+//std::vector<EnvironmentObj*> Player::Teleport_Barrack;
+
 Player::Player() : GameObject("Player") 
 {
 	for (size_t i = 0; i < MESH_TYPE::mt_Count; i++)
@@ -73,6 +78,7 @@ Player* Player::getInstance()
 	else 
 		return (Instance_ = new Player()); 
 }
+
 void Player::setPosition(Vector3& pos)
 {
 	pos_ = pos;
@@ -91,10 +97,11 @@ void Player::update(double dt, Camera* cam)
 	else
 		dirRotateAxis.Set(0, 1, 0);
 	CollisionMesh_ = PMesh[MESH_TYPE::Body];
-//	SceneManager::getCurrentScene()->getCurrentSceneObjs();
+	CollisionMesh_->pos = pos_;
 
 	PlayerMovement(dt);
 	getPointedObj(cam);
+
 
 	if (Application::IsKeyPressed('E'))
 		currentWeapon_ = weapons_[WEAPON_TYPE::RANGED];
@@ -104,15 +111,19 @@ void Player::update(double dt, Camera* cam)
 	else if (currentWeapon_ == weapons_[WEAPON_TYPE::RANGED])
 		RangedAttack(dt);
 
+
+	checkTeleport();
+	//TeleportToInsideBarrack();
+
 }
 
 void Player::render(MS* projectionStack, MS* viewStack, MS* modelStack, unsigned * m_parameters)
 {
-	modelStack->PushMatrix();
-	modelStack->Translate(pos_.x, pos_.y, pos_.z);
-	modelStack->Rotate(dirRotateAngle, dirRotateAxis.x, dirRotateAxis.y, dirRotateAxis.z);
-	RenderMeshClass::RenderMesh(PMesh[MESH_TYPE::Body], true, projectionStack, viewStack, modelStack, m_parameters);
-	modelStack->PopMatrix();
+	//modelStack->PushMatrix();
+	//modelStack->Translate(pos_.x, pos_.y, pos_.z);
+	//modelStack->Rotate(dirRotateAngle, dirRotateAxis.x, dirRotateAxis.y, dirRotateAxis.z);
+	//RenderMeshClass::RenderMesh(PMesh[MESH_TYPE::Body], true, projectionStack, viewStack, modelStack, m_parameters);
+	//modelStack->PopMatrix();
 
 	if (Pointed_Obj)
 		RenderMeshClass::RenderTextOnScreen(&Scene::Text[Scene::TEXT_TYPE::Century], Pointed_Obj->getName(), Color(0, 1, 0), 2, 35, 55, projectionStack, viewStack, modelStack, m_parameters);
@@ -144,7 +155,6 @@ void Player::getPointedObj(Camera* cam)
 
 	Pointed_Obj = NULL;
 
-	
 	for (auto it : CollisionObjects)
 	{
 		if (it->CollisionMesh_->isPointInsideAABB(TargetPointNear))
@@ -158,7 +168,6 @@ void Player::getPointedObj(Camera* cam)
 		}
 
 	}
-
 }
 
 void Player::isHitUpdate(int dmg)
@@ -269,6 +278,7 @@ void Player::PlayerMovement(double dt)
 //bool isDead();
 //~Player();
 
+
 void Player::MeleeAttack(double dt)
 {
 	static bool hitAlready = false;
@@ -343,3 +353,31 @@ void Player::RangedAttack(double dt)
 	if (Rweap->shotCooldown > 0)
 		Rweap->shotCooldown -= dt;
 }
+void Player::checkTeleport()
+{
+
+	for (size_t i = 0; i < Teleport.size(); i++)
+	{
+		if (CollisionMesh_->isCollide(Teleport.at(i)->CollisionMesh_))
+		{
+			SceneManager::getInstance()->SetNextSceneID(Teleport.at(i)->getNextSceneID());
+			SceneManager::getInstance()->SetNextScene();
+		}
+
+	}
+}
+
+//void Player::TeleportToInsideBarrack(){
+//
+//	for (size_t i = 0; i < Teleport_Barrack.size(); i++)
+//	{
+//		if (CollisionMesh_->isCollide(Teleport_Barrack.at(i)->CollisionMesh_))
+//		{
+//			SceneManager::getInstance()->SetNextSceneID(2);
+//			SceneManager::getInstance()->SetNextScene();
+//		}
+//
+//	}
+//
+//
+//}

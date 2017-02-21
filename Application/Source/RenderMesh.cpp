@@ -120,7 +120,7 @@ void RenderMeshClass::RenderTextOnScreen(Scene::Text_Data* TextData, std::string
 }
 void RenderMeshClass::RenderMeshOnScreen(Mesh* mesh, int x, int y, int z, int sizex, int sizey, MS* projectionStack, MS* viewStack, MS* modelStack, unsigned * m_parameters)
 {
-	//glDisable(GL_DEPTH_TEST);
+	glDisable(GL_DEPTH_TEST);
 	Mtx44 ortho;
 	ortho.SetToOrtho(0, Application::getWindowWidth(), 0, Application::getWindowHeight(), -10, 10); //size of screen UI
 	projectionStack->PushMatrix();
@@ -137,5 +137,5 @@ void RenderMeshClass::RenderMeshOnScreen(Mesh* mesh, int x, int y, int z, int si
 	projectionStack->PopMatrix();
 	viewStack->PopMatrix();
 	modelStack->PopMatrix();
-	//glEnable(GL_DEPTH_TEST);
+	glEnable(GL_DEPTH_TEST);
 }

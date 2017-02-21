@@ -226,7 +226,11 @@ void BossScene::Update(double dt)
 	dy = dt * double(height / 2 - c_posy);
 	camera->Update(dt, dx, dy);
 
-
+	if (Application::IsKeyPressed('1'))
+	{
+		SceneManager::getInstance()->SetNextSceneID(0);
+		SceneManager::getInstance()->SetNextScene();
+	}
 
 	FramesPerSec = 1 / dt;
 }
@@ -277,6 +281,7 @@ void BossScene::Exit()
 			delete meshList[i];
 	}
 	delete camera;
+	Player::getInstance()->clearCollisionObj();
 
 	// Cleanup VBO here
 	glDeleteVertexArrays(1, &m_vertexArrayID);

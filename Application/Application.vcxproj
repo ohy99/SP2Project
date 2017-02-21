@@ -89,11 +89,16 @@
     <ClCompile Include="Source\BossShootProj.cpp" />
     <ClCompile Include="Source\Camera.cpp" />
     <ClCompile Include="Source\Camera3.cpp" />
+    <ClCompile Include="Source\CameraMG.cpp" />
+    <ClCompile Include="Source\Environment.cpp" />
     <ClCompile Include="Source\FPSCam.cpp" />
+    <ClCompile Include="Source\InsideBarrackScene.cpp" />
     <ClCompile Include="Source\LoadOBJ.cpp" />
     <ClCompile Include="Source\LoadTextData.cpp" />
     <ClCompile Include="Source\LoadTGA.cpp" />
     <ClCompile Include="Source\MainScreen.cpp" />
+    <ClCompile Include="Source\MGPlayer.cpp" />
+    <ClCompile Include="Source\MiniGame.cpp" />
     <ClCompile Include="Source\NPC_Doc.cpp" />
     <ClCompile Include="Source\Player.cpp" />
     <ClCompile Include="Source\RangeWeapon.cpp" />
@@ -106,7 +111,9 @@
     <ClCompile Include="Source\Scene2.cpp" />
     <ClCompile Include="Source\shader.cpp" />
     <ClCompile Include="Source\UI.cpp" />
+    <ClCompile Include="Source\UndergroundScene.cpp" />
     <ClCompile Include="Source\Utility.cpp" />
+    <ClCompile Include="Source\WorldScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\AllyNPC.h" />
@@ -118,10 +125,14 @@
     <ClInclude Include="Source\Bullets.h" />
     <ClInclude Include="Source\Camera.h" />
     <ClInclude Include="Source\Camera3.h" />
+    <ClInclude Include="Source\CameraMG.h" />
     <ClInclude Include="Source\DetectMemoryLeak.h" />
+    <ClInclude Include="Source\Distance.h" />
     <ClInclude Include="Source\EnemyAI.h" />
+    <ClInclude Include="Source\Environment.h" />
     <ClInclude Include="Source\FPSCam.h" />
     <ClInclude Include="Source\GameObject.h" />
+    <ClInclude Include="Source\InsideBarrackScene.h" />
     <ClInclude Include="Source\Item.h" />
     <ClInclude Include="Source\Light.h" />
     <ClInclude Include="Source\LoadOBJ.h" />
@@ -129,6 +140,8 @@
     <ClInclude Include="Source\LoadTGA.h" />
     <ClInclude Include="Source\MainScreen.h" />
     <ClInclude Include="Source\MeleeWeapon.h" />
+    <ClInclude Include="Source\MGPlayer.h" />
+    <ClInclude Include="Source\MiniGame.h" />
     <ClInclude Include="Source\NPC.h" />
     <ClInclude Include="Source\NPC_Doc.h" />
     <ClInclude Include="Source\Player.h" />
@@ -146,11 +159,14 @@
     <ClInclude Include="Source\SceneManager.h" />
     <ClInclude Include="Source\shader.hpp" />
     <ClInclude Include="Source\BossShootProj.h" />
+    <ClInclude Include="Source\Teleporter.h" />
     <ClInclude Include="Source\UI.h" />
+    <ClInclude Include="Source\UndergroundScene.h" />
     <ClInclude Include="Source\Usables.h" />
     <ClInclude Include="Source\Utility.h" />
     <ClInclude Include="Source\Vertex.h" />
     <ClInclude Include="Source\Weapon.h" />
+    <ClInclude Include="Source\WorldScene.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

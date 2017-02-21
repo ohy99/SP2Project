@@ -15,6 +15,11 @@
 #include "MainScene.h"
 #include "BossScene.h"
 
+#include "UndergroundScene.h"
+#include "MiniGame.h"
+#include "WorldScene.h"
+#include "InsideBarrackScene.h"
+
 #include "DetectMemoryLeak.h"
 
 GLFWwindow* Application::m_window = 0;
@@ -127,13 +132,24 @@ void Application::Init()
 void Application::Run()
 {
 	//Main Loop
-	Scene *scene1 = new MainScene();
-	SceneManager::getInstance()->AddScene(scene1);
-	Scene *scene2 = new BossScene();
-	SceneManager::getInstance()->AddScene(scene2);
+
+	Scene *tempScene = new MainScene();
+	SceneManager::getInstance()->AddScene(tempScene);
+	tempScene = new WorldScene();
+	SceneManager::getInstance()->AddScene(tempScene);
+	tempScene = new InsideBarrackScene();
+	SceneManager::getInstance()->AddScene(tempScene);
+	tempScene = new BossScene();
+	SceneManager::getInstance()->AddScene(tempScene);
+	tempScene = new UndergroundScene();
+	SceneManager::getInstance()->AddScene(tempScene);
+	tempScene = new MiniGame();
+	SceneManager::getInstance()->AddScene(tempScene);
+
+
 	SceneManager::getInstance()->SetNextSceneID(1);
 	//Scene *scene = scene1;
-	scene1->Init();
+	SceneManager::getInstance()->getCurrentScene()->Init();
 
 	//Scene *scene = new A3Scene();
 

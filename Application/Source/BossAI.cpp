@@ -129,7 +129,7 @@ void GoatBoss::render(MS* projectionStack, MS* viewStack, MS* modelStack, unsign
 	modelStack->PushMatrix();
 	modelStack->Translate(0.15f * CollisionMesh_->right.x, 1.2f, (0.15f * CollisionMesh_->right.z));
 	modelStack->Translate(CollisionMesh_->pos.x, CollisionMesh_->pos.y, CollisionMesh_->pos.z);//y always 0
-	modelStack->Rotate((CollisionMesh_->dir.x < 0 ? -1.0f : 1.0f) * Math::RadianToDegree(acos(CollisionMesh_->dir.Dot(Vector3(0, 0, 1)))), 0, 1, 0);
+	modelStack->Rotate((CollisionMesh_->dir.x < 0 ? -1.0f : 1.0f) * Math::RadianToDegree(acos(CollisionMesh_->dir.Dot(Vector3(0.f, 0.f, 1.f)))), 0.f, 1.f, 0.f);
 	modelStack->Scale(0.3f, 0.3f, 0.3f);
 	RenderMeshClass::RenderText(&Scene::Text[Scene::TEXT_TYPE::Chiller], std::to_string(hp_), Color(1, 0, 0), projectionStack, viewStack, modelStack, m_parameters);
 	modelStack->PopMatrix();

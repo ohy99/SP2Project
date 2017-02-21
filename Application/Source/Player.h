@@ -11,7 +11,9 @@
 #include "FPSCam.h"
 #include "EnemyAI.h"
 
+#include "Environment.h"
 
+#include "Teleporter.h"
 
 class Player : public GameObject
 {
@@ -45,7 +47,7 @@ class Player : public GameObject
 	static Player* Instance_;
 	STATES state_;
 	float hitDelay = 0.0f;
-	float moveSPD = 2.0f;
+	float moveSPD = 20.0f;
 
 	GameObject* Pointed_Obj;
 
@@ -78,12 +80,21 @@ public:
 	inline int getHp() { return hp_; }
 	void PlayerMovement(double dt);
 	static inline void addCollisionObject(GameObject* obj) { CollisionObjects.push_back(obj); }
+
 	static void clearCollisionObj(){ while (CollisionObjects.size() > 0) CollisionObjects.pop_back();  
-	while (enemies_.size()) enemies_.pop_back();
+	while (enemies_.size()) enemies_.pop_back(); while (Teleport.size()) Teleport.pop_back();
 	}
 
 	GameObject* getPointedObj() { return Pointed_Obj; }
 	Weapon* getCurrWeap() { return currentWeapon_; }
+
+
+	void checkTeleport();
+	static std::vector<Teleporter*> Teleport;
+
+	//void TeleportToInsideBarrack();
+	//static std::vector<EnvironmentObj*> Teleport_Barrack;
+
 	//bool isDead();
 	//~Player();
 
