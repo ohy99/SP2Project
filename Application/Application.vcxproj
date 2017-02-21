@@ -105,7 +105,9 @@
     <ClCompile Include="Source\RenderMesh.cpp" />
     <ClCompile Include="Source\shader.cpp" />
     <ClCompile Include="Source\UI.cpp" />
+    <ClCompile Include="Source\UndergroundScene.cpp" />
     <ClCompile Include="Source\Utility.cpp" />
+    <ClCompile Include="Source\WorldScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\AllyNPC.h" />
@@ -143,10 +145,12 @@
     <ClInclude Include="Source\SceneManager.h" />
     <ClInclude Include="Source\shader.hpp" />
     <ClInclude Include="Source\UI.h" />
+    <ClInclude Include="Source\UndergroundScene.h" />
     <ClInclude Include="Source\Usables.h" />
     <ClInclude Include="Source\Utility.h" />
     <ClInclude Include="Source\Vertex.h" />
     <ClInclude Include="Source\Weapon.h" />
+    <ClInclude Include="Source\WorldScene.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

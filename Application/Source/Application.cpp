@@ -13,7 +13,9 @@
 
 #include "SceneManager.h"
 #include "MainScene.h"
+#include "UndergroundScene.h"
 #include "MiniGame.h"
+#include "WorldScene.h"
 
 #include "DetectMemoryLeak.h"
 
@@ -127,10 +129,17 @@ void Application::Init()
 void Application::Run()
 {
 	//Main Loop
+<<<<<<< HEAD
 	Scene *scene1 = new MainScene();
+=======
+
+	Scene *scene1 = new UndergroundScene();
+>>>>>>> 7e1014aefe7cb8882b346ca4a7379b4f04e11af2
 	SceneManager::getInstance()->AddScene(scene1);
-	Scene *scene2 = new MainScene();
+	Scene *scene2 = new WorldScene();
 	SceneManager::getInstance()->AddScene(scene2);
+	Scene *scene3 = new MiniGame();
+	SceneManager::getInstance()->AddScene(scene3);
 	SceneManager::getInstance()->SetNextSceneID(1);
 	//Scene *scene = scene1;
 	scene1->Init();

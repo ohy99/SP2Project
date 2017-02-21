@@ -30,8 +30,8 @@ MS MainScene::modelStack, MainScene::viewStack, MainScene::projectionStack;
 UI renderMeshOnScreen;
 std::vector<EnvironmentObj*> MainScene::Env_Obj;
 std::vector<NPC*> MainScene::CampNPC;
-
-
+EnvironmentObj* MainScene::Teleporter;
+EnvironmentObj* MainScene::Barrack;
 
 
 MainScene::MainScene()
@@ -224,14 +224,22 @@ void MainScene::Init()
 
 
 	//Teleporter ------------------ START
-	EnvironmentObj* Teleporter = new EnvironmentObj(MeshBuilder::GenerateOBJ("Teleporter", "OBJ//Teleporter_OBJ.obj"));
+	Teleporter = new EnvironmentObj(MeshBuilder::GenerateOBJ("Teleporter", "OBJ//Teleporter_OBJ.obj"));
 	Teleporter->CollisionMesh_->textureID = LoadTGA("Image//InteractableItem_Teleporter_UV_Texture.tga");
-	EnvironmentObj* Teleporter1 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Teleporter1", "OBJ//Teleporter1_OBJ.obj"));
-	Teleporter1->CollisionMesh_->textureID = LoadTGA("Image//InteractableItem_Teleporter_UV_Texture.tga");
+	//Teleporter1 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Teleporter1", "OBJ//Teleporter1_OBJ.obj"));
+	//Teleporter1->CollisionMesh_->textureID = LoadTGA("Image//InteractableItem_Teleporter_UV_Texture.tga");
 
-	Env_Obj.push_back(Teleporter);
-	Env_Obj.push_back(Teleporter1);
+	meshList[GEO_Teleporter] = MeshBuilder::GenerateOBJ("Teleporter", "OBJ//Teleporter_OBJ.obj");
+	meshList[GEO_Teleporter]->textureID = LoadTGA("Image//InteractableItem_Teleporter_UV_Texture.tga");
+	
+
+	//Env_Obj.push_back(Teleporter);
+	//Env_Obj.push_back(Teleporter1);
+
+	Player::getInstance()->Teleport.push_back(Teleporter);
 	//Teleporter -----------------------END
+
+
 
 
 	NPC* Doc = new NPC_DOC();
@@ -241,35 +249,50 @@ void MainScene::Init()
 
 
 
-	//Medical Tent ------------------- START
-	EnvironmentObj* MedicalTent = new EnvironmentObj(MeshBuilder::GenerateOBJ("Medical Tent", "OBJ//MedicalTent_OBJ.obj"));
-	MedicalTent->CollisionMesh_->textureID = LoadTGA("Image//MedicalCamp_UV_Texture.tga");
+	//Medical Tents ------------------- START
+	EnvironmentObj* MedicalTent1 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Medical Tent1", "OBJ//MedicalTent1_OBJ.obj"));
+	MedicalTent1->CollisionMesh_->textureID = LoadTGA("Image//MedicalCamp_UV_Texture.tga");
+	EnvironmentObj* MedicalTent2 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Medical Tent2", "OBJ//MedicalTent2_OBJ.obj"));
+	MedicalTent2->CollisionMesh_->textureID = LoadTGA("Image//MedicalCamp_UV_Texture.tga");
+	EnvironmentObj* MedicalTent3 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Medical Tent3", "OBJ//MedicalTent3_OBJ.obj"));
+	MedicalTent3->CollisionMesh_->textureID = LoadTGA("Image//MedicalCamp_UV_Texture.tga");
+	EnvironmentObj* MedicalTent4 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Medical Tent4", "OBJ//MedicalTent4_OBJ.obj"));
+	MedicalTent4->CollisionMesh_->textureID = LoadTGA("Image//MedicalCamp_UV_Texture.tga");
 
-	Env_Obj.push_back(MedicalTent);
+	Env_Obj.push_back(MedicalTent1);
+	Env_Obj.push_back(MedicalTent2);
+	Env_Obj.push_back(MedicalTent3);
+	Env_Obj.push_back(MedicalTent4);
 	//Medical Tent ------------------- END
+
 
 
 
 	//Barracks -------------------- START
 	EnvironmentObj* Barrack1 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Barrack1", "OBJ//Barracks1_OBJ.obj"));
 	Barrack1->CollisionMesh_->textureID = LoadTGA("Image//Barracks_UV_Texture.tga");
-	EnvironmentObj* Barrack2 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Barrack2", "OBJ//Barracks2_OBJ.obj"));
-	Barrack2->CollisionMesh_->textureID = LoadTGA("Image//Barracks_UV_Texture.tga");
+	Barrack = new EnvironmentObj(MeshBuilder::GenerateOBJ("Barrack2", "OBJ//Barracks2_OBJ.obj"));
+	Barrack->CollisionMesh_->textureID = LoadTGA("Image//Barracks_UV_Texture.tga");
 	EnvironmentObj* Barrack3 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Barrack3", "OBJ//Barracks3_OBJ.obj"));
 	Barrack3->CollisionMesh_->textureID = LoadTGA("Image//Barracks_UV_Texture.tga");
 	EnvironmentObj* Barrack4 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Barrack4", "OBJ//Barracks4_OBJ.obj"));
 	Barrack4->CollisionMesh_->textureID = LoadTGA("Image//Barracks_UV_Texture.tga");
 
+	meshList[GEO_Barrack] = MeshBuilder::GenerateOBJ("Barrack2", "OBJ//Barracks2_OBJ.obj");
+	meshList[GEO_Barrack]->textureID = LoadTGA("Image//Barracks_UV_Texture.tga");
+
 	Env_Obj.push_back(Barrack1);
-	Env_Obj.push_back(Barrack2);
 	Env_Obj.push_back(Barrack3);
 	Env_Obj.push_back(Barrack4);
+
+	Player::getInstance()->Teleport_Barrack.push_back(Barrack);
 	//Barracks ------------------------- END
 
 
-	//vcxprof -> discard
+
 
 	//Crates ------------------------------- START
+<<<<<<< HEAD
 	meshList[GEO_Crates1] = MeshBuilder::GenerateOBJ("Barracks", "OBJ//Crates1_OBJ.obj");
 	meshList[GEO_Crates1]->material.kAmbient.Set(0.6f, 0.6f, 0.6f);
 	meshList[GEO_Crates1]->material.kDiffuse.Set(0.3f, 0.3f, 0.3f);
@@ -278,8 +301,14 @@ void MainScene::Init()
 	meshList[GEO_Crates1]->textureID = LoadTGA("Image//Crate_UV_Texture.tga");
 
 	EnvironmentObj* Crate1 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Crate1", "OBJ//Crates_OBJ.obj"));
+=======
+	EnvironmentObj* Crate = new EnvironmentObj(MeshBuilder::GenerateOBJ("Crates", "OBJ//Crates_OBJ.obj"));
+	Crate->CollisionMesh_->textureID = LoadTGA("Image//Crate_UV_Texture.tga");
+	EnvironmentObj* Crate1 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Crate1", "OBJ//Crates1_OBJ.obj"));
+>>>>>>> 7e1014aefe7cb8882b346ca4a7379b4f04e11af2
 	Crate1->CollisionMesh_->textureID = LoadTGA("Image//Crate_UV_Texture.tga");
 
+	Env_Obj.push_back(Crate);
 	Env_Obj.push_back(Crate1);
 	//Crates ------------------------------------------- END
 
@@ -287,19 +316,19 @@ void MainScene::Init()
 
 
 	//Solar Panels------------------------------------- START
-	meshList[GEO_SolarPanel] = MeshBuilder::GenerateOBJ("Barracks", "OBJ//SolarPanel_OBJ.obj");
-	meshList[GEO_SolarPanel]->material.kAmbient.Set(0.6f, 0.6f, 0.6f);
-	meshList[GEO_SolarPanel]->material.kDiffuse.Set(0.3f, 0.3f, 0.3f);
-	meshList[GEO_SolarPanel]->material.kSpecular.Set(0.1f, 0.1f, 0.1f);
-	meshList[GEO_SolarPanel]->material.kShininess = 1.0f;
-	meshList[GEO_SolarPanel]->textureID = LoadTGA("Image//SolarUV_Texture.tga");
+	EnvironmentObj* SolarPanel1 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Solar Panel1", "OBJ//SolarPanel1_OBJ.obj"));
+	SolarPanel1->CollisionMesh_->textureID = LoadTGA("Image//SolarUV_Texture.tga");
+	EnvironmentObj* SolarPanel2 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Solar Panel2", "OBJ//SolarPanel2_OBJ.obj"));
+	SolarPanel2->CollisionMesh_->textureID = LoadTGA("Image//SolarUV_Texture.tga");
+	EnvironmentObj* SolarPanel3 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Solar Panel3", "OBJ//SolarPanel3_OBJ.obj"));
+	SolarPanel3->CollisionMesh_->textureID = LoadTGA("Image//SolarUV_Texture.tga");
+	EnvironmentObj* SolarPanel4 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Solar Panel4", "OBJ//SolarPanel4_OBJ.obj"));
+	SolarPanel4->CollisionMesh_->textureID = LoadTGA("Image//SolarUV_Texture.tga");
 
-	meshList[GEO_SolarPanel1] = MeshBuilder::GenerateOBJ("Barracks", "OBJ//SolarPanel1_OBJ.obj");
-	meshList[GEO_SolarPanel1]->material.kAmbient.Set(0.6f, 0.6f, 0.6f);
-	meshList[GEO_SolarPanel1]->material.kDiffuse.Set(0.3f, 0.3f, 0.3f);
-	meshList[GEO_SolarPanel1]->material.kSpecular.Set(0.1f, 0.1f, 0.1f);
-	meshList[GEO_SolarPanel1]->material.kShininess = 1.0f;
-	meshList[GEO_SolarPanel1]->textureID = LoadTGA("Image//SolarUV_Texture.tga");
+	Env_Obj.push_back(SolarPanel1);
+	Env_Obj.push_back(SolarPanel2);
+	Env_Obj.push_back(SolarPanel3);
+	Env_Obj.push_back(SolarPanel4);
 	//Solar Panels ------------------------------------- END
 
 
@@ -309,16 +338,12 @@ void MainScene::Init()
 	EnvironmentObj* PowerBox = new EnvironmentObj(MeshBuilder::GenerateOBJ("PB", "OBJ//Powerbox_OBJ.obj"));
 	PowerBox->CollisionMesh_->textureID = LoadTGA("Image//Powerbox_UV_Texture.tga");
 
-	meshList[GEO_PowerBox] = MeshBuilder::GenerateOBJ("Barracks", "OBJ//Powerbox_OBJ.obj");
-	meshList[GEO_PowerBox]->material.kAmbient.Set(0.6f, 0.6f, 0.6f);
-	meshList[GEO_PowerBox]->material.kDiffuse.Set(0.3f, 0.3f, 0.3f);
-	meshList[GEO_PowerBox]->material.kSpecular.Set(0.1f, 0.1f, 0.1f);
-	meshList[GEO_PowerBox]->material.kShininess = 1.0f;
-	meshList[GEO_PowerBox]->textureID = LoadTGA("Image//Powerbox_UV_Texture.tga");
-
 	Env_Obj.push_back(PowerBox);
-
 	//Powerbox ----------------------------------- END
+
+
+
+
 	for (auto it : Env_Obj)
 		Player::addCollisionObject(it);
 
@@ -477,13 +502,20 @@ void MainScene::Render()
 			renderUI.renderPause(&projectionStack, &viewStack, &modelStack, m_parameters);
 
 
-		RenderBaseCamp();
 		RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::to_string(FramesPerSec), Color(1, 0, 0), 1.5f, 45, 38, &projectionStack, &viewStack, &modelStack, m_parameters);
 	}
 
 }
 
 void MainScene::RenderBaseCamp(){
+
+	modelStack.PushMatrix();
+	RenderMeshClass::RenderMesh(meshList[GEO_Teleporter], false, &projectionStack, &viewStack, &modelStack, m_parameters);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	RenderMeshClass::RenderMesh(meshList[GEO_Barrack], false, &projectionStack, &viewStack, &modelStack, m_parameters);
+	modelStack.PopMatrix();
 
 	for (size_t i = 0; i < Env_Obj.size(); i++)
 	{
@@ -492,25 +524,6 @@ void MainScene::RenderBaseCamp(){
 		modelStack.PopMatrix();
 
 	}
-
-
-	//Crates
-	modelStack.PushMatrix();
-	RenderMeshClass::RenderMesh(meshList[GEO_Crates], true, &projectionStack, &viewStack, &modelStack, m_parameters);
-	RenderMeshClass::RenderMesh(meshList[GEO_Crates1], true, &projectionStack, &viewStack, &modelStack, m_parameters);
-	modelStack.PopMatrix();
-
-	//Solar panels
-	modelStack.PushMatrix();
-	RenderMeshClass::RenderMesh(meshList[GEO_SolarPanel], true, &projectionStack, &viewStack, &modelStack, m_parameters);
-	RenderMeshClass::RenderMesh(meshList[GEO_SolarPanel1], true, &projectionStack, &viewStack, &modelStack, m_parameters);
-	modelStack.PopMatrix();
-
-	//Powerbox
-	//modelStack.PushMatrix();
-	//RenderMeshClass::RenderMesh(meshList[GEO_PowerBox], true, &projectionStack, &viewStack, &modelStack, m_parameters);
-	//modelStack.PopMatrix();
-
 }
 
 void MainScene::Exit()

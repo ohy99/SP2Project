@@ -8,6 +8,9 @@
 
 Player* Player::Instance_ = 0;
 std::vector<GameObject*> Player::CollisionObjects;
+std::vector<EnvironmentObj*> Player::Teleport;
+std::vector<EnvironmentObj*> Player::Teleport_Barrack;
+
 Player::Player() : GameObject("Player") 
 {
 	//int hp_;
@@ -32,6 +35,7 @@ Player* Player::getInstance()
 	else 
 		return (Instance_ = new Player()); 
 }
+
 void Player::setPosition(Vector3& pos)
 {
 	pos_ = pos;
@@ -53,15 +57,17 @@ void Player::update(double dt, Camera* cam)
 	PlayerMovement(dt);
 	getPointedObj(cam);
 
+	checkTeleport();
+	TeleportToInsideBarrack();
 }
 
 void Player::render(MS* projectionStack, MS* viewStack, MS* modelStack, unsigned * m_parameters)
 {
-	modelStack->PushMatrix();
-	modelStack->Translate(pos_.x, pos_.y, pos_.z);
-	modelStack->Rotate(dirRotateAngle, dirRotateAxis.x, dirRotateAxis.y, dirRotateAxis.z);
-	RenderMeshClass::RenderMesh(PMesh[MESH_TYPE::Body], true, projectionStack, viewStack, modelStack, m_parameters);
-	modelStack->PopMatrix();
+	//modelStack->PushMatrix();
+	//modelStack->Translate(pos_.x, pos_.y, pos_.z);
+	//modelStack->Rotate(dirRotateAngle, dirRotateAxis.x, dirRotateAxis.y, dirRotateAxis.z);
+	//RenderMeshClass::RenderMesh(PMesh[MESH_TYPE::Body], true, projectionStack, viewStack, modelStack, m_parameters);
+	//modelStack->PopMatrix();
 
 	if (Pointed_Obj)
 		RenderMeshClass::RenderTextOnScreen(&Scene::Text[Scene::TEXT_TYPE::Century], Pointed_Obj->getName(), Color(1, 0, 0), 2, 35, 26, projectionStack, viewStack, modelStack, m_parameters);
@@ -187,3 +193,30 @@ void Player::PlayerMovement(double dt)
 
 //bool isDead();
 //~Player();
+
+void Player::checkTeleport(){
+
+	for (size_t i = 0; i < Teleport.size(); i++)
+	{
+		if (CollisionMesh_->isCollide(Teleport.at(i)->CollisionMesh_))
+		{
+			SceneManager::getInstance()->SetNextSceneID(1);
+			SceneManager::getInstance()->SetNextScene();
+		}
+
+	}
+}
+
+void Player::TeleportToInsideBarrack(){
+
+	for (size_t i = 0; i < Teleport_Barrack.size(); i++)
+	{
+		if (CollisionMesh_->isCollide(Teleport_Barrack.at(i)->CollisionMesh_))
+		{
+			SceneManager::getInstance()->SetNextSceneID(2);
+			SceneManager::getInstance()->SetNextScene();
+		}
+
+	}
+
+}
