@@ -513,8 +513,6 @@ void MainScene::RenderBaseCamp(){
 		modelStack.PopMatrix();
 
 	}
-	
-
 }
 
 void MainScene::Exit()

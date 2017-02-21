@@ -43,7 +43,7 @@ class Player : public GameObject
 	static Player* Instance_;
 	STATES state_;
 	float hitDelay = 0.0f;
-	float moveSPD = 10.0f;
+	float moveSPD = 20.0f;
 
 	GameObject* Pointed_Obj;
 

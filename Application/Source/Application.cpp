@@ -13,6 +13,7 @@
 
 #include "SceneManager.h"
 #include "MainScene.h"
+#include "UndergroundScene.h"
 #include "MiniGame.h"
 #include "WorldScene.h"
 
@@ -128,10 +129,13 @@ void Application::Init()
 void Application::Run()
 {
 	//Main Loop
-	Scene *scene1 = new MiniGame();
+
+	Scene *scene1 = new UndergroundScene();
 	SceneManager::getInstance()->AddScene(scene1);
 	Scene *scene2 = new WorldScene();
 	SceneManager::getInstance()->AddScene(scene2);
+	Scene *scene3 = new MiniGame();
+	SceneManager::getInstance()->AddScene(scene3);
 	SceneManager::getInstance()->SetNextSceneID(1);
 	//Scene *scene = scene1;
 	scene1->Init();
