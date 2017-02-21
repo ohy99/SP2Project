@@ -58,11 +58,11 @@ void Player::update(double dt, Camera* cam)
 
 void Player::render(MS* projectionStack, MS* viewStack, MS* modelStack, unsigned * m_parameters)
 {
-	modelStack->PushMatrix();
-	modelStack->Translate(pos_.x, pos_.y, pos_.z);
-	modelStack->Rotate(dirRotateAngle, dirRotateAxis.x, dirRotateAxis.y, dirRotateAxis.z);
-	RenderMeshClass::RenderMesh(PMesh[MESH_TYPE::Body], true, projectionStack, viewStack, modelStack, m_parameters);
-	modelStack->PopMatrix();
+	//modelStack->PushMatrix();
+	//modelStack->Translate(pos_.x, pos_.y, pos_.z);
+	//modelStack->Rotate(dirRotateAngle, dirRotateAxis.x, dirRotateAxis.y, dirRotateAxis.z);
+	//RenderMeshClass::RenderMesh(PMesh[MESH_TYPE::Body], true, projectionStack, viewStack, modelStack, m_parameters);
+	//modelStack->PopMatrix();
 
 	if (Pointed_Obj)
 		RenderMeshClass::RenderTextOnScreen(&Scene::Text[Scene::TEXT_TYPE::Century], Pointed_Obj->getName(), Color(1, 0, 0), 2, 35, 26, projectionStack, viewStack, modelStack, m_parameters);
