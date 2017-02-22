@@ -188,7 +188,7 @@ void MiniGame::Init()
 
 	roadDistance = 0.f;
 	obstaclePosX = 0.f;
-	obstaclePosZ = 40.f;
+	obstaclePosZ = 80.f;
 
 	for (int i = 0; i < 20; i++)
 	{
@@ -283,7 +283,7 @@ void MiniGame::Init()
 	wasEscPressed = false;
 
 	score = 0.f;
-	bonusScore = 0.25f; // Default score
+	bonusScore = 0.2f; // Default score multiplier
 
 	camera = new CameraMG;
 	camera->Init(Vector3(0.f, 0.f, 7.f), Vector3(0.f, 0.f, 50.f), Vector3(0.f, 1.f, 0.f));
