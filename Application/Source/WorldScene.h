@@ -37,6 +37,7 @@ class WorldScene : public Scene
 		GEO_LIGHTBALL1,
 		GEO_GroundMesh_RedDirt,
 		GEO_Teleporter,
+		GEO_UNDERGROUND_DOOR,
 
 		GEO_LEFT,
 		GEO_RIGHT,
@@ -61,6 +62,7 @@ public:
 	static MS modelStack, viewStack, projectionStack;
 
 	static Teleporter* WS_Teleporter;
+	static Teleporter* Underground_Door;
 
 private:
 	unsigned m_vertexArrayID;

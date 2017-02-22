@@ -187,7 +187,7 @@ void InsideBarrackScene::Init()
 	Wall2->CollisionMesh_->textureID = LoadTGA("Image//InsideBarrackScene//InsideBarracks_Wall_UV_Texture.tga");
 	EnvironmentObj* Wall3 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Wall3", "OBJ//InsideBarrackScene//Wall3_OBJ.obj"));
 	Wall3->CollisionMesh_->textureID = LoadTGA("Image//InsideBarrackScene//InsideBarracks_Wall_UV_Texture.tga");
-	Barrack = new Teleporter(MeshBuilder::GenerateOBJ("Door1", "OBJ//InsideBarrackScene//Door1_OBJ.obj"),0);
+	Barrack = new Teleporter(MeshBuilder::GenerateOBJ("Door1", "OBJ//InsideBarrackScene//Door1_OBJ.obj"), 0);
 	Barrack->CollisionMesh_->textureID = LoadTGA("Image//InsideBarrackScene//InsideBarracks_Door_UV_Texture.tga");
 	EnvironmentObj* Ceiling1 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Ceiling1", "OBJ//InsideBarrackScene//Ceiling1_OBJ.obj"));
 	Ceiling1->CollisionMesh_->textureID = LoadTGA("Image//InsideBarrackScene//InsideBarracks_Door_UV_Texture.tga");

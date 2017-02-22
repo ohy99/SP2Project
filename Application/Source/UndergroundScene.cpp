@@ -29,7 +29,8 @@ MS UndergroundScene::modelStack, UndergroundScene::viewStack, UndergroundScene::
 //std::vector<GameObject*> UndergroundScene::Game_Objects_(10, NULL);
 //UI renderMeshOnScreen;
 std::vector<EnvironmentObj*> UndergroundScene::Env_Obj;
-std::vector<NPC*> UndergroundScene::CampNPC;
+Teleporter* UndergroundScene::Stairs;
+//std::vector<NPC*> UndergroundScene::CampNPC;
 
 
 
@@ -258,13 +259,18 @@ void UndergroundScene::Init()
 	//Ceiling --- End
 
 	//Stairs --- Start
-
-	EnvironmentObj* Stairs = new EnvironmentObj(MeshBuilder::GenerateOBJ("Wall", "OBJ//Stairs.obj"));
+	Stairs = new Teleporter(MeshBuilder::GenerateOBJ("Stairs", "OBJ//Stairs.obj"), 1);
 	Stairs->CollisionMesh_->textureID = LoadTGA("Image//Mossy_Ground.tga");
 
-	Env_Obj.push_back(Stairs);
+	meshList[GEO_STAIRS] = MeshBuilder::GenerateOBJ("Stairs", "OBJ//Stairs.obj");
+	meshList[GEO_STAIRS]->material.kAmbient.Set(0.6f, 0.6f, 0.6f);
+	meshList[GEO_STAIRS]->material.kDiffuse.Set(0.3f, 0.3f, 0.3f);
+	meshList[GEO_STAIRS]->material.kSpecular.Set(0.1f, 0.1f, 0.1f);
+	meshList[GEO_STAIRS]->material.kShininess = 1.0f;
+	meshList[GEO_STAIRS]->textureID = LoadTGA("Image//Mossy_Ground.tga");
 
-	//Stairs --- Start
+	Player::getInstance()->Teleport.push_back(Stairs);
+	//Stairs --- End
 
 	//Furniture ------ Start
 	EnvironmentObj* Bed1 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Bed", "OBJ//Bed1.obj"));
@@ -381,10 +387,10 @@ void UndergroundScene::Update(double dt)
 
 	Player::getInstance()->update(dt, camera);
 
-	for (size_t i = 0; i < CampNPC.size(); i++)
-	{
-		CampNPC.at(i)->update(dt);
-	}
+	//for (size_t i = 0; i < CampNPC.size(); i++)
+	//{
+	//	CampNPC.at(i)->update(dt);
+	//}
 
 
 	if (!isPause && !MainMenu.isMainMenu)
@@ -417,11 +423,11 @@ void UndergroundScene::Render()
 		camera->getUp().x, camera->getUp().y, camera->getUp().z);
 	modelStack.LoadIdentity();
 
-	if (MainMenu.isMainMenu)
-		MainMenu.Render();
+	//if (MainMenu.isMainMenu)
+	//	MainMenu.Render();
 
-	else
-	{
+	//else
+	//{
 		RenderMeshClass::RenderMesh(meshList[GEO_AXES], false, &projectionStack, &viewStack, &modelStack, m_parameters);
 		Player::getInstance()->render(&projectionStack, &viewStack, &modelStack, m_parameters);
 
@@ -437,10 +443,10 @@ void UndergroundScene::Render()
 
 
 
-		for (size_t i = 0; i < CampNPC.size(); i++)
-		{
-			CampNPC.at(i)->render(&projectionStack, &viewStack, &modelStack, m_parameters);
-		}
+		//for (size_t i = 0; i < CampNPC.size(); i++)
+		//{
+		//	CampNPC.at(i)->render(&projectionStack, &viewStack, &modelStack, m_parameters);
+		//}
 		RenderBaseCamp();
 
 
@@ -450,7 +456,7 @@ void UndergroundScene::Render()
 
 		RenderBaseCamp();
 		RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::to_string(FramesPerSec), Color(1, 0, 0), 1.5f, 45, 38, &projectionStack, &viewStack, &modelStack, m_parameters);
-	}
+	//}
 
 }
 
@@ -481,6 +487,10 @@ void UndergroundScene::RenderBaseCamp(){
 	//modelStack.PushMatrix();
 	//RenderMeshClass::RenderMesh(meshList[GEO_PowerBox], true, &projectionStack, &viewStack, &modelStack, m_parameters);
 	//modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	RenderMeshClass::RenderMesh(meshList[GEO_STAIRS], true, &projectionStack, &viewStack, &modelStack, m_parameters);
+	modelStack.PushMatrix();
 
 }
 
