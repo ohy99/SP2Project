@@ -340,12 +340,10 @@ void UndergroundScene::Update(double dt)
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); //wireframe mode
 	}
 
-	bool once = false;
-	if (Application::IsKeyPressed('1') && once == false)
+	if (Application::IsKeyPressed('1'))
 	{
+		SceneManager::getInstance()->SetNextSceneID(0);
 		SceneManager::getInstance()->SetNextScene();
-		//SceneManager::getInstance()->SetNextSceneID(0);
-		once = true;
 	}
 
 	bool fpsonce = false;
@@ -494,6 +492,7 @@ void UndergroundScene::Exit()
 			delete meshList[i];
 	}
 	delete camera;
+	Player::getInstance()->clearCollisionObj();
 
 	// Cleanup VBO here
 	glDeleteVertexArrays(1, &m_vertexArrayID);

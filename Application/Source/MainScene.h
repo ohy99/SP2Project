@@ -10,6 +10,7 @@
 //#include "MeshBuilder.h"
 #include "MatrixStack.h"
 #include "Light.h"
+#include "Teleporter.h"
 
 #include <vector>
 
@@ -63,8 +64,8 @@ public:
 
 	static MS modelStack, viewStack, projectionStack;
 
-	static EnvironmentObj* Teleporter;
-	static EnvironmentObj* Barrack;
+	static Teleporter* MS_Teleporter;
+	static Teleporter* Barrack;
 
 private:
 	unsigned m_vertexArrayID;

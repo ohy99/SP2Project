@@ -3,34 +3,17 @@
 
 #include "NPC.h"
 #include "Vector3.h"
+#include <string>
 
-class EnemyAI : public NPC
+class EnemyAI abstract : public NPC
 {
-	enum botParts
-	{
-		body,
-		lhorn,
-		rhorn,
-		botParts_count
-	};
-	enum botSTATES
-	{
-		Idle,
-		Attack,
-		PathFind,
-
-		botSTATES_Count,
-	};
-	Vector3 pos_;
-	Mesh* mesh[botParts_count];
-	int hp_;
-	int damage_;
 
 public:
-	EnemyAI(Vector3 pos);
-	virtual ~EnemyAI();
-	virtual void update(double dt);
-	virtual void render();
+	EnemyAI(const std::string& name) : NPC(name) {}
+	virtual ~EnemyAI() {}
+	virtual void update(double dt) {}
+	virtual void render() {}
+	virtual void isHitUpdate(int dmg) {};
 };
 
 #endif

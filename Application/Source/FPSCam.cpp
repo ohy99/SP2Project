@@ -22,6 +22,7 @@ FPSCam::FPSCam()
 
 FPSCam::~FPSCam()
 {
+	Instance = NULL;
 }
 
 void FPSCam::Init(const Vector3& pos, const Vector3& target, const Vector3& up)

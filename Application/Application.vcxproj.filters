@@ -9,18 +9,42 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
     </Filter>
+    <Filter Include="Header Files\LoadFiles">
+      <UniqueIdentifier>{c0ec30a3-fccb-4797-82c2-853acc8a7b34}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\GameObj">
+      <UniqueIdentifier>{338f0022-aa98-484b-a447-1e98bee3c90e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\GameObj\Boss">
+      <UniqueIdentifier>{3cd153be-53de-4b1e-a512-243b6888fceb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Others">
+      <UniqueIdentifier>{9817d9d0-1a6e-4330-95d6-18fa65c9622f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\GameObj">
+      <UniqueIdentifier>{24fa8984-8d00-452f-9c11-df15f9edff18}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\LoadFiles">
+      <UniqueIdentifier>{bdd41d62-5732-4b77-b2d6-e64bea733c78}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Others">
+      <UniqueIdentifier>{94352362-628f-4c23-a036-0c821b756cd0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\GameObj\Boss">
+      <UniqueIdentifier>{f6dff005-27cb-4a44-ac56-25b9af5b2808}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\GameObj\Player">
+      <UniqueIdentifier>{7c9fc220-1d8d-4e4e-a02a-c8e1e4c3545e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\GameObj\Player">
+      <UniqueIdentifier>{f5f4108c-8ca9-4509-b6d7-c17f92a9fa52}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Application.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Source\Camera.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\LoadOBJ.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\LoadTGA.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Source\main.cpp">
@@ -32,31 +56,10 @@
     <ClCompile Include="Source\MeshBuilder.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source\shader.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Utility.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Camera3.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source\LoadATOM.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\LoadTextData.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Source\MainScene.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\RangeWeapon.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Player.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\NPC_Doc.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Source\RenderMesh.cpp">
@@ -68,13 +71,55 @@
     <ClCompile Include="Source\MainScreen.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Source\FPSCam.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\BossScene.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scene2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\LoadATOM.cpp">
+      <Filter>Source Files\LoadFiles</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\LoadOBJ.cpp">
+      <Filter>Source Files\LoadFiles</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\LoadTextData.cpp">
+      <Filter>Source Files\LoadFiles</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\LoadTGA.cpp">
+      <Filter>Source Files\LoadFiles</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\NPC_Doc.cpp">
+      <Filter>Source Files\GameObj</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\RangeWeapon.cpp">
+      <Filter>Source Files\GameObj</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\shader.cpp">
+      <Filter>Source Files\Others</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Utility.cpp">
+      <Filter>Source Files\Others</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\BossAI.cpp">
+      <Filter>Source Files\GameObj\Boss</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\BossShootProj.cpp">
+      <Filter>Source Files\GameObj\Boss</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\BossGSmash.cpp">
+      <Filter>Source Files\GameObj\Boss</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Player.cpp">
+      <Filter>Source Files\GameObj\Player</Filter>
+    </ClCompile>
     <ClCompile Include="Source\MiniGame.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Source\FPSCam.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Environment.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Source\CameraMG.cpp">
@@ -89,6 +134,12 @@
     <ClCompile Include="Source\UndergroundScene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Environment.cpp">
+      <Filter>Source Files\GameObj\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\InsideBarrackScene.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Application.h">
@@ -100,15 +151,6 @@
     <ClInclude Include="Source\Light.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Source\LoadOBJ.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\LoadTGA.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Material.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Mesh.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -118,67 +160,13 @@
     <ClInclude Include="Source\Scene.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Source\shader.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Utility.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Vertex.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Camera3.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\LoadATOM.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\LoadTextData.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Source\SceneManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Source\DetectMemoryLeak.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameObject.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Source\MainScene.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Item.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Weapon.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\RangeWeapon.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Player.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\MeleeWeapon.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Usables.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\AllyNPC.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\EnemyAI.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\NPC.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\NPC_Doc.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Potions.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Source\RenderMesh.h">
@@ -189,6 +177,96 @@
     </ClInclude>
     <ClInclude Include="Source\MainScreen.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\FPSCam.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\BossScene.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Scene2.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\BossAI.h">
+      <Filter>Header Files\GameObj\Boss</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\BossAttackStyles.h">
+      <Filter>Header Files\GameObj\Boss</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Projectile.h">
+      <Filter>Header Files\GameObj\Boss</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\BossShootProj.h">
+      <Filter>Header Files\GameObj\Boss</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\LoadATOM.h">
+      <Filter>Header Files\LoadFiles</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\LoadOBJ.h">
+      <Filter>Header Files\LoadFiles</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\LoadTextData.h">
+      <Filter>Header Files\LoadFiles</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\LoadTGA.h">
+      <Filter>Header Files\LoadFiles</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\AllyNPC.h">
+      <Filter>Header Files\GameObj</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameObject.h">
+      <Filter>Header Files\GameObj</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\EnemyAI.h">
+      <Filter>Header Files\GameObj</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\MeleeWeapon.h">
+      <Filter>Header Files\GameObj</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Item.h">
+      <Filter>Header Files\GameObj</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\NPC.h">
+      <Filter>Header Files\GameObj</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\NPC_Doc.h">
+      <Filter>Header Files\GameObj</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Potions.h">
+      <Filter>Header Files\GameObj</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\RangeWeapon.h">
+      <Filter>Header Files\GameObj</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Usables.h">
+      <Filter>Header Files\GameObj</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Weapon.h">
+      <Filter>Header Files\GameObj</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\DetectMemoryLeak.h">
+      <Filter>Header Files\Others</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Material.h">
+      <Filter>Header Files\Others</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\shader.hpp">
+      <Filter>Header Files\Others</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Utility.h">
+      <Filter>Header Files\Others</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Vertex.h">
+      <Filter>Header Files\Others</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\BossGSmash.h">
+      <Filter>Header Files\GameObj\Boss</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Player.h">
+      <Filter>Header Files\GameObj\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Bullets.h">
+      <Filter>Header Files\GameObj</Filter>
     </ClInclude>
     <ClInclude Include="Source\MiniGame.h">
       <Filter>Header Files</Filter>
@@ -213,6 +291,12 @@
     </ClInclude>
     <ClInclude Include="Source\UndergroundScene.h">
       <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Teleporter.h">
+      <Filter>Header Files\GameObj</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\InsideBarrackScene.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

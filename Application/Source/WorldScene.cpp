@@ -29,7 +29,7 @@ MS WorldScene::modelStack, WorldScene::viewStack, WorldScene::projectionStack;
 //std::vector<GameObject*> WorldScene::Game_Objects_(10, NULL);
 //UI renderMeshOnScreen;
 std::vector<EnvironmentObj*> WorldScene::Env_Obj;
-EnvironmentObj* WorldScene::Teleporter;
+Teleporter* WorldScene::WS_Teleporter;
 
 //std::vector<NPC*> WorldScene::CampNPC;
 
@@ -350,14 +350,14 @@ void WorldScene::Init()
 
 
 	//Teleporter -------------------------------------------- START
-	Teleporter = new EnvironmentObj(MeshBuilder::GenerateOBJ("Teleporter", "OBJ//WorldScene//Teleporter_OBJ.obj"));
-	Teleporter->CollisionMesh_->textureID = LoadTGA("Image//WorldScene//InteractableItem_Teleporter_UV_Texture.tga");
+	WS_Teleporter = new Teleporter(MeshBuilder::GenerateOBJ("Teleporter", "OBJ//WorldScene//Teleporter_OBJ.obj"),0);
+	WS_Teleporter->CollisionMesh_->textureID = LoadTGA("Image//WorldScene//InteractableItem_Teleporter_UV_Texture.tga");
 
 	meshList[GEO_Teleporter] = MeshBuilder::GenerateOBJ("Teleporter", "OBJ//WorldScene//Teleporter_OBJ.obj");
 	meshList[GEO_Teleporter]->textureID = LoadTGA("Image//WorldScene//InteractableItem_Teleporter_UV_Texture.tga");
 
 	//Env_Obj.push_back(Teleporter);
-	Player::getInstance()->Teleport.push_back(Teleporter);
+	Player::getInstance()->Teleport.push_back(WS_Teleporter);
 	//Teleporter -------------------------------------------- END
 
 
@@ -437,13 +437,13 @@ void WorldScene::Update(double dt)
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); //wireframe mode
 	}
 
-	bool once = false;
-	if (Application::IsKeyPressed('1') && once == false)
-	{
-		SceneManager::getInstance()->SetNextScene();
-		//SceneManager::getInstance()->SetNextSceneID(0);
-		once = true;
-	}
+	//bool once = false;
+	//if (Application::IsKeyPressed('1') && once == false)
+	//{
+	//	SceneManager::getInstance()->SetNextScene();
+	//	//SceneManager::getInstance()->SetNextSceneID(0);
+	//	once = true;
+	//}
 
 	bool fpsonce = false;
 	if (Application::IsKeyPressed('V') && fpsonce == false)
@@ -498,6 +498,12 @@ void WorldScene::Update(double dt)
 		dx = dt * double(width / 2 - c_posx);
 		dy = dt * double(height / 2 - c_posy);
 		camera->Update(dt, dx, dy);
+	}
+
+	if (Application::IsKeyPressed('1'))
+	{
+		SceneManager::getInstance()->SetNextSceneID(0);
+		SceneManager::getInstance()->SetNextScene();
 	}
 
 	FramesPerSec = 1 / dt;
@@ -578,6 +584,7 @@ void WorldScene::Exit()
 			delete meshList[i];
 	}
 	delete camera;
+	Player::getInstance()->clearCollisionObj();
 
 	// Cleanup VBO here
 	glDeleteVertexArrays(1, &m_vertexArrayID);

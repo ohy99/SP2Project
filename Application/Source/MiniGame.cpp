@@ -415,6 +415,12 @@ void MiniGame::Update(double dt)
 	score = MGPlayer::getInstance()->playerScore(bonusScore);
 
 	FramesPerSec = 1 / dt; 
+
+	if (Application::IsKeyPressed('1'))
+	{
+		SceneManager::getInstance()->SetNextSceneID(0);
+		SceneManager::getInstance()->SetNextScene();
+	}
 }
 
 void MiniGame::Render()

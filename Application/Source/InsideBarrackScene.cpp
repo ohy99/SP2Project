@@ -12,6 +12,7 @@
 #include "LoadTextData.h"
 #include "LoadATOM.h"
 
+#include "FPSCam.h"
 //#include "GameObject.h"
 
 #include "NPC_Doc.h"
@@ -32,7 +33,7 @@ MS InsideBarrackScene::modelStack, InsideBarrackScene::viewStack, InsideBarrackS
 //UI renderMeshOnScreen;
 
 std::vector<EnvironmentObj*> InsideBarrackScene::Env_Obj;
-EnvironmentObj* InsideBarrackScene::Barrack;
+Teleporter* InsideBarrackScene::Barrack;
 
 //std::vector<NPC*> InsideBarrackScene::CampNPC;
 
@@ -186,7 +187,7 @@ void InsideBarrackScene::Init()
 	Wall2->CollisionMesh_->textureID = LoadTGA("Image//InsideBarrackScene//InsideBarracks_Wall_UV_Texture.tga");
 	EnvironmentObj* Wall3 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Wall3", "OBJ//InsideBarrackScene//Wall3_OBJ.obj"));
 	Wall3->CollisionMesh_->textureID = LoadTGA("Image//InsideBarrackScene//InsideBarracks_Wall_UV_Texture.tga");
-	Barrack = new EnvironmentObj(MeshBuilder::GenerateOBJ("Door1", "OBJ//InsideBarrackScene//Door1_OBJ.obj"));
+	Barrack = new Teleporter(MeshBuilder::GenerateOBJ("Door1", "OBJ//InsideBarrackScene//Door1_OBJ.obj"),0);
 	Barrack->CollisionMesh_->textureID = LoadTGA("Image//InsideBarrackScene//InsideBarracks_Door_UV_Texture.tga");
 	EnvironmentObj* Ceiling1 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Ceiling1", "OBJ//InsideBarrackScene//Ceiling1_OBJ.obj"));
 	Ceiling1->CollisionMesh_->textureID = LoadTGA("Image//InsideBarrackScene//InsideBarracks_Door_UV_Texture.tga");
@@ -199,7 +200,7 @@ void InsideBarrackScene::Init()
 	Env_Obj.push_back(Wall3);
 	Env_Obj.push_back(Ceiling1);
 
-	Player::getInstance()->Teleport_Barrack.push_back(Barrack);
+	Player::getInstance()->Teleport.push_back(Barrack);
 	//Walls, Door, Ceiling ------------------------------- END
 
 
@@ -275,8 +276,8 @@ void InsideBarrackScene::Init()
 	isPause = false;
 	//MainMenu.Init();
 
-	camera = new Camera3;
-	camera->Init(Vector3(0, 0, 7), Vector3(0, 0, 0), Vector3(0, 1, 0));
+	camera = FPSCam::getInstance();
+	//camera->Init(Vector3(0, 0, 7), Vector3(0, 0, 0), Vector3(0, 1, 0));
 
 
 	Mtx44 projection;
@@ -312,13 +313,13 @@ void InsideBarrackScene::Update(double dt)
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); //wireframe mode
 	}
 
-	bool once = false;
-	if (Application::IsKeyPressed('1') && once == false)
-	{
-		SceneManager::getInstance()->SetNextScene();
-		//SceneManager::getInstance()->SetNextSceneID(0);
-		once = true;
-	}
+	//bool once = false;
+	//if (Application::IsKeyPressed('1') && once == false)
+	//{
+	//	SceneManager::getInstance()->SetNextScene();
+	//	//SceneManager::getInstance()->SetNextSceneID(0);
+	//	once = true;
+	//}
 
 	bool fpsonce = false;
 	if (Application::IsKeyPressed('V') && fpsonce == false)
@@ -373,6 +374,12 @@ void InsideBarrackScene::Update(double dt)
 		dx = dt * double(width / 2 - c_posx);
 		dy = dt * double(height / 2 - c_posy);
 		camera->Update(dt, dx, dy);
+	}
+
+	if (Application::IsKeyPressed('1'))
+	{
+		SceneManager::getInstance()->SetNextSceneID(0);
+		SceneManager::getInstance()->SetNextScene();
 	}
 
 	FramesPerSec = 1 / dt;
@@ -451,7 +458,8 @@ void InsideBarrackScene::Exit()
 		if (meshList[i] != NULL)
 			delete meshList[i];
 	}
-	delete camera;
+	//delete camera;
+	Player::getInstance()->clearCollisionObj();
 
 	// Cleanup VBO here
 	glDeleteVertexArrays(1, &m_vertexArrayID);

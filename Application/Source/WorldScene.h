@@ -60,7 +60,7 @@ public:
 
 	static MS modelStack, viewStack, projectionStack;
 
-	static EnvironmentObj* Teleporter;
+	static Teleporter* WS_Teleporter;
 
 private:
 	unsigned m_vertexArrayID;

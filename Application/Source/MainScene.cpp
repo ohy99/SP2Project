@@ -15,6 +15,7 @@
 
 #include "NPC_Doc.h"
 #include "Environment.h"
+#include "Teleporter.h"
 
 #include "RenderMesh.h"
 
@@ -30,8 +31,8 @@ MS MainScene::modelStack, MainScene::viewStack, MainScene::projectionStack;
 UI renderMeshOnScreen;
 std::vector<EnvironmentObj*> MainScene::Env_Obj;
 std::vector<NPC*> MainScene::CampNPC;
-EnvironmentObj* MainScene::Teleporter;
-EnvironmentObj* MainScene::Barrack;
+Teleporter* MainScene::MS_Teleporter;
+Teleporter* MainScene::Barrack;
 
 
 MainScene::MainScene()
@@ -224,8 +225,8 @@ void MainScene::Init()
 
 
 	//Teleporter ------------------ START
-	Teleporter = new EnvironmentObj(MeshBuilder::GenerateOBJ("Teleporter", "OBJ//Teleporter_OBJ.obj"));
-	Teleporter->CollisionMesh_->textureID = LoadTGA("Image//InteractableItem_Teleporter_UV_Texture.tga");
+	MS_Teleporter = new Teleporter(MeshBuilder::GenerateOBJ("Teleporter", "OBJ//Teleporter_OBJ.obj"), 1);
+	MS_Teleporter->CollisionMesh_->textureID = LoadTGA("Image//InteractableItem_Teleporter_UV_Texture.tga");
 	//Teleporter1 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Teleporter1", "OBJ//Teleporter1_OBJ.obj"));
 	//Teleporter1->CollisionMesh_->textureID = LoadTGA("Image//InteractableItem_Teleporter_UV_Texture.tga");
 
@@ -236,7 +237,7 @@ void MainScene::Init()
 	//Env_Obj.push_back(Teleporter);
 	//Env_Obj.push_back(Teleporter1);
 
-	Player::getInstance()->Teleport.push_back(Teleporter);
+	Player::getInstance()->Teleport.push_back(MS_Teleporter);
 	//Teleporter -----------------------END
 
 
@@ -271,7 +272,7 @@ void MainScene::Init()
 	//Barracks -------------------- START
 	EnvironmentObj* Barrack1 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Barrack1", "OBJ//Barracks1_OBJ.obj"));
 	Barrack1->CollisionMesh_->textureID = LoadTGA("Image//Barracks_UV_Texture.tga");
-	Barrack = new EnvironmentObj(MeshBuilder::GenerateOBJ("Barrack2", "OBJ//Barracks2_OBJ.obj"));
+	Barrack = new Teleporter(MeshBuilder::GenerateOBJ("Barrack2", "OBJ//Barracks2_OBJ.obj"),2);
 	Barrack->CollisionMesh_->textureID = LoadTGA("Image//Barracks_UV_Texture.tga");
 	EnvironmentObj* Barrack3 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Barrack3", "OBJ//Barracks3_OBJ.obj"));
 	Barrack3->CollisionMesh_->textureID = LoadTGA("Image//Barracks_UV_Texture.tga");
@@ -285,7 +286,7 @@ void MainScene::Init()
 	Env_Obj.push_back(Barrack3);
 	Env_Obj.push_back(Barrack4);
 
-	Player::getInstance()->Teleport_Barrack.push_back(Barrack);
+	Player::getInstance()->Teleport.push_back(Barrack);
 	//Barracks ------------------------- END
 
 
@@ -388,13 +389,13 @@ void MainScene::Update(double dt)
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); //wireframe mode
 	}
 
-	bool once = false;
-	if (Application::IsKeyPressed('1') && once == false)
-	{
-		SceneManager::getInstance()->SetNextScene();
-		//SceneManager::getInstance()->SetNextSceneID(0);
-		once = true;
-	}
+	//bool once = false;
+	//if (Application::IsKeyPressed('1') && once == false)
+	//{
+	//	SceneManager::getInstance()->SetNextScene();
+	//	//SceneManager::getInstance()->SetNextSceneID(0);
+	//	once = true;
+	//}
 
 	bool fpsonce = false;
 	if (Application::IsKeyPressed('V') && fpsonce == false)
@@ -453,6 +454,28 @@ void MainScene::Update(double dt)
 
 	FramesPerSec = 1 / dt;
 	MainMenu.Update(dt);
+
+	if (Application::IsKeyPressed('5'))
+	{
+		SceneManager::getInstance()->SetNextSceneID(5);
+		SceneManager::getInstance()->SetNextScene();
+	}
+
+	if (Application::IsKeyPressed('6'))
+	{
+		SceneManager::getInstance()->SetNextSceneID(1);
+		SceneManager::getInstance()->SetNextScene();
+	}
+	if (Application::IsKeyPressed('7'))
+	{
+		SceneManager::getInstance()->SetNextSceneID(4);
+		SceneManager::getInstance()->SetNextScene();
+	}
+	if (Application::IsKeyPressed('8'))
+	{
+		SceneManager::getInstance()->SetNextSceneID(3);
+		SceneManager::getInstance()->SetNextScene();
+	}
 }
 
 void MainScene::Render()
@@ -529,7 +552,8 @@ void MainScene::Exit()
 		if (meshList[i] != NULL)
 			delete meshList[i];
 	}
-	delete camera;
+	//delete camera;
+	Player::getInstance()->clearCollisionObj();
 
 	// Cleanup VBO here
 	glDeleteVertexArrays(1, &m_vertexArrayID);

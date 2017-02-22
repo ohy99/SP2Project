@@ -13,9 +13,12 @@
 
 #include "SceneManager.h"
 #include "MainScene.h"
+#include "BossScene.h"
+
 #include "UndergroundScene.h"
 #include "MiniGame.h"
 #include "WorldScene.h"
+#include "InsideBarrackScene.h"
 
 #include "DetectMemoryLeak.h"
 
@@ -129,15 +132,33 @@ void Application::Init()
 void Application::Run()
 {
 	//Main Loop
+<<<<<<< HEAD
 	Scene *scene1 = new MiniGame();
 	SceneManager::getInstance()->AddScene(scene1);
 	Scene *scene2 = new WorldScene();
 	SceneManager::getInstance()->AddScene(scene2);
 	Scene *scene3 = new MiniGame();
 	SceneManager::getInstance()->AddScene(scene3);
+=======
+
+	Scene *tempScene = new MainScene();
+	SceneManager::getInstance()->AddScene(tempScene);
+	tempScene = new WorldScene();
+	SceneManager::getInstance()->AddScene(tempScene);
+	tempScene = new InsideBarrackScene();
+	SceneManager::getInstance()->AddScene(tempScene);
+	tempScene = new BossScene();
+	SceneManager::getInstance()->AddScene(tempScene);
+	tempScene = new UndergroundScene();
+	SceneManager::getInstance()->AddScene(tempScene);
+	tempScene = new MiniGame();
+	SceneManager::getInstance()->AddScene(tempScene);
+
+
+>>>>>>> 9d8e860b9ba28d0bab1c68b1cff24a954fb0a494
 	SceneManager::getInstance()->SetNextSceneID(1);
 	//Scene *scene = scene1;
-	scene1->Init();
+	SceneManager::getInstance()->getCurrentScene()->Init();
 
 	//Scene *scene = new A3Scene();
 

@@ -8,7 +8,7 @@ class EnvironmentObj : public GameObject
 {
 public:
 	EnvironmentObj(Mesh* obj) : GameObject(obj->name) { CollisionMesh_ = obj; CollisionMesh_->collisionEnabled = true; };
-	~EnvironmentObj() {};
+	virtual ~EnvironmentObj() {};
 };
 
 #endif

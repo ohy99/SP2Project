@@ -5,6 +5,7 @@
 
 class MeleeWeapon : public Weapon
 {
+public:
 	MeleeWeapon(const std::string& name, int damage) : Weapon(name, damage) { ; }
 	virtual ~MeleeWeapon() { ; }
 };
