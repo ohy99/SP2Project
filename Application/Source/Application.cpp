@@ -132,16 +132,16 @@ void Application::Init()
 void Application::Run()
 {
 	//Main Loop
-<<<<<<< HEAD
-	Scene *scene1 = new MiniGame();
-	SceneManager::getInstance()->AddScene(scene1);
-	Scene *scene2 = new WorldScene();
-	SceneManager::getInstance()->AddScene(scene2);
-	Scene *scene3 = new MiniGame();
-	SceneManager::getInstance()->AddScene(scene3);
-=======
+	//Scene *scene1 = new MiniGame();
+	//SceneManager::getInstance()->AddScene(scene1);
+	//Scene *scene2 = new WorldScene();
+	//SceneManager::getInstance()->AddScene(scene2);
+	//Scene *scene3 = new MiniGame();
+	//SceneManager::getInstance()->AddScene(scene3);
 
-	Scene *tempScene = new MainScene();
+	Scene *tempScene = new MainScreen();
+	SceneManager::getInstance()->AddScene(tempScene);
+	tempScene = new MainScene();
 	SceneManager::getInstance()->AddScene(tempScene);
 	tempScene = new WorldScene();
 	SceneManager::getInstance()->AddScene(tempScene);
@@ -155,7 +155,6 @@ void Application::Run()
 	SceneManager::getInstance()->AddScene(tempScene);
 
 
->>>>>>> 9d8e860b9ba28d0bab1c68b1cff24a954fb0a494
 	SceneManager::getInstance()->SetNextSceneID(1);
 	//Scene *scene = scene1;
 	SceneManager::getInstance()->getCurrentScene()->Init();

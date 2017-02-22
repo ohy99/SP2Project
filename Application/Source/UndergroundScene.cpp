@@ -357,8 +357,6 @@ void UndergroundScene::Update(double dt)
 
 	if (isEscPressed && !wasEscPressed) // When you press ESC
 	{
-		if (!MainMenu.isMainMenu)
-		{
 			if (!isPause)
 			{
 				isPause = true;
@@ -373,13 +371,10 @@ void UndergroundScene::Update(double dt)
 			}
 
 			wasEscPressed = isEscPressed;
-		}
 	}
 
 	if (!isEscPressed && wasEscPressed) // When you release the ESC button
 		wasEscPressed = isEscPressed;
-
-	Player::getInstance()->update(dt, camera);
 
 	for (size_t i = 0; i < CampNPC.size(); i++)
 	{
@@ -387,7 +382,7 @@ void UndergroundScene::Update(double dt)
 	}
 
 
-	if (!isPause && !MainMenu.isMainMenu)
+	if (!isPause)
 	{
 		double c_posx, c_posy;
 		glfwGetCursorPos(Application::m_window, &c_posx, &c_posy);
@@ -417,41 +412,33 @@ void UndergroundScene::Render()
 		camera->getUp().x, camera->getUp().y, camera->getUp().z);
 	modelStack.LoadIdentity();
 
-	if (MainMenu.isMainMenu)
-		MainMenu.Render();
+	RenderMeshClass::RenderMesh(meshList[GEO_AXES], false, &projectionStack, &viewStack, &modelStack, m_parameters);
+	Player::getInstance()->render(&projectionStack, &viewStack, &modelStack, m_parameters);
 
-	else
+	RenderSkybox();
+	//	renderEnvironment();
+
+	//Ground Mesh
+	modelStack.PushMatrix();
+	modelStack.Scale(1000, 1000, 1000);
+	modelStack.Rotate(90, -1, 0, 0);
+	RenderMeshClass::RenderMesh(meshList[GEO_MOSSY_GROUND], true, &projectionStack, &viewStack, &modelStack, m_parameters);
+	modelStack.PopMatrix();
+
+
+	for (size_t i = 0; i < CampNPC.size(); i++)
 	{
-		RenderMeshClass::RenderMesh(meshList[GEO_AXES], false, &projectionStack, &viewStack, &modelStack, m_parameters);
-		Player::getInstance()->render(&projectionStack, &viewStack, &modelStack, m_parameters);
-
-		RenderSkybox();
-		//	renderEnvironment();
-
-		//Ground Mesh
-		modelStack.PushMatrix();
-		modelStack.Scale(1000, 1000, 1000);
-		modelStack.Rotate(90, -1, 0, 0);
-		RenderMeshClass::RenderMesh(meshList[GEO_MOSSY_GROUND], true, &projectionStack, &viewStack, &modelStack, m_parameters);
-		modelStack.PopMatrix();
-
-
-
-		for (size_t i = 0; i < CampNPC.size(); i++)
-		{
-			CampNPC.at(i)->render(&projectionStack, &viewStack, &modelStack, m_parameters);
-		}
-		RenderBaseCamp();
-
-
-		if (isPause)
-			renderUI.renderPause(&projectionStack, &viewStack, &modelStack, m_parameters);
-
-
-		RenderBaseCamp();
-		RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::to_string(FramesPerSec), Color(1, 0, 0), 1.5f, 45, 38, &projectionStack, &viewStack, &modelStack, m_parameters);
+		CampNPC.at(i)->render(&projectionStack, &viewStack, &modelStack, m_parameters);
 	}
+	RenderBaseCamp();
 
+
+	if (isPause)
+		renderUI.renderPause(&projectionStack, &viewStack, &modelStack, m_parameters);
+
+
+	RenderBaseCamp();
+	RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::to_string(FramesPerSec), Color(1, 0, 0), 1.5f, 45, 38, &projectionStack, &viewStack, &modelStack, m_parameters);
 }
 
 void UndergroundScene::RenderBaseCamp(){
