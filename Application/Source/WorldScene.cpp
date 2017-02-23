@@ -323,14 +323,19 @@ void WorldScene::Init()
 
 	//Door to Underground Lab --------------------------------- START
 
-	Underground_Door = new Teleporter(MeshBuilder::GenerateOBJ("Underground Door", "OBJ//UndergroundDoor.obj"), 5);
-	Underground_Door->CollisionMesh_->textureID = LoadTGA("Image//UndergroundDoor.tga");
+	EnvironmentObj* UndergroundDoor = new EnvironmentObj(MeshBuilder::GenerateOBJ("Underground Door", "OBJ//UndergroundDoor.obj"));
+	UndergroundDoor->CollisionMesh_->textureID = LoadTGA("Image//UndergroundDoor.tga");
 
-	meshList[GEO_UNDERGROUND_DOOR] = MeshBuilder::GenerateOBJ("Underground Door", "OBJ//UndergroundDoor.obj");
-	meshList[GEO_UNDERGROUND_DOOR]->textureID = LoadTGA("Image//UndergroundDoor.tga");
 
-	//Env_Obj.push_back(Teleporter);
-	Player::getInstance()->Teleport.push_back(Underground_Door);
+	Env_Obj.push_back(UndergroundDoor);
+
+	//Underground_Door = new Teleporter(MeshBuilder::GenerateOBJ("Underground Door", "OBJ//UndergroundDoor.obj"), 5);
+	//Underground_Door->CollisionMesh_->textureID = LoadTGA("Image//UndergroundDoor.tga");
+
+	//meshList[GEO_UNDERGROUND_DOOR] = MeshBuilder::GenerateOBJ("Underground Door", "OBJ//UndergroundDoor.obj");
+	//meshList[GEO_UNDERGROUND_DOOR]->textureID = LoadTGA("Image//UndergroundDoor.tga");
+
+	//Player::getInstance()->Teleport.push_back(Underground_Door);
 	//Door to Underground Lab --------------------------------- END
 
 	//Vehicles ----------------------------------------------- START
@@ -590,9 +595,9 @@ void WorldScene::Render()
 	//RenderMeshClass::RenderMesh(meshList[GEO_Teleporter], true, &projectionStack, &viewStack, &modelStack, m_parameters);
 	//modelStack.PushMatrix();
 
-	modelStack.PushMatrix();
-	RenderMeshClass::RenderMesh(meshList[GEO_UNDERGROUND_DOOR], true, &projectionStack, &viewStack, &modelStack, m_parameters);
-	modelStack.PushMatrix();
+	//modelStack.PushMatrix();
+	//RenderMeshClass::RenderMesh(meshList[GEO_UNDERGROUND_DOOR], true, &projectionStack, &viewStack, &modelStack, m_parameters);
+	//modelStack.PushMatrix();
 
 	for (size_t i = 0; i < Env_Obj.size(); i++)
 	{
