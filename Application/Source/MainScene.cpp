@@ -225,19 +225,23 @@ void MainScene::Init()
 
 
 	//Teleporter ------------------ START
-	MS_Teleporter = new Teleporter(MeshBuilder::GenerateOBJ("Teleporter", "OBJ//Teleporter_OBJ.obj"), 1);
-	MS_Teleporter->CollisionMesh_->textureID = LoadTGA("Image//InteractableItem_Teleporter_UV_Texture.tga");
+	//MS_Teleporter = new Teleporter(MeshBuilder::GenerateOBJ("Teleporter", "OBJ//Teleporter_OBJ.obj"), 1);
+	//MS_Teleporter->CollisionMesh_->textureID = LoadTGA("Image//InteractableItem_Teleporter_UV_Texture.tga");
+
+	EnvironmentObj* Teleporter = new EnvironmentObj(MeshBuilder::GenerateOBJ("Teleporter", "OBJ//Teleporter_OBJ.obj"));
+	Teleporter->CollisionMesh_->textureID = LoadTGA("Image//InteractableItem_Teleporter_UV_Texture.tga");
+
 	//Teleporter1 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Teleporter1", "OBJ//Teleporter1_OBJ.obj"));
 	//Teleporter1->CollisionMesh_->textureID = LoadTGA("Image//InteractableItem_Teleporter_UV_Texture.tga");
 
-	meshList[GEO_Teleporter] = MeshBuilder::GenerateOBJ("Teleporter", "OBJ//Teleporter_OBJ.obj");
-	meshList[GEO_Teleporter]->textureID = LoadTGA("Image//InteractableItem_Teleporter_UV_Texture.tga");
+	//meshList[GEO_Teleporter] = MeshBuilder::GenerateOBJ("Teleporter", "OBJ//Teleporter_OBJ.obj");
+	//meshList[GEO_Teleporter]->textureID = LoadTGA("Image//InteractableItem_Teleporter_UV_Texture.tga");
 	
 
-	//Env_Obj.push_back(Teleporter);
+	Env_Obj.push_back(Teleporter);
 	//Env_Obj.push_back(Teleporter1);
 
-	Player::getInstance()->Teleport.push_back(MS_Teleporter);
+	//Player::getInstance()->Teleport.push_back(MS_Teleporter);
 	//Teleporter -----------------------END
 
 
@@ -272,21 +276,26 @@ void MainScene::Init()
 	//Barracks -------------------- START
 	EnvironmentObj* Barrack1 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Barrack1", "OBJ//Barracks1_OBJ.obj"));
 	Barrack1->CollisionMesh_->textureID = LoadTGA("Image//Barracks_UV_Texture.tga");
-	Barrack = new Teleporter(MeshBuilder::GenerateOBJ("Barrack2", "OBJ//Barracks2_OBJ.obj"),2);
-	Barrack->CollisionMesh_->textureID = LoadTGA("Image//Barracks_UV_Texture.tga");
+	EnvironmentObj* Barrack2 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Barrack2", "OBJ//Barracks2_OBJ.obj"));
+	Barrack2->CollisionMesh_->textureID = LoadTGA("Image//Barracks_UV_Texture.tga");
+
+	//Barrack = new Teleporter(MeshBuilder::GenerateOBJ("Barrack2", "OBJ//Barracks2_OBJ.obj"),2);
+	//Barrack->CollisionMesh_->textureID = LoadTGA("Image//Barracks_UV_Texture.tga");
+
 	EnvironmentObj* Barrack3 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Barrack3", "OBJ//Barracks3_OBJ.obj"));
 	Barrack3->CollisionMesh_->textureID = LoadTGA("Image//Barracks_UV_Texture.tga");
 	EnvironmentObj* Barrack4 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Barrack4", "OBJ//Barracks4_OBJ.obj"));
 	Barrack4->CollisionMesh_->textureID = LoadTGA("Image//Barracks_UV_Texture.tga");
 
-	meshList[GEO_Barrack] = MeshBuilder::GenerateOBJ("Barrack2", "OBJ//Barracks2_OBJ.obj");
-	meshList[GEO_Barrack]->textureID = LoadTGA("Image//Barracks_UV_Texture.tga");
+	//meshList[GEO_Barrack] = MeshBuilder::GenerateOBJ("Barrack2", "OBJ//Barracks2_OBJ.obj");
+	//meshList[GEO_Barrack]->textureID = LoadTGA("Image//Barracks_UV_Texture.tga");
 
 	Env_Obj.push_back(Barrack1);
+	Env_Obj.push_back(Barrack2);
 	Env_Obj.push_back(Barrack3);
 	Env_Obj.push_back(Barrack4);
 
-	Player::getInstance()->Teleport.push_back(Barrack);
+	//Player::getInstance()->Teleport.push_back(Barrack);
 	//Barracks ------------------------- END
 
 
@@ -349,7 +358,7 @@ void MainScene::Init()
 	renderUI.Init();
 	wasEscPressed = false;
 	isPause = false;
-	MainMenu.Init();
+	//MainMenu.Init();
 
 	camera = new Camera3;
 	camera->Init(Vector3(0, 0, 7), Vector3(0, 0, 0), Vector3(0, 1, 0));
@@ -408,8 +417,8 @@ void MainScene::Update(double dt)
 
 	if (isEscPressed && !wasEscPressed) // When you press ESC
 	{
-		if (!MainMenu.isMainMenu)
-		{
+		//if (!MainMenu.isMainMenu)
+		//{
 			if (!isPause)
 			{
 				isPause = true;
@@ -424,7 +433,7 @@ void MainScene::Update(double dt)
 			}
 
 			wasEscPressed = isEscPressed;
-		}
+		//}
 	}
 		
 	if (!isEscPressed && wasEscPressed) // When you release the ESC button
@@ -438,7 +447,7 @@ void MainScene::Update(double dt)
 	}
 
 
-	if (!isPause && !MainMenu.isMainMenu)
+	if (!isPause/* && !MainMenu.isMainMenu*/)
 	{
 		double c_posx, c_posy;
 		glfwGetCursorPos(Application::m_window, &c_posx, &c_posy);
@@ -453,30 +462,32 @@ void MainScene::Update(double dt)
 	}
 
 	FramesPerSec = 1 / dt;
-	MainMenu.Update(dt);
+	//MainMenu.Update(dt);
 
-	if (Application::IsKeyPressed('5'))
-	{
-		SceneManager::getInstance()->SetNextSceneID(5);
-		SceneManager::getInstance()->SetNextScene();
-	}
 
-	if (Application::IsKeyPressed('6'))
-	{
-		SceneManager::getInstance()->SetNextSceneID(1);
-		SceneManager::getInstance()->SetNextScene();
-	}
-	if (Application::IsKeyPressed('7'))
-	{
-		SceneManager::getInstance()->SetNextSceneID(4);
-		SceneManager::getInstance()->SetNextScene();
-	}
-	if (Application::IsKeyPressed('8'))
-	{
-		SceneManager::getInstance()->SetNextSceneID(3);
-		SceneManager::getInstance()->SetNextScene();
-	}
+	//if (Application::IsKeyPressed('5'))
+	//{
+	//	SceneManager::getInstance()->SetNextSceneID(5);
+	//	SceneManager::getInstance()->SetNextScene();
+	//}
+
+	//if (Application::IsKeyPressed('6'))
+	//{
+	//	SceneManager::getInstance()->SetNextSceneID(1);
+	//	SceneManager::getInstance()->SetNextScene();
+	//}
+	//if (Application::IsKeyPressed('7'))
+	//{
+	//	SceneManager::getInstance()->SetNextSceneID(4);
+	//	SceneManager::getInstance()->SetNextScene();
+	//}
+	//if (Application::IsKeyPressed('8'))
+	//{
+	//	SceneManager::getInstance()->SetNextSceneID(3);
+	//	SceneManager::getInstance()->SetNextScene();
+	//}
 }
+
 
 void MainScene::Render()
 {
@@ -490,11 +501,11 @@ void MainScene::Render()
 		camera->getUp().x, camera->getUp().y, camera->getUp().z);
 	modelStack.LoadIdentity();
 
-	if (MainMenu.isMainMenu)
-		MainMenu.Render();
+	//if (MainMenu.isMainMenu)
+	//	MainMenu.Render();
 
-	else
-	{
+	//else
+	//{
 		RenderMeshClass::RenderMesh(meshList[GEO_AXES], false, &projectionStack, &viewStack, &modelStack, m_parameters);
 		Player::getInstance()->render(&projectionStack, &viewStack, &modelStack, m_parameters);
 
@@ -509,12 +520,13 @@ void MainScene::Render()
 		modelStack.PopMatrix();
 
 
-
 		for (size_t i = 0; i < CampNPC.size(); i++)
 		{
 			CampNPC.at(i)->render(&projectionStack, &viewStack, &modelStack, m_parameters);
 		}
 		RenderBaseCamp();
+
+		Interactions();
 
 
 		if (isPause)
@@ -522,19 +534,26 @@ void MainScene::Render()
 
 
 		RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::to_string(FramesPerSec), Color(1, 0, 0), 1.5f, 45, 38, &projectionStack, &viewStack, &modelStack, m_parameters);
-	}
+	//}
 
 }
 
+void MainScene::Interactions(){
+
+	if (Player::getInstance()->getPlayerPosition().x >= -8 && Player::getInstance()->getPlayerPosition().x <= -5 && Player::getInstance()->getPlayerPosition().z <= -11 && Player::getInstance()->getPlayerPosition().z >= -17){
+		
+		RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("[Press SPACE to enter.]"), Color(1, 0, 0), 2.f, 35, 24, &projectionStack, &viewStack, &modelStack, m_parameters);
+		
+		if (Application::IsKeyPressed(VK_SPACE)){
+
+			SceneManager::getInstance()->SetNextSceneID(2);
+			SceneManager::getInstance()->SetNextScene();
+
+		}
+	}
+}
+
 void MainScene::RenderBaseCamp(){
-
-	modelStack.PushMatrix();
-	RenderMeshClass::RenderMesh(meshList[GEO_Teleporter], false, &projectionStack, &viewStack, &modelStack, m_parameters);
-	modelStack.PopMatrix();
-
-	modelStack.PushMatrix();
-	RenderMeshClass::RenderMesh(meshList[GEO_Barrack], false, &projectionStack, &viewStack, &modelStack, m_parameters);
-	modelStack.PopMatrix();
 
 	for (size_t i = 0; i < Env_Obj.size(); i++)
 	{

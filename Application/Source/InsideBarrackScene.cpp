@@ -187,20 +187,25 @@ void InsideBarrackScene::Init()
 	Wall2->CollisionMesh_->textureID = LoadTGA("Image//InsideBarrackScene//InsideBarracks_Wall_UV_Texture.tga");
 	EnvironmentObj* Wall3 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Wall3", "OBJ//InsideBarrackScene//Wall3_OBJ.obj"));
 	Wall3->CollisionMesh_->textureID = LoadTGA("Image//InsideBarrackScene//InsideBarracks_Wall_UV_Texture.tga");
-	Barrack = new Teleporter(MeshBuilder::GenerateOBJ("Door1", "OBJ//InsideBarrackScene//Door1_OBJ.obj"), 0);
-	Barrack->CollisionMesh_->textureID = LoadTGA("Image//InsideBarrackScene//InsideBarracks_Door_UV_Texture.tga");
+	EnvironmentObj* Door = new EnvironmentObj(MeshBuilder::GenerateOBJ("Door1", "OBJ//InsideBarrackScene//Door1_OBJ.obj"));
+	Door->CollisionMesh_->textureID = LoadTGA("Image//InsideBarrackScene//InsideBarracks_Door_UV_Texture.tga");
+
+	//Barrack = new Teleporter(MeshBuilder::GenerateOBJ("Door1", "OBJ//InsideBarrackScene//Door1_OBJ.obj"), 0);
+	//Barrack->CollisionMesh_->textureID = LoadTGA("Image//InsideBarrackScene//InsideBarracks_Door_UV_Texture.tga");
+	
 	EnvironmentObj* Ceiling1 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Ceiling1", "OBJ//InsideBarrackScene//Ceiling1_OBJ.obj"));
 	Ceiling1->CollisionMesh_->textureID = LoadTGA("Image//InsideBarrackScene//InsideBarracks_Door_UV_Texture.tga");
 
-	meshList[GEO_DOOR] = MeshBuilder::GenerateOBJ("Door1", "OBJ//InsideBarrackScene//Door1_OBJ.obj");
-	meshList[GEO_DOOR]->textureID = LoadTGA("Image//InsideBarrackScene//InsideBarracks_Door_UV_Texture.tga");
+	//meshList[GEO_DOOR] = MeshBuilder::GenerateOBJ("Door1", "OBJ//InsideBarrackScene//Door1_OBJ.obj");
+	//meshList[GEO_DOOR]->textureID = LoadTGA("Image//InsideBarrackScene//InsideBarracks_Door_UV_Texture.tga");
 
 	Env_Obj.push_back(Wall1);
 	Env_Obj.push_back(Wall2);
 	Env_Obj.push_back(Wall3);
 	Env_Obj.push_back(Ceiling1);
+	Env_Obj.push_back(Door);
 
-	Player::getInstance()->Teleport.push_back(Barrack);
+	//Player::getInstance()->Teleport.push_back(Barrack);
 	//Walls, Door, Ceiling ------------------------------- END
 
 
@@ -438,9 +443,8 @@ void InsideBarrackScene::Render()
 
 	}
 
-	modelStack.PushMatrix();
-	RenderMeshClass::RenderMesh(meshList[GEO_DOOR], true, & projectionStack, &viewStack, &modelStack, m_parameters);
-	modelStack.PopMatrix();
+
+	Interactions();
 
 	RenderMeshClass::RenderMesh(meshList[GEO_AXES], false, &projectionStack, &viewStack, &modelStack, m_parameters);
 	Player::getInstance()->render(&projectionStack, &viewStack, &modelStack, m_parameters);
@@ -450,6 +454,22 @@ void InsideBarrackScene::Render()
 
 }
 
+void InsideBarrackScene::Interactions(){
+
+	if (Player::getInstance()->getPlayerPosition().x >= -1 && Player::getInstance()->getPlayerPosition().x <= 1 && Player::getInstance()->getPlayerPosition().z <= -1.5 && Player::getInstance()->getPlayerPosition().z >= -2){
+
+		RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("[Press SPACE to exit.]"), Color(1, 0, 0), 2.f, 35, 24, &projectionStack, &viewStack, &modelStack, m_parameters);
+
+		if (Application::IsKeyPressed(VK_SPACE)){
+
+			SceneManager::getInstance()->SetNextSceneID(0);
+			SceneManager::getInstance()->SetNextScene();
+
+			Player::getInstance()->setPosition(Vector3(-6.5, 0.0, -14.0));
+		}
+	}
+
+}
 
 void InsideBarrackScene::Exit()
 {
