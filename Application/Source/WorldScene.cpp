@@ -48,7 +48,7 @@ WorldScene::~WorldScene()
 void WorldScene::Init()
 {
 	// Init VBO here
-	Player::getInstance()->setPosition(Vector3(0, 0, 0));
+	//Player::getInstance()->setPosition(Vector3(0, 0, 0));
 
 	glClearColor(0.0f, 0.5f, 0.66f, 0.0f);
 
@@ -360,14 +360,19 @@ void WorldScene::Init()
 
 
 	//Teleporter -------------------------------------------- START
-	WS_Teleporter = new Teleporter(MeshBuilder::GenerateOBJ("Teleporter", "OBJ//WorldScene//Teleporter_OBJ.obj"),0);
-	WS_Teleporter->CollisionMesh_->textureID = LoadTGA("Image//WorldScene//InteractableItem_Teleporter_UV_Texture.tga");
+	//WS_Teleporter = new Teleporter(MeshBuilder::GenerateOBJ("Teleporter", "OBJ//WorldScene//Teleporter_OBJ.obj"),0);
+	//WS_Teleporter->CollisionMesh_->textureID = LoadTGA("Image//WorldScene//InteractableItem_Teleporter_UV_Texture.tga");
 
-	meshList[GEO_Teleporter] = MeshBuilder::GenerateOBJ("Teleporter", "OBJ//WorldScene//Teleporter_OBJ.obj");
-	meshList[GEO_Teleporter]->textureID = LoadTGA("Image//WorldScene//InteractableItem_Teleporter_UV_Texture.tga");
+	//meshList[GEO_Teleporter] = MeshBuilder::GenerateOBJ("Teleporter", "OBJ//WorldScene//Teleporter_OBJ.obj");
+	//meshList[GEO_Teleporter]->textureID = LoadTGA("Image//WorldScene//InteractableItem_Teleporter_UV_Texture.tga");
 
-	Env_Obj.push_back(WS_Teleporter);
-	Player::getInstance()->Teleport.push_back(WS_Teleporter);
+	EnvironmentObj* Teleporter = new EnvironmentObj(MeshBuilder::GenerateOBJ("Teleporter", "OBJ//WorldScene//Teleporter_OBJ.obj"));
+	Teleporter->CollisionMesh_->textureID = LoadTGA("Image//WorldScene//InteractableItem_Teleporter_UV_Texture.tga");
+
+
+	Env_Obj.push_back(Teleporter);
+
+	//Player::getInstance()->Teleport.push_back(WS_Teleporter);
 	//Teleporter -------------------------------------------- END
 
 
@@ -581,9 +586,9 @@ void WorldScene::Render()
 
 	//}
 
-	modelStack.PushMatrix();
-	RenderMeshClass::RenderMesh(meshList[GEO_Teleporter], true, &projectionStack, &viewStack, &modelStack, m_parameters);
-	modelStack.PushMatrix();
+	//modelStack.PushMatrix();
+	//RenderMeshClass::RenderMesh(meshList[GEO_Teleporter], true, &projectionStack, &viewStack, &modelStack, m_parameters);
+	//modelStack.PushMatrix();
 
 	modelStack.PushMatrix();
 	RenderMeshClass::RenderMesh(meshList[GEO_UNDERGROUND_DOOR], true, &projectionStack, &viewStack, &modelStack, m_parameters);
@@ -597,6 +602,7 @@ void WorldScene::Render()
 		
 	}
 
+	Interactions();
 
 	RenderMeshClass::RenderMesh(meshList[GEO_AXES], false, &projectionStack, &viewStack, &modelStack, m_parameters);
 	Player::getInstance()->render(&projectionStack, &viewStack, &modelStack, m_parameters);
@@ -607,6 +613,25 @@ void WorldScene::Render()
 }
 
 
+void WorldScene::Interactions(){
+
+	if (Player::getInstance()->getPlayerPosition().x >= 92 && Player::getInstance()->getPlayerPosition().x <= 97 && Player::getInstance()->getPlayerPosition().z <= -8 && Player::getInstance()->getPlayerPosition().z >= -15){
+
+		RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("[Press SPACE to teleport to Camp Base.]"), Color(1, 0, 0), 2.f, 28, 30, &projectionStack, &viewStack, &modelStack, m_parameters);
+	}
+
+	if (Application::IsKeyPressed(VK_SPACE)){
+
+		if (Player::getInstance()->getPlayerPosition().x >= 92 && Player::getInstance()->getPlayerPosition().x <= 97 && Player::getInstance()->getPlayerPosition().z <= -8 && Player::getInstance()->getPlayerPosition().z >= -15){
+
+			SceneManager::getInstance()->SetNextSceneID(0);
+			SceneManager::getInstance()->SetNextScene();
+			Player::getInstance()->setPosition(Vector3(-18.0, 0.0, -0.5));
+		}
+
+	}
+}
+
 void WorldScene::Exit()
 {
 	for (size_t i = 0; i < GEOMETRY_TYPE::NUM_GEOMETRY; i++)
@@ -614,7 +639,7 @@ void WorldScene::Exit()
 		if (meshList[i] != NULL)
 			delete meshList[i];
 	}
-	delete camera;
+	//delete camera;
 	Player::getInstance()->clearCollisionObj();
 
 	// Cleanup VBO here
