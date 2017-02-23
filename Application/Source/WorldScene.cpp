@@ -232,6 +232,10 @@ void WorldScene::Init()
 	//Outer Row of Buildings 3 ----------------------------------- START
 	EnvironmentObj* OuterBuilding3_BigApartment = new EnvironmentObj(MeshBuilder::GenerateOBJ("Big Apartment", "OBJ//WorldScene//OuterBuildingRow3--BigApartment_OBJ.obj"));
 	OuterBuilding3_BigApartment->CollisionMesh_->textureID = LoadTGA("Image//WorldScene//BigApartment.tga");
+	EnvironmentObj* OuterBuilding3_BigApartment2 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Big Apartment", "OBJ//WorldScene//OuterBuildingRow3--BigApartment2_OBJ.obj"));
+	OuterBuilding3_BigApartment2->CollisionMesh_->textureID = LoadTGA("Image//WorldScene//BigApartment.tga");
+	EnvironmentObj* OuterBuilding3_BigApartment3 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Big Apartment", "OBJ//WorldScene//OuterBuildingRow3--BigApartment3_OBJ.obj"));
+	OuterBuilding3_BigApartment3->CollisionMesh_->textureID = LoadTGA("Image//WorldScene//BigApartment.tga");
 	EnvironmentObj* OuterBuilding3_Ruins = new EnvironmentObj(MeshBuilder::GenerateOBJ("Ruins", "OBJ//WorldScene//OuterBuildingRow3--Ruins_OBJ.obj"));
 	OuterBuilding3_Ruins->CollisionMesh_->textureID = LoadTGA("Image//WorldScene//Ruins2_UV_Texture.tga");
 	EnvironmentObj* OuterBuilding3_Ruins1 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Ruins", "OBJ//WorldScene//OuterBuildingRow3--Ruins1_OBJ.obj"));
@@ -250,6 +254,8 @@ void WorldScene::Init()
 	OuterBuilding3_Car->CollisionMesh_->textureID = LoadTGA("Image//WorldScene//Car_Texture.tga");
 
 	Env_Obj.push_back(OuterBuilding3_BigApartment);
+	Env_Obj.push_back(OuterBuilding3_BigApartment2);
+	Env_Obj.push_back(OuterBuilding3_BigApartment3);
 	Env_Obj.push_back(OuterBuilding3_Ruins);
 	Env_Obj.push_back(OuterBuilding3_Ruins1);
 	Env_Obj.push_back(OuterBuilding3_BigSkyScraper);
@@ -274,12 +280,15 @@ void WorldScene::Init()
 	OuterBuilding4_LShapeBuilding->CollisionMesh_->textureID = LoadTGA("Image//WorldScene//Building4UV.tga");
 	EnvironmentObj* OuterBuilding4_Tree = new EnvironmentObj(MeshBuilder::GenerateOBJ("Tree", "OBJ//WorldScene//OuterBuildingRow4--Tree_OBJ.obj"));
 	OuterBuilding4_Tree->CollisionMesh_->textureID = LoadTGA("Image//WorldScene//Tree_MediumSize_UV_Texture.tga");
+	EnvironmentObj* OuterBuilding4_Tree2 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Tree", "OBJ//WorldScene//OuterBuildingRow4--Tree2_OBJ.obj"));
+	OuterBuilding4_Tree2->CollisionMesh_->textureID = LoadTGA("Image//WorldScene//Tree_MediumSize_UV_Texture.tga");
 
 	Env_Obj.push_back(OuterBuilding4_BigApartment);
 	Env_Obj.push_back(OuterBuilding4_Ruins);
 	Env_Obj.push_back(OuterBuilding4_BigSkyScraper);
 	Env_Obj.push_back(OuterBuilding4_LShapeBuilding);
 	Env_Obj.push_back(OuterBuilding4_Tree);
+	Env_Obj.push_back(OuterBuilding4_Tree2);
 	//Outer Row of Buildings 4 ------------------------------------ END
 
 
@@ -634,6 +643,21 @@ void WorldScene::Interactions(){
 			Player::getInstance()->setPosition(Vector3(-18.0, 0.0, -0.5));
 		}
 
+	}
+
+	if (Player::getInstance()->getPlayerPosition().x >= -88 && Player::getInstance()->getPlayerPosition().x <= -86 && Player::getInstance()->getPlayerPosition().z <= -68 && Player::getInstance()->getPlayerPosition().z >= -70)
+	{
+		RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("[Press SPACE to enter]"), Color(1, 0, 0), 2.f, 28, 30, &projectionStack, &viewStack, &modelStack, m_parameters);
+	}
+
+	if (Application::IsKeyPressed(VK_SPACE))
+	{
+		if (Player::getInstance()->getPlayerPosition().x >= -88 && Player::getInstance()->getPlayerPosition().x <= -86 && Player::getInstance()->getPlayerPosition().z <= -68 && Player::getInstance()->getPlayerPosition().z >= -70)
+		{
+			SceneManager::getInstance()->SetNextSceneID(4);
+			SceneManager::getInstance()->SetNextScene();
+			Player::getInstance()->setPosition(Vector3(-36.0, 0.0, 30.0));
+		}
 	}
 }
 
