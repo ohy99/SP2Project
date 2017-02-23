@@ -16,6 +16,7 @@
 #include "NPC_Doc.h"
 #include "Environment.h"
 #include "Teleporter.h"
+#include "Inventory.h"
 
 #include "RenderMesh.h"
 
@@ -353,6 +354,7 @@ void MainScene::Init()
 	camera = new Camera3;
 	camera->Init(Vector3(0, 0, 7), Vector3(0, 0, 0), Vector3(0, 1, 0));
 
+	Inventory::getInstance()->Init();
 
 	Mtx44 projection;
 	projection.SetToPerspective(45.f, 4.f / 3.f, 0.1f, 1000.f);
@@ -366,7 +368,7 @@ void MainScene::Update(double dt)
 {
 
 
-	int width, height;
+
 	glfwGetWindowSize(Application::m_window, &width, &height);
 	isEscPressed = Application::IsKeyPressed(VK_ESCAPE);
 
@@ -426,7 +428,9 @@ void MainScene::Update(double dt)
 	if (!isEscPressed && wasEscPressed) // When you release the ESC button
 		wasEscPressed = isEscPressed;
 
+
 	Player::getInstance()->update(dt, camera);
+	Inventory::getInstance()->Update(dt);
 
 	for (size_t i = 0; i < CampNPC.size(); i++)
 	{
@@ -434,7 +438,7 @@ void MainScene::Update(double dt)
 	}
 
 
-	if (!isPause)
+	if (!isPause && !Inventory::getInstance()->isInventoryOpen())
 	{
 		double c_posx, c_posy;
 		glfwGetCursorPos(Application::m_window, &c_posx, &c_posy);
@@ -510,6 +514,8 @@ void MainScene::Render()
 	if (isPause)
 		renderUI.renderPause(&projectionStack, &viewStack, &modelStack, m_parameters);
 
+	Inventory::getInstance()->Render(&projectionStack, &viewStack, &modelStack, m_parameters);
+	Inventory::getInstance()->renderMessage(&projectionStack, &viewStack, &modelStack, m_parameters);
 
 	RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::to_string(FramesPerSec), Color(1, 0, 0), 1.5f, 45, 38, &projectionStack, &viewStack, &modelStack, m_parameters);
 }

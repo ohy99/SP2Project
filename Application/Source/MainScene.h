@@ -89,6 +89,8 @@ private:
 	bool isPause;
 	bool isEscPressed, wasEscPressed;
 
+	int width, height;
+
 	MainScreen MainMenu;
 	UI renderUI;
 

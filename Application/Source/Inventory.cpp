@@ -1,8 +1,18 @@
 #include "Inventory.h"
 #include "RenderMesh.h"
-#include <algorithm>
+//#include <algorithm>
+#include "Application.h"
+#include "MeshBuilder.h"
 
 Inventory* Inventory::Instance_ = NULL;
+
+Inventory* Inventory::getInstance()
+{
+	if (Instance_)
+		return Instance_;
+	else
+		return (Instance_ = new Inventory("Inventory"));
+}
 
 Item* Inventory::getItem(int i)
 {
@@ -16,14 +26,6 @@ Item* Inventory::getItem(int i)
 
 	else
 		return currItem;
-}
-
-Inventory* Inventory::getInstance()
-{
-	if (Instance_)
-		return Instance_;
-	else
-		return (Instance_ = new Inventory("Inventory"));
 }
 
 void Inventory::setItem(Item* items)
@@ -49,8 +51,51 @@ int Inventory::getInventorySize()
 	return Storage.size();
 }
 
+void Inventory::Init()
+{
+	isInventory = false;
+	meshList[INVENTORY] = MeshBuilder::GenerateQuad("Inventory", Color(1.f, 1.f, 1.f), 1.f, 1.f);
+}
+
+void Inventory::Update(double dt)
+{
+	isIPressed = Application::IsKeyPressed('I');
+
+	if (isIPressed && !wasIPressed)
+	{
+		if (!isInventory)
+		{
+			isInventory = true;
+			glfwSetInputMode(Application::m_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+		}
+
+		else
+			isInventory = false;
+
+		wasIPressed = isIPressed;
+	}
+
+	if (!isIPressed && wasIPressed)
+		wasIPressed = isIPressed;
+}
+
 void Inventory::renderMessage(MS* projectionStack, MS* viewStack, MS* modelStack, unsigned * m_parameters)
 {
-	if (isInventoryFull)
+	if (Application::IsKeyPressed('F') && isInventoryFull)
 		RenderMeshClass::RenderTextOnScreen(&Scene::Text[Scene::TEXT_TYPE::Century], "Your inventory is full", Color(1.f, 1.f, 1.f), 2, 35, 26, projectionStack, viewStack, modelStack, m_parameters);
+}
+
+void Inventory::Render(MS* projectionStack, MS* viewStack, MS* modelStack, unsigned * m_parameters)
+{
+	if (isInventory)
+		RenderMeshClass::RenderMeshOnScreen(meshList[INVENTORY], 500, 200, 0, 500, 300, projectionStack, viewStack, modelStack, m_parameters);
+}
+
+bool Inventory::isInventoryOpen()
+{
+	if (!isInventory)
+		return false;
+
+	else
+		return true;
 }
