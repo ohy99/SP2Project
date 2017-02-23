@@ -19,6 +19,7 @@
 #include "RenderMesh.h"
 
 #include "UI.h"
+#include "Inventory.h"
 
 //UndergroundScene::Text_Data UndergroundScene::Text[TEXT_TYPE::Text_Count];
 //unsigned UndergroundScene::m_parameters[U_TOTAL];
@@ -297,10 +298,7 @@ void UndergroundScene::Init()
 
 
 
-	renderUI.Init();
-	wasEscPressed = false;
-	isPause = false;
-	MainMenu.Init();
+	UI::getInstance()->Init();
 
 	camera = new Camera3;
 	camera->Init(Vector3(0, 0, 7), Vector3(0, 0, 0), Vector3(0, 1, 0));
@@ -320,7 +318,6 @@ void UndergroundScene::Update(double dt)
 
 	int width, height;
 	glfwGetWindowSize(Application::m_window, &width, &height);
-	isEscPressed = Application::IsKeyPressed(VK_ESCAPE);
 
 
 	if (Application::IsKeyPressed(VK_NUMPAD1) || Application::IsKeyPressed('1'))
@@ -353,36 +350,9 @@ void UndergroundScene::Update(double dt)
 		fpsonce = true;
 	}
 
+	UI::getInstance()->Update(dt);
 
-
-	if (isEscPressed && !wasEscPressed) // When you press ESC
-	{
-			if (!isPause)
-			{
-				isPause = true;
-				glfwSetInputMode(Application::m_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-				glfwSetCursorPos(Application::m_window, width / 2, height / 2);
-			}
-			else
-			{
-				isPause = false;
-				glfwSetInputMode(Application::m_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-				glfwSetCursorPos(Application::m_window, width / 2, height / 2);
-			}
-
-			wasEscPressed = isEscPressed;
-	}
-
-	if (!isEscPressed && wasEscPressed) // When you release the ESC button
-		wasEscPressed = isEscPressed;
-
-	for (size_t i = 0; i < CampNPC.size(); i++)
-	{
-		CampNPC.at(i)->update(dt);
-	}
-
-
-	if (!isPause)
+	if (!UI::getInstance()->isPauseOpen() && !Inventory::getInstance()->isInventoryOpen())
 	{
 		double c_posx, c_posy;
 		glfwGetCursorPos(Application::m_window, &c_posx, &c_posy);
@@ -394,10 +364,14 @@ void UndergroundScene::Update(double dt)
 		dx = dt * double(width / 2 - c_posx);
 		dy = dt * double(height / 2 - c_posy);
 		camera->Update(dt, dx, dy);
+
+		for (size_t i = 0; i < CampNPC.size(); i++)
+		{
+			CampNPC.at(i)->update(dt);
+		}
 	}
 
 	FramesPerSec = 1 / dt;
-	MainMenu.Update(dt);
 }
 
 void UndergroundScene::Render()
@@ -432,9 +406,7 @@ void UndergroundScene::Render()
 	}
 	RenderBaseCamp();
 
-
-	if (isPause)
-		renderUI.renderPause(&projectionStack, &viewStack, &modelStack, m_parameters);
+	UI::getInstance()->renderPause(&projectionStack, &viewStack, &modelStack, m_parameters);
 
 
 	RenderBaseCamp();

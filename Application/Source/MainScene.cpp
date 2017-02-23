@@ -29,7 +29,6 @@ MS MainScene::modelStack, MainScene::viewStack, MainScene::projectionStack;
 //std::vector<GameObject*> MainScene::Game_Objects_(10, NULL);
 
 //std::vector<GameObject*> MainScene::Game_Objects_(10, NULL);
-UI renderMeshOnScreen;
 std::vector<EnvironmentObj*> MainScene::Env_Obj;
 std::vector<NPC*> MainScene::CampNPC;
 Teleporter* MainScene::MS_Teleporter;
@@ -347,9 +346,7 @@ void MainScene::Init()
 
 
 
-	renderUI.Init();
-	wasEscPressed = false;
-	isPause = false;
+	UI::getInstance()->Init();
 
 	camera = new Camera3;
 	camera->Init(Vector3(0, 0, 7), Vector3(0, 0, 0), Vector3(0, 1, 0));
@@ -370,7 +367,7 @@ void MainScene::Update(double dt)
 
 
 	glfwGetWindowSize(Application::m_window, &width, &height);
-	isEscPressed = Application::IsKeyPressed(VK_ESCAPE);
+
 
 
 	if (Application::IsKeyPressed(VK_NUMPAD1) || Application::IsKeyPressed('1'))
@@ -405,40 +402,13 @@ void MainScene::Update(double dt)
 		fpsonce = true;
 	}
 
-
-
-	if (isEscPressed && !wasEscPressed) // When you press ESC
-	{
-			if (!isPause)
-			{
-				isPause = true;
-				glfwSetInputMode(Application::m_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-				glfwSetCursorPos(Application::m_window, width / 2, height / 2);				
-			}
-			else
-			{
-				isPause = false;
-				glfwSetInputMode(Application::m_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-				glfwSetCursorPos(Application::m_window, width / 2, height / 2);
-			}
-
-			wasEscPressed = isEscPressed;
-	}
-		
-	if (!isEscPressed && wasEscPressed) // When you release the ESC button
-		wasEscPressed = isEscPressed;
-
-
 	Player::getInstance()->update(dt, camera);
 	Inventory::getInstance()->Update(dt);
-
-	for (size_t i = 0; i < CampNPC.size(); i++)
-	{
-		CampNPC.at(i)->update(dt);
-	}
+	UI::getInstance()->Update(dt);
 
 
-	if (!isPause && !Inventory::getInstance()->isInventoryOpen())
+
+	if (!UI::getInstance()->isPauseOpen() && !Inventory::getInstance()->isInventoryOpen())
 	{
 		double c_posx, c_posy;
 		glfwGetCursorPos(Application::m_window, &c_posx, &c_posy);
@@ -450,6 +420,11 @@ void MainScene::Update(double dt)
 		dx = dt * double(width / 2 - c_posx);
 		dy = dt * double(height / 2 - c_posy);
 		camera->Update(dt, dx, dy);
+
+		for (size_t i = 0; i < CampNPC.size(); i++)
+		{
+			CampNPC.at(i)->update(dt);
+		}
 	}
 
 	FramesPerSec = 1 / dt;
@@ -511,8 +486,7 @@ void MainScene::Render()
 	RenderBaseCamp();
 
 
-	if (isPause)
-		renderUI.renderPause(&projectionStack, &viewStack, &modelStack, m_parameters);
+	UI::getInstance()->renderPause(&projectionStack, &viewStack, &modelStack, m_parameters);
 
 	Inventory::getInstance()->Render(&projectionStack, &viewStack, &modelStack, m_parameters);
 	Inventory::getInstance()->renderMessage(&projectionStack, &viewStack, &modelStack, m_parameters);

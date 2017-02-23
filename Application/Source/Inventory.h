@@ -10,6 +10,8 @@ class Inventory
 public:
 	virtual ~Inventory() { ; }
 
+
+
 	// Getter
 	Item* getItem(int i); // Be able to get item from inventory
 
@@ -30,20 +32,26 @@ private:
 	enum GEOMETRY_TYPE
 	{
 		INVENTORY,
-		SLOT1,
-		SLOT2,
-		SLOT3,
-		SLOT4,
-		SLOT5,
-		SLOT6,
-		SLOT7,
-		SLOT8,
-		SLOT9,
+		SLOTS,
+		//SLOT2,
+		//SLOT3,
+		//SLOT4,
+		//SLOT5,
+		//SLOT6,
+		//SLOT7,
+		//SLOT8,
+		//SLOT9,
+		//SLOT10,
+		//SLOT11,
+		//SLOT12,
 
 		NUM_GEOMETRY,
 	};
 
+	static Inventory* Instance_;
 	Mesh* meshList[NUM_GEOMETRY];
+
+	std::vector<Mesh*> Slots;
 
 	Inventory(const std::string& name) : maxStorage(9), isInventoryFull(false), currItem(NULL)
 	{
@@ -56,10 +64,22 @@ private:
 	bool isInventoryFull; // render message if inventory is full
 	Item* currItem;
 
-	bool isIPressed, wasIPressed, isInventory;
 	int width, height;
+	int leftButton;
+	bool isLeftMouseButtonPressed, wasLeftMouseButtonPressed;
+	bool isIPressed, wasIPressed, isInventory;
 
-	static Inventory* Instance_;
+	int x, y;
+	int slotPosition;
+
+	Vector3 min, max, pos;
+	double cur_x, cur_y;
 };
+
+//struct InventorySlot
+//{
+//	Vector3 position; // to store the position of the slots
+//	Item* item_; // to store the item onto the slot
+//};
 
 #endif
