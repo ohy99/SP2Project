@@ -173,8 +173,8 @@ void MainScene::Init()
 	meshList[GEO_GroundMesh_RedDirt]->textureID = LoadTGA("Image//GroundMesh_RedDirt_Texture.tga");
 	//Ground Mesh ---- Red Dirt ----------------- End
 
-
-
+	meshList[test] = MeshBuilder::GenerateQuad("Test", Color(1, 1, 1), 1, 1);
+	meshList[test]->textureID = LoadTGA("Image//inventory.tga");
 
 	//Skybox ------------ Base Camp Start
 	//Left Skybox 
@@ -488,7 +488,7 @@ void MainScene::Render()
 
 	UI::getInstance()->renderPause(&projectionStack, &viewStack, &modelStack, m_parameters);
 
-	Inventory::getInstance()->Render(&projectionStack, &viewStack, &modelStack, m_parameters);
+	Inventory::getInstance()->Render(&projectionStack, &viewStack, &modelStack, m_parameters, meshList[test]);
 	Inventory::getInstance()->renderMessage(&projectionStack, &viewStack, &modelStack, m_parameters);
 
 	RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::to_string(FramesPerSec), Color(1, 0, 0), 1.5f, 45, 38, &projectionStack, &viewStack, &modelStack, m_parameters);

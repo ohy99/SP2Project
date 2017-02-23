@@ -22,7 +22,7 @@ public:
 
 	void Init();
 	void Update(double dt);
-	void Render(MS* projectionStack, MS* viewStack, MS* modelStack, unsigned * m_parameters); // use to render Inventory onto the screen
+	void Render(MS* projectionStack, MS* viewStack, MS* modelStack, unsigned * m_parameters, Mesh* itemTexture); // use to render Inventory onto the screen
 	void renderMessage(MS* projectionStack, MS* viewStack, MS* modelStack, unsigned * m_parameters); // Message to tell player that inventory is full
 
 	bool isInventoryOpen();
@@ -33,17 +33,6 @@ private:
 	{
 		INVENTORY,
 		SLOTS,
-		//SLOT2,
-		//SLOT3,
-		//SLOT4,
-		//SLOT5,
-		//SLOT6,
-		//SLOT7,
-		//SLOT8,
-		//SLOT9,
-		//SLOT10,
-		//SLOT11,
-		//SLOT12,
 
 		NUM_GEOMETRY,
 	};

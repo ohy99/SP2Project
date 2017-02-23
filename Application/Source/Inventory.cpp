@@ -129,7 +129,7 @@ void Inventory::renderMessage(MS* projectionStack, MS* viewStack, MS* modelStack
 		RenderMeshClass::RenderTextOnScreen(&Scene::Text[Scene::TEXT_TYPE::Century], "Your inventory is full", Color(1.f, 1.f, 1.f), 10, 10, 26, projectionStack, viewStack, modelStack, m_parameters);
 }
 
-void Inventory::Render(MS* projectionStack, MS* viewStack, MS* modelStack, unsigned * m_parameters)
+void Inventory::Render(MS* projectionStack, MS* viewStack, MS* modelStack, unsigned * m_parameters, Mesh* itemTexture)
 {
 	if (isInventory)
 	{
@@ -137,6 +137,7 @@ void Inventory::Render(MS* projectionStack, MS* viewStack, MS* modelStack, unsig
 
 		for (size_t i = 0; i < Inventory_.size(); i++)
 		{
+			//meshList[SLOTS] = itemTexture;
 			RenderMeshClass::RenderMeshOnScreen(meshList[SLOTS], Inventory_[i].x, Inventory_[i].y, Inventory_[i].z, 100, 100, projectionStack, viewStack, modelStack, m_parameters);
 		}
 	}

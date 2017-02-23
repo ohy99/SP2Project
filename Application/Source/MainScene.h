@@ -42,6 +42,8 @@ class MainScene : public Scene
 		GEO_Barrack,
 		GEO_Crates1,
 
+		test,
+
 		GEO_LEFT,
 		GEO_RIGHT,
 		GEO_TOP,
