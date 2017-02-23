@@ -36,7 +36,7 @@ class UndergroundScene : public Scene
 		GEO_LIGHTBALL,
 		GEO_LIGHTBALL1,
 		GEO_MOSSY_GROUND,
-
+		GEO_STAIRS,
 
 
 
@@ -62,6 +62,8 @@ public:
 
 	static MS modelStack, viewStack, projectionStack;
 
+	static Teleporter* Stairs;
+
 private:
 	unsigned m_vertexArrayID;
 	Mesh* meshList[NUM_GEOMETRY];
@@ -78,7 +80,7 @@ private:
 	Light light[8];
 
 	static std::vector<EnvironmentObj*> Env_Obj;
-	static std::vector<NPC*> CampNPC;
+	//static std::vector<NPC*> CampNPC;
 	//std::vector
 
 	bool isPause;
