@@ -92,6 +92,7 @@ private:
 	void Interactions();
 
 	double x, y;
+	int counter_text;
 	//void RenderText(Text_Data* TextData, std::string text, Color color);
 	//void RenderTextOnScreen(Text_Data* TextData, std::string text, Color color, float size, float x, float y);
 	//void RenderMeshOnScreen(Mesh* mesh, int x, int y, int sizex, int sizey);

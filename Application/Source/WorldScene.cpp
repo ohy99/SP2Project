@@ -397,13 +397,15 @@ void WorldScene::Init()
 	Tablet->CollisionMesh_->textureID = LoadTGA("Image//WorldScene//InteractableItem_OffTablet_UV_Texture.tga");
 	EnvironmentObj* Robot = new EnvironmentObj(MeshBuilder::GenerateOBJ("Robot", "OBJ//WorldScene//BrokenRobot_OBJ.obj"));
 	Robot->CollisionMesh_->textureID = LoadTGA("Image//WorldScene//InteractableItem_BrokenRobot_UV_Texture.tga");
-	EnvironmentObj* Recorder = new EnvironmentObj(MeshBuilder::GenerateOBJ("Recorder", "OBJ//WorldScene//Recorder_OBJ.obj"));
-	Recorder->CollisionMesh_->textureID = LoadTGA("Image//WorldScene//InteractableItem_Recorder_UV_Texture.tga");
+	EnvironmentObj* Hard_disk = new EnvironmentObj(MeshBuilder::GenerateOBJ("Hard Disk", "OBJ//WorldScene//Harddisk_OBJ.obj"));
+	Hard_disk->CollisionMesh_->textureID = LoadTGA("Image//WorldScene//InteractableItem_Harddisk_UV_Texture.tga");
+	EnvironmentObj* BrokenGuard = new EnvironmentObj(MeshBuilder::GenerateOBJ("Broken Guard", "OBJ//WorldScene//DestroyedGuard.obj"));
 
 
 	Env_Obj.push_back(Tablet);
 	Env_Obj.push_back(Robot);
-	Env_Obj.push_back(Recorder);
+	Env_Obj.push_back(Hard_disk);
+	Env_Obj.push_back(BrokenGuard);
 	//Interactable Items ----------------------------------------------- END
 
 
@@ -456,6 +458,8 @@ void WorldScene::Init()
 
 	// Hide the mouse and enable unlimited mouvement
 	glfwSetInputMode(Application::m_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+
+	counter_text = 0;
 }
 
 void WorldScene::Update(double dt)
@@ -629,6 +633,7 @@ void WorldScene::Render()
 
 void WorldScene::Interactions(){
 
+	//Teleporter to Camp base -- Main Scene
 	if (Player::getInstance()->getPlayerPosition().x >= 92 && Player::getInstance()->getPlayerPosition().x <= 97 && Player::getInstance()->getPlayerPosition().z <= -8 && Player::getInstance()->getPlayerPosition().z >= -15){
 
 		RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("[Press SPACE to teleport to Camp Base.]"), Color(1, 0, 0), 2.f, 28, 30, &projectionStack, &viewStack, &modelStack, m_parameters);
@@ -645,6 +650,7 @@ void WorldScene::Interactions(){
 
 	}
 
+	//Door to Underground Scene
 	if (Player::getInstance()->getPlayerPosition().x >= -88 && Player::getInstance()->getPlayerPosition().x <= -86 && Player::getInstance()->getPlayerPosition().z <= -68 && Player::getInstance()->getPlayerPosition().z >= -70)
 	{
 		RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("[Press SPACE to enter]"), Color(1, 0, 0), 2.f, 28, 30, &projectionStack, &viewStack, &modelStack, m_parameters);
@@ -659,6 +665,15 @@ void WorldScene::Interactions(){
 			Player::getInstance()->setPosition(Vector3(-36.0, 0.0, 30.0));
 		}
 	}
+
+	//Tablet -- For 2nd Hint, true hint.
+	if (Player::getInstance()->getPlayerPosition().x >= -59 && Player::getInstance()->getPlayerPosition().x <= -58 && Player::getInstance()->getPlayerPosition().z <= 39 && Player::getInstance()->getPlayerPosition().z >= 36){
+
+		RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("[Press SPACE to scan.]"), Color(1, 0, 0), 2.f, 30, 30, &projectionStack, &viewStack, &modelStack, m_parameters);
+		
+	}
+			//RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("*Extracting data…*"), Color(1, 0, 0), 2.f, 28, 30, &projectionStack, &viewStack, &modelStack, m_parameters);
+			//RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("*Discovered: This tablet holds information of a machine that can apparently help to rejuvenate the Earth.There are apparently three parts to the blueprints required to make this device.One of the locations is recorded in this device.New coordinates found.*"), Color(1, 0, 0), 2.f, 16, 30, &projectionStack, &viewStack, &modelStack, m_parameters);
 }
 
 void WorldScene::Exit()
