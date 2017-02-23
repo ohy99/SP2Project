@@ -75,7 +75,6 @@ private:
 	Camera *camera;
 
 	void RenderSkybox();
-	void RenderBaseCamp();
 
 	Light light[8];
 
@@ -88,6 +87,8 @@ private:
 
 	MainScreen MainMenu;
 	UI renderUI;
+
+	void Interactions();
 
 	double x, y;
 	//void RenderText(Text_Data* TextData, std::string text, Color color);

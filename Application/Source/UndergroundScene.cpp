@@ -251,7 +251,7 @@ void UndergroundScene::Init()
 
 	//Ceiling --- Start
 
-	EnvironmentObj* Ceiling = new EnvironmentObj(MeshBuilder::GenerateOBJ("Wall", "OBJ//Ceiling.obj"));
+	EnvironmentObj* Ceiling = new EnvironmentObj(MeshBuilder::GenerateOBJ("Ceiling", "OBJ//Ceiling.obj"));
 	Ceiling->CollisionMesh_->textureID = LoadTGA("Image//Mossy_Ceiling.tga");
 
 	Env_Obj.push_back(Ceiling);
@@ -259,17 +259,21 @@ void UndergroundScene::Init()
 	//Ceiling --- End
 
 	//Stairs --- Start
-	Stairs = new Teleporter(MeshBuilder::GenerateOBJ("Stairs", "OBJ//Stairs.obj"), 1);
-	Stairs->CollisionMesh_->textureID = LoadTGA("Image//Mossy_Ground.tga");
+	EnvironmentObj* Stairs = new EnvironmentObj(MeshBuilder::GenerateOBJ("Stairs", "OBJ//Stairs.obj"));
+	Stairs->CollisionMesh_->textureID = LoadTGA("Image//Mossy_Wall.tga");
 
-	meshList[GEO_STAIRS] = MeshBuilder::GenerateOBJ("Stairs", "OBJ//Stairs.obj");
-	meshList[GEO_STAIRS]->material.kAmbient.Set(0.6f, 0.6f, 0.6f);
-	meshList[GEO_STAIRS]->material.kDiffuse.Set(0.3f, 0.3f, 0.3f);
-	meshList[GEO_STAIRS]->material.kSpecular.Set(0.1f, 0.1f, 0.1f);
-	meshList[GEO_STAIRS]->material.kShininess = 1.0f;
-	meshList[GEO_STAIRS]->textureID = LoadTGA("Image//Mossy_Ground.tga");
+	Env_Obj.push_back(Stairs);
+	//Stairs = new Teleporter(MeshBuilder::GenerateOBJ("Stairs", "OBJ//Stairs.obj"), 1);
+	//Stairs->CollisionMesh_->textureID = LoadTGA("Image//Mossy_Ground.tga");
 
-	Player::getInstance()->Teleport.push_back(Stairs);
+	//meshList[GEO_STAIRS] = MeshBuilder::GenerateOBJ("Stairs", "OBJ//Stairs.obj");
+	//meshList[GEO_STAIRS]->material.kAmbient.Set(0.6f, 0.6f, 0.6f);
+	//meshList[GEO_STAIRS]->material.kDiffuse.Set(0.3f, 0.3f, 0.3f);
+	//meshList[GEO_STAIRS]->material.kSpecular.Set(0.1f, 0.1f, 0.1f);
+	//meshList[GEO_STAIRS]->material.kShininess = 1.0f;
+	//meshList[GEO_STAIRS]->textureID = LoadTGA("Image//Mossy_Ground.tga");
+
+	//Player::getInstance()->Teleport.push_back(Stairs);
 	//Stairs --- End
 
 	//Furniture ------ Start
@@ -306,7 +310,7 @@ void UndergroundScene::Init()
 	renderUI.Init();
 	wasEscPressed = false;
 	isPause = false;
-	MainMenu.Init();
+	//MainMenu.Init();
 
 	camera = new Camera3;
 	camera->Init(Vector3(0, 0, 7), Vector3(0, 0, 0), Vector3(0, 1, 0));
@@ -346,11 +350,11 @@ void UndergroundScene::Update(double dt)
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); //wireframe mode
 	}
 
-	if (Application::IsKeyPressed('1'))
-	{
-		SceneManager::getInstance()->SetNextSceneID(0);
-		SceneManager::getInstance()->SetNextScene();
-	}
+	//if (Application::IsKeyPressed('1'))
+	//{
+	//	SceneManager::getInstance()->SetNextSceneID(0);
+	//	SceneManager::getInstance()->SetNextScene();
+	//}
 
 	bool fpsonce = false;
 	if (Application::IsKeyPressed('V') && fpsonce == false)
@@ -363,8 +367,8 @@ void UndergroundScene::Update(double dt)
 
 	if (isEscPressed && !wasEscPressed) // When you press ESC
 	{
-		if (!MainMenu.isMainMenu)
-		{
+		//if (!MainMenu.isMainMenu)
+		//{
 			if (!isPause)
 			{
 				isPause = true;
@@ -379,7 +383,7 @@ void UndergroundScene::Update(double dt)
 			}
 
 			wasEscPressed = isEscPressed;
-		}
+		//}
 	}
 
 	if (!isEscPressed && wasEscPressed) // When you release the ESC button
@@ -393,7 +397,7 @@ void UndergroundScene::Update(double dt)
 	//}
 
 
-	if (!isPause && !MainMenu.isMainMenu)
+	if (!isPause/* && !MainMenu.isMainMenu*/)
 	{
 		double c_posx, c_posy;
 		glfwGetCursorPos(Application::m_window, &c_posx, &c_posy);
@@ -408,7 +412,7 @@ void UndergroundScene::Update(double dt)
 	}
 
 	FramesPerSec = 1 / dt;
-	MainMenu.Update(dt);
+	//MainMenu.Update(dt);
 }
 
 void UndergroundScene::Render()
@@ -441,56 +445,48 @@ void UndergroundScene::Render()
 		RenderMeshClass::RenderMesh(meshList[GEO_MOSSY_GROUND], true, &projectionStack, &viewStack, &modelStack, m_parameters);
 		modelStack.PopMatrix();
 
-
-
 		//for (size_t i = 0; i < CampNPC.size(); i++)
 		//{
 		//	CampNPC.at(i)->render(&projectionStack, &viewStack, &modelStack, m_parameters);
 		//}
-		RenderBaseCamp();
-
-
-		if (isPause)
-			renderUI.renderPause(&projectionStack, &viewStack, &modelStack, m_parameters);
-
-
-		RenderBaseCamp();
-		RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::to_string(FramesPerSec), Color(1, 0, 0), 1.5f, 45, 38, &projectionStack, &viewStack, &modelStack, m_parameters);
-	//}
-
-}
-
-void UndergroundScene::RenderBaseCamp(){
 
 	for (size_t i = 0; i < Env_Obj.size(); i++)
 	{
 		modelStack.PushMatrix();
 		RenderMeshClass::RenderMesh(Env_Obj.at(i)->CollisionMesh_, true, &projectionStack, &viewStack, &modelStack, m_parameters);
 		modelStack.PopMatrix();
-
 	}
 
-
-	////Crates
 	//modelStack.PushMatrix();
-	//RenderMeshClass::RenderMesh(meshList[GEO_Crates], true, &projectionStack, &viewStack, &modelStack, m_parameters);
-	//RenderMeshClass::RenderMesh(meshList[GEO_Crates1], true, &projectionStack, &viewStack, &modelStack, m_parameters);
-	//modelStack.PopMatrix();
-
-	////Solar panels
+	//RenderMeshClass::RenderMesh(meshList[GEO_STAIRS], true, &projectionStack, &viewStack, &modelStack, m_parameters);
 	//modelStack.PushMatrix();
-	//RenderMeshClass::RenderMesh(meshList[GEO_SolarPanel], true, &projectionStack, &viewStack, &modelStack, m_parameters);
-	//RenderMeshClass::RenderMesh(meshList[GEO_SolarPanel1], true, &projectionStack, &viewStack, &modelStack, m_parameters);
-	//modelStack.PopMatrix();
 
-	//Powerbox
-	//modelStack.PushMatrix();
-	//RenderMeshClass::RenderMesh(meshList[GEO_PowerBox], true, &projectionStack, &viewStack, &modelStack, m_parameters);
-	//modelStack.PopMatrix();
+	Interactions();
 
-	modelStack.PushMatrix();
-	RenderMeshClass::RenderMesh(meshList[GEO_STAIRS], true, &projectionStack, &viewStack, &modelStack, m_parameters);
-	modelStack.PushMatrix();
+	if (isPause)
+		renderUI.renderPause(&projectionStack, &viewStack, &modelStack, m_parameters);
+
+	RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::to_string(FramesPerSec), Color(1, 0, 0), 1.5f, 45, 38, &projectionStack, &viewStack, &modelStack, m_parameters);
+	//}
+}
+
+void UndergroundScene::Interactions(){
+	
+	if (Player::getInstance()->getPlayerPosition().x >= -39 && Player::getInstance()->getPlayerPosition().x <= -33 && Player::getInstance()->getPlayerPosition().z <= 33 && Player::getInstance()->getPlayerPosition().z >= 26)
+	{
+		RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("[Press [Space] to exit.]"), Color(1, 0, 0), 2.f, 35, 24, &projectionStack, &viewStack, &modelStack, m_parameters);
+	}
+
+	if (Application::IsKeyPressed(VK_SPACE))
+	{ 
+		if (Player::getInstance()->getPlayerPosition().x >= -39 && Player::getInstance()->getPlayerPosition().x <= -33 && Player::getInstance()->getPlayerPosition().z <= 33 && Player::getInstance()->getPlayerPosition().z >= 26)
+		{
+			SceneManager::getInstance()->SetNextSceneID(1);
+			SceneManager::getInstance()->SetNextScene();
+
+			Player::getInstance()->setPosition(Vector3(-87.0, 0.0, -69.0));
+		}
+	}
 
 }
 
@@ -501,7 +497,7 @@ void UndergroundScene::Exit()
 		if (meshList[i] != NULL)
 			delete meshList[i];
 	}
-	delete camera;
+	//delete camera;
 	Player::getInstance()->clearCollisionObj();
 
 	// Cleanup VBO here
