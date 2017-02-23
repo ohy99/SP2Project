@@ -356,9 +356,26 @@ void WorldScene::Init()
 	meshList[GEO_Teleporter] = MeshBuilder::GenerateOBJ("Teleporter", "OBJ//WorldScene//Teleporter_OBJ.obj");
 	meshList[GEO_Teleporter]->textureID = LoadTGA("Image//WorldScene//InteractableItem_Teleporter_UV_Texture.tga");
 
-	//Env_Obj.push_back(Teleporter);
+	Env_Obj.push_back(WS_Teleporter);
 	Player::getInstance()->Teleport.push_back(WS_Teleporter);
 	//Teleporter -------------------------------------------- END
+
+
+
+
+	//Interactable Items ----------------------------------------------- START
+	EnvironmentObj* Tablet = new EnvironmentObj(MeshBuilder::GenerateOBJ("Tablet", "OBJ//WorldScene//Tablet_OBJ.obj"));
+	Tablet->CollisionMesh_->textureID = LoadTGA("Image//WorldScene//InteractableItem_OffTablet_UV_Texture.tga");
+	EnvironmentObj* Robot = new EnvironmentObj(MeshBuilder::GenerateOBJ("Robot", "OBJ//WorldScene//BrokenRobot_OBJ.obj"));
+	Robot->CollisionMesh_->textureID = LoadTGA("Image//WorldScene//InteractableItem_BrokenRobot_UV_Texture.tga");
+	EnvironmentObj* Recorder = new EnvironmentObj(MeshBuilder::GenerateOBJ("Recorder", "OBJ//WorldScene//Recorder_OBJ.obj"));
+	Recorder->CollisionMesh_->textureID = LoadTGA("Image//WorldScene//InteractableItem_Recorder_UV_Texture.tga");
+
+
+	Env_Obj.push_back(Tablet);
+	Env_Obj.push_back(Robot);
+	Env_Obj.push_back(Recorder);
+	//Interactable Items ----------------------------------------------- END
 
 
 
