@@ -92,7 +92,11 @@ private:
 	void Interactions();
 
 	double x, y;
-	int counter_text;
+
+	int counter_text_tablet = 0;
+	int counter_text_robot = 0;
+	int counter_text_oil = 0;
+
 	//void RenderText(Text_Data* TextData, std::string text, Color color);
 	//void RenderTextOnScreen(Text_Data* TextData, std::string text, Color color, float size, float x, float y);
 	//void RenderMeshOnScreen(Mesh* mesh, int x, int y, int sizex, int sizey);
