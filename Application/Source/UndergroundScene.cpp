@@ -308,14 +308,8 @@ void UndergroundScene::Init()
 
 
 
-<<<<<<< HEAD
 	UI::getInstance()->Init();
-=======
-	renderUI.Init();
-	wasEscPressed = false;
-	isPause = false;
-	//MainMenu.Init();
->>>>>>> 71ce569d045d102c8a0d4bd9467d6ff2d8dea4a4
+
 
 	camera = new Camera3;
 	camera->Init(Vector3(0, 0, 7), Vector3(0, 0, 0), Vector3(0, 1, 0));
@@ -369,67 +363,29 @@ void UndergroundScene::Update(double dt)
 
 	UI::getInstance()->Update(dt);
 
-<<<<<<< HEAD
+
 	if (!UI::getInstance()->isPauseOpen() && !Inventory::getInstance()->isInventoryOpen())
-=======
-
-	if (isEscPressed && !wasEscPressed) // When you press ESC
 	{
-		//if (!MainMenu.isMainMenu)
-		//{
-			if (!isPause)
-			{
-				isPause = true;
-				glfwSetInputMode(Application::m_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-				glfwSetCursorPos(Application::m_window, width / 2, height / 2);
-			}
-			else
-			{
-				isPause = false;
-				glfwSetInputMode(Application::m_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-				glfwSetCursorPos(Application::m_window, width / 2, height / 2);
-			}
 
-			wasEscPressed = isEscPressed;
-		//}
-	}
-
-	if (!isEscPressed && wasEscPressed) // When you release the ESC button
-		wasEscPressed = isEscPressed;
-
-	Player::getInstance()->update(dt, camera);
-
-	//for (size_t i = 0; i < CampNPC.size(); i++)
-	//{
-	//	CampNPC.at(i)->update(dt);
-	//}
-
-
-	if (!isPause/* && !MainMenu.isMainMenu*/)
->>>>>>> 71ce569d045d102c8a0d4bd9467d6ff2d8dea4a4
-	{
 		double c_posx, c_posy;
 		glfwGetCursorPos(Application::m_window, &c_posx, &c_posy);
 		glfwSetCursorPos(Application::m_window, width / 2, height / 2);
 
 		glfwSetInputMode(Application::m_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+		Player::getInstance()->update(dt, camera);
 
 		double dx, dy;
 		dx = dt * double(width / 2 - c_posx);
 		dy = dt * double(height / 2 - c_posy);
 		camera->Update(dt, dx, dy);
 
-		for (size_t i = 0; i < CampNPC.size(); i++)
-		{
-			CampNPC.at(i)->update(dt);
-		}
+		//for (size_t i = 0; i < CampNPC.size(); i++)
+		//{
+		//	CampNPC.at(i)->update(dt);
+		//}
 	}
 
 	FramesPerSec = 1 / dt;
-<<<<<<< HEAD
-=======
-	//MainMenu.Update(dt);
->>>>>>> 71ce569d045d102c8a0d4bd9467d6ff2d8dea4a4
 }
 
 void UndergroundScene::Render()
@@ -444,7 +400,6 @@ void UndergroundScene::Render()
 		camera->getUp().x, camera->getUp().y, camera->getUp().z);
 	modelStack.LoadIdentity();
 
-<<<<<<< HEAD
 	RenderMeshClass::RenderMesh(meshList[GEO_AXES], false, &projectionStack, &viewStack, &modelStack, m_parameters);
 	Player::getInstance()->render(&projectionStack, &viewStack, &modelStack, m_parameters);
 
@@ -459,64 +414,16 @@ void UndergroundScene::Render()
 	modelStack.PopMatrix();
 
 
-	for (size_t i = 0; i < CampNPC.size(); i++)
-	{
-		CampNPC.at(i)->render(&projectionStack, &viewStack, &modelStack, m_parameters);
-	}
-	RenderBaseCamp();
+	//for (size_t i = 0; i < CampNPC.size(); i++)
+	//{
+	//	CampNPC.at(i)->render(&projectionStack, &viewStack, &modelStack, m_parameters);
+	//}
 
 	UI::getInstance()->renderPause(&projectionStack, &viewStack, &modelStack, m_parameters);
 
-
-	RenderBaseCamp();
 	RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::to_string(FramesPerSec), Color(1, 0, 0), 1.5f, 45, 38, &projectionStack, &viewStack, &modelStack, m_parameters);
 }
 
-void UndergroundScene::RenderBaseCamp(){
-=======
-	//if (MainMenu.isMainMenu)
-	//	MainMenu.Render();
-
-	//else
-	//{
-		RenderMeshClass::RenderMesh(meshList[GEO_AXES], false, &projectionStack, &viewStack, &modelStack, m_parameters);
-		Player::getInstance()->render(&projectionStack, &viewStack, &modelStack, m_parameters);
-
-		RenderSkybox();
-		//	renderEnvironment();
-
-		//Ground Mesh
-		modelStack.PushMatrix();
-		modelStack.Scale(1000, 1000, 1000);
-		modelStack.Rotate(90, -1, 0, 0);
-		RenderMeshClass::RenderMesh(meshList[GEO_MOSSY_GROUND], true, &projectionStack, &viewStack, &modelStack, m_parameters);
-		modelStack.PopMatrix();
-
-		//for (size_t i = 0; i < CampNPC.size(); i++)
-		//{
-		//	CampNPC.at(i)->render(&projectionStack, &viewStack, &modelStack, m_parameters);
-		//}
->>>>>>> 71ce569d045d102c8a0d4bd9467d6ff2d8dea4a4
-
-	for (size_t i = 0; i < Env_Obj.size(); i++)
-	{
-		modelStack.PushMatrix();
-		RenderMeshClass::RenderMesh(Env_Obj.at(i)->CollisionMesh_, true, &projectionStack, &viewStack, &modelStack, m_parameters);
-		modelStack.PopMatrix();
-	}
-
-	//modelStack.PushMatrix();
-	//RenderMeshClass::RenderMesh(meshList[GEO_STAIRS], true, &projectionStack, &viewStack, &modelStack, m_parameters);
-	//modelStack.PushMatrix();
-
-	Interactions();
-
-	if (isPause)
-		renderUI.renderPause(&projectionStack, &viewStack, &modelStack, m_parameters);
-
-	RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::to_string(FramesPerSec), Color(1, 0, 0), 1.5f, 45, 38, &projectionStack, &viewStack, &modelStack, m_parameters);
-	//}
-}
 
 void UndergroundScene::Interactions(){
 	

@@ -82,17 +82,8 @@ private:
 	//static std::vector<NPC*> CampNPC;
 	//std::vector
 
-<<<<<<< HEAD
-=======
-	bool isPause;
-	bool isEscPressed, wasEscPressed;
-
-	MainScreen MainMenu;
-	UI renderUI;
-
 	void Interactions();
 
->>>>>>> 71ce569d045d102c8a0d4bd9467d6ff2d8dea4a4
 	double x, y;
 	//void RenderText(Text_Data* TextData, std::string text, Color color);
 	//void RenderTextOnScreen(Text_Data* TextData, std::string text, Color color, float size, float x, float y);

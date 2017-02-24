@@ -355,21 +355,12 @@ void MainScene::Init()
 	//Powerbox ----------------------------------- END
 
 
-
-
 	for (auto it : Env_Obj)
 		Player::addCollisionObject(it);
 
 
-
-<<<<<<< HEAD
 	UI::getInstance()->Init();
-=======
-	renderUI.Init();
-	wasEscPressed = false;
-	isPause = false;
-	//MainMenu.Init();
->>>>>>> 71ce569d045d102c8a0d4bd9467d6ff2d8dea4a4
+
 
 	camera = new Camera3;
 	camera->Init(Vector3(0, 0, 7), Vector3(0, 0, 0), Vector3(0, 1, 0));
@@ -425,46 +416,14 @@ void MainScene::Update(double dt)
 		fpsonce = true;
 	}
 
-<<<<<<< HEAD
-=======
-
-
-	if (isEscPressed && !wasEscPressed) // When you press ESC
-	{
-		//if (!MainMenu.isMainMenu)
-		//{
-			if (!isPause)
-			{
-				isPause = true;
-				glfwSetInputMode(Application::m_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-				glfwSetCursorPos(Application::m_window, width / 2, height / 2);				
-			}
-			else
-			{
-				isPause = false;
-				glfwSetInputMode(Application::m_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-				glfwSetCursorPos(Application::m_window, width / 2, height / 2);
-			}
-
-			wasEscPressed = isEscPressed;
-		//}
-	}
-		
-	if (!isEscPressed && wasEscPressed) // When you release the ESC button
-		wasEscPressed = isEscPressed;
-
->>>>>>> 71ce569d045d102c8a0d4bd9467d6ff2d8dea4a4
 	Player::getInstance()->update(dt, camera);
 	Inventory::getInstance()->Update(dt);
 	UI::getInstance()->Update(dt);
 
 
 
-<<<<<<< HEAD
+
 	if (!UI::getInstance()->isPauseOpen() && !Inventory::getInstance()->isInventoryOpen())
-=======
-	if (!isPause/* && !MainMenu.isMainMenu*/)
->>>>>>> 71ce569d045d102c8a0d4bd9467d6ff2d8dea4a4
 	{
 		double c_posx, c_posy;
 		glfwGetCursorPos(Application::m_window, &c_posx, &c_posy);
@@ -484,10 +443,6 @@ void MainScene::Update(double dt)
 	}
 
 	FramesPerSec = 1 / dt;
-<<<<<<< HEAD
-=======
-	//MainMenu.Update(dt);
->>>>>>> 71ce569d045d102c8a0d4bd9467d6ff2d8dea4a4
 
 
 	//if (Application::IsKeyPressed('5'))
@@ -526,21 +481,15 @@ void MainScene::Render()
 		camera->getUp().x, camera->getUp().y, camera->getUp().z);
 	modelStack.LoadIdentity();
 
-<<<<<<< HEAD
+
 	RenderMeshClass::RenderMesh(meshList[GEO_AXES], false, &projectionStack, &viewStack, &modelStack, m_parameters);
 	Player::getInstance()->render(&projectionStack, &viewStack, &modelStack, m_parameters);
-=======
-	//if (MainMenu.isMainMenu)
-	//	MainMenu.Render();
 
-	//else
-	//{
 		RenderMeshClass::RenderMesh(meshList[GEO_AXES], false, &projectionStack, &viewStack, &modelStack, m_parameters);
 		Player::getInstance()->render(&projectionStack, &viewStack, &modelStack, m_parameters);
 
 		RenderSkybox();
 		//	renderEnvironment();
->>>>>>> 71ce569d045d102c8a0d4bd9467d6ff2d8dea4a4
 
 	RenderSkybox();
 	//	renderEnvironment();
@@ -552,15 +501,13 @@ void MainScene::Render()
 	RenderMeshClass::RenderMesh(meshList[GEO_GroundMesh_RedDirt], true, &projectionStack, &viewStack, &modelStack, m_parameters);
 	modelStack.PopMatrix();
 
-<<<<<<< HEAD
-
 
 	for (size_t i = 0; i < CampNPC.size(); i++)
 	{
 		CampNPC.at(i)->render(&projectionStack, &viewStack, &modelStack, m_parameters);
 	}
 	RenderBaseCamp();
-=======
+
 		for (size_t i = 0; i < CampNPC.size(); i++)
 		{
 			CampNPC.at(i)->render(&projectionStack, &viewStack, &modelStack, m_parameters);
@@ -569,17 +516,13 @@ void MainScene::Render()
 
 		Interactions();
 
->>>>>>> 71ce569d045d102c8a0d4bd9467d6ff2d8dea4a4
+
 
 
 	UI::getInstance()->renderPause(&projectionStack, &viewStack, &modelStack, m_parameters);
 
-<<<<<<< HEAD
+
 	Inventory::getInstance()->Render(&projectionStack, &viewStack, &modelStack, m_parameters);
-=======
-		RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::to_string(FramesPerSec), Color(1, 0, 0), 1.5f, 45, 38, &projectionStack, &viewStack, &modelStack, m_parameters);
-	//}
->>>>>>> 71ce569d045d102c8a0d4bd9467d6ff2d8dea4a4
 
 	RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::to_string(FramesPerSec), Color(1, 0, 0), 1.5f, 45, 38, &projectionStack, &viewStack, &modelStack, m_parameters);
 }
