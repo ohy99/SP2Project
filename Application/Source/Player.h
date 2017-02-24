@@ -68,14 +68,14 @@ public:
 	static std::vector<EnemyAI*> enemies_;
 	static Player* getInstance();
 	void setPosition(Vector3& pos);
+	Vector3 getPlayerPosition() { return pos_; }
 
 	void update(double dt, Camera* cam);
 	void render(MS* projectionStack, MS* viewStack, MS* modelStack, unsigned * m_parameters);
 	void getPointedObj(Camera* cam);
 
 	void isHitUpdate(int dmg);
-
-
+	
 	Mesh* getCollisionMesh() { return PMesh[MESH_TYPE::Body]; };
 	inline int getHp() { return hp_; }
 	void PlayerMovement(double dt);
@@ -99,6 +99,7 @@ public:
 
 	//bool isDead();
 	//~Player();
+
 
 	void MeleeAttack(double dt);
 	void RangedAttack(double dt);

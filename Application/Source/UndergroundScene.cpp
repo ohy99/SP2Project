@@ -30,7 +30,8 @@ MS UndergroundScene::modelStack, UndergroundScene::viewStack, UndergroundScene::
 //std::vector<GameObject*> UndergroundScene::Game_Objects_(10, NULL);
 //UI renderMeshOnScreen;
 std::vector<EnvironmentObj*> UndergroundScene::Env_Obj;
-std::vector<NPC*> UndergroundScene::CampNPC;
+Teleporter* UndergroundScene::Stairs;
+//std::vector<NPC*> UndergroundScene::CampNPC;
 
 
 
@@ -251,7 +252,7 @@ void UndergroundScene::Init()
 
 	//Ceiling --- Start
 
-	EnvironmentObj* Ceiling = new EnvironmentObj(MeshBuilder::GenerateOBJ("Wall", "OBJ//Ceiling.obj"));
+	EnvironmentObj* Ceiling = new EnvironmentObj(MeshBuilder::GenerateOBJ("Ceiling", "OBJ//Ceiling.obj"));
 	Ceiling->CollisionMesh_->textureID = LoadTGA("Image//Mossy_Ceiling.tga");
 
 	Env_Obj.push_back(Ceiling);
@@ -259,13 +260,22 @@ void UndergroundScene::Init()
 	//Ceiling --- End
 
 	//Stairs --- Start
-
-	EnvironmentObj* Stairs = new EnvironmentObj(MeshBuilder::GenerateOBJ("Wall", "OBJ//Stairs.obj"));
-	Stairs->CollisionMesh_->textureID = LoadTGA("Image//Mossy_Ground.tga");
+	EnvironmentObj* Stairs = new EnvironmentObj(MeshBuilder::GenerateOBJ("Stairs", "OBJ//Stairs.obj"));
+	Stairs->CollisionMesh_->textureID = LoadTGA("Image//Mossy_Wall.tga");
 
 	Env_Obj.push_back(Stairs);
+	//Stairs = new Teleporter(MeshBuilder::GenerateOBJ("Stairs", "OBJ//Stairs.obj"), 1);
+	//Stairs->CollisionMesh_->textureID = LoadTGA("Image//Mossy_Ground.tga");
 
-	//Stairs --- Start
+	//meshList[GEO_STAIRS] = MeshBuilder::GenerateOBJ("Stairs", "OBJ//Stairs.obj");
+	//meshList[GEO_STAIRS]->material.kAmbient.Set(0.6f, 0.6f, 0.6f);
+	//meshList[GEO_STAIRS]->material.kDiffuse.Set(0.3f, 0.3f, 0.3f);
+	//meshList[GEO_STAIRS]->material.kSpecular.Set(0.1f, 0.1f, 0.1f);
+	//meshList[GEO_STAIRS]->material.kShininess = 1.0f;
+	//meshList[GEO_STAIRS]->textureID = LoadTGA("Image//Mossy_Ground.tga");
+
+	//Player::getInstance()->Teleport.push_back(Stairs);
+	//Stairs --- End
 
 	//Furniture ------ Start
 	EnvironmentObj* Bed1 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Bed", "OBJ//Bed1.obj"));
@@ -298,7 +308,14 @@ void UndergroundScene::Init()
 
 
 
+<<<<<<< HEAD
 	UI::getInstance()->Init();
+=======
+	renderUI.Init();
+	wasEscPressed = false;
+	isPause = false;
+	//MainMenu.Init();
+>>>>>>> 71ce569d045d102c8a0d4bd9467d6ff2d8dea4a4
 
 	camera = new Camera3;
 	camera->Init(Vector3(0, 0, 7), Vector3(0, 0, 0), Vector3(0, 1, 0));
@@ -337,11 +354,11 @@ void UndergroundScene::Update(double dt)
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); //wireframe mode
 	}
 
-	if (Application::IsKeyPressed('1'))
-	{
-		SceneManager::getInstance()->SetNextSceneID(0);
-		SceneManager::getInstance()->SetNextScene();
-	}
+	//if (Application::IsKeyPressed('1'))
+	//{
+	//	SceneManager::getInstance()->SetNextSceneID(0);
+	//	SceneManager::getInstance()->SetNextScene();
+	//}
 
 	bool fpsonce = false;
 	if (Application::IsKeyPressed('V') && fpsonce == false)
@@ -352,7 +369,44 @@ void UndergroundScene::Update(double dt)
 
 	UI::getInstance()->Update(dt);
 
+<<<<<<< HEAD
 	if (!UI::getInstance()->isPauseOpen() && !Inventory::getInstance()->isInventoryOpen())
+=======
+
+	if (isEscPressed && !wasEscPressed) // When you press ESC
+	{
+		//if (!MainMenu.isMainMenu)
+		//{
+			if (!isPause)
+			{
+				isPause = true;
+				glfwSetInputMode(Application::m_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+				glfwSetCursorPos(Application::m_window, width / 2, height / 2);
+			}
+			else
+			{
+				isPause = false;
+				glfwSetInputMode(Application::m_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+				glfwSetCursorPos(Application::m_window, width / 2, height / 2);
+			}
+
+			wasEscPressed = isEscPressed;
+		//}
+	}
+
+	if (!isEscPressed && wasEscPressed) // When you release the ESC button
+		wasEscPressed = isEscPressed;
+
+	Player::getInstance()->update(dt, camera);
+
+	//for (size_t i = 0; i < CampNPC.size(); i++)
+	//{
+	//	CampNPC.at(i)->update(dt);
+	//}
+
+
+	if (!isPause/* && !MainMenu.isMainMenu*/)
+>>>>>>> 71ce569d045d102c8a0d4bd9467d6ff2d8dea4a4
 	{
 		double c_posx, c_posy;
 		glfwGetCursorPos(Application::m_window, &c_posx, &c_posy);
@@ -372,6 +426,10 @@ void UndergroundScene::Update(double dt)
 	}
 
 	FramesPerSec = 1 / dt;
+<<<<<<< HEAD
+=======
+	//MainMenu.Update(dt);
+>>>>>>> 71ce569d045d102c8a0d4bd9467d6ff2d8dea4a4
 }
 
 void UndergroundScene::Render()
@@ -386,6 +444,7 @@ void UndergroundScene::Render()
 		camera->getUp().x, camera->getUp().y, camera->getUp().z);
 	modelStack.LoadIdentity();
 
+<<<<<<< HEAD
 	RenderMeshClass::RenderMesh(meshList[GEO_AXES], false, &projectionStack, &viewStack, &modelStack, m_parameters);
 	Player::getInstance()->render(&projectionStack, &viewStack, &modelStack, m_parameters);
 
@@ -414,32 +473,68 @@ void UndergroundScene::Render()
 }
 
 void UndergroundScene::RenderBaseCamp(){
+=======
+	//if (MainMenu.isMainMenu)
+	//	MainMenu.Render();
+
+	//else
+	//{
+		RenderMeshClass::RenderMesh(meshList[GEO_AXES], false, &projectionStack, &viewStack, &modelStack, m_parameters);
+		Player::getInstance()->render(&projectionStack, &viewStack, &modelStack, m_parameters);
+
+		RenderSkybox();
+		//	renderEnvironment();
+
+		//Ground Mesh
+		modelStack.PushMatrix();
+		modelStack.Scale(1000, 1000, 1000);
+		modelStack.Rotate(90, -1, 0, 0);
+		RenderMeshClass::RenderMesh(meshList[GEO_MOSSY_GROUND], true, &projectionStack, &viewStack, &modelStack, m_parameters);
+		modelStack.PopMatrix();
+
+		//for (size_t i = 0; i < CampNPC.size(); i++)
+		//{
+		//	CampNPC.at(i)->render(&projectionStack, &viewStack, &modelStack, m_parameters);
+		//}
+>>>>>>> 71ce569d045d102c8a0d4bd9467d6ff2d8dea4a4
 
 	for (size_t i = 0; i < Env_Obj.size(); i++)
 	{
 		modelStack.PushMatrix();
 		RenderMeshClass::RenderMesh(Env_Obj.at(i)->CollisionMesh_, true, &projectionStack, &viewStack, &modelStack, m_parameters);
 		modelStack.PopMatrix();
-
 	}
 
-
-	////Crates
 	//modelStack.PushMatrix();
-	//RenderMeshClass::RenderMesh(meshList[GEO_Crates], true, &projectionStack, &viewStack, &modelStack, m_parameters);
-	//RenderMeshClass::RenderMesh(meshList[GEO_Crates1], true, &projectionStack, &viewStack, &modelStack, m_parameters);
-	//modelStack.PopMatrix();
-
-	////Solar panels
+	//RenderMeshClass::RenderMesh(meshList[GEO_STAIRS], true, &projectionStack, &viewStack, &modelStack, m_parameters);
 	//modelStack.PushMatrix();
-	//RenderMeshClass::RenderMesh(meshList[GEO_SolarPanel], true, &projectionStack, &viewStack, &modelStack, m_parameters);
-	//RenderMeshClass::RenderMesh(meshList[GEO_SolarPanel1], true, &projectionStack, &viewStack, &modelStack, m_parameters);
-	//modelStack.PopMatrix();
 
-	//Powerbox
-	//modelStack.PushMatrix();
-	//RenderMeshClass::RenderMesh(meshList[GEO_PowerBox], true, &projectionStack, &viewStack, &modelStack, m_parameters);
-	//modelStack.PopMatrix();
+	Interactions();
+
+	if (isPause)
+		renderUI.renderPause(&projectionStack, &viewStack, &modelStack, m_parameters);
+
+	RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::to_string(FramesPerSec), Color(1, 0, 0), 1.5f, 45, 38, &projectionStack, &viewStack, &modelStack, m_parameters);
+	//}
+}
+
+void UndergroundScene::Interactions(){
+	
+	if (Player::getInstance()->getPlayerPosition().x >= -39 && Player::getInstance()->getPlayerPosition().x <= -33 && Player::getInstance()->getPlayerPosition().z <= 33 && Player::getInstance()->getPlayerPosition().z >= 26)
+	{
+		RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("[Press [Space] to exit.]"), Color(1, 0, 0), 2.f, 35, 24, &projectionStack, &viewStack, &modelStack, m_parameters);
+	}
+
+	if (Application::IsKeyPressed(VK_SPACE))
+	{ 
+		if (Player::getInstance()->getPlayerPosition().x >= -39 && Player::getInstance()->getPlayerPosition().x <= -33 && Player::getInstance()->getPlayerPosition().z <= 33 && Player::getInstance()->getPlayerPosition().z >= 26)
+		{
+			SceneManager::getInstance()->SetNextSceneID(1);
+			SceneManager::getInstance()->SetNextScene();
+
+			Player::getInstance()->setPosition(Vector3(-87.0, 0.0, -69.0));
+		}
+	}
 
 }
 
@@ -450,7 +545,7 @@ void UndergroundScene::Exit()
 		if (meshList[i] != NULL)
 			delete meshList[i];
 	}
-	delete camera;
+	//delete camera;
 	Player::getInstance()->clearCollisionObj();
 
 	// Cleanup VBO here

@@ -82,6 +82,7 @@ private:
 
 	void RenderSkybox();
 	void RenderBaseCamp();
+	void Interactions();
 
 	Light light[8];
 

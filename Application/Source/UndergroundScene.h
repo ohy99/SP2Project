@@ -36,7 +36,7 @@ class UndergroundScene : public Scene
 		GEO_LIGHTBALL,
 		GEO_LIGHTBALL1,
 		GEO_MOSSY_GROUND,
-
+		GEO_STAIRS,
 
 
 
@@ -62,6 +62,8 @@ public:
 
 	static MS modelStack, viewStack, projectionStack;
 
+	static Teleporter* Stairs;
+
 private:
 	unsigned m_vertexArrayID;
 	Mesh* meshList[NUM_GEOMETRY];
@@ -73,14 +75,24 @@ private:
 	Camera *camera;
 
 	void RenderSkybox();
-	void RenderBaseCamp();
 
 	Light light[8];
 
 	static std::vector<EnvironmentObj*> Env_Obj;
-	static std::vector<NPC*> CampNPC;
+	//static std::vector<NPC*> CampNPC;
 	//std::vector
 
+<<<<<<< HEAD
+=======
+	bool isPause;
+	bool isEscPressed, wasEscPressed;
+
+	MainScreen MainMenu;
+	UI renderUI;
+
+	void Interactions();
+
+>>>>>>> 71ce569d045d102c8a0d4bd9467d6ff2d8dea4a4
 	double x, y;
 	//void RenderText(Text_Data* TextData, std::string text, Color color);
 	//void RenderTextOnScreen(Text_Data* TextData, std::string text, Color color, float size, float x, float y);

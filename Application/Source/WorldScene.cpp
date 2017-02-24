@@ -30,6 +30,7 @@ MS WorldScene::modelStack, WorldScene::viewStack, WorldScene::projectionStack;
 //UI renderMeshOnScreen;
 std::vector<EnvironmentObj*> WorldScene::Env_Obj;
 Teleporter* WorldScene::WS_Teleporter;
+Teleporter* WorldScene::Underground_Door;
 
 //std::vector<NPC*> WorldScene::CampNPC;
 
@@ -47,7 +48,7 @@ WorldScene::~WorldScene()
 void WorldScene::Init()
 {
 	// Init VBO here
-	Player::getInstance()->setPosition(Vector3(0, 0, 0));
+	//Player::getInstance()->setPosition(Vector3(0, 0, 0));
 
 	glClearColor(0.0f, 0.5f, 0.66f, 0.0f);
 
@@ -231,6 +232,10 @@ void WorldScene::Init()
 	//Outer Row of Buildings 3 ----------------------------------- START
 	EnvironmentObj* OuterBuilding3_BigApartment = new EnvironmentObj(MeshBuilder::GenerateOBJ("Big Apartment", "OBJ//WorldScene//OuterBuildingRow3--BigApartment_OBJ.obj"));
 	OuterBuilding3_BigApartment->CollisionMesh_->textureID = LoadTGA("Image//WorldScene//BigApartment.tga");
+	EnvironmentObj* OuterBuilding3_BigApartment2 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Big Apartment", "OBJ//WorldScene//OuterBuildingRow3--BigApartment2_OBJ.obj"));
+	OuterBuilding3_BigApartment2->CollisionMesh_->textureID = LoadTGA("Image//WorldScene//BigApartment.tga");
+	EnvironmentObj* OuterBuilding3_BigApartment3 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Big Apartment", "OBJ//WorldScene//OuterBuildingRow3--BigApartment3_OBJ.obj"));
+	OuterBuilding3_BigApartment3->CollisionMesh_->textureID = LoadTGA("Image//WorldScene//BigApartment.tga");
 	EnvironmentObj* OuterBuilding3_Ruins = new EnvironmentObj(MeshBuilder::GenerateOBJ("Ruins", "OBJ//WorldScene//OuterBuildingRow3--Ruins_OBJ.obj"));
 	OuterBuilding3_Ruins->CollisionMesh_->textureID = LoadTGA("Image//WorldScene//Ruins2_UV_Texture.tga");
 	EnvironmentObj* OuterBuilding3_Ruins1 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Ruins", "OBJ//WorldScene//OuterBuildingRow3--Ruins1_OBJ.obj"));
@@ -249,6 +254,8 @@ void WorldScene::Init()
 	OuterBuilding3_Car->CollisionMesh_->textureID = LoadTGA("Image//WorldScene//Car_Texture.tga");
 
 	Env_Obj.push_back(OuterBuilding3_BigApartment);
+	Env_Obj.push_back(OuterBuilding3_BigApartment2);
+	Env_Obj.push_back(OuterBuilding3_BigApartment3);
 	Env_Obj.push_back(OuterBuilding3_Ruins);
 	Env_Obj.push_back(OuterBuilding3_Ruins1);
 	Env_Obj.push_back(OuterBuilding3_BigSkyScraper);
@@ -273,12 +280,15 @@ void WorldScene::Init()
 	OuterBuilding4_LShapeBuilding->CollisionMesh_->textureID = LoadTGA("Image//WorldScene//Building4UV.tga");
 	EnvironmentObj* OuterBuilding4_Tree = new EnvironmentObj(MeshBuilder::GenerateOBJ("Tree", "OBJ//WorldScene//OuterBuildingRow4--Tree_OBJ.obj"));
 	OuterBuilding4_Tree->CollisionMesh_->textureID = LoadTGA("Image//WorldScene//Tree_MediumSize_UV_Texture.tga");
+	EnvironmentObj* OuterBuilding4_Tree2 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Tree", "OBJ//WorldScene//OuterBuildingRow4--Tree2_OBJ.obj"));
+	OuterBuilding4_Tree2->CollisionMesh_->textureID = LoadTGA("Image//WorldScene//Tree_MediumSize_UV_Texture.tga");
 
 	Env_Obj.push_back(OuterBuilding4_BigApartment);
 	Env_Obj.push_back(OuterBuilding4_Ruins);
 	Env_Obj.push_back(OuterBuilding4_BigSkyScraper);
 	Env_Obj.push_back(OuterBuilding4_LShapeBuilding);
 	Env_Obj.push_back(OuterBuilding4_Tree);
+	Env_Obj.push_back(OuterBuilding4_Tree2);
 	//Outer Row of Buildings 4 ------------------------------------ END
 
 
@@ -320,8 +330,22 @@ void WorldScene::Init()
 	Env_Obj.push_back(BottomLeft_BigApartment);
 	//Inner Row of Buildings -------------------------------------- END
 
+	//Door to Underground Lab --------------------------------- START
+
+	EnvironmentObj* UndergroundDoor = new EnvironmentObj(MeshBuilder::GenerateOBJ("Underground Door", "OBJ//UndergroundDoor.obj"));
+	UndergroundDoor->CollisionMesh_->textureID = LoadTGA("Image//UndergroundDoor.tga");
 
 
+	Env_Obj.push_back(UndergroundDoor);
+
+	//Underground_Door = new Teleporter(MeshBuilder::GenerateOBJ("Underground Door", "OBJ//UndergroundDoor.obj"), 5);
+	//Underground_Door->CollisionMesh_->textureID = LoadTGA("Image//UndergroundDoor.tga");
+
+	//meshList[GEO_UNDERGROUND_DOOR] = MeshBuilder::GenerateOBJ("Underground Door", "OBJ//UndergroundDoor.obj");
+	//meshList[GEO_UNDERGROUND_DOOR]->textureID = LoadTGA("Image//UndergroundDoor.tga");
+
+	//Player::getInstance()->Teleport.push_back(Underground_Door);
+	//Door to Underground Lab --------------------------------- END
 
 	//Vehicles ----------------------------------------------- START
 	EnvironmentObj* DestroyedTruck = new EnvironmentObj(MeshBuilder::GenerateOBJ("Truck", "OBJ//WorldScene//Vehicle1_OBJ.obj"));
@@ -329,9 +353,6 @@ void WorldScene::Init()
 
 	Env_Obj.push_back(DestroyedTruck);
 	//Vehicles ----------------------------------------------- END
-
-
-
 
 	//Barricades --------------------------------------------- START
 	EnvironmentObj* Barricade1 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Barricade1", "OBJ//WorldScene//Barricade1_OBJ.obj"));
@@ -350,15 +371,42 @@ void WorldScene::Init()
 
 
 	//Teleporter -------------------------------------------- START
-	WS_Teleporter = new Teleporter(MeshBuilder::GenerateOBJ("Teleporter", "OBJ//WorldScene//Teleporter_OBJ.obj"),0);
-	WS_Teleporter->CollisionMesh_->textureID = LoadTGA("Image//WorldScene//InteractableItem_Teleporter_UV_Texture.tga");
+	//WS_Teleporter = new Teleporter(MeshBuilder::GenerateOBJ("Teleporter", "OBJ//WorldScene//Teleporter_OBJ.obj"),0);
+	//WS_Teleporter->CollisionMesh_->textureID = LoadTGA("Image//WorldScene//InteractableItem_Teleporter_UV_Texture.tga");
 
-	meshList[GEO_Teleporter] = MeshBuilder::GenerateOBJ("Teleporter", "OBJ//WorldScene//Teleporter_OBJ.obj");
-	meshList[GEO_Teleporter]->textureID = LoadTGA("Image//WorldScene//InteractableItem_Teleporter_UV_Texture.tga");
+	//meshList[GEO_Teleporter] = MeshBuilder::GenerateOBJ("Teleporter", "OBJ//WorldScene//Teleporter_OBJ.obj");
+	//meshList[GEO_Teleporter]->textureID = LoadTGA("Image//WorldScene//InteractableItem_Teleporter_UV_Texture.tga");
 
-	//Env_Obj.push_back(Teleporter);
-	Player::getInstance()->Teleport.push_back(WS_Teleporter);
+	EnvironmentObj* Teleporter = new EnvironmentObj(MeshBuilder::GenerateOBJ("Teleporter", "OBJ//WorldScene//Teleporter_OBJ.obj"));
+	Teleporter->CollisionMesh_->textureID = LoadTGA("Image//WorldScene//InteractableItem_Teleporter_UV_Texture.tga");
+
+
+	Env_Obj.push_back(Teleporter);
+
+	//Player::getInstance()->Teleport.push_back(WS_Teleporter);
 	//Teleporter -------------------------------------------- END
+
+
+
+
+	//Interactable Items ----------------------------------------------- START
+	EnvironmentObj* Tablet = new EnvironmentObj(MeshBuilder::GenerateOBJ("Tablet", "OBJ//WorldScene//Tablet_OBJ.obj"));
+	Tablet->CollisionMesh_->textureID = LoadTGA("Image//WorldScene//InteractableItem_OffTablet_UV_Texture.tga");
+	EnvironmentObj* Robot = new EnvironmentObj(MeshBuilder::GenerateOBJ("Robot", "OBJ//WorldScene//BrokenRobot_OBJ.obj"));
+	Robot->CollisionMesh_->textureID = LoadTGA("Image//WorldScene//InteractableItem_BrokenRobot_UV_Texture.tga");
+	EnvironmentObj* Blueprint1 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Truck", "OBJ//Blueprint1.obj"));
+	Blueprint1->CollisionMesh_->textureID = LoadTGA("Image//BlueprintUV.tga");
+	//EnvironmentObj* Hard_disk = new EnvironmentObj(MeshBuilder::GenerateOBJ("Hard Disk", "OBJ//WorldScene//Harddisk_OBJ.obj"));
+	//Hard_disk->CollisionMesh_->textureID = LoadTGA("Image//WorldScene//InteractableItem_Harddisk_UV_Texture.tga");
+	EnvironmentObj* BrokenGuard = new EnvironmentObj(MeshBuilder::GenerateOBJ("Broken Guard", "OBJ//WorldScene//DestroyedGuard.obj"));
+
+
+	Env_Obj.push_back(Tablet);
+	Env_Obj.push_back(Robot);
+	//Env_Obj.push_back(Hard_disk);
+	Env_Obj.push_back(Blueprint1);
+	Env_Obj.push_back(BrokenGuard);
+	//Interactable Items ----------------------------------------------- END
 
 
 
@@ -410,6 +458,7 @@ void WorldScene::Init()
 
 	// Hide the mouse and enable unlimited mouvement
 	glfwSetInputMode(Application::m_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+
 }
 
 void WorldScene::Update(double dt)
@@ -554,9 +603,13 @@ void WorldScene::Render()
 
 	//}
 
-	modelStack.PushMatrix();
-	RenderMeshClass::RenderMesh(meshList[GEO_Teleporter], true, &projectionStack, &viewStack, &modelStack, m_parameters);
-	modelStack.PushMatrix();
+	//modelStack.PushMatrix();
+	//RenderMeshClass::RenderMesh(meshList[GEO_Teleporter], true, &projectionStack, &viewStack, &modelStack, m_parameters);
+	//modelStack.PushMatrix();
+
+	//modelStack.PushMatrix();
+	//RenderMeshClass::RenderMesh(meshList[GEO_UNDERGROUND_DOOR], true, &projectionStack, &viewStack, &modelStack, m_parameters);
+	//modelStack.PushMatrix();
 
 	for (size_t i = 0; i < Env_Obj.size(); i++)
 	{
@@ -566,6 +619,7 @@ void WorldScene::Render()
 		
 	}
 
+	Interactions();
 
 	RenderMeshClass::RenderMesh(meshList[GEO_AXES], false, &projectionStack, &viewStack, &modelStack, m_parameters);
 	Player::getInstance()->render(&projectionStack, &viewStack, &modelStack, m_parameters);
@@ -576,6 +630,86 @@ void WorldScene::Render()
 }
 
 
+void WorldScene::Interactions(){
+
+
+	//Teleporter to Camp base -- Main Scene
+	if (Player::getInstance()->getPlayerPosition().x >= 92 && Player::getInstance()->getPlayerPosition().x <= 97 && Player::getInstance()->getPlayerPosition().z <= -8 && Player::getInstance()->getPlayerPosition().z >= -15){
+
+		RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("[Press SPACE to teleport to Camp Base.]"), Color(1, 0, 0), 2.f, 28, 30, &projectionStack, &viewStack, &modelStack, m_parameters);
+	}
+
+	if (Application::IsKeyPressed(VK_SPACE)){
+
+		if (Player::getInstance()->getPlayerPosition().x >= 92 && Player::getInstance()->getPlayerPosition().x <= 97 && Player::getInstance()->getPlayerPosition().z <= -8 && Player::getInstance()->getPlayerPosition().z >= -15){
+
+			SceneManager::getInstance()->SetNextSceneID(0);
+			SceneManager::getInstance()->SetNextScene();
+			Player::getInstance()->setPosition(Vector3(-18.0, 0.0, -0.5));
+		}
+
+	}
+
+	//Door to Underground Scene
+	if (Player::getInstance()->getPlayerPosition().x >= -88 && Player::getInstance()->getPlayerPosition().x <= -86 && Player::getInstance()->getPlayerPosition().z <= -68 && Player::getInstance()->getPlayerPosition().z >= -70)
+	{
+		RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("[Press SPACE to enter]"), Color(1, 0, 0), 2.f, 28, 30, &projectionStack, &viewStack, &modelStack, m_parameters);
+	}
+
+	if (Application::IsKeyPressed(VK_SPACE))
+	{
+		if (Player::getInstance()->getPlayerPosition().x >= -88 && Player::getInstance()->getPlayerPosition().x <= -86 && Player::getInstance()->getPlayerPosition().z <= -68 && Player::getInstance()->getPlayerPosition().z >= -70)
+		{
+			SceneManager::getInstance()->SetNextSceneID(4);
+			SceneManager::getInstance()->SetNextScene();
+			Player::getInstance()->setPosition(Vector3(-36.0, 0.0, 30.0));
+		}
+	}
+
+	//Tablet -- For 2nd Hint, true hint.
+	if (Player::getInstance()->getPlayerPosition().x >= -59 && Player::getInstance()->getPlayerPosition().x <= -58 && Player::getInstance()->getPlayerPosition().z <= 39 && Player::getInstance()->getPlayerPosition().z >= 36){
+
+		if (counter_text_tablet == 0){
+		
+			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("[Press SPACE to scan.]"), Color(1, 0, 0), 2.f, 30, 30, &projectionStack, &viewStack, &modelStack, m_parameters);
+		}
+		if (Application::IsKeyPressed(VK_SPACE)){
+
+			counter_text_tablet = 1;
+		}
+		if (counter_text_tablet == 1){
+
+			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("*Extracting data…*"), Color(1, 0, 0), 2.f, 10, 37, &projectionStack, &viewStack, &modelStack, m_parameters);
+			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("*Discovered: This tablet holds information of a machine that can"), Color(1, 0, 0), 2.f, 10, 35, &projectionStack, &viewStack, &modelStack, m_parameters);
+			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("apparently help to rejuvenate the Earth."), Color(1, 0, 0), 2.f, 10, 33, &projectionStack, &viewStack, &modelStack, m_parameters);
+			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("There are apparently three parts to the blueprints required to make this device."), Color(1, 0, 0), 2.f, 10, 31, &projectionStack, &viewStack, &modelStack, m_parameters);
+			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("One of the locations is recorded in this device. A hidden lab at somewhere"), Color(1, 0, 0), 2.f, 10, 29, &projectionStack, &viewStack, &modelStack, m_parameters);
+			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("around coordinates: -80, -80 *"), Color(1, 0, 0), 2.f, 10, 27, &projectionStack, &viewStack, &modelStack, m_parameters);
+
+		}
+	}
+
+	//Broken Robot -- For 1st Hint, true hint.
+	if (Player::getInstance()->getPlayerPosition().x >= 75 && Player::getInstance()->getPlayerPosition().x <= 79 && Player::getInstance()->getPlayerPosition().z <= 74 && Player::getInstance()->getPlayerPosition().z >= 67){
+	
+		if (counter_text_robot == 0){
+
+			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("[Press SPACE to scan.]"), Color(1, 0, 0), 2.f, 30, 30, &projectionStack, &viewStack, &modelStack, m_parameters);
+		}
+		if (Application::IsKeyPressed(VK_SPACE)){
+
+			counter_text_robot = 1;
+		}
+		if (counter_text_robot == 1){
+
+			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("*Extracting data…*"), Color(1, 0, 0), 2.f, 10, 37, &projectionStack, &viewStack, &modelStack, m_parameters);
+			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("*Discovered: This robot appears to be a research assistant "), Color(1, 0, 0), 2.f, 10, 35, &projectionStack, &viewStack, &modelStack, m_parameters);
+			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("from a time before Earth was abandoned. One registered area of interest."), Color(1, 0, 0), 2.f, 10, 33, &projectionStack, &viewStack, &modelStack, m_parameters);
+			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("New coordinates found: ... *"), Color(1, 0, 0), 2.f, 10, 31, &projectionStack, &viewStack, &modelStack, m_parameters);
+		}
+	}
+}
+
 void WorldScene::Exit()
 {
 	for (size_t i = 0; i < GEOMETRY_TYPE::NUM_GEOMETRY; i++)
@@ -583,7 +717,7 @@ void WorldScene::Exit()
 		if (meshList[i] != NULL)
 			delete meshList[i];
 	}
-	delete camera;
+	//delete camera;
 	Player::getInstance()->clearCollisionObj();
 
 	// Cleanup VBO here
