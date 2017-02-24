@@ -31,6 +31,7 @@ MS MainScene::modelStack, MainScene::viewStack, MainScene::projectionStack;
 //std::vector<GameObject*> MainScene::Game_Objects_(10, NULL);
 
 //std::vector<GameObject*> MainScene::Game_Objects_(10, NULL);
+std::vector<Item*> MainScene::Item_Obj;
 std::vector<EnvironmentObj*> MainScene::Env_Obj;
 std::vector<NPC*> MainScene::CampNPC;
 Teleporter* MainScene::MS_Teleporter;
@@ -187,7 +188,7 @@ void MainScene::Init()
 	a->item2DTexture->textureID = LoadTGA("Image//inventory.tga");
 
 	//Inventory::getInstance()->setItem(a);
-	Player::Items.push_back(a);
+	Item_Obj.push_back(a);
 
 	//Skybox ------------ Base Camp Start
 	//Left Skybox 
@@ -364,6 +365,8 @@ void MainScene::Init()
 	for (auto it : Env_Obj)
 		Player::addCollisionObject(it);
 
+	for (auto it : Item_Obj)
+		Player::Items.push_back(it);
 
 	UI::getInstance()->Init();
 
@@ -502,9 +505,15 @@ void MainScene::Render()
 	RenderMeshClass::RenderMesh(meshList[GEO_GroundMesh_RedDirt], true, &projectionStack, &viewStack, &modelStack, m_parameters);
 	modelStack.PopMatrix();
 
-	modelStack.PushMatrix();
-	RenderMeshClass::RenderMesh(a->CollisionMesh_, true, &projectionStack, &viewStack, &modelStack, m_parameters);
-	modelStack.PopMatrix();
+	for (size_t i = 0; i < Item_Obj.size(); i++)
+	{
+		if (!Player::Items[i]->isItemInInventory)
+		{
+			modelStack.PushMatrix();
+			RenderMeshClass::RenderMesh(Item_Obj.at(i)->CollisionMesh_, true, &projectionStack, &viewStack, &modelStack, m_parameters);
+			modelStack.PopMatrix();
+		}
+	}
 
 	for (size_t i = 0; i < CampNPC.size(); i++)
 	{
