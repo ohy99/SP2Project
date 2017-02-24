@@ -21,6 +21,7 @@
 #include "RenderMesh.h"
 
 #include "UI.h"
+#include "Item.h"
 
 //MainScene::Text_Data MainScene::Text[TEXT_TYPE::Text_Count];
 //unsigned MainScene::m_parameters[U_TOTAL];
@@ -173,8 +174,14 @@ void MainScene::Init()
 	meshList[GEO_GroundMesh_RedDirt]->textureID = LoadTGA("Image//GroundMesh_RedDirt_Texture.tga");
 	//Ground Mesh ---- Red Dirt ----------------- End
 
-	meshList[test] = MeshBuilder::GenerateQuad("Test", Color(1, 1, 1), 1, 1);
-	meshList[test]->textureID = LoadTGA("Image//inventory.tga");
+	//textureList[test] = MeshBuilder::GenerateQuad("Test", Color(1, 1, 1), 1, 1);
+	//textureList[test]->textureID = LoadTGA("Image//inventory.tga");
+	Inventory::getInstance()->Init();
+	a = new Item("a");
+	//a->CollisionMesh_ = MeshBuilder::GenerateOBJ();
+	a->texture[0] = MeshBuilder::GenerateQuad("quad", Color(1, 1, 1), 1.f, 1.f);
+	a->texture[0]->textureID = LoadTGA("Image//inventory.tga");
+	Inventory::getInstance()->setItem(a);
 
 	//Skybox ------------ Base Camp Start
 	//Left Skybox 
@@ -351,7 +358,7 @@ void MainScene::Init()
 	camera = new Camera3;
 	camera->Init(Vector3(0, 0, 7), Vector3(0, 0, 0), Vector3(0, 1, 0));
 
-	Inventory::getInstance()->Init();
+
 
 	Mtx44 projection;
 	projection.SetToPerspective(45.f, 4.f / 3.f, 0.1f, 1000.f);
@@ -488,8 +495,7 @@ void MainScene::Render()
 
 	UI::getInstance()->renderPause(&projectionStack, &viewStack, &modelStack, m_parameters);
 
-	Inventory::getInstance()->Render(&projectionStack, &viewStack, &modelStack, m_parameters, meshList[test]);
-	Inventory::getInstance()->renderMessage(&projectionStack, &viewStack, &modelStack, m_parameters);
+	Inventory::getInstance()->Render(&projectionStack, &viewStack, &modelStack, m_parameters);
 
 	RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::to_string(FramesPerSec), Color(1, 0, 0), 1.5f, 45, 38, &projectionStack, &viewStack, &modelStack, m_parameters);
 }

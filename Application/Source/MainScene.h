@@ -19,6 +19,7 @@
 #include "UI.h"
 #include "NPC.h"
 #include "Environment.h"
+#include "Weapon.h"
 
 
 class MainScene : public Scene
@@ -42,7 +43,7 @@ class MainScene : public Scene
 		GEO_Barrack,
 		GEO_Crates1,
 
-		test,
+
 
 		GEO_LEFT,
 		GEO_RIGHT,
@@ -91,6 +92,7 @@ private:
 	int width, height;
 
 	MainScreen MainMenu;
+	Item* a;
 
 	double x, y;
 	//void RenderText(Text_Data* TextData, std::string text, Color color);

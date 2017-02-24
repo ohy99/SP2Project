@@ -22,8 +22,7 @@ public:
 
 	void Init();
 	void Update(double dt);
-	void Render(MS* projectionStack, MS* viewStack, MS* modelStack, unsigned * m_parameters, Mesh* itemTexture); // use to render Inventory onto the screen
-	void renderMessage(MS* projectionStack, MS* viewStack, MS* modelStack, unsigned * m_parameters); // Message to tell player that inventory is full
+	void Render(MS* projectionStack, MS* viewStack, MS* modelStack, unsigned * m_parameters); // use to render Inventory onto the screen
 
 	bool isInventoryOpen();
 	static Inventory* getInstance();
@@ -32,7 +31,7 @@ private:
 	enum GEOMETRY_TYPE
 	{
 		INVENTORY,
-		SLOTS,
+		EMPTY_SLOTS,
 
 		NUM_GEOMETRY,
 	};
@@ -40,16 +39,8 @@ private:
 	static Inventory* Instance_;
 	Mesh* meshList[NUM_GEOMETRY];
 
-	std::vector<Mesh*> Slots;
+	Inventory(const std::string& name) : isInventoryFull(false), currItem(NULL) { ; }
 
-	Inventory(const std::string& name) : maxStorage(9), isInventoryFull(false), currItem(NULL)
-	{
-		for (int i = 0; i < 9; i++)
-			Storage.push_back(NULL);
-	}
-
-	std::vector<Item*> Storage;
-	int maxStorage; // defalut set it to 10, increase gradually by 4 every upgrade
 	bool isInventoryFull; // render message if inventory is full
 	Item* currItem;
 
@@ -59,16 +50,17 @@ private:
 	bool isIPressed, wasIPressed, isInventory;
 
 	int x, y;
+	int size;
 	int slotPosition;
 
 	Vector3 min, max, pos;
 	double cur_x, cur_y;
 };
 
-//struct InventorySlot
-//{
-//	Vector3 position; // to store the position of the slots
-//	Item* item_; // to store the item onto the slot
-//};
+struct InventorySlot
+{
+	Mesh* hitBox; // to store the position of the slots
+	Item* item_; // to store the item onto the slot
+};
 
 #endif

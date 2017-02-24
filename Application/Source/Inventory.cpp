@@ -8,7 +8,7 @@
 
 #include "Vector3.h"
 
-std::vector<Vector3> Inventory_;
+std::vector<InventorySlot*> Inventory_;
 Inventory* Inventory::Instance_ = NULL;
 
 Inventory* Inventory::getInstance()
@@ -21,10 +21,10 @@ Inventory* Inventory::getInstance()
 
 Item* Inventory::getItem(int i)
 {
-	if (Storage.size() > 0)
+	if (Inventory_.size() > 0)
 	{
-		currItem = Storage[i];
-		Storage[i] = NULL;
+		currItem = Inventory_[i]->item_;
+		Inventory_[i] = NULL;
 
 		return currItem;
 	}
@@ -35,19 +35,44 @@ Item* Inventory::getItem(int i)
 
 void Inventory::setItem(Item* items)
 {
-	for (size_t i = 0; i < Storage.size(); i++)
+	bool hasputed = false;
+	for (size_t i = 0; i < Inventory_.size(); i++)
 	{
-		if (Storage[i] == NULL)
-			Storage.push_back(items);
-
-		else
-			isInventoryFull = true;
+		if (Inventory_[i]->item_ == NULL)
+		{
+			Inventory_[i]->item_ = (items);
+			hasputed = true;
+			break;
+		}
 	}
+
+	if (!hasputed)
+		isInventoryFull = true;
+
+	//bool hasputed = false;
+	//for (size_t i = 0; i < 12; i++)
+	//{
+	//	if (itemSlots[i] == NULL)
+	//	{
+	//		itemSlots[i] = items;
+	//		hasputed = true;
+	//		break;
+	//	}
+	//}
+	//if (!hasputed)
+	//	isInventoryFull;
+		
 }
 
 int Inventory::getInventorySize()
 {
-	return Storage.size();
+	for (size_t i = 0; i < Inventory_.size(); i++)
+	{
+		if (Inventory_[i] != NULL)
+			size++;
+	}
+
+	return size;
 }
 
 void Inventory::Init()
@@ -57,8 +82,8 @@ void Inventory::Init()
 	wasLeftMouseButtonPressed = false;
 	meshList[INVENTORY] = MeshBuilder::GenerateQuad("Inventory", Color(1.f, 1.f, 1.f), 1.f, 1.f);
 	meshList[INVENTORY]->textureID = LoadTGA("Image//inventory.tga");
-	meshList[SLOTS] = MeshBuilder::GenerateQuad("Slots", Color(1.f, 0.f, 0.f), 1.f, 1.f);
-	meshList[SLOTS]->textureID = LoadTGA("Image//empty_slot.tga");
+	meshList[EMPTY_SLOTS] = MeshBuilder::GenerateQuad("Empty Slots", Color(1.f, 0.f, 0.f), 1.f, 1.f);
+	meshList[EMPTY_SLOTS]->textureID = LoadTGA("Image//empty_slot.tga");
 
 	min = Vector3(-50.f, -50.f, 0.f);
 	max = Vector3(50.f, 50.f, 2.f);
@@ -69,14 +94,15 @@ void Inventory::Init()
 		x = 675;
 
 		for (int j = 0; j < 3; j++)
-		{
-			Mesh* temp_Slot = MeshBuilder::GenerateQuad("Slots", Color(1.f, 0.f, 0.f), 1.f, 1.f);
-			Inventory_.push_back(Vector3(x, y, 0.f));
-
-
+		{			
+			Mesh* temp_Slot = new Mesh("");
 			pos = Vector3((float)(Application::getWindowWidth() / 1024.f) * x, (float)(Application::getWindowHeight() / 768.f) * y, 0.f);
 			temp_Slot->setHb(true, min, max, pos, Vector3(0.f, 1.f, 0.f));
-			Slots.push_back(temp_Slot);
+
+			InventorySlot* tempSlot = new InventorySlot;
+			tempSlot->hitBox = temp_Slot;
+			tempSlot->item_ = NULL;
+			Inventory_.push_back(tempSlot);
 
 			x += 125;
 		}
@@ -96,9 +122,14 @@ void Inventory::Update(double dt)
 	{
 		for (size_t i = 0; i < Inventory_.size(); i++)
 		{
-			if (Slots[i]->isPointInsideAABB(Position(cur_x, Application::getWindowHeight() - cur_y, 0.f)))
-				slotPosition = i;		
+			if (Inventory_[i]->hitBox->isPointInsideAABB(Position(cur_x, Application::getWindowHeight() - cur_y, 0.f)))
+			{
+				slotPosition = i;
+				break;
+			}				
 		}
+
+		std::cout << slotPosition << std::endl;
 		wasLeftMouseButtonPressed = isLeftMouseButtonPressed;
 	}
 
@@ -123,24 +154,25 @@ void Inventory::Update(double dt)
 		wasIPressed = isIPressed;
 }
 
-void Inventory::renderMessage(MS* projectionStack, MS* viewStack, MS* modelStack, unsigned * m_parameters)
-{
-	if (isInventoryFull)
-		RenderMeshClass::RenderTextOnScreen(&Scene::Text[Scene::TEXT_TYPE::Century], "Your inventory is full", Color(1.f, 1.f, 1.f), 10, 10, 26, projectionStack, viewStack, modelStack, m_parameters);
-}
 
-void Inventory::Render(MS* projectionStack, MS* viewStack, MS* modelStack, unsigned * m_parameters, Mesh* itemTexture)
+
+void Inventory::Render(MS* projectionStack, MS* viewStack, MS* modelStack, unsigned * m_parameters)
 {
-	if (isInventory)
+	if (isInventory) // When you open inventory, render inventory onto screen
 	{
 		RenderMeshClass::RenderMeshOnScreen(meshList[INVENTORY], 800, 375, 0, 400, 700, projectionStack, viewStack, modelStack, m_parameters);
 
 		for (size_t i = 0; i < Inventory_.size(); i++)
 		{
-			//meshList[SLOTS] = itemTexture;
-			RenderMeshClass::RenderMeshOnScreen(meshList[SLOTS], Inventory_[i].x, Inventory_[i].y, Inventory_[i].z, 100, 100, projectionStack, viewStack, modelStack, m_parameters);
+			if (Inventory_[i]->item_ != NULL)
+				RenderMeshClass::RenderMeshOnScreen(*Inventory_[i]->item_->texture, Inventory_[i]->hitBox->pos.x, Inventory_[i]->hitBox->pos.y, Inventory_[i]->hitBox->pos.z, 100, 100, projectionStack, viewStack, modelStack, m_parameters);
+			else
+				RenderMeshClass::RenderMeshOnScreen(meshList[EMPTY_SLOTS], Inventory_[i]->hitBox->pos.x, Inventory_[i]->hitBox->pos.y, Inventory_[i]->hitBox->pos.z, 100, 100, projectionStack, viewStack, modelStack, m_parameters);
 		}
 	}
+
+	if (isInventoryFull)
+		RenderMeshClass::RenderTextOnScreen(&Scene::Text[Scene::TEXT_TYPE::Century], "Your inventory is full", Color(1.f, 1.f, 1.f), 10, 10, 26, projectionStack, viewStack, modelStack, m_parameters);
 }
 
 bool Inventory::isInventoryOpen()
