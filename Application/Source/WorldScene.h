@@ -100,7 +100,9 @@ private:
 	int counter_text_tablet = 0;
 	int counter_text_robot = 0;
 	int counter_text_oil = 0;
+	int counter_text_fakeBlueprints = 0;
 	bool Blueprint1 = false;
+	bool Blueprint2 = false;
 	//int addblueprint;
 
 	//void RenderText(Text_Data* TextData, std::string text, Color color);
