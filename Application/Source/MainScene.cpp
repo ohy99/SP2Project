@@ -49,6 +49,8 @@ void MainScene::Init()
 {
 	// Init VBO here
 
+	Player::getInstance()->setPosition(Vector3(12, 0, 11));
+
 	glClearColor(0.0f, 0.5f, 0.66f, 0.0f);
 
 	glEnable(GL_DEPTH_TEST);
@@ -517,6 +519,8 @@ void MainScene::Render()
 	RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::to_string(FramesPerSec), Color(1, 0, 0), 1.5f, 45, 38, &projectionStack, &viewStack, &modelStack, m_parameters);
 	RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("Blueprints:"), Color(1, 0, 0), 2.f, 68, 57, &projectionStack, &viewStack, &modelStack, m_parameters);
 	RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::to_string(Blueprints::GetBlueprintNumber()), Color(1, 0, 0), 2.f, 77, 57, &projectionStack, &viewStack, &modelStack, m_parameters);
+	
+	Player::getInstance()->render(&projectionStack, &viewStack, &modelStack, m_parameters);
 
 	UI::getInstance()->renderPause(&projectionStack, &viewStack, &modelStack, m_parameters);
 	Inventory::getInstance()->Render(&projectionStack, &viewStack, &modelStack, m_parameters);
