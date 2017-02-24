@@ -84,6 +84,8 @@
   <ItemGroup>
     <ClCompile Include="Source\Application.cpp" />
     <ClCompile Include="Source\BossAI.cpp" />
+    <ClCompile Include="Source\BossDropGoat.cpp" />
+    <ClCompile Include="Source\BossFlank.cpp" />
     <ClCompile Include="Source\BossGSmash.cpp" />
     <ClCompile Include="Source\BossScene.cpp" />
     <ClCompile Include="Source\BossShootProj.cpp" />
@@ -92,6 +94,7 @@
     <ClCompile Include="Source\CameraMG.cpp" />
     <ClCompile Include="Source\Environment.cpp" />
     <ClCompile Include="Source\FPSCam.cpp" />
+    <ClCompile Include="Source\GoatMinion.cpp" />
     <ClCompile Include="Source\InsideBarrackScene.cpp" />
     <ClCompile Include="Source\LoadOBJ.cpp" />
     <ClCompile Include="Source\LoadTextData.cpp" />
@@ -120,6 +123,8 @@
     <ClInclude Include="Source\Application.h" />
     <ClInclude Include="Source\BossAI.h" />
     <ClInclude Include="Source\BossAttackStyles.h" />
+    <ClInclude Include="Source\BossDropGoat.h" />
+    <ClInclude Include="Source\BossFlank.h" />
     <ClInclude Include="Source\BossGSmash.h" />
     <ClInclude Include="Source\BossScene.h" />
     <ClInclude Include="Source\Bullets.h" />
@@ -132,6 +137,7 @@
     <ClInclude Include="Source\Environment.h" />
     <ClInclude Include="Source\FPSCam.h" />
     <ClInclude Include="Source\GameObject.h" />
+    <ClInclude Include="Source\GoatMinion.h" />
     <ClInclude Include="Source\InsideBarrackScene.h" />
     <ClInclude Include="Source\Item.h" />
     <ClInclude Include="Source\Light.h" />

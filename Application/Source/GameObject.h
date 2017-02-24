@@ -14,7 +14,7 @@ protected:
 	std::string ObjName;
 	std::string TextureName;
 public: 
-	virtual ~GameObject() { };
+	virtual ~GameObject() { delete CollisionMesh_; };
 	std::string getName(void) {	return kName; }
 	Mesh* CollisionMesh_ = 0;
 };

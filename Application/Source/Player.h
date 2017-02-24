@@ -10,6 +10,7 @@
 #include "MatrixStack.h"
 #include "FPSCam.h"
 #include "EnemyAI.h"
+#include "Bullets.h"
 
 #include "Environment.h"
 
@@ -20,7 +21,9 @@ class Player : public GameObject
 	enum WEAPON_TYPE
 	{
 		MELEE,
-		RANGED,
+		PISTOL,
+		RIFLE,
+		MACHINEGUN,
 		WT_COUNT
 	};
 	enum STATES
@@ -49,9 +52,12 @@ class Player : public GameObject
 	float hitDelay = 0.0f;
 	float moveSPD = 20.0f;
 
+	Mesh* Crosshair;
+
 	GameObject* Pointed_Obj;
 
 	Weapon* weapons_[WEAPON_TYPE::WT_COUNT];
+	unsigned currWeap = 0;
 	Weapon* currentWeapon_;
 	Potions* potions; // 
 	//AttackType* attack;
@@ -62,7 +68,10 @@ class Player : public GameObject
 	Player();
 
 	static std::vector<GameObject*> CollisionObjects;
-
+	BulletsTrail* bulletMesh[30];
+	BulletsTrail* getBulletTrail();
+	void updateBulletTrail(double dt);
+	void renderBulletTrail(MS* projectionStack, MS* viewStack, MS* modelStack, unsigned * m_parameters);
 public:
 	~Player();
 	static std::vector<EnemyAI*> enemies_;
@@ -100,6 +109,8 @@ public:
 
 	void MeleeAttack(double dt);
 	void RangedAttack(double dt);
+
+	void checkSwapWeapon();
 };
 
 #endif

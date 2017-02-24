@@ -74,9 +74,6 @@
     <ClCompile Include="Source\FPSCam.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source\BossScene.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Scene2.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -104,18 +101,6 @@
     <ClCompile Include="Source\Utility.cpp">
       <Filter>Source Files\Others</Filter>
     </ClCompile>
-    <ClCompile Include="Source\BossAI.cpp">
-      <Filter>Source Files\GameObj\Boss</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\BossShootProj.cpp">
-      <Filter>Source Files\GameObj\Boss</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\BossGSmash.cpp">
-      <Filter>Source Files\GameObj\Boss</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Player.cpp">
-      <Filter>Source Files\GameObj\Player</Filter>
-    </ClCompile>
     <ClCompile Include="Source\MiniGame.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -139,6 +124,30 @@
     </ClCompile>
     <ClCompile Include="Source\InsideBarrackScene.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\BossShootProj.cpp">
+      <Filter>Header Files\GameObj\Boss</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\BossGSmash.cpp">
+      <Filter>Header Files\GameObj\Boss</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\BossDropGoat.cpp">
+      <Filter>Header Files\GameObj\Boss</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\BossAI.cpp">
+      <Filter>Header Files\GameObj\Boss</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GoatMinion.cpp">
+      <Filter>Header Files\GameObj\Boss</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Player.cpp">
+      <Filter>Header Files\GameObj\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\BossScene.cpp">
+      <Filter>Header Files\GameObj\Boss</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\BossFlank.cpp">
+      <Filter>Header Files\GameObj\Boss</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -179,9 +188,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Source\FPSCam.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\BossScene.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Source\Scene2.h">
@@ -286,17 +292,29 @@
     <ClInclude Include="Source\Distance.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Source\WorldScene.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\UndergroundScene.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Teleporter.h">
       <Filter>Header Files\GameObj</Filter>
     </ClInclude>
     <ClInclude Include="Source\InsideBarrackScene.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\UndergroundScene.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\WorldScene.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\BossDropGoat.h">
+      <Filter>Header Files\GameObj\Boss</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GoatMinion.h">
+      <Filter>Header Files\GameObj\Boss</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\BossScene.h">
+      <Filter>Header Files\GameObj\Boss</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\BossFlank.h">
+      <Filter>Header Files\GameObj\Boss</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

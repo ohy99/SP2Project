@@ -6,7 +6,7 @@
 class MeleeWeapon : public Weapon
 {
 public:
-	MeleeWeapon(const std::string& name, int damage) : Weapon(name, damage) { ; }
+	MeleeWeapon(const std::string& name, int Mindamage, int maxDmg) : Weapon(name, Mindamage, maxDmg) { ; }
 	virtual ~MeleeWeapon() { ; }
 };
 

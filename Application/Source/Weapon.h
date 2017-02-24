@@ -6,23 +6,24 @@
 class Weapon : public Item
 {
 public: 
-	Weapon(const std::string& name, int damage) : Item(name), damage(damage) { ; } // To initialise the name & damage of the weapon
+	Weapon(const std::string& name, int Mindmg, int Maxdmg) : Item(name), minDmg(Mindmg), maxDmg(Maxdmg) { ; } // To initialise the name & damage of the weapon
 	virtual ~Weapon() { ; }
 
 	// Getter
-	int getWeaponDamage() // To return the damage of the weapon
+	inline int getWeaponDamage() // To return the damage of the weapon
 	{
-		return damage;
+		return (rand() % (maxDmg - minDmg + 1) + minDmg);
 	}
 
 	// Setter
 	void setWeaponDamage(int damage) // When player drinks attack boost potion
 	{
-		this->damage = this->damage + damage;
+		this->minDmg += damage;
+		this->maxDmg += damage;
 	}
 
 protected:
-	int damage;
+	int minDmg, maxDmg;
 };
 
 #endif

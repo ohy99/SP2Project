@@ -25,24 +25,24 @@ bool BossShootProj::performAttack(double dt, double& animTime)
 	}
 
 	
-	if (isEndAOE)
-	{
+	//if (isEndAOE)
+	//{
 		GoatBoss::getInstance()->resetState();
 		return true;
-		isStartAOE = false;
-		performOnce = false;
-	}
-	else
-		ShootAnimTime += dt;
-	isStartAOE = true;
+	//	isStartAOE = false;
+	//	performOnce = false;
+	//}
+	//else
+	//	ShootAnimTime += dt;
+	//isStartAOE = true;
 	return true;
 }
 void BossShootProj::renderAttack(MS* projectionStack, MS* viewStack, MS* modelStack, unsigned * m_parameters)
 {
-	if (isStartAOE)
-	{
+	//if (isStartAOE)
+	//{
 
-		if (ShootAnimTime == 0.0)
-			isEndAOE = true;
-	}
+	//	if (ShootAnimTime == 0.0)
+	//		isEndAOE = true;
+	//}
 }

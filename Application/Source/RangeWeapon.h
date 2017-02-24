@@ -8,8 +8,8 @@
 class RangeWeapon : public Weapon
 {
 public:
-	RangeWeapon(const std::string& name, int damage, unsigned totalAmmo, unsigned maxAmmo, unsigned MagCapacity) :
-		Weapon(name, damage), roundsInMag(MagCapacity), ammoNotInMag(totalAmmo), AmmoCapacity(maxAmmo), MagCapacity(MagCapacity) {
+	RangeWeapon(const std::string& name, int mindmg, int maxdmg, unsigned totalAmmo, unsigned maxAmmo, unsigned MagCapacity) :
+		Weapon(name, mindmg, maxdmg), roundsInMag(MagCapacity), ammoNotInMag(totalAmmo), AmmoCapacity(maxAmmo), MagCapacity(MagCapacity) {
 		shotCooldown = 0.0;
 	}
 	virtual ~RangeWeapon() { ; }
@@ -32,7 +32,7 @@ public:
 	bool Shoot();
 	double shotCooldown;//This is use to pair with ROF
 	int roundsPerMin;
-	float accuracy;//Max value is 1.0
+	float accuracy;//Lower the better. this is the radius of the max spread in 10m
 	float reloadSpd;
 
 private:

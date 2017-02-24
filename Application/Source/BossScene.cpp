@@ -142,31 +142,35 @@ void BossScene::Init()
 	//LoadTextData("Image//Segoe Marker Data.csv", Text[TEXT_TYPE::SegoeMarker].TextWidth);
 
 
-	//Skybox ------------ Base Camp Start
+	//Skybox ------------skyBoxScale, skyBoxDistance;
+	skyBoxScale = 500;
+	skyBoxDistance = skyBoxScale * 0.5f * 0.99;
 	//Left Skybox 
-	meshList[GEO_LEFT] = MeshBuilder::GenerateQuad("Left", Color(1, 1, 1), 1.0f, 1.0f);
-	meshList[GEO_LEFT]->textureID = LoadTGA("Image//sky1_left.tga");
+	meshList[GEO_LEFT] = MeshBuilder::GenerateQuad("Left", Color(1, 1, 1), skyBoxScale, skyBoxScale);
+	meshList[GEO_LEFT]->textureID = LoadTGA("Image//BossSceneSkyBoxLeft.tga");
 
 	//Right Skybox 
-	meshList[GEO_RIGHT] = MeshBuilder::GenerateQuad("Right", Color(1, 1, 1), 1.0f, 1.0f);
-	meshList[GEO_RIGHT]->textureID = LoadTGA("Image//sky1_right.tga");
+	meshList[GEO_RIGHT] = MeshBuilder::GenerateQuad("Right", Color(1, 1, 1), skyBoxScale, skyBoxScale);
+	meshList[GEO_RIGHT]->textureID = LoadTGA("Image//BossSceneSkyBoxRight.tga");
 
 	//Front Skybox 
-	meshList[GEO_FRONT] = MeshBuilder::GenerateQuad("Front", Color(1, 1, 1), 1.0f, 1.0f);
-	meshList[GEO_FRONT]->textureID = LoadTGA("Image//sky1_front.tga");
+	meshList[GEO_FRONT] = MeshBuilder::GenerateQuad("Front", Color(1, 1, 1), skyBoxScale, skyBoxScale);
+	meshList[GEO_FRONT]->textureID = LoadTGA("Image//BossSceneSkyBoxFront.tga");
 
 	//Back Skybox 
-	meshList[GEO_BACK] = MeshBuilder::GenerateQuad("Back", Color(1, 1, 1), 1.0f, 1.0f);
-	meshList[GEO_BACK]->textureID = LoadTGA("Image//sky1_back.tga");
+	meshList[GEO_BACK] = MeshBuilder::GenerateQuad("Back", Color(1, 1, 1), skyBoxScale, skyBoxScale);
+	meshList[GEO_BACK]->textureID = LoadTGA("Image//BossSceneSkyBoxBack.tga");
 
 	//Top Skybox 
-	meshList[GEO_TOP] = MeshBuilder::GenerateQuad("Top", Color(1, 1, 1), 1.0f, 1.0f);
-	meshList[GEO_TOP]->textureID = LoadTGA("Image//sky1_up.tga");
+	meshList[GEO_TOP] = MeshBuilder::GenerateQuad("Top", Color(1, 1, 1), skyBoxScale, skyBoxScale);
+	meshList[GEO_TOP]->textureID = LoadTGA("Image//BossSceneSkyBoxTop.tga");
 
 	//Bottom Skybox 
-	meshList[GEO_BOTTOM] = MeshBuilder::GenerateQuad("Bottom", Color(1, 1, 1), 1.0f, 1.0f);
-	meshList[GEO_BOTTOM]->textureID = LoadTGA("Image//sky1_down.tga");
-	//Skybox ------------- Base Camp End
+	meshList[GEO_BOTTOM] = MeshBuilder::GenerateQuad("Bottom", Color(1, 1, 1), skyBoxScale, skyBoxScale);
+	meshList[GEO_BOTTOM]->textureID = LoadTGA("Image//BossSceneSkyBoxBottom.tga");
+	//Skybox -------------
+	meshList[GROUND] = MeshBuilder::GenerateQuad("Ground Mesh", Color(0.1f, 0.1f, 0.1f), skyBoxScale, skyBoxScale);
+//	meshList[GROUND]->textureID = LoadTGA("Image//");
 
 
 	for (auto it : Env_Obj)
@@ -261,13 +265,14 @@ void BossScene::Render()
 
 
 
-	Player::getInstance()->render(&projectionStack, &viewStack, &modelStack, m_parameters);
 	GoatBoss::getInstance()->render(&projectionStack, &viewStack, &modelStack, m_parameters);
+	Player::getInstance()->render(&projectionStack, &viewStack, &modelStack, m_parameters);
 
 	RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::to_string(FramesPerSec), Color(1, 0, 0), 1.5f, 45, 38, &projectionStack, &viewStack, &modelStack, m_parameters);
 }
 
-void BossScene::RenderBaseCamp(){
+void BossScene::RenderBaseCamp()
+{
 
 
 
@@ -290,47 +295,43 @@ void BossScene::Exit()
 void BossScene::RenderSkybox()
 {
 	modelStack.PushMatrix();
-	modelStack.Translate(0, 0, -248);
-	modelStack.Scale(500.0f, 500.0f, 500.0f);
+	modelStack.Translate(0, 0, -skyBoxDistance);
 	RenderMeshClass::RenderMesh(meshList[GEO_FRONT], false, &projectionStack, &viewStack, &modelStack, m_parameters);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-	modelStack.Translate(0, 0, 248);
+	modelStack.Translate(0, 0, skyBoxDistance);
 	modelStack.Rotate(180.0f, 0, 1, 0);
-	modelStack.Scale(500.0f, 500.0f, 500.0f);
 	RenderMeshClass::RenderMesh(meshList[GEO_BACK], false, &projectionStack, &viewStack, &modelStack, m_parameters);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-	modelStack.Translate(-248, 0, 0);
+	modelStack.Translate(-skyBoxDistance, 0, 0);
 	modelStack.Rotate(90.0f, 0, 1, 0);
-	modelStack.Scale(500.0f, 500.0f, 500.0f);
 	RenderMeshClass::RenderMesh(meshList[GEO_LEFT], false, &projectionStack, &viewStack, &modelStack, m_parameters);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-	modelStack.Translate(248, 0, 0);
+	modelStack.Translate(skyBoxDistance, 0, 0);
 	modelStack.Rotate(-90.0f, 0, 1, 0);
-	modelStack.Scale(500.0f, 500.0f, 500.0f);
 	RenderMeshClass::RenderMesh(meshList[GEO_RIGHT], false, &projectionStack, &viewStack, &modelStack, m_parameters);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-	modelStack.Translate(0, 248, 0);
-	modelStack.Rotate(90.0f, 0, 1, 0);
+	modelStack.Translate(0, skyBoxDistance, 0);
 	modelStack.Rotate(90.0f, 1, 0, 0);
-	modelStack.Scale(500.0f, 500.0f, 500.0f);
 	RenderMeshClass::RenderMesh(meshList[GEO_TOP], false, &projectionStack, &viewStack, &modelStack, m_parameters);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-	modelStack.Translate(0, -248, 0);
-	modelStack.Rotate(90.0f, 0, 1, 0);
+	modelStack.Translate(0, -skyBoxDistance, 0);
 	modelStack.Rotate(-90.0f, 1, 0, 0);
-	modelStack.Scale(500.0f, 500.0f, 500.0f);
 	RenderMeshClass::RenderMesh(meshList[GEO_BOTTOM], false, &projectionStack, &viewStack, &modelStack, m_parameters);
 	modelStack.PopMatrix();
 
+	modelStack.PushMatrix();
+	modelStack.Rotate(-90.0f, 1, 0, 0);
+	RenderMeshClass::RenderMesh(meshList[GROUND], false, &projectionStack, &viewStack, &modelStack, m_parameters);
+	modelStack.PopMatrix();
 
 }
