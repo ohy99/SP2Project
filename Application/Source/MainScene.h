@@ -19,12 +19,12 @@
 #include "UI.h"
 #include "NPC.h"
 #include "Environment.h"
-<<<<<<< HEAD
+
 #include "Item.h"
-=======
+
 #include "Blueprints.h"
 #include "Weapon.h"
->>>>>>> a61f1ba9b91ec54e86018ebc4ab8c171a8b2fb4d
+
 
 class MainScene : public Scene
 {

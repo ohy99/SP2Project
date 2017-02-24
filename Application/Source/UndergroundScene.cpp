@@ -425,14 +425,7 @@ void UndergroundScene::Render()
 		modelStack.PushMatrix();
 		RenderMeshClass::RenderMesh(Env_Obj.at(i)->CollisionMesh_, true, &projectionStack, &viewStack, &modelStack, m_parameters);
 		modelStack.PopMatrix();
-<<<<<<< HEAD
-
 	}
-
-	Interactions();
-=======
-	}
->>>>>>> a61f1ba9b91ec54e86018ebc4ab8c171a8b2fb4d
 
 	Interactions();
 	//for (size_t i = 0; i < CampNPC.size(); i++)

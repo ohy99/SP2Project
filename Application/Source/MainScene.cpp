@@ -491,16 +491,9 @@ void MainScene::Render()
 	RenderMeshClass::RenderMesh(meshList[GEO_AXES], false, &projectionStack, &viewStack, &modelStack, m_parameters);
 	Player::getInstance()->render(&projectionStack, &viewStack, &modelStack, m_parameters);
 
-<<<<<<< HEAD
+
 	RenderSkybox();
 	//	renderEnvironment();
-=======
-		RenderMeshClass::RenderMesh(meshList[GEO_AXES], false, &projectionStack, &viewStack, &modelStack, m_parameters);
-		Player::getInstance()->render(&projectionStack, &viewStack, &modelStack, m_parameters);
-
-		RenderSkybox();
-		//	renderEnvironment();
->>>>>>> a61f1ba9b91ec54e86018ebc4ab8c171a8b2fb4d
 
 	//Ground Mesh
 	modelStack.PushMatrix();
@@ -520,16 +513,12 @@ void MainScene::Render()
 	RenderBaseCamp();
 
 
-<<<<<<< HEAD
 	Interactions();
 
-
-=======
 	RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::to_string(FramesPerSec), Color(1, 0, 0), 1.5f, 45, 38, &projectionStack, &viewStack, &modelStack, m_parameters);
 	RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("Blueprints: ") + std::to_string(Blueprints::GetBlueprintNumber()) + std::string("/3"), Color(1, 0, 0), 2.f, 68, 57, &projectionStack, &viewStack, &modelStack, m_parameters);
 	
 	Player::getInstance()->render(&projectionStack, &viewStack, &modelStack, m_parameters);
->>>>>>> a61f1ba9b91ec54e86018ebc4ab8c171a8b2fb4d
 
 	UI::getInstance()->renderPause(&projectionStack, &viewStack, &modelStack, m_parameters);
 	Inventory::getInstance()->Render(&projectionStack, &viewStack, &modelStack, m_parameters);
