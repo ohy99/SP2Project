@@ -492,9 +492,6 @@ void MainScene::Render()
 		RenderSkybox();
 		//	renderEnvironment();
 
-	RenderSkybox();
-	//	renderEnvironment();
-
 	//Ground Mesh
 	modelStack.PushMatrix();
 	modelStack.Scale(1000, 1000, 1000);
@@ -517,16 +514,13 @@ void MainScene::Render()
 
 		Interactions();
 
-	/*	RenderMeshClass::RenderTextOnScreen(&Scene::Text[Scene::TEXT_TYPE::Century], std::to_string(numberOfBlueprints), Color(1, 0, 0), 2, 20, 20, &projectionStack, &viewStack, &modelStack, m_parameters);*/
-
-
-
+	RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::to_string(FramesPerSec), Color(1, 0, 0), 1.5f, 45, 38, &projectionStack, &viewStack, &modelStack, m_parameters);
+	RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("Blueprints:"), Color(1, 0, 0), 2.f, 68, 57, &projectionStack, &viewStack, &modelStack, m_parameters);
+	RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::to_string(Blueprints::GetBlueprintNumber()), Color(1, 0, 0), 2.f, 77, 57, &projectionStack, &viewStack, &modelStack, m_parameters);
 
 	UI::getInstance()->renderPause(&projectionStack, &viewStack, &modelStack, m_parameters);
 	Inventory::getInstance()->Render(&projectionStack, &viewStack, &modelStack, m_parameters);
 
-	RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::to_string(FramesPerSec), Color(1, 0, 0), 1.5f, 45, 38, &projectionStack, &viewStack, &modelStack, m_parameters);
-	RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::to_string(Blueprints::GetBlueprintNumber()), Color(1, 0, 0), 1.5f, 20, 20, &projectionStack, &viewStack, &modelStack, m_parameters);
 	
 }
 
