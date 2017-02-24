@@ -95,6 +95,7 @@ private:
 	Light light[8];
 
 	static std::vector<EnvironmentObj*> Env_Obj;
+	static std::vector<Item*> Item_Obj;
 	static std::vector<NPC*> CampNPC;
 	//std::vector
 

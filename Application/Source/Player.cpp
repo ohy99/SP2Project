@@ -587,10 +587,10 @@ void Player::checkPickUpItem()
 	{
 		for (size_t i = 0; i < Items.size(); i++)
 		{
-			if (Pointed_Obj && !Inventory::getInstance()->isInventoryFull())
+			if (Pointed_Obj && !Inventory::getInstance()->isInventoryFull() && !Items[i]->isItemInInventory)
 			{
 				Inventory::getInstance()->setItem(Items[i]);
-
+				Items[i]->isItemInInventory = true;
 				break;
 			}
 		}
