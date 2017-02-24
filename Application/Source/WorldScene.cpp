@@ -459,7 +459,6 @@ void WorldScene::Init()
 	// Hide the mouse and enable unlimited mouvement
 	glfwSetInputMode(Application::m_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 
-	counter_text = 0;
 }
 
 void WorldScene::Update(double dt)
@@ -633,6 +632,7 @@ void WorldScene::Render()
 
 void WorldScene::Interactions(){
 
+
 	//Teleporter to Camp base -- Main Scene
 	if (Player::getInstance()->getPlayerPosition().x >= 92 && Player::getInstance()->getPlayerPosition().x <= 97 && Player::getInstance()->getPlayerPosition().z <= -8 && Player::getInstance()->getPlayerPosition().z >= -15){
 
@@ -669,11 +669,45 @@ void WorldScene::Interactions(){
 	//Tablet -- For 2nd Hint, true hint.
 	if (Player::getInstance()->getPlayerPosition().x >= -59 && Player::getInstance()->getPlayerPosition().x <= -58 && Player::getInstance()->getPlayerPosition().z <= 39 && Player::getInstance()->getPlayerPosition().z >= 36){
 
-		RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("[Press SPACE to scan.]"), Color(1, 0, 0), 2.f, 30, 30, &projectionStack, &viewStack, &modelStack, m_parameters);
+		if (counter_text_tablet == 0){
 		
+			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("[Press SPACE to scan.]"), Color(1, 0, 0), 2.f, 30, 30, &projectionStack, &viewStack, &modelStack, m_parameters);
+		}
+		if (Application::IsKeyPressed(VK_SPACE)){
+
+			counter_text_tablet = 1;
+		}
+		if (counter_text_tablet == 1){
+
+			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("*Extracting data…*"), Color(1, 0, 0), 2.f, 10, 37, &projectionStack, &viewStack, &modelStack, m_parameters);
+			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("*Discovered: This tablet holds information of a machine that can"), Color(1, 0, 0), 2.f, 10, 35, &projectionStack, &viewStack, &modelStack, m_parameters);
+			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("apparently help to rejuvenate the Earth."), Color(1, 0, 0), 2.f, 10, 33, &projectionStack, &viewStack, &modelStack, m_parameters);
+			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("There are apparently three parts to the blueprints required to make this device."), Color(1, 0, 0), 2.f, 10, 31, &projectionStack, &viewStack, &modelStack, m_parameters);
+			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("One of the locations is recorded in this device. A hidden lab at somewhere"), Color(1, 0, 0), 2.f, 10, 29, &projectionStack, &viewStack, &modelStack, m_parameters);
+			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("around coordinates: -80, -80 *"), Color(1, 0, 0), 2.f, 10, 27, &projectionStack, &viewStack, &modelStack, m_parameters);
+
+		}
 	}
-			//RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("*Extracting data…*"), Color(1, 0, 0), 2.f, 28, 30, &projectionStack, &viewStack, &modelStack, m_parameters);
-			//RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("*Discovered: This tablet holds information of a machine that can apparently help to rejuvenate the Earth.There are apparently three parts to the blueprints required to make this device.One of the locations is recorded in this device.New coordinates found.*"), Color(1, 0, 0), 2.f, 16, 30, &projectionStack, &viewStack, &modelStack, m_parameters);
+
+	//Broken Robot -- For 1st Hint, true hint.
+	if (Player::getInstance()->getPlayerPosition().x >= 75 && Player::getInstance()->getPlayerPosition().x <= 79 && Player::getInstance()->getPlayerPosition().z <= 74 && Player::getInstance()->getPlayerPosition().z >= 67){
+	
+		if (counter_text_robot == 0){
+
+			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("[Press SPACE to scan.]"), Color(1, 0, 0), 2.f, 30, 30, &projectionStack, &viewStack, &modelStack, m_parameters);
+		}
+		if (Application::IsKeyPressed(VK_SPACE)){
+
+			counter_text_robot = 1;
+		}
+		if (counter_text_robot == 1){
+
+			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("*Extracting data…*"), Color(1, 0, 0), 2.f, 10, 37, &projectionStack, &viewStack, &modelStack, m_parameters);
+			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("*Discovered: This robot appears to be a research assistant "), Color(1, 0, 0), 2.f, 10, 35, &projectionStack, &viewStack, &modelStack, m_parameters);
+			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("from a time before Earth was abandoned. One registered area of interest."), Color(1, 0, 0), 2.f, 10, 33, &projectionStack, &viewStack, &modelStack, m_parameters);
+			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("New coordinates found: ... *"), Color(1, 0, 0), 2.f, 10, 31, &projectionStack, &viewStack, &modelStack, m_parameters);
+		}
+	}
 }
 
 void WorldScene::Exit()
