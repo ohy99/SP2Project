@@ -81,6 +81,7 @@ private:
 	//std::vector
 
 	Blueprints *blueprints;
+	bool Blueprint3 = false;
 
 	void Interactions();
 
