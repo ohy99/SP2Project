@@ -354,9 +354,6 @@ void WorldScene::Init()
 	Env_Obj.push_back(DestroyedTruck);
 	//Vehicles ----------------------------------------------- END
 
-
-
-
 	//Barricades --------------------------------------------- START
 	EnvironmentObj* Barricade1 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Barricade1", "OBJ//WorldScene//Barricade1_OBJ.obj"));
 	Barricade1->CollisionMesh_->textureID = LoadTGA("Image//WorldScene//Barricade_UV_Texture.tga");
@@ -397,14 +394,17 @@ void WorldScene::Init()
 	Tablet->CollisionMesh_->textureID = LoadTGA("Image//WorldScene//InteractableItem_OffTablet_UV_Texture.tga");
 	EnvironmentObj* Robot = new EnvironmentObj(MeshBuilder::GenerateOBJ("Robot", "OBJ//WorldScene//BrokenRobot_OBJ.obj"));
 	Robot->CollisionMesh_->textureID = LoadTGA("Image//WorldScene//InteractableItem_BrokenRobot_UV_Texture.tga");
-	EnvironmentObj* Hard_disk = new EnvironmentObj(MeshBuilder::GenerateOBJ("Hard Disk", "OBJ//WorldScene//Harddisk_OBJ.obj"));
-	Hard_disk->CollisionMesh_->textureID = LoadTGA("Image//WorldScene//InteractableItem_Harddisk_UV_Texture.tga");
+	EnvironmentObj* Blueprint1 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Truck", "OBJ//Blueprint1.obj"));
+	Blueprint1->CollisionMesh_->textureID = LoadTGA("Image//BlueprintUV.tga");
+	//EnvironmentObj* Hard_disk = new EnvironmentObj(MeshBuilder::GenerateOBJ("Hard Disk", "OBJ//WorldScene//Harddisk_OBJ.obj"));
+	//Hard_disk->CollisionMesh_->textureID = LoadTGA("Image//WorldScene//InteractableItem_Harddisk_UV_Texture.tga");
 	EnvironmentObj* BrokenGuard = new EnvironmentObj(MeshBuilder::GenerateOBJ("Broken Guard", "OBJ//WorldScene//DestroyedGuard.obj"));
 
 
 	Env_Obj.push_back(Tablet);
 	Env_Obj.push_back(Robot);
-	Env_Obj.push_back(Hard_disk);
+	//Env_Obj.push_back(Hard_disk);
+	Env_Obj.push_back(Blueprint1);
 	Env_Obj.push_back(BrokenGuard);
 	//Interactable Items ----------------------------------------------- END
 
