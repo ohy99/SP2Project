@@ -19,6 +19,9 @@
 #include "RenderMesh.h"
 
 #include "UI.h"
+#include "Blueprints.h"
+#include "Inventory.h"
+
 
 //UndergroundScene::Text_Data UndergroundScene::Text[TEXT_TYPE::Text_Count];
 //unsigned UndergroundScene::m_parameters[U_TOTAL];
@@ -29,7 +32,8 @@ MS UndergroundScene::modelStack, UndergroundScene::viewStack, UndergroundScene::
 //std::vector<GameObject*> UndergroundScene::Game_Objects_(10, NULL);
 //UI renderMeshOnScreen;
 std::vector<EnvironmentObj*> UndergroundScene::Env_Obj;
-std::vector<NPC*> UndergroundScene::CampNPC;
+Teleporter* UndergroundScene::Stairs;
+//std::vector<NPC*> UndergroundScene::CampNPC;
 
 
 
@@ -250,7 +254,7 @@ void UndergroundScene::Init()
 
 	//Ceiling --- Start
 
-	EnvironmentObj* Ceiling = new EnvironmentObj(MeshBuilder::GenerateOBJ("Wall", "OBJ//Ceiling.obj"));
+	EnvironmentObj* Ceiling = new EnvironmentObj(MeshBuilder::GenerateOBJ("Ceiling", "OBJ//Ceiling.obj"));
 	Ceiling->CollisionMesh_->textureID = LoadTGA("Image//Mossy_Ceiling.tga");
 
 	Env_Obj.push_back(Ceiling);
@@ -258,13 +262,22 @@ void UndergroundScene::Init()
 	//Ceiling --- End
 
 	//Stairs --- Start
-
-	EnvironmentObj* Stairs = new EnvironmentObj(MeshBuilder::GenerateOBJ("Wall", "OBJ//Stairs.obj"));
-	Stairs->CollisionMesh_->textureID = LoadTGA("Image//Mossy_Ground.tga");
+	EnvironmentObj* Stairs = new EnvironmentObj(MeshBuilder::GenerateOBJ("Stairs", "OBJ//Stairs.obj"));
+	Stairs->CollisionMesh_->textureID = LoadTGA("Image//Mossy_Wall.tga");
 
 	Env_Obj.push_back(Stairs);
+	//Stairs = new Teleporter(MeshBuilder::GenerateOBJ("Stairs", "OBJ//Stairs.obj"), 1);
+	//Stairs->CollisionMesh_->textureID = LoadTGA("Image//Mossy_Ground.tga");
 
-	//Stairs --- Start
+	//meshList[GEO_STAIRS] = MeshBuilder::GenerateOBJ("Stairs", "OBJ//Stairs.obj");
+	//meshList[GEO_STAIRS]->material.kAmbient.Set(0.6f, 0.6f, 0.6f);
+	//meshList[GEO_STAIRS]->material.kDiffuse.Set(0.3f, 0.3f, 0.3f);
+	//meshList[GEO_STAIRS]->material.kSpecular.Set(0.1f, 0.1f, 0.1f);
+	//meshList[GEO_STAIRS]->material.kShininess = 1.0f;
+	//meshList[GEO_STAIRS]->textureID = LoadTGA("Image//Mossy_Ground.tga");
+
+	//Player::getInstance()->Teleport.push_back(Stairs);
+	//Stairs --- End
 
 	//Furniture ------ Start
 	EnvironmentObj* Bed1 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Bed", "OBJ//Bed1.obj"));
@@ -289,18 +302,22 @@ void UndergroundScene::Init()
 	Env_Obj.push_back(Desk2);
 	Env_Obj.push_back(Desk3);
 	Env_Obj.push_back(Wardrobe);
-
 	//Furniture ------ End
+
+	//Blueprint 3 ----- Start
+	EnvironmentObj* Blueprint = new EnvironmentObj(MeshBuilder::GenerateOBJ("Blueprint", "OBJ//Blueprint3.obj"));
+	Blueprint->CollisionMesh_->textureID = LoadTGA("Image//BlueprintUV.tga");
+
+	Env_Obj.push_back(Blueprint);
+	//Blueprint 3 ----- End
 
 	for (auto it : Env_Obj)
 		Player::addCollisionObject(it);
 
 
 
-	renderUI.Init();
-	wasEscPressed = false;
-	isPause = false;
-	MainMenu.Init();
+	UI::getInstance()->Init();
+
 
 	camera = new Camera3;
 	camera->Init(Vector3(0, 0, 7), Vector3(0, 0, 0), Vector3(0, 1, 0));
@@ -320,7 +337,6 @@ void UndergroundScene::Update(double dt)
 
 	int width, height;
 	glfwGetWindowSize(Application::m_window, &width, &height);
-	isEscPressed = Application::IsKeyPressed(VK_ESCAPE);
 
 
 	if (Application::IsKeyPressed(VK_NUMPAD1) || Application::IsKeyPressed('1'))
@@ -340,11 +356,11 @@ void UndergroundScene::Update(double dt)
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); //wireframe mode
 	}
 
-	if (Application::IsKeyPressed('1'))
-	{
-		SceneManager::getInstance()->SetNextSceneID(0);
-		SceneManager::getInstance()->SetNextScene();
-	}
+	//if (Application::IsKeyPressed('1'))
+	//{
+	//	SceneManager::getInstance()->SetNextSceneID(0);
+	//	SceneManager::getInstance()->SetNextScene();
+	//}
 
 	bool fpsonce = false;
 	if (Application::IsKeyPressed('V') && fpsonce == false)
@@ -353,56 +369,31 @@ void UndergroundScene::Update(double dt)
 		fpsonce = true;
 	}
 
+	UI::getInstance()->Update(dt);
 
 
-	if (isEscPressed && !wasEscPressed) // When you press ESC
+	if (!UI::getInstance()->isPauseOpen() && !Inventory::getInstance()->isInventoryOpen())
 	{
-		if (!MainMenu.isMainMenu)
-		{
-			if (!isPause)
-			{
-				isPause = true;
-				glfwSetInputMode(Application::m_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-				glfwSetCursorPos(Application::m_window, width / 2, height / 2);
-			}
-			else
-			{
-				isPause = false;
-				glfwSetInputMode(Application::m_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-				glfwSetCursorPos(Application::m_window, width / 2, height / 2);
-			}
 
-			wasEscPressed = isEscPressed;
-		}
-	}
-
-	if (!isEscPressed && wasEscPressed) // When you release the ESC button
-		wasEscPressed = isEscPressed;
-
-	Player::getInstance()->update(dt, camera);
-
-	for (size_t i = 0; i < CampNPC.size(); i++)
-	{
-		CampNPC.at(i)->update(dt);
-	}
-
-
-	if (!isPause && !MainMenu.isMainMenu)
-	{
 		double c_posx, c_posy;
 		glfwGetCursorPos(Application::m_window, &c_posx, &c_posy);
 		glfwSetCursorPos(Application::m_window, width / 2, height / 2);
 
 		glfwSetInputMode(Application::m_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+		Player::getInstance()->update(dt, camera);
 
 		double dx, dy;
 		dx = dt * double(width / 2 - c_posx);
 		dy = dt * double(height / 2 - c_posy);
 		camera->Update(dt, dx, dy);
+
+		//for (size_t i = 0; i < CampNPC.size(); i++)
+		//{
+		//	CampNPC.at(i)->update(dt);
+		//}
 	}
 
 	FramesPerSec = 1 / dt;
-	MainMenu.Update(dt);
 }
 
 void UndergroundScene::Render()
@@ -417,71 +408,77 @@ void UndergroundScene::Render()
 		camera->getUp().x, camera->getUp().y, camera->getUp().z);
 	modelStack.LoadIdentity();
 
-	if (MainMenu.isMainMenu)
-		MainMenu.Render();
+	RenderMeshClass::RenderMesh(meshList[GEO_AXES], false, &projectionStack, &viewStack, &modelStack, m_parameters);
 
-	else
-	{
-		RenderMeshClass::RenderMesh(meshList[GEO_AXES], false, &projectionStack, &viewStack, &modelStack, m_parameters);
-		Player::getInstance()->render(&projectionStack, &viewStack, &modelStack, m_parameters);
+	RenderSkybox();
+	//	renderEnvironment();
 
-		RenderSkybox();
-		//	renderEnvironment();
-
-		//Ground Mesh
-		modelStack.PushMatrix();
-		modelStack.Scale(1000, 1000, 1000);
-		modelStack.Rotate(90, -1, 0, 0);
-		RenderMeshClass::RenderMesh(meshList[GEO_MOSSY_GROUND], true, &projectionStack, &viewStack, &modelStack, m_parameters);
-		modelStack.PopMatrix();
-
-
-
-		for (size_t i = 0; i < CampNPC.size(); i++)
-		{
-			CampNPC.at(i)->render(&projectionStack, &viewStack, &modelStack, m_parameters);
-		}
-		RenderBaseCamp();
-
-
-		if (isPause)
-			renderUI.renderPause(&projectionStack, &viewStack, &modelStack, m_parameters);
-
-
-		RenderBaseCamp();
-		RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::to_string(FramesPerSec), Color(1, 0, 0), 1.5f, 45, 38, &projectionStack, &viewStack, &modelStack, m_parameters);
-	}
-
-}
-
-void UndergroundScene::RenderBaseCamp(){
+	//Ground Mesh
+	modelStack.PushMatrix();
+	modelStack.Scale(1000, 1000, 1000);
+	modelStack.Rotate(90, -1, 0, 0);
+	RenderMeshClass::RenderMesh(meshList[GEO_MOSSY_GROUND], true, &projectionStack, &viewStack, &modelStack, m_parameters);
+	modelStack.PopMatrix();
 
 	for (size_t i = 0; i < Env_Obj.size(); i++)
 	{
 		modelStack.PushMatrix();
 		RenderMeshClass::RenderMesh(Env_Obj.at(i)->CollisionMesh_, true, &projectionStack, &viewStack, &modelStack, m_parameters);
 		modelStack.PopMatrix();
-
 	}
 
+	Interactions();
+	//for (size_t i = 0; i < CampNPC.size(); i++)
+	//{
+	//	CampNPC.at(i)->render(&projectionStack, &viewStack, &modelStack, m_parameters);
+	//}
 
-	////Crates
-	//modelStack.PushMatrix();
-	//RenderMeshClass::RenderMesh(meshList[GEO_Crates], true, &projectionStack, &viewStack, &modelStack, m_parameters);
-	//RenderMeshClass::RenderMesh(meshList[GEO_Crates1], true, &projectionStack, &viewStack, &modelStack, m_parameters);
-	//modelStack.PopMatrix();
+	RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("Blueprints: ") + std::to_string(Blueprints::GetBlueprintNumber()) + std::string("/3"), Color(1, 0, 0), 2.f, 68, 57, &projectionStack, &viewStack, &modelStack, m_parameters);
 
-	////Solar panels
-	//modelStack.PushMatrix();
-	//RenderMeshClass::RenderMesh(meshList[GEO_SolarPanel], true, &projectionStack, &viewStack, &modelStack, m_parameters);
-	//RenderMeshClass::RenderMesh(meshList[GEO_SolarPanel1], true, &projectionStack, &viewStack, &modelStack, m_parameters);
-	//modelStack.PopMatrix();
+	UI::getInstance()->renderPause(&projectionStack, &viewStack, &modelStack, m_parameters);
+	Player::getInstance()->render(&projectionStack, &viewStack, &modelStack, m_parameters);
+	RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::to_string(FramesPerSec), Color(1, 0, 0), 1.5f, 45, 38, &projectionStack, &viewStack, &modelStack, m_parameters);
+}
 
-	//Powerbox
-	//modelStack.PushMatrix();
-	//RenderMeshClass::RenderMesh(meshList[GEO_PowerBox], true, &projectionStack, &viewStack, &modelStack, m_parameters);
-	//modelStack.PopMatrix();
 
+void UndergroundScene::Interactions()
+{
+	//Return to World Scene
+	if (Player::getInstance()->getPlayerPosition().x >= -39 && Player::getInstance()->getPlayerPosition().x <= -33 && Player::getInstance()->getPlayerPosition().z <= 33 && Player::getInstance()->getPlayerPosition().z >= 26)
+	{
+		RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("[Press SPACE to exit.]"), Color(1, 0, 0), 2.f, 30, 30, &projectionStack, &viewStack, &modelStack, m_parameters);
+	}
+
+	if (Application::IsKeyPressed(VK_SPACE))
+	{ 
+		if (Player::getInstance()->getPlayerPosition().x >= -39 && Player::getInstance()->getPlayerPosition().x <= -33 && Player::getInstance()->getPlayerPosition().z <= 33 && Player::getInstance()->getPlayerPosition().z >= 26)
+		{
+			SceneManager::getInstance()->SetNextSceneID(2);
+			SceneManager::getInstance()->SetNextScene();
+
+			Player::getInstance()->setPosition(Vector3(-87.0, 0.0, -69.0));
+		}
+	}
+
+	//Blueprint 3
+	if (Player::getInstance()->getPlayerPosition().x >= 41.5 && Player::getInstance()->getPlayerPosition().x <= 43 && Player::getInstance()->getPlayerPosition().z <= 39 && Player::getInstance()->getPlayerPosition().z >= 37){
+
+		if (Blueprint3 == false){
+
+			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("[Press SPACE to scan.]"), Color(1, 0, 0), 2.f, 30, 30, &projectionStack, &viewStack, &modelStack, m_parameters);
+			if (Application::IsKeyPressed(VK_SPACE))
+			{
+				Blueprint3 = true;
+				Blueprints::AddBlueprintNumber();
+			}
+		}
+		if (Blueprint3 == true){
+
+			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("*Object scanned*"), Color(1, 0, 0), 2.f, 10, 37, &projectionStack, &viewStack, &modelStack, m_parameters);
+			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("*Discovered: This appears to be a blueprint for a part of a machine."), Color(1, 0, 0), 2.f, 10, 35, &projectionStack, &viewStack, &modelStack, m_parameters);
+			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("Committing to memory... Blueprint saved*"), Color(1, 0, 0), 2.f, 10, 33, &projectionStack, &viewStack, &modelStack, m_parameters);
+		}
+	}
 }
 
 void UndergroundScene::Exit()
@@ -491,7 +488,7 @@ void UndergroundScene::Exit()
 		if (meshList[i] != NULL)
 			delete meshList[i];
 	}
-	delete camera;
+	//delete camera;
 	Player::getInstance()->clearCollisionObj();
 
 	// Cleanup VBO here

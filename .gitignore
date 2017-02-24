@@ -35,3 +35,6 @@ Common/Debug
 *.iff
 *.png
 *.ma
+Debug/Application.ilk
+Debug/Application.pdb
+

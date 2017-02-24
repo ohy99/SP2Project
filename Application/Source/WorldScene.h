@@ -18,6 +18,7 @@
 #include "UI.h"
 #include "NPC.h"
 #include "Environment.h"
+#include "Blueprints.h"
 
 
 class WorldScene : public Scene
@@ -37,6 +38,7 @@ class WorldScene : public Scene
 		GEO_LIGHTBALL1,
 		GEO_GroundMesh_RedDirt,
 		GEO_Teleporter,
+		GEO_UNDERGROUND_DOOR,
 
 		GEO_LEFT,
 		GEO_RIGHT,
@@ -61,6 +63,9 @@ public:
 	static MS modelStack, viewStack, projectionStack;
 
 	static Teleporter* WS_Teleporter;
+	static Teleporter* Underground_Door;
+
+	//MainScene* blueprint;
 
 private:
 	unsigned m_vertexArrayID;
@@ -86,13 +91,23 @@ private:
 
 	//MainScreen MainMenu;
 	//UI renderUI;
+	Blueprints *blueprints;
+
+	void Interactions();
 
 	double x, y;
+
+	int counter_text_tablet = 0;
+	int counter_text_robot = 0;
+	int counter_text_oil = 0;
+	int counter_text_fakeBlueprints = 0;
+	bool Blueprint1 = false;
+	bool Blueprint2 = false;
+	//int addblueprint;
+
 	//void RenderText(Text_Data* TextData, std::string text, Color color);
 	//void RenderTextOnScreen(Text_Data* TextData, std::string text, Color color, float size, float x, float y);
-	//void RenderMeshOnScreen(Mesh* mesh, int x, int y, int sizex, int sizey);
+	//void RenderMeshOnScreen(Mesh* mesh, int x, int y, int sizex, int sizey)
 
 };
-
-
 #endif

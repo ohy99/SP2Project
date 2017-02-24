@@ -19,6 +19,8 @@
 #include "RenderMesh.h"
 
 #include "UI.h"
+#include "Blueprints.h"
+#include "Inventory.h"
 
 //WorldScene::Text_Data WorldScene::Text[TEXT_TYPE::Text_Count];
 //unsigned WorldScene::m_parameters[U_TOTAL];
@@ -30,6 +32,7 @@ MS WorldScene::modelStack, WorldScene::viewStack, WorldScene::projectionStack;
 //UI renderMeshOnScreen;
 std::vector<EnvironmentObj*> WorldScene::Env_Obj;
 Teleporter* WorldScene::WS_Teleporter;
+Teleporter* WorldScene::Underground_Door;
 
 //std::vector<NPC*> WorldScene::CampNPC;
 
@@ -47,7 +50,7 @@ WorldScene::~WorldScene()
 void WorldScene::Init()
 {
 	// Init VBO here
-	Player::getInstance()->setPosition(Vector3(0, 0, 0));
+	//Player::getInstance()->setPosition(Vector3(0, 0, 0));
 
 	glClearColor(0.0f, 0.5f, 0.66f, 0.0f);
 
@@ -231,6 +234,10 @@ void WorldScene::Init()
 	//Outer Row of Buildings 3 ----------------------------------- START
 	EnvironmentObj* OuterBuilding3_BigApartment = new EnvironmentObj(MeshBuilder::GenerateOBJ("Big Apartment", "OBJ//WorldScene//OuterBuildingRow3--BigApartment_OBJ.obj"));
 	OuterBuilding3_BigApartment->CollisionMesh_->textureID = LoadTGA("Image//WorldScene//BigApartment.tga");
+	EnvironmentObj* OuterBuilding3_BigApartment2 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Big Apartment", "OBJ//WorldScene//OuterBuildingRow3--BigApartment2_OBJ.obj"));
+	OuterBuilding3_BigApartment2->CollisionMesh_->textureID = LoadTGA("Image//WorldScene//BigApartment.tga");
+	EnvironmentObj* OuterBuilding3_BigApartment3 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Big Apartment", "OBJ//WorldScene//OuterBuildingRow3--BigApartment3_OBJ.obj"));
+	OuterBuilding3_BigApartment3->CollisionMesh_->textureID = LoadTGA("Image//WorldScene//BigApartment.tga");
 	EnvironmentObj* OuterBuilding3_Ruins = new EnvironmentObj(MeshBuilder::GenerateOBJ("Ruins", "OBJ//WorldScene//OuterBuildingRow3--Ruins_OBJ.obj"));
 	OuterBuilding3_Ruins->CollisionMesh_->textureID = LoadTGA("Image//WorldScene//Ruins2_UV_Texture.tga");
 	EnvironmentObj* OuterBuilding3_Ruins1 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Ruins", "OBJ//WorldScene//OuterBuildingRow3--Ruins1_OBJ.obj"));
@@ -249,6 +256,8 @@ void WorldScene::Init()
 	OuterBuilding3_Car->CollisionMesh_->textureID = LoadTGA("Image//WorldScene//Car_Texture.tga");
 
 	Env_Obj.push_back(OuterBuilding3_BigApartment);
+	Env_Obj.push_back(OuterBuilding3_BigApartment2);
+	Env_Obj.push_back(OuterBuilding3_BigApartment3);
 	Env_Obj.push_back(OuterBuilding3_Ruins);
 	Env_Obj.push_back(OuterBuilding3_Ruins1);
 	Env_Obj.push_back(OuterBuilding3_BigSkyScraper);
@@ -273,12 +282,15 @@ void WorldScene::Init()
 	OuterBuilding4_LShapeBuilding->CollisionMesh_->textureID = LoadTGA("Image//WorldScene//Building4UV.tga");
 	EnvironmentObj* OuterBuilding4_Tree = new EnvironmentObj(MeshBuilder::GenerateOBJ("Tree", "OBJ//WorldScene//OuterBuildingRow4--Tree_OBJ.obj"));
 	OuterBuilding4_Tree->CollisionMesh_->textureID = LoadTGA("Image//WorldScene//Tree_MediumSize_UV_Texture.tga");
+	EnvironmentObj* OuterBuilding4_Tree2 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Tree", "OBJ//WorldScene//OuterBuildingRow4--Tree2_OBJ.obj"));
+	OuterBuilding4_Tree2->CollisionMesh_->textureID = LoadTGA("Image//WorldScene//Tree_MediumSize_UV_Texture.tga");
 
 	Env_Obj.push_back(OuterBuilding4_BigApartment);
 	Env_Obj.push_back(OuterBuilding4_Ruins);
 	Env_Obj.push_back(OuterBuilding4_BigSkyScraper);
 	Env_Obj.push_back(OuterBuilding4_LShapeBuilding);
 	Env_Obj.push_back(OuterBuilding4_Tree);
+	Env_Obj.push_back(OuterBuilding4_Tree2);
 	//Outer Row of Buildings 4 ------------------------------------ END
 
 
@@ -320,8 +332,22 @@ void WorldScene::Init()
 	Env_Obj.push_back(BottomLeft_BigApartment);
 	//Inner Row of Buildings -------------------------------------- END
 
+	//Door to Underground Lab --------------------------------- START
+
+	EnvironmentObj* UndergroundDoor = new EnvironmentObj(MeshBuilder::GenerateOBJ("Underground Door", "OBJ//UndergroundDoor.obj"));
+	UndergroundDoor->CollisionMesh_->textureID = LoadTGA("Image//UndergroundDoor.tga");
 
 
+	Env_Obj.push_back(UndergroundDoor);
+
+	//Underground_Door = new Teleporter(MeshBuilder::GenerateOBJ("Underground Door", "OBJ//UndergroundDoor.obj"), 5);
+	//Underground_Door->CollisionMesh_->textureID = LoadTGA("Image//UndergroundDoor.tga");
+
+	//meshList[GEO_UNDERGROUND_DOOR] = MeshBuilder::GenerateOBJ("Underground Door", "OBJ//UndergroundDoor.obj");
+	//meshList[GEO_UNDERGROUND_DOOR]->textureID = LoadTGA("Image//UndergroundDoor.tga");
+
+	//Player::getInstance()->Teleport.push_back(Underground_Door);
+	//Door to Underground Lab --------------------------------- END
 
 	//Vehicles ----------------------------------------------- START
 	EnvironmentObj* DestroyedTruck = new EnvironmentObj(MeshBuilder::GenerateOBJ("Truck", "OBJ//WorldScene//Vehicle1_OBJ.obj"));
@@ -329,9 +355,6 @@ void WorldScene::Init()
 
 	Env_Obj.push_back(DestroyedTruck);
 	//Vehicles ----------------------------------------------- END
-
-
-
 
 	//Barricades --------------------------------------------- START
 	EnvironmentObj* Barricade1 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Barricade1", "OBJ//WorldScene//Barricade1_OBJ.obj"));
@@ -350,15 +373,71 @@ void WorldScene::Init()
 
 
 	//Teleporter -------------------------------------------- START
-	WS_Teleporter = new Teleporter(MeshBuilder::GenerateOBJ("Teleporter", "OBJ//WorldScene//Teleporter_OBJ.obj"),0);
-	WS_Teleporter->CollisionMesh_->textureID = LoadTGA("Image//WorldScene//InteractableItem_Teleporter_UV_Texture.tga");
+	//WS_Teleporter = new Teleporter(MeshBuilder::GenerateOBJ("Teleporter", "OBJ//WorldScene//Teleporter_OBJ.obj"),0);
+	//WS_Teleporter->CollisionMesh_->textureID = LoadTGA("Image//WorldScene//InteractableItem_Teleporter_UV_Texture.tga");
 
-	meshList[GEO_Teleporter] = MeshBuilder::GenerateOBJ("Teleporter", "OBJ//WorldScene//Teleporter_OBJ.obj");
-	meshList[GEO_Teleporter]->textureID = LoadTGA("Image//WorldScene//InteractableItem_Teleporter_UV_Texture.tga");
+	//meshList[GEO_Teleporter] = MeshBuilder::GenerateOBJ("Teleporter", "OBJ//WorldScene//Teleporter_OBJ.obj");
+	//meshList[GEO_Teleporter]->textureID = LoadTGA("Image//WorldScene//InteractableItem_Teleporter_UV_Texture.tga");
 
-	//Env_Obj.push_back(Teleporter);
-	Player::getInstance()->Teleport.push_back(WS_Teleporter);
+	EnvironmentObj* Teleporter = new EnvironmentObj(MeshBuilder::GenerateOBJ("Teleporter", "OBJ//WorldScene//Teleporter_OBJ.obj"));
+	Teleporter->CollisionMesh_->textureID = LoadTGA("Image//WorldScene//InteractableItem_Teleporter_UV_Texture.tga");
+
+
+	Env_Obj.push_back(Teleporter);
+
+	//Player::getInstance()->Teleport.push_back(WS_Teleporter);
 	//Teleporter -------------------------------------------- END
+
+
+
+
+	//Interactable Items ----------------------------------------------- START
+	EnvironmentObj* Tablet = new EnvironmentObj(MeshBuilder::GenerateOBJ("Tablet", "OBJ//WorldScene//Tablet_OBJ.obj"));
+	Tablet->CollisionMesh_->textureID = LoadTGA("Image//WorldScene//InteractableItem_OffTablet_UV_Texture.tga");
+	EnvironmentObj* Robot = new EnvironmentObj(MeshBuilder::GenerateOBJ("Robot", "OBJ//WorldScene//BrokenRobot_OBJ.obj"));
+	Robot->CollisionMesh_->textureID = LoadTGA("Image//WorldScene//InteractableItem_BrokenRobot_UV_Texture.tga");
+	EnvironmentObj* Blueprint1 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Blueprint", "OBJ//Blueprint1.obj"));
+	Blueprint1->CollisionMesh_->textureID = LoadTGA("Image//BlueprintUV.tga");
+	EnvironmentObj* Blueprint2 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Blueprint", "OBJ//Blueprint2.obj"));
+	Blueprint2->CollisionMesh_->textureID = LoadTGA("Image//BlueprintUV.tga");
+	EnvironmentObj* Blueprint_Fakehint = new EnvironmentObj(MeshBuilder::GenerateOBJ("Blueprint", "OBJ//Blueprint_FakeHint.obj"));
+	Blueprint_Fakehint->CollisionMesh_->textureID = LoadTGA("Image//BlueprintUV.tga");
+	EnvironmentObj* BrokenGuard = new EnvironmentObj(MeshBuilder::GenerateOBJ("Broken Guard", "OBJ//WorldScene//DestroyedGuard.obj"));
+
+
+	Env_Obj.push_back(Tablet);
+	Env_Obj.push_back(Robot);
+	Env_Obj.push_back(Blueprint1);
+	Env_Obj.push_back(Blueprint2);
+	Env_Obj.push_back(Blueprint_Fakehint);
+	Env_Obj.push_back(BrokenGuard);
+	//Interactable Items ----------------------------------------------- END
+
+
+
+
+	//Oil Barrels (Infront of blueprints) -------------------------------------- START
+	EnvironmentObj* OilBarrel1 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Oil Barrel1", "OBJ//WorldScene//OilBarrel_infront_blueprints1.obj"));
+	OilBarrel1->CollisionMesh_->textureID = LoadTGA("Image//WorldScene//OilBarrerlsUV.tga");
+	EnvironmentObj* OilBarrel2 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Oil Barrel2", "OBJ//WorldScene//OilBarrel_infront_blueprints2.obj"));
+	OilBarrel2->CollisionMesh_->textureID = LoadTGA("Image//WorldScene//OilBarrerlsUV.tga");
+
+	Env_Obj.push_back(OilBarrel1);
+	Env_Obj.push_back(OilBarrel2);
+	//Oil Barrels (Infront of blueprints) --------------------------------------- END
+
+
+
+
+	//Oil Barrels (Fake hints) ------------------------------------------------ START
+	EnvironmentObj* OilBarrel_FakeHint1 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Oil Barrel1", "OBJ//WorldScene//OilBarrel_FakeHint1.obj"));
+	OilBarrel_FakeHint1->CollisionMesh_->textureID = LoadTGA("Image//WorldScene//OilBarrerlsUV.tga");
+	EnvironmentObj* OilBarrel_FakeHint2 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Oil Barrel2", "OBJ//WorldScene//OilBarrel_FakeHint2.obj"));
+	OilBarrel_FakeHint2->CollisionMesh_->textureID = LoadTGA("Image//WorldScene//OilBarrerlsUV.tga");
+
+	Env_Obj.push_back(OilBarrel_FakeHint1);
+	Env_Obj.push_back(OilBarrel_FakeHint2);
+	//Oil Barrels (Fake hints) ------------------------------------------------ END
 
 
 
@@ -391,6 +470,9 @@ void WorldScene::Init()
 
 
 
+
+
+
 	for (auto it : Env_Obj)
 		Player::addCollisionObject(it);
 	
@@ -399,6 +481,8 @@ void WorldScene::Init()
 	wasEscPressed = false;
 	isPause = false;
 	//MainMenu.Init();
+
+	UI::getInstance()->Init();
 
 	camera = new Camera3;
 	camera->Init(Vector3(0, 0, 7), Vector3(0, 0, 0), Vector3(0, 1, 0));
@@ -410,6 +494,7 @@ void WorldScene::Init()
 
 	// Hide the mouse and enable unlimited mouvement
 	glfwSetInputMode(Application::m_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+
 }
 
 void WorldScene::Update(double dt)
@@ -452,41 +537,16 @@ void WorldScene::Update(double dt)
 		fpsonce = true;
 	}
 
-
-
-	if (isEscPressed && !wasEscPressed) // When you press ESC
-	{
-		//if (!MainMenu.isMainMenu)
-		//{
-			if (!isPause)
-			{
-				isPause = true;
-				glfwSetInputMode(Application::m_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-				glfwSetCursorPos(Application::m_window, width / 2, height / 2);
-			}
-			else
-			{
-				isPause = false;
-				glfwSetInputMode(Application::m_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-				glfwSetCursorPos(Application::m_window, width / 2, height / 2);
-			}
-
-			wasEscPressed = isEscPressed;
-		//}
-	}
-
-	if (!isEscPressed && wasEscPressed) // When you release the ESC button
-		wasEscPressed = isEscPressed;
-
 	Player::getInstance()->update(dt, camera);
+	Inventory::getInstance()->Update(dt);
+	UI::getInstance()->Update(dt);
+
 
 	//for (size_t i = 0; i < CampNPC.size(); i++)
 	//{
 	//	CampNPC.at(i)->update(dt);
 	//}
-
-
-	if (!isPause /*&& !mainmenu.ismainmenu*/)
+	if (!UI::getInstance()->isPauseOpen() && !Inventory::getInstance()->isInventoryOpen())
 	{
 		double c_posx, c_posy;
 		glfwGetCursorPos(Application::m_window, &c_posx, &c_posy);
@@ -498,7 +558,13 @@ void WorldScene::Update(double dt)
 		dx = dt * double(width / 2 - c_posx);
 		dy = dt * double(height / 2 - c_posy);
 		camera->Update(dt, dx, dy);
+
+		//for (size_t i = 0; i < CampNPC.size(); i++)
+		//{
+		//	CampNPC.at(i)->update(dt);
+		//}
 	}
+
 
 	if (Application::IsKeyPressed('1'))
 	{
@@ -523,40 +589,31 @@ void WorldScene::Render()
 		camera->getUp().x, camera->getUp().y, camera->getUp().z);
 	modelStack.LoadIdentity();
 
-	//if (MainMenu.isMainMenu)
-	//	MainMenu.Render();
+	RenderSkybox();
+	//renderEnvironment();
 
-	//else
+	//Ground Mesh
+	modelStack.PushMatrix();
+	modelStack.Scale(1000, 1000, 1000);
+	modelStack.Rotate(90, -1, 0, 0);
+	RenderMeshClass::RenderMesh(meshList[GEO_GroundMesh_RedDirt], true, &projectionStack, &viewStack, &modelStack, m_parameters);
+	modelStack.PopMatrix();
+
+
+
+	//for (size_t i = 0; i < CampNPC.size(); i++)
 	//{
-
-		RenderSkybox();
-		//renderEnvironment();
-
-		//Ground Mesh
-		modelStack.PushMatrix();
-		modelStack.Scale(1000, 1000, 1000);
-		modelStack.Rotate(90, -1, 0, 0);
-		RenderMeshClass::RenderMesh(meshList[GEO_GroundMesh_RedDirt], true, &projectionStack, &viewStack, &modelStack, m_parameters);
-		modelStack.PopMatrix();
-
-
-
-		//for (size_t i = 0; i < CampNPC.size(); i++)
-		//{
-		//	CampNPC.at(i)->render(&projectionStack, &viewStack, &modelStack, m_parameters);
-		//}
-
-
-
-		//if (isPause)
-			//renderUI.renderPause(&projectionStack, &viewStack, &modelStack, m_parameters);
-
-
+	//	CampNPC.at(i)->render(&projectionStack, &viewStack, &modelStack, m_parameters);
 	//}
 
-	modelStack.PushMatrix();
-	RenderMeshClass::RenderMesh(meshList[GEO_Teleporter], true, &projectionStack, &viewStack, &modelStack, m_parameters);
-	modelStack.PushMatrix();
+
+	//modelStack.PushMatrix();
+	//RenderMeshClass::RenderMesh(meshList[GEO_Teleporter], true, &projectionStack, &viewStack, &modelStack, m_parameters);
+	//modelStack.PushMatrix();
+
+	//modelStack.PushMatrix();
+	//RenderMeshClass::RenderMesh(meshList[GEO_UNDERGROUND_DOOR], true, &projectionStack, &viewStack, &modelStack, m_parameters);
+	//modelStack.PushMatrix();
 
 	for (size_t i = 0; i < Env_Obj.size(); i++)
 	{
@@ -566,15 +623,162 @@ void WorldScene::Render()
 		
 	}
 
+	Interactions();
+
+	RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("Blueprints: ") + std::to_string(Blueprints::GetBlueprintNumber()) + std::string("/3"), Color(1, 0, 0), 2.f, 68, 57, &projectionStack, &viewStack, &modelStack, m_parameters);
 
 	RenderMeshClass::RenderMesh(meshList[GEO_AXES], false, &projectionStack, &viewStack, &modelStack, m_parameters);
 	Player::getInstance()->render(&projectionStack, &viewStack, &modelStack, m_parameters);
 
 	RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::to_string(FramesPerSec), Color(1, 0, 0), 1.5f, 45, 38, &projectionStack, &viewStack, &modelStack, m_parameters);
 
+	UI::getInstance()->renderPause(&projectionStack, &viewStack, &modelStack, m_parameters);
+	Inventory::getInstance()->Render(&projectionStack, &viewStack, &modelStack, m_parameters);
 
 }
 
+
+void WorldScene::Interactions(){
+
+
+	//Teleporter to Camp base -- Main Scene
+	if (Player::getInstance()->getPlayerPosition().x >= 92 && Player::getInstance()->getPlayerPosition().x <= 97 && Player::getInstance()->getPlayerPosition().z <= -8 && Player::getInstance()->getPlayerPosition().z >= -15){
+
+		RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("[Press SPACE to teleport to Camp Base.]"), Color(1, 0, 0), 2.f, 28, 30, &projectionStack, &viewStack, &modelStack, m_parameters);
+	}
+
+	if (Application::IsKeyPressed(VK_SPACE)){
+
+		if (Player::getInstance()->getPlayerPosition().x >= 92 && Player::getInstance()->getPlayerPosition().x <= 97 && Player::getInstance()->getPlayerPosition().z <= -8 && Player::getInstance()->getPlayerPosition().z >= -15){
+
+			SceneManager::getInstance()->SetNextSceneID(1);
+			SceneManager::getInstance()->SetNextScene();
+			Player::getInstance()->setPosition(Vector3(-18.0, 0.0, -0.5));
+		}
+
+	}
+
+
+	//Door to Underground Scene
+	if (Player::getInstance()->getPlayerPosition().x >= -88 && Player::getInstance()->getPlayerPosition().x <= -86 && Player::getInstance()->getPlayerPosition().z <= -68 && Player::getInstance()->getPlayerPosition().z >= -70)
+	{
+		RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("[Press SPACE to enter]"), Color(1, 0, 0), 2.f, 28, 30, &projectionStack, &viewStack, &modelStack, m_parameters);
+	}
+
+	if (Application::IsKeyPressed(VK_SPACE))
+	{
+		if (Player::getInstance()->getPlayerPosition().x >= -88 && Player::getInstance()->getPlayerPosition().x <= -86 && Player::getInstance()->getPlayerPosition().z <= -68 && Player::getInstance()->getPlayerPosition().z >= -70)
+		{
+			SceneManager::getInstance()->SetNextSceneID(5);
+			SceneManager::getInstance()->SetNextScene();
+			Player::getInstance()->setPosition(Vector3(-36.0, 0.0, 30.0));
+		}
+	}
+
+
+	//Tablet -- For 2nd Hint, true hint.
+	if (Player::getInstance()->getPlayerPosition().x >= -59 && Player::getInstance()->getPlayerPosition().x <= -58 && Player::getInstance()->getPlayerPosition().z <= 39 && Player::getInstance()->getPlayerPosition().z >= 36){
+
+		if (counter_text_tablet == 0){
+		
+			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("[Press SPACE to scan.]"), Color(1, 0, 0), 2.f, 30, 30, &projectionStack, &viewStack, &modelStack, m_parameters);
+		}
+		if (Application::IsKeyPressed(VK_SPACE)){
+
+			counter_text_tablet = 1;
+		}
+		if (counter_text_tablet == 1){
+
+			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("*Data extracted*"), Color(1, 0, 0), 2.f, 10, 37, &projectionStack, &viewStack, &modelStack, m_parameters);
+			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("*Discovered: This tablet holds information of a machine that can"), Color(1, 0, 0), 2.f, 10, 35, &projectionStack, &viewStack, &modelStack, m_parameters);
+			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("apparently help to rejuvenate the Earth."), Color(1, 0, 0), 2.f, 10, 33, &projectionStack, &viewStack, &modelStack, m_parameters);
+			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("There are apparently three parts to the blueprints required to make this device."), Color(1, 0, 0), 2.f, 10, 31, &projectionStack, &viewStack, &modelStack, m_parameters);
+			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("One of the locations is recorded in this device. A hidden lab at somewhere"), Color(1, 0, 0), 2.f, 10, 29, &projectionStack, &viewStack, &modelStack, m_parameters);
+			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("around coordinates: x;-80, y;-80 *"), Color(1, 0, 0), 2.f, 10, 27, &projectionStack, &viewStack, &modelStack, m_parameters);
+
+		}
+	}
+
+
+	//Broken Robot -- For 1st Hint, true hint.
+	if (Player::getInstance()->getPlayerPosition().x >= 75 && Player::getInstance()->getPlayerPosition().x <= 79 && Player::getInstance()->getPlayerPosition().z <= 74 && Player::getInstance()->getPlayerPosition().z >= 67){
+	
+		if (counter_text_robot == 0){
+
+			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("[Press SPACE to scan.]"), Color(1, 0, 0), 2.f, 30, 30, &projectionStack, &viewStack, &modelStack, m_parameters);
+		}
+		if (Application::IsKeyPressed(VK_SPACE)){
+
+			counter_text_robot = 1;
+		}
+		if (counter_text_robot == 1){
+
+			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("*Data extracted*"), Color(1, 0, 0), 2.f, 10, 37, &projectionStack, &viewStack, &modelStack, m_parameters);
+			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("*Discovered: This robot appears to be a research assistant "), Color(1, 0, 0), 2.f, 10, 35, &projectionStack, &viewStack, &modelStack, m_parameters);
+			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("from a time before Earth was abandoned. One registered area of interest."), Color(1, 0, 0), 2.f, 10, 33, &projectionStack, &viewStack, &modelStack, m_parameters);
+			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("New coordinates found: x; 54, y;-84*"), Color(1, 0, 0), 2.f, 10, 31, &projectionStack, &viewStack, &modelStack, m_parameters);
+		}
+	}
+
+	//Oil Barrel -- Fake Hint, A receipt instead.
+	if (Player::getInstance()->getPlayerPosition().x >= -110 && Player::getInstance()->getPlayerPosition().x <= -107 && Player::getInstance()->getPlayerPosition().z <= 90 && Player::getInstance()->getPlayerPosition().z >= 87){
+		
+		if (counter_text_fakeBlueprints == 0){
+			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("[Press SPACE to scan.]"), Color(1, 0, 0), 2.f, 30, 30, &projectionStack, &viewStack, &modelStack, m_parameters);
+		}
+		if (Application::IsKeyPressed(VK_SPACE)){
+			
+			counter_text_fakeBlueprints = 1;
+		}
+		if (counter_text_fakeBlueprints == 1){
+
+			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("*Object scanned*"), Color(1, 0, 0), 2.f, 15, 35, &projectionStack, &viewStack, &modelStack, m_parameters);
+			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("*This appears to be a receipt for barrels of oil. False alarm.* "), Color(1, 0, 0), 2.f, 15, 33, &projectionStack, &viewStack, &modelStack, m_parameters);
+		}
+	}
+
+
+	//Blueprint 1 -- Near the dead robot
+	if (Player::getInstance()->getPlayerPosition().x >= 30 && Player::getInstance()->getPlayerPosition().x <= 34 && Player::getInstance()->getPlayerPosition().z <= 21 && Player::getInstance()->getPlayerPosition().z >= 18){
+
+		if (Blueprint1 == false){
+
+			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("[Press SPACE to scan.]"), Color(1, 0, 0), 2.f, 30, 30, &projectionStack, &viewStack, &modelStack, m_parameters);
+			if (Application::IsKeyPressed(VK_SPACE))
+			{
+				Blueprint1 = true;
+				Blueprints::AddBlueprintNumber();
+			}
+		}
+		if (Blueprint1 == true){
+
+			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("*Object scanned*"), Color(1, 0, 0), 2.f, 10, 37, &projectionStack, &viewStack, &modelStack, m_parameters);
+			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("*Discovered: This appears to be a blueprint for a part of a machine."), Color(1, 0, 0), 2.f, 10, 35, &projectionStack, &viewStack, &modelStack, m_parameters);
+			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("Committing to memory... Blueprint saved*"), Color(1, 0, 0), 2.f, 10, 33, &projectionStack, &viewStack, &modelStack, m_parameters);
+		}
+	}
+
+	//Blueprint 2 -- Behind the oil barrels.
+	if (Player::getInstance()->getPlayerPosition().x >= 103 && Player::getInstance()->getPlayerPosition().x <= 105 && Player::getInstance()->getPlayerPosition().z <= -95 && Player::getInstance()->getPlayerPosition().z >= -98){
+		
+		if (Blueprint2 == false){
+			
+			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("[Press SPACE to scan.]"), Color(1, 0, 0), 2.f, 30, 30, &projectionStack, &viewStack, &modelStack, m_parameters);
+
+			if (Application::IsKeyPressed(VK_SPACE)){
+
+				Blueprint2 = true;
+				Blueprints::AddBlueprintNumber();
+			}
+		}
+		if (Blueprint2 == true){
+
+			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("*Object scanned*"), Color(1, 0, 0), 2.f, 10, 37, &projectionStack, &viewStack, &modelStack, m_parameters);
+			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("*Discovered: This appears to be a blueprint for a part of a machine."), Color(1, 0, 0), 2.f, 10, 35, &projectionStack, &viewStack, &modelStack, m_parameters);
+			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("Committing to memory... Blueprint saved*"), Color(1, 0, 0), 2.f, 10, 33, &projectionStack, &viewStack, &modelStack, m_parameters);
+		}
+	}
+}
 
 void WorldScene::Exit()
 {
@@ -583,7 +787,7 @@ void WorldScene::Exit()
 		if (meshList[i] != NULL)
 			delete meshList[i];
 	}
-	delete camera;
+	//delete camera;
 	Player::getInstance()->clearCollisionObj();
 
 	// Cleanup VBO here

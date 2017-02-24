@@ -18,7 +18,7 @@
 #include "UI.h"
 #include "NPC.h"
 #include "Environment.h"
-
+#include "Blueprints.h"
 
 class UndergroundScene : public Scene
 {
@@ -36,9 +36,7 @@ class UndergroundScene : public Scene
 		GEO_LIGHTBALL,
 		GEO_LIGHTBALL1,
 		GEO_MOSSY_GROUND,
-
-
-
+		GEO_STAIRS,
 
 		GEO_LEFT,
 		GEO_RIGHT,
@@ -62,6 +60,8 @@ public:
 
 	static MS modelStack, viewStack, projectionStack;
 
+	static Teleporter* Stairs;
+
 private:
 	unsigned m_vertexArrayID;
 	Mesh* meshList[NUM_GEOMETRY];
@@ -73,25 +73,22 @@ private:
 	Camera *camera;
 
 	void RenderSkybox();
-	void RenderBaseCamp();
 
 	Light light[8];
 
 	static std::vector<EnvironmentObj*> Env_Obj;
-	static std::vector<NPC*> CampNPC;
+	//static std::vector<NPC*> CampNPC;
 	//std::vector
 
-	bool isPause;
-	bool isEscPressed, wasEscPressed;
+	Blueprints *blueprints;
+	bool Blueprint3 = false;
 
-	MainScreen MainMenu;
-	UI renderUI;
+	void Interactions();
 
 	double x, y;
 	//void RenderText(Text_Data* TextData, std::string text, Color color);
 	//void RenderTextOnScreen(Text_Data* TextData, std::string text, Color color, float size, float x, float y);
 	//void RenderMeshOnScreen(Mesh* mesh, int x, int y, int sizex, int sizey);
-
 };
 
 #endif

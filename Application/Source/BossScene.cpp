@@ -230,9 +230,9 @@ void BossScene::Update(double dt)
 	dy = dt * double(height / 2 - c_posy);
 	camera->Update(dt, dx, dy);
 
-	if (Application::IsKeyPressed('1'))
+	if (Application::IsKeyPressed(VK_F2))
 	{
-		SceneManager::getInstance()->SetNextSceneID(0);
+		SceneManager::getInstance()->SetNextSceneID(1);
 		SceneManager::getInstance()->SetNextScene();
 	}
 

@@ -72,19 +72,23 @@ class Player : public GameObject
 	BulletsTrail* getBulletTrail();
 	void updateBulletTrail(double dt);
 	void renderBulletTrail(MS* projectionStack, MS* viewStack, MS* modelStack, unsigned * m_parameters);
+
+	bool isFPressed, wasFPressed;
+
+
 public:
 	~Player();
 	static std::vector<EnemyAI*> enemies_;
 	static Player* getInstance();
 	void setPosition(Vector3& pos);
+	Vector3 getPlayerPosition() { return pos_; }
 
 	void update(double dt, Camera* cam);
 	void render(MS* projectionStack, MS* viewStack, MS* modelStack, unsigned * m_parameters);
 	void getPointedObj(Camera* cam);
 
 	void isHitUpdate(int dmg);
-
-
+	
 	Mesh* getCollisionMesh() { return PMesh[MESH_TYPE::Body]; };
 	inline int getHp() { return hp_; }
 	void PlayerMovement(double dt);
@@ -99,13 +103,16 @@ public:
 
 
 	void checkTeleport();
+	void checkPickUpItem();
 	static std::vector<Teleporter*> Teleport;
+	static std::vector<Item*> Items;
 
 	//void TeleportToInsideBarrack();
 	//static std::vector<EnvironmentObj*> Teleport_Barrack;
 
 	//bool isDead();
 	//~Player();
+
 
 	void MeleeAttack(double dt);
 	void RangedAttack(double dt);

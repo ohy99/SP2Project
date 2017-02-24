@@ -20,6 +20,11 @@
 #include "NPC.h"
 #include "Environment.h"
 
+#include "Item.h"
+
+#include "Blueprints.h"
+#include "Weapon.h"
+
 
 class MainScene : public Scene
 {
@@ -42,6 +47,8 @@ class MainScene : public Scene
 		GEO_Barrack,
 		GEO_Crates1,
 
+
+
 		GEO_LEFT,
 		GEO_RIGHT,
 		GEO_TOP,
@@ -60,12 +67,16 @@ public:
 	virtual void Update(double dt);
 	virtual void Render();
 	virtual void Exit();
+	//int GetBlueprintNumber();
+	//virtual void SetBlueprintNumber(int new_number);
 	//virtual std::vector<GameObject*> getCurrentSceneObjs(){ return Game_Objects_; }
 
 	static MS modelStack, viewStack, projectionStack;
 
 	static Teleporter* MS_Teleporter;
 	static Teleporter* Barrack;
+
+	//int numberOfBlueprints = 0;
 
 private:
 	unsigned m_vertexArrayID;
@@ -79,6 +90,7 @@ private:
 
 	void RenderSkybox();
 	void RenderBaseCamp();
+	void Interactions();
 
 	Light light[8];
 
@@ -86,11 +98,11 @@ private:
 	static std::vector<NPC*> CampNPC;
 	//std::vector
 
-	bool isPause;
-	bool isEscPressed, wasEscPressed;
+	int width, height;
 
 	MainScreen MainMenu;
-	UI renderUI;
+	Blueprints *blueprints;
+	Item* a;
 
 	double x, y;
 	//void RenderText(Text_Data* TextData, std::string text, Color color);

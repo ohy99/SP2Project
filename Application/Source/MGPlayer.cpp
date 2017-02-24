@@ -9,7 +9,7 @@
 MGPlayer* MGPlayer::Instance = 0;
 std::vector<GameObject*> MGPlayer::CollisionObjects;
 
-MGPlayer::MGPlayer() : GameObject("Player"), lane(1.f), moveSpeed(20.f), isHit(false), wasDPressed(false), wasAPressed(false)
+MGPlayer::MGPlayer() : GameObject("Player"), lane(1.f), moveSpeed(30.f), isHit(false), wasDPressed(false), wasAPressed(false)
 {
 	PMesh[MESH_TYPE::BODY] = MeshBuilder::GenerateOBJ("", "OBJ//goat.obj");
 	PMesh[MESH_TYPE::BODY]->collisionEnabled = true;

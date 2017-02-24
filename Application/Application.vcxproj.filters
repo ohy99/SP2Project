@@ -148,6 +148,16 @@
     </ClCompile>
     <ClCompile Include="Source\BossFlank.cpp">
       <Filter>Header Files\GameObj\Boss</Filter>
+    <ClCompile Include="Source\Blueprints.cpp">
+	 <Filter>Source Files</Filter>
+    <ClCompile Include="Source\Camera2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\DataBase.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Inventory.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -315,6 +325,16 @@
     </ClInclude>
     <ClInclude Include="Source\BossFlank.h">
       <Filter>Header Files\GameObj\Boss</Filter>
+    <ClInclude Include="Source\Blueprints.h">
+      <Filter>Header Files\Others</Filter>
+    <ClInclude Include="Source\Inventory.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Camera2.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\DataBase.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
