@@ -625,8 +625,7 @@ void WorldScene::Render()
 
 	Interactions();
 
-	RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("Blueprints:"), Color(1, 0, 0), 2.f, 68, 57, &projectionStack, &viewStack, &modelStack, m_parameters);
-	RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::to_string(Blueprints::GetBlueprintNumber()), Color(1, 0, 0), 2.f, 77, 57, &projectionStack, &viewStack, &modelStack, m_parameters);
+	RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("Blueprints: ") + std::to_string(Blueprints::GetBlueprintNumber()) + std::string("/3"), Color(1, 0, 0), 2.f, 68, 57, &projectionStack, &viewStack, &modelStack, m_parameters);
 
 	RenderMeshClass::RenderMesh(meshList[GEO_AXES], false, &projectionStack, &viewStack, &modelStack, m_parameters);
 	Player::getInstance()->render(&projectionStack, &viewStack, &modelStack, m_parameters);
@@ -690,7 +689,7 @@ void WorldScene::Interactions(){
 		}
 		if (counter_text_tablet == 1){
 
-			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("*Extracting data…*"), Color(1, 0, 0), 2.f, 10, 37, &projectionStack, &viewStack, &modelStack, m_parameters);
+			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("*Data extracted*"), Color(1, 0, 0), 2.f, 10, 37, &projectionStack, &viewStack, &modelStack, m_parameters);
 			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("*Discovered: This tablet holds information of a machine that can"), Color(1, 0, 0), 2.f, 10, 35, &projectionStack, &viewStack, &modelStack, m_parameters);
 			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("apparently help to rejuvenate the Earth."), Color(1, 0, 0), 2.f, 10, 33, &projectionStack, &viewStack, &modelStack, m_parameters);
 			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("There are apparently three parts to the blueprints required to make this device."), Color(1, 0, 0), 2.f, 10, 31, &projectionStack, &viewStack, &modelStack, m_parameters);
@@ -714,7 +713,7 @@ void WorldScene::Interactions(){
 		}
 		if (counter_text_robot == 1){
 
-			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("*Extracting data…*"), Color(1, 0, 0), 2.f, 10, 37, &projectionStack, &viewStack, &modelStack, m_parameters);
+			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("*Data extracted*"), Color(1, 0, 0), 2.f, 10, 37, &projectionStack, &viewStack, &modelStack, m_parameters);
 			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("*Discovered: This robot appears to be a research assistant "), Color(1, 0, 0), 2.f, 10, 35, &projectionStack, &viewStack, &modelStack, m_parameters);
 			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("from a time before Earth was abandoned. One registered area of interest."), Color(1, 0, 0), 2.f, 10, 33, &projectionStack, &viewStack, &modelStack, m_parameters);
 			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("New coordinates found: x; 54, y;-84*"), Color(1, 0, 0), 2.f, 10, 31, &projectionStack, &viewStack, &modelStack, m_parameters);
@@ -733,7 +732,7 @@ void WorldScene::Interactions(){
 		}
 		if (counter_text_fakeBlueprints == 1){
 
-			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("*Scanning…*"), Color(1, 0, 0), 2.f, 15, 35, &projectionStack, &viewStack, &modelStack, m_parameters);
+			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("*Object scanned*"), Color(1, 0, 0), 2.f, 15, 35, &projectionStack, &viewStack, &modelStack, m_parameters);
 			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("*This appears to be a receipt for barrels of oil. False alarm.* "), Color(1, 0, 0), 2.f, 15, 33, &projectionStack, &viewStack, &modelStack, m_parameters);
 		}
 	}
@@ -753,14 +752,14 @@ void WorldScene::Interactions(){
 		}
 		if (Blueprint1 == true){
 
-			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("*Scanning*"), Color(1, 0, 0), 2.f, 10, 37, &projectionStack, &viewStack, &modelStack, m_parameters);
+			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("*Object scanned*"), Color(1, 0, 0), 2.f, 10, 37, &projectionStack, &viewStack, &modelStack, m_parameters);
 			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("*Discovered: This appears to be a blueprint for a part of a machine."), Color(1, 0, 0), 2.f, 10, 35, &projectionStack, &viewStack, &modelStack, m_parameters);
 			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("Committing to memory... Blueprint saved*"), Color(1, 0, 0), 2.f, 10, 33, &projectionStack, &viewStack, &modelStack, m_parameters);
 		}
 	}
 
 	//Blueprint 2 -- Behind the oil barrels.
-	if (Player::getInstance()->getPlayerPosition().x >= 103 && Player::getInstance()->getPlayerPosition().x <= 104 && Player::getInstance()->getPlayerPosition().z <= -96 && Player::getInstance()->getPlayerPosition().z >= -97){
+	if (Player::getInstance()->getPlayerPosition().x >= 103 && Player::getInstance()->getPlayerPosition().x <= 105 && Player::getInstance()->getPlayerPosition().z <= -95 && Player::getInstance()->getPlayerPosition().z >= -98){
 		
 		if (Blueprint2 == false){
 			
@@ -774,7 +773,7 @@ void WorldScene::Interactions(){
 		}
 		if (Blueprint2 == true){
 
-			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("*Scanning*"), Color(1, 0, 0), 2.f, 10, 37, &projectionStack, &viewStack, &modelStack, m_parameters);
+			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("*Object scanned*"), Color(1, 0, 0), 2.f, 10, 37, &projectionStack, &viewStack, &modelStack, m_parameters);
 			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("*Discovered: This appears to be a blueprint for a part of a machine."), Color(1, 0, 0), 2.f, 10, 35, &projectionStack, &viewStack, &modelStack, m_parameters);
 			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("Committing to memory... Blueprint saved*"), Color(1, 0, 0), 2.f, 10, 33, &projectionStack, &viewStack, &modelStack, m_parameters);
 		}

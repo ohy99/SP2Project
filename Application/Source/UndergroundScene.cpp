@@ -433,6 +433,8 @@ void UndergroundScene::Render()
 	//	CampNPC.at(i)->render(&projectionStack, &viewStack, &modelStack, m_parameters);
 	//}
 
+	RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("Blueprints: ") + std::to_string(Blueprints::GetBlueprintNumber()) + std::string("/3"), Color(1, 0, 0), 2.f, 68, 57, &projectionStack, &viewStack, &modelStack, m_parameters);
+
 	UI::getInstance()->renderPause(&projectionStack, &viewStack, &modelStack, m_parameters);
 	Player::getInstance()->render(&projectionStack, &viewStack, &modelStack, m_parameters);
 	RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::to_string(FramesPerSec), Color(1, 0, 0), 1.5f, 45, 38, &projectionStack, &viewStack, &modelStack, m_parameters);
@@ -472,7 +474,7 @@ void UndergroundScene::Interactions()
 		}
 		if (Blueprint3 == true){
 
-			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("*Scanning*"), Color(1, 0, 0), 2.f, 10, 37, &projectionStack, &viewStack, &modelStack, m_parameters);
+			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("*Object scanned*"), Color(1, 0, 0), 2.f, 10, 37, &projectionStack, &viewStack, &modelStack, m_parameters);
 			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("*Discovered: This appears to be a blueprint for a part of a machine."), Color(1, 0, 0), 2.f, 10, 35, &projectionStack, &viewStack, &modelStack, m_parameters);
 			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("Committing to memory... Blueprint saved*"), Color(1, 0, 0), 2.f, 10, 33, &projectionStack, &viewStack, &modelStack, m_parameters);
 		}

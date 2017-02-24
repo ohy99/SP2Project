@@ -517,8 +517,7 @@ void MainScene::Render()
 		Interactions();
 
 	RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::to_string(FramesPerSec), Color(1, 0, 0), 1.5f, 45, 38, &projectionStack, &viewStack, &modelStack, m_parameters);
-	RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("Blueprints:"), Color(1, 0, 0), 2.f, 68, 57, &projectionStack, &viewStack, &modelStack, m_parameters);
-	RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::to_string(Blueprints::GetBlueprintNumber()), Color(1, 0, 0), 2.f, 77, 57, &projectionStack, &viewStack, &modelStack, m_parameters);
+	RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("Blueprints: ") + std::to_string(Blueprints::GetBlueprintNumber()) + std::string("/3"), Color(1, 0, 0), 2.f, 68, 57, &projectionStack, &viewStack, &modelStack, m_parameters);
 	
 	Player::getInstance()->render(&projectionStack, &viewStack, &modelStack, m_parameters);
 
