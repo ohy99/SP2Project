@@ -7,18 +7,11 @@
 class Item : public GameObject
 {
 public:
-	Item(const std::string& name) : GameObject(name) {}
+	Item(const std::string& name) : GameObject(name), isItemInInventory(false) { ; }
 	virtual ~Item() {};
 
-
-	enum TEXTURE_ID // only to pass in these for rendering different texture onto the inventory
-	{
-		ITEM_TEXTURE,
-
-		NUM_TEXTURE,
-	};
-
-	Mesh* texture[NUM_TEXTURE];
+	Mesh* item2DTexture;
+	bool isItemInInventory;
 };
 
 #endif

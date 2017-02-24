@@ -19,7 +19,7 @@
 #include "UI.h"
 #include "NPC.h"
 #include "Environment.h"
-#include "Weapon.h"
+#include "Item.h"
 
 
 class MainScene : public Scene

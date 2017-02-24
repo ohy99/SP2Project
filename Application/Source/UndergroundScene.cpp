@@ -413,6 +413,15 @@ void UndergroundScene::Render()
 	RenderMeshClass::RenderMesh(meshList[GEO_MOSSY_GROUND], true, &projectionStack, &viewStack, &modelStack, m_parameters);
 	modelStack.PopMatrix();
 
+	for (size_t i = 0; i < Env_Obj.size(); i++)
+	{
+		modelStack.PushMatrix();
+		RenderMeshClass::RenderMesh(Env_Obj.at(i)->CollisionMesh_, true, &projectionStack, &viewStack, &modelStack, m_parameters);
+		modelStack.PopMatrix();
+
+	}
+
+	Interactions();
 
 	//for (size_t i = 0; i < CampNPC.size(); i++)
 	//{
@@ -436,7 +445,7 @@ void UndergroundScene::Interactions(){
 	{ 
 		if (Player::getInstance()->getPlayerPosition().x >= -39 && Player::getInstance()->getPlayerPosition().x <= -33 && Player::getInstance()->getPlayerPosition().z <= 33 && Player::getInstance()->getPlayerPosition().z >= 26)
 		{
-			SceneManager::getInstance()->SetNextSceneID(1);
+			SceneManager::getInstance()->SetNextSceneID(2);
 			SceneManager::getInstance()->SetNextScene();
 
 			Player::getInstance()->setPosition(Vector3(-87.0, 0.0, -69.0));

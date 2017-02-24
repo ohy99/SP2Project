@@ -63,6 +63,8 @@ class Player : public GameObject
 
 	static std::vector<GameObject*> CollisionObjects;
 
+	bool isFPressed, wasFPressed;
+
 public:
 	~Player();
 	static std::vector<EnemyAI*> enemies_;

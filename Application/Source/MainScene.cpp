@@ -178,10 +178,13 @@ void MainScene::Init()
 	//textureList[test]->textureID = LoadTGA("Image//inventory.tga");
 	Inventory::getInstance()->Init();
 	a = new Item("a");
-	//a->CollisionMesh_ = MeshBuilder::GenerateOBJ();
-	a->texture[0] = MeshBuilder::GenerateQuad("quad", Color(1, 1, 1), 1.f, 1.f);
-	a->texture[0]->textureID = LoadTGA("Image//inventory.tga");
-	Inventory::getInstance()->setItem(a);
+	a->CollisionMesh_ = MeshBuilder::GenerateOBJ("Testing", "OBJ//testing.obj");
+	a->CollisionMesh_->textureID = LoadTGA("Image//testing.tga");
+	a->item2DTexture = MeshBuilder::GenerateQuad("quad", Color(1, 1, 1), 1.f, 1.f);
+	a->item2DTexture->textureID = LoadTGA("Image//inventory.tga");
+
+	//Inventory::getInstance()->setItem(a);
+	Player::Items.push_back(a);
 
 	//Skybox ------------ Base Camp Start
 	//Left Skybox 
@@ -485,12 +488,6 @@ void MainScene::Render()
 	RenderMeshClass::RenderMesh(meshList[GEO_AXES], false, &projectionStack, &viewStack, &modelStack, m_parameters);
 	Player::getInstance()->render(&projectionStack, &viewStack, &modelStack, m_parameters);
 
-		RenderMeshClass::RenderMesh(meshList[GEO_AXES], false, &projectionStack, &viewStack, &modelStack, m_parameters);
-		Player::getInstance()->render(&projectionStack, &viewStack, &modelStack, m_parameters);
-
-		RenderSkybox();
-		//	renderEnvironment();
-
 	RenderSkybox();
 	//	renderEnvironment();
 
@@ -501,6 +498,9 @@ void MainScene::Render()
 	RenderMeshClass::RenderMesh(meshList[GEO_GroundMesh_RedDirt], true, &projectionStack, &viewStack, &modelStack, m_parameters);
 	modelStack.PopMatrix();
 
+	modelStack.PushMatrix();
+	RenderMeshClass::RenderMesh(a->CollisionMesh_, true, &projectionStack, &viewStack, &modelStack, m_parameters);
+	modelStack.PopMatrix();
 
 	for (size_t i = 0; i < CampNPC.size(); i++)
 	{
@@ -508,14 +508,8 @@ void MainScene::Render()
 	}
 	RenderBaseCamp();
 
-		for (size_t i = 0; i < CampNPC.size(); i++)
-		{
-			CampNPC.at(i)->render(&projectionStack, &viewStack, &modelStack, m_parameters);
-		}
-		RenderBaseCamp();
 
-		Interactions();
-
+	Interactions();
 
 
 
@@ -538,7 +532,7 @@ void MainScene::Interactions(){
 			
 		if (Player::getInstance()->getPlayerPosition().x >= -8 && Player::getInstance()->getPlayerPosition().x <= -5 && Player::getInstance()->getPlayerPosition().z <= -11 && Player::getInstance()->getPlayerPosition().z >= -17){
 
-			SceneManager::getInstance()->SetNextSceneID(2);
+			SceneManager::getInstance()->SetNextSceneID(3);
 			SceneManager::getInstance()->SetNextScene();
 		}
 	}
@@ -552,7 +546,7 @@ void MainScene::Interactions(){
 
 		if (Player::getInstance()->getPlayerPosition().x >= -21 && Player::getInstance()->getPlayerPosition().x <= -17 && Player::getInstance()->getPlayerPosition().z <= 2 && Player::getInstance()->getPlayerPosition().z >= -2){
 
-			SceneManager::getInstance()->SetNextSceneID(1);
+			SceneManager::getInstance()->SetNextSceneID(2);
 			SceneManager::getInstance()->SetNextScene();
 			Player::getInstance()->setPosition(Vector3(94.0, 0.0, -8.0));
 		}

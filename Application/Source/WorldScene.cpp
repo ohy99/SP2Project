@@ -643,7 +643,7 @@ void WorldScene::Interactions(){
 
 		if (Player::getInstance()->getPlayerPosition().x >= 92 && Player::getInstance()->getPlayerPosition().x <= 97 && Player::getInstance()->getPlayerPosition().z <= -8 && Player::getInstance()->getPlayerPosition().z >= -15){
 
-			SceneManager::getInstance()->SetNextSceneID(0);
+			SceneManager::getInstance()->SetNextSceneID(1);
 			SceneManager::getInstance()->SetNextScene();
 			Player::getInstance()->setPosition(Vector3(-18.0, 0.0, -0.5));
 		}
@@ -660,7 +660,7 @@ void WorldScene::Interactions(){
 	{
 		if (Player::getInstance()->getPlayerPosition().x >= -88 && Player::getInstance()->getPlayerPosition().x <= -86 && Player::getInstance()->getPlayerPosition().z <= -68 && Player::getInstance()->getPlayerPosition().z >= -70)
 		{
-			SceneManager::getInstance()->SetNextSceneID(4);
+			SceneManager::getInstance()->SetNextSceneID(5);
 			SceneManager::getInstance()->SetNextScene();
 			Player::getInstance()->setPosition(Vector3(-36.0, 0.0, 30.0));
 		}

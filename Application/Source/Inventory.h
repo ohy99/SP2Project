@@ -25,6 +25,7 @@ public:
 	void Render(MS* projectionStack, MS* viewStack, MS* modelStack, unsigned * m_parameters); // use to render Inventory onto the screen
 
 	bool isInventoryOpen();
+	bool isInventoryFull();
 	static Inventory* getInstance();
 
 private:
@@ -39,9 +40,8 @@ private:
 	static Inventory* Instance_;
 	Mesh* meshList[NUM_GEOMETRY];
 
-	Inventory(const std::string& name) : isInventoryFull(false), currItem(NULL) { ; }
+	Inventory(const std::string& name) : currItem(NULL) { ; }
 
-	bool isInventoryFull; // render message if inventory is full
 	Item* currItem;
 
 	int width, height;
@@ -51,7 +51,6 @@ private:
 
 	int x, y;
 	int size;
-	int slotPosition;
 
 	Vector3 min, max, pos;
 	double cur_x, cur_y;

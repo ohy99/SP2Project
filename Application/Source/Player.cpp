@@ -19,7 +19,7 @@ std::vector<Teleporter*> Player::Teleport;
 std::vector<Item*> Player::Items;
 //std::vector<EnvironmentObj*> Player::Teleport_Barrack;
 
-Player::Player() : GameObject("Player")
+Player::Player() : GameObject("Player"), wasFPressed(false)
 {
 	for (size_t i = 0; i < MESH_TYPE::mt_Count; i++)
 		PMesh[i] = NULL;
@@ -114,11 +114,9 @@ void Player::update(double dt, Camera* cam)
 	else if (currentWeapon_ == weapons_[WEAPON_TYPE::RANGED])
 		RangedAttack(dt);
 
-
+	checkPickUpItem();
 	checkTeleport();
 	//TeleportToInsideBarrack();
-
-	checkPickUpItem();
 }
 
 void Player::render(MS* projectionStack, MS* viewStack, MS* modelStack, unsigned * m_parameters)
@@ -157,13 +155,31 @@ void Player::render(MS* projectionStack, MS* viewStack, MS* modelStack, unsigned
 void Player::getPointedObj(Camera* cam)
 {
 	Position TargetPointFar;
-	TargetPointFar.Set(cam->getTarget().x, cam->getTarget().y, cam->getTarget().z);
+	TargetPointFar.Set(cam->getPosition().x + (cam->getDir().x * 2.f),
+		cam->getPosition().x + (cam->getDir().x * 2.f),
+		cam->getPosition().x + (cam->getDir().x * 2.f));
 	Position TargetPointNear;
 	TargetPointNear.Set(cam->getPosition().x + (cam->getDir().x * 0.5f),
 		cam->getPosition().y + (cam->getDir().y * 0.5f),
 		cam->getPosition().z + (cam->getDir().z * 0.5f));
 
 	Pointed_Obj = NULL;
+
+	for (auto it : Items)
+	{
+		if (it->CollisionMesh_->isPointInsideAABB(TargetPointNear))
+		{
+			Pointed_Obj = it;
+			return;
+		}
+			
+		if (it->CollisionMesh_->isPointInsideAABB(TargetPointFar))
+		{
+			Pointed_Obj = it;
+			return;
+		}
+			
+	}
 
 	for (auto it : CollisionObjects)
 	{
@@ -197,92 +213,96 @@ void Player::PlayerMovement(double dt)
 	Mesh projected("Projected");
 	projected.setHb(true, PMesh[MESH_TYPE::Body]->Hitbox_Min, PMesh[MESH_TYPE::Body]->Hitbox_Max, PMesh[MESH_TYPE::Body]->pos, PMesh[MESH_TYPE::Body]->dir);
 	//projected.setHb(true, CollisionMesh_->Hitbox_Min, CollisionMesh_->Hitbox_Max, CollisionMesh_->pos, CollisionMesh_->dir);
-	if (Application::IsKeyPressed('W'))
-	{
-		bool bam = false;
-		projected.pos.x += (dir_.x * dt * moveSPD);
-		projected.pos.z += (dir_.z * dt * moveSPD);
 
-		for (size_t i = 0; i < CollisionObjects.size(); i++)
+	if (!Inventory::getInstance()->isInventoryOpen() && !UI::getInstance()->isPauseOpen())
+	{
+		if (Application::IsKeyPressed('W'))
 		{
-			if (projected.isCollide(CollisionObjects[i]->CollisionMesh_) == true)
+			bool bam = false;
+			projected.pos.x += (dir_.x * dt * moveSPD);
+			projected.pos.z += (dir_.z * dt * moveSPD);
+
+			for (size_t i = 0; i < CollisionObjects.size(); i++)
 			{
-				bam = true;
-				break;
+				if (projected.isCollide(CollisionObjects[i]->CollisionMesh_) == true)
+				{
+					bam = true;
+					break;
+				}
+			}
+
+			if (bam == false)
+			{
+				pos_.x += (dir_.x * dt * moveSPD);
+				pos_.z += (dir_.z * dt * moveSPD);
+			}
+		}
+		if (Application::IsKeyPressed('S'))
+		{
+			bool bam = false;
+			projected.pos.x += (-dir_.x * dt * moveSPD);
+			projected.pos.z += (-dir_.z * dt * moveSPD);
+
+			for (size_t i = 0; i < CollisionObjects.size(); i++)
+			{
+				if (projected.isCollide(CollisionObjects[i]->CollisionMesh_) == true)
+				{
+					bam = true;
+					break;
+				}
+			}
+
+			if (bam == false)
+			{
+				pos_.x += (-dir_.x * dt * moveSPD);
+				pos_.z += (-dir_.z * dt * moveSPD);
+			}
+		}
+		if (Application::IsKeyPressed('A'))
+		{
+			bool bam = false;
+			projected.pos.x += (-right_.x * dt * moveSPD);
+			projected.pos.z += (-right_.z * dt * moveSPD);
+
+			for (size_t i = 0; i < CollisionObjects.size(); i++)
+			{
+				if (projected.isCollide(CollisionObjects[i]->CollisionMesh_) == true)
+				{
+					bam = true;
+					break;
+				}
+			}
+
+			if (bam == false)
+			{
+				pos_.x += (-right_.x * dt * moveSPD);
+				pos_.z += (-right_.z * dt * moveSPD);
+			}
+		}
+		if (Application::IsKeyPressed('D'))
+		{
+			bool bam = false;
+			projected.pos.x += (right_.x * dt * moveSPD);
+			projected.pos.z += (right_.z * dt * moveSPD);
+
+			for (size_t i = 0; i < CollisionObjects.size(); i++)
+			{
+				if (projected.isCollide(CollisionObjects[i]->CollisionMesh_) == true)
+				{
+					bam = true;
+					break;
+				}
+			}
+
+			if (bam == false)
+			{
+				pos_.x += (right_.x * dt * moveSPD);
+				pos_.z += (right_.z * dt * moveSPD);
 			}
 		}
 
-		if (bam == false)
-		{
-			pos_.x += (dir_.x * dt * moveSPD);
-			pos_.z += (dir_.z * dt * moveSPD);
-		}
-	}
-	if (Application::IsKeyPressed('S'))
-	{
-		bool bam = false;
-		projected.pos.x += (-dir_.x * dt * moveSPD);
-		projected.pos.z += (-dir_.z * dt * moveSPD);
-
-		for (size_t i = 0; i < CollisionObjects.size(); i++)
-		{
-			if (projected.isCollide(CollisionObjects[i]->CollisionMesh_) == true)
-			{
-				bam = true;
-				break;
-			}
-		}
-
-		if (bam == false)
-		{
-			pos_.x += (-dir_.x * dt * moveSPD);
-			pos_.z += (-dir_.z * dt * moveSPD);
-		}
-	}
-	if (Application::IsKeyPressed('A'))
-	{
-		bool bam = false;
-		projected.pos.x += (-right_.x * dt * moveSPD);
-		projected.pos.z += (-right_.z * dt * moveSPD);
-
-		for (size_t i = 0; i < CollisionObjects.size(); i++)
-		{
-			if (projected.isCollide(CollisionObjects[i]->CollisionMesh_) == true)
-			{
-				bam = true;
-				break;
-			}
-		}
-
-		if (bam == false)
-		{
-			pos_.x += (-right_.x * dt * moveSPD);
-			pos_.z += (-right_.z * dt * moveSPD);
-		}
-	}
-	if (Application::IsKeyPressed('D'))
-	{
-		bool bam = false;
-		projected.pos.x += (right_.x * dt * moveSPD);
-		projected.pos.z += (right_.z * dt * moveSPD);
-
-		for (size_t i = 0; i < CollisionObjects.size(); i++)
-		{
-			if (projected.isCollide(CollisionObjects[i]->CollisionMesh_) == true)
-			{
-				bam = true;
-				break;
-			}
-		}
-
-		if (bam == false)
-		{
-			pos_.x += (right_.x * dt * moveSPD);
-			pos_.z += (right_.z * dt * moveSPD);
-		}
-	}
-	PMesh[MESH_TYPE::Body]->pos = pos_;
-	
+		PMesh[MESH_TYPE::Body]->pos = pos_;
+	}	
 }
 
 //bool isDead();
@@ -379,14 +399,26 @@ void Player::checkTeleport()
 
 void Player::checkPickUpItem()
 {
-	for (size_t i = 0; i < Items.size(); i++)
+	isFPressed = Application::IsKeyPressed('F');
+
+	if (isFPressed && !wasFPressed)
 	{
-		if (Application::IsKeyPressed('F') && CollisionMesh_->isCollide(Items.at(i)->CollisionMesh_))
+		for (size_t i = 0; i < Items.size(); i++)
 		{
-			Inventory::getInstance()->setItem(Items[i]);
-			delete Items[i];
+			if (Pointed_Obj && !Inventory::getInstance()->isInventoryFull())
+			{
+				Inventory::getInstance()->setItem(Items[i]);
+
+				break;
+			}
 		}
+
+		wasFPressed = isFPressed;
 	}
+
+	if (!isFPressed && wasFPressed)
+		wasFPressed = isFPressed;
+
 }
 
 //void Player::TeleportToInsideBarrack(){

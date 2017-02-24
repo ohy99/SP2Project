@@ -24,7 +24,7 @@ Item* Inventory::getItem(int i)
 	if (Inventory_.size() > 0)
 	{
 		currItem = Inventory_[i]->item_;
-		Inventory_[i] = NULL;
+		Inventory_[i]->item_ = NULL;
 
 		return currItem;
 	}
@@ -35,19 +35,15 @@ Item* Inventory::getItem(int i)
 
 void Inventory::setItem(Item* items)
 {
-	bool hasputed = false;
 	for (size_t i = 0; i < Inventory_.size(); i++)
 	{
 		if (Inventory_[i]->item_ == NULL)
 		{
 			Inventory_[i]->item_ = (items);
-			hasputed = true;
 			break;
 		}
 	}
 
-	if (!hasputed)
-		isInventoryFull = true;
 
 	//bool hasputed = false;
 	//for (size_t i = 0; i < 12; i++)
@@ -66,9 +62,11 @@ void Inventory::setItem(Item* items)
 
 int Inventory::getInventorySize()
 {
+	size = 0;
+
 	for (size_t i = 0; i < Inventory_.size(); i++)
 	{
-		if (Inventory_[i] != NULL)
+		if (Inventory_[i]->item_ != NULL)
 			size++;
 	}
 
@@ -88,6 +86,8 @@ void Inventory::Init()
 	min = Vector3(-50.f, -50.f, 0.f);
 	max = Vector3(50.f, 50.f, 2.f);
 	y = 600;
+
+	size = 0;
 
 	for (int i = 0; i < 4; i++)
 	{
@@ -124,12 +124,11 @@ void Inventory::Update(double dt)
 		{
 			if (Inventory_[i]->hitBox->isPointInsideAABB(Position(cur_x, Application::getWindowHeight() - cur_y, 0.f)))
 			{
-				slotPosition = i;
+				Inventory::getItem(i);
 				break;
 			}				
 		}
 
-		std::cout << slotPosition << std::endl;
 		wasLeftMouseButtonPressed = isLeftMouseButtonPressed;
 	}
 
@@ -165,14 +164,14 @@ void Inventory::Render(MS* projectionStack, MS* viewStack, MS* modelStack, unsig
 		for (size_t i = 0; i < Inventory_.size(); i++)
 		{
 			if (Inventory_[i]->item_ != NULL)
-				RenderMeshClass::RenderMeshOnScreen(*Inventory_[i]->item_->texture, Inventory_[i]->hitBox->pos.x, Inventory_[i]->hitBox->pos.y, Inventory_[i]->hitBox->pos.z, 100, 100, projectionStack, viewStack, modelStack, m_parameters);
+				RenderMeshClass::RenderMeshOnScreen(Inventory_[i]->item_->item2DTexture, Inventory_[i]->hitBox->pos.x, Inventory_[i]->hitBox->pos.y, Inventory_[i]->hitBox->pos.z, 100, 100, projectionStack, viewStack, modelStack, m_parameters);
 			else
 				RenderMeshClass::RenderMeshOnScreen(meshList[EMPTY_SLOTS], Inventory_[i]->hitBox->pos.x, Inventory_[i]->hitBox->pos.y, Inventory_[i]->hitBox->pos.z, 100, 100, projectionStack, viewStack, modelStack, m_parameters);
 		}
-	}
 
-	if (isInventoryFull)
-		RenderMeshClass::RenderTextOnScreen(&Scene::Text[Scene::TEXT_TYPE::Century], "Your inventory is full", Color(1.f, 1.f, 1.f), 10, 10, 26, projectionStack, viewStack, modelStack, m_parameters);
+		if (isInventoryFull())
+			RenderMeshClass::RenderTextOnScreen(&Scene::Text[Scene::TEXT_TYPE::Century], "Your inventory is full", Color(1.f, 1.f, 1.f), 10, 10, 26, projectionStack, viewStack, modelStack, m_parameters);
+	}
 }
 
 bool Inventory::isInventoryOpen()
@@ -182,4 +181,15 @@ bool Inventory::isInventoryOpen()
 
 	else
 		return true;
+}
+
+bool Inventory::isInventoryFull()
+{
+	getInventorySize();
+
+	if (size >= 12)
+		return true;
+
+	else
+		return false;
 }
