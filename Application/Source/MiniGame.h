@@ -68,10 +68,6 @@ private:
 
 	Light light[8];
 
-	bool isPause;
-	bool isEscPressed, wasEscPressed;
-
-	UI renderUI;
 	static std::vector<EnvironmentObj*> Obstacles;
 
 	int width, height;

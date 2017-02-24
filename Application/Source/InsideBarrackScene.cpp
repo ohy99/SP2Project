@@ -462,7 +462,7 @@ void InsideBarrackScene::Interactions(){
 
 		if (Application::IsKeyPressed(VK_SPACE)){
 
-			SceneManager::getInstance()->SetNextSceneID(0);
+			SceneManager::getInstance()->SetNextSceneID(1);
 			SceneManager::getInstance()->SetNextScene();
 
 			Player::getInstance()->setPosition(Vector3(-6.5, 0.0, -14.0));

@@ -644,7 +644,7 @@ void WorldScene::Interactions(){
 
 		if (Player::getInstance()->getPlayerPosition().x >= 92 && Player::getInstance()->getPlayerPosition().x <= 97 && Player::getInstance()->getPlayerPosition().z <= -8 && Player::getInstance()->getPlayerPosition().z >= -15){
 
-			SceneManager::getInstance()->SetNextSceneID(0);
+			SceneManager::getInstance()->SetNextSceneID(1);
 			SceneManager::getInstance()->SetNextScene();
 			Player::getInstance()->setPosition(Vector3(-18.0, 0.0, -0.5));
 		}
@@ -661,7 +661,7 @@ void WorldScene::Interactions(){
 	{
 		if (Player::getInstance()->getPlayerPosition().x >= -88 && Player::getInstance()->getPlayerPosition().x <= -86 && Player::getInstance()->getPlayerPosition().z <= -68 && Player::getInstance()->getPlayerPosition().z >= -70)
 		{
-			SceneManager::getInstance()->SetNextSceneID(4);
+			SceneManager::getInstance()->SetNextSceneID(5);
 			SceneManager::getInstance()->SetNextScene();
 			Player::getInstance()->setPosition(Vector3(-36.0, 0.0, 30.0));
 		}
@@ -709,6 +709,8 @@ void WorldScene::Interactions(){
 			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("New coordinates found: ... *"), Color(1, 0, 0), 2.f, 10, 31, &projectionStack, &viewStack, &modelStack, m_parameters);
 		}
 	}
+
+	//Blueprint 1
 	if (Player::getInstance()->getPlayerPosition().x >= 30 && Player::getInstance()->getPlayerPosition().x <= 34 && Player::getInstance()->getPlayerPosition().z <= 21 && Player::getInstance()->getPlayerPosition().z >= 18){
 
 		if (Blueprint1 == false){
@@ -718,9 +720,6 @@ void WorldScene::Interactions(){
 			{
 				Blueprint1 = true;
 				Blueprints::AddBlueprintNumber();
-				//addblueprint = blueprint->GetBlueprintNumber();
-				//addblueprint++;
-				//blueprint->SetBlueprintNumber(addblueprint);
 			}
 		}
 		if (Blueprint1 == true){

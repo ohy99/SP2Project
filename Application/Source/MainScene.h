@@ -19,9 +19,8 @@
 #include "UI.h"
 #include "NPC.h"
 #include "Environment.h"
-//#include "WorldScene.h"
 #include "Blueprints.h"
-
+#include "Weapon.h"
 
 class MainScene : public Scene
 {
@@ -43,6 +42,8 @@ class MainScene : public Scene
 		GEO_Teleporter1,
 		GEO_Barrack,
 		GEO_Crates1,
+
+
 
 		GEO_LEFT,
 		GEO_RIGHT,
@@ -93,12 +94,11 @@ private:
 	static std::vector<NPC*> CampNPC;
 	//std::vector
 
-	bool isPause;
-	bool isEscPressed, wasEscPressed;
+	int width, height;
 
 	MainScreen MainMenu;
-	UI renderUI;
 	Blueprints *blueprints;
+	Item* a;
 
 	double x, y;
 	//void RenderText(Text_Data* TextData, std::string text, Color color);

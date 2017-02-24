@@ -90,7 +90,9 @@ public:
 
 
 	void checkTeleport();
+	void checkPickUpItem();
 	static std::vector<Teleporter*> Teleport;
+	static std::vector<Item*> Items;
 
 	//void TeleportToInsideBarrack();
 	//static std::vector<EnvironmentObj*> Teleport_Barrack;

@@ -8,6 +8,7 @@
 
 #include "MeleeWeapon.h"
 #include "RangeWeapon.h"
+#include "Inventory.h"
 
 Player* Player::Instance_ = 0;
 std::vector<GameObject*> Player::CollisionObjects;
@@ -15,15 +16,17 @@ std::vector<GameObject*> Player::CollisionObjects;
 std::vector<EnemyAI*> Player::enemies_;
 
 std::vector<Teleporter*> Player::Teleport;
+std::vector<Item*> Player::Items;
 //std::vector<EnvironmentObj*> Player::Teleport_Barrack;
 
-Player::Player() : GameObject("Player") 
+Player::Player() : GameObject("Player")
 {
 	for (size_t i = 0; i < MESH_TYPE::mt_Count; i++)
 		PMesh[i] = NULL;
 	currentWeapon_ = NULL;
 	for (size_t i = 0; i < WEAPON_TYPE::WT_COUNT; i++)
 		weapons_[i] = NULL;
+	Pointed_Obj = NULL;
 	potions = NULL;
 	//attack = NULL;
 	//int hp_;
@@ -115,6 +118,7 @@ void Player::update(double dt, Camera* cam)
 	checkTeleport();
 	//TeleportToInsideBarrack();
 
+	checkPickUpItem();
 }
 
 void Player::render(MS* projectionStack, MS* viewStack, MS* modelStack, unsigned * m_parameters)
@@ -141,6 +145,12 @@ void Player::render(MS* projectionStack, MS* viewStack, MS* modelStack, unsigned
 		//RenderMeshClass::RenderTextOnScreen(&Scene::Text[Scene::TEXT_TYPE::SegoeMarker], std::to_string(Rweap->getWeaponAmmo()), Color(1, 1, 1), 2, 75, 5, projectionStack, viewStack, modelStack, m_parameters);
 		RenderMeshClass::RenderTextOnScreen(&Scene::Text[Scene::TEXT_TYPE::SegoeMarker], std::to_string(Rweap->getWeaponAmmo()), Color(1, 1, 1), 2, 75, 5, projectionStack, viewStack, modelStack, m_parameters);
 	}
+
+
+
+
+
+
 }
 
 
@@ -364,6 +374,18 @@ void Player::checkTeleport()
 			SceneManager::getInstance()->SetNextScene();
 		}
 
+	}
+}
+
+void Player::checkPickUpItem()
+{
+	for (size_t i = 0; i < Items.size(); i++)
+	{
+		if (Application::IsKeyPressed('F') && CollisionMesh_->isCollide(Items.at(i)->CollisionMesh_))
+		{
+			Inventory::getInstance()->setItem(Items[i]);
+			delete Items[i];
+		}
 	}
 }
 

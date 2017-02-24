@@ -188,7 +188,7 @@ void MiniGame::Init()
 
 	roadDistance = 0.f;
 	obstaclePosX = 0.f;
-	obstaclePosZ = 40.f;
+	obstaclePosZ = 80.f;
 
 	for (int i = 0; i < 20; i++)
 	{
@@ -278,12 +278,10 @@ void MiniGame::Init()
 			continue;
 	}
 
-	renderUI.Init();
-	isPause = false;
-	wasEscPressed = false;
+	UI::getInstance()->Init();
 
 	score = 0.f;
-	bonusScore = 0.25f; // Default score
+	bonusScore = 0.2f; // Default score multiplier
 
 	camera = new CameraMG;
 	camera->Init(Vector3(0.f, 0.f, 7.f), Vector3(0.f, 0.f, 50.f), Vector3(0.f, 1.f, 0.f));
@@ -299,38 +297,16 @@ void MiniGame::Init()
 void MiniGame::Update(double dt)
 {
 	glfwGetWindowSize(Application::m_window, &width, &height);
-	isEscPressed = Application::IsKeyPressed(VK_ESCAPE);
 
-	if (isEscPressed && !wasEscPressed) // When you press ESC
-	{
-			if (!isPause)
-			{
-				isPause = true;
-				glfwSetInputMode(Application::m_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-				glfwSetCursorPos(Application::m_window, width / 2, height / 2);
-			}
-			else
-			{
-				isPause = false;
-				glfwSetInputMode(Application::m_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-				glfwSetCursorPos(Application::m_window, width / 2, height / 2);
-			}
+	UI::getInstance()->Update(dt);
 
-			wasEscPressed = isEscPressed;
-	}
-
-	if (!isEscPressed && wasEscPressed) // When you release the ESC button
-		wasEscPressed = isEscPressed;
-
-	if (!isPause)
+	if (!UI::getInstance()->isPauseOpen())
 	{
 		double c_posx, c_posy;
 		glfwGetCursorPos(Application::m_window, &c_posx, &c_posy);
 		glfwSetCursorPos(Application::m_window, width / 2, height / 2);
 
 		glfwSetInputMode(Application::m_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-
-		MGPlayer::getInstance()->Update(dt, camera);
 
 		double dx, dy;
 		dx = dt * double(width / 2 - c_posx);
@@ -448,8 +424,7 @@ void MiniGame::Render()
 
 	RenderMiniGame();
 
-	if (isPause)
-		renderUI.renderPause(&projectionStack, &viewStack, &modelStack, m_parameters);
+	UI::getInstance()->renderPause(&projectionStack, &viewStack, &modelStack, m_parameters);
 
 	RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::to_string(FramesPerSec), Color(1.f, 0.f, 0.f), 1.5f, 45.f, 38.f, &projectionStack, &viewStack, &modelStack, m_parameters);
 	Score = "Total score:" + std::to_string(score);

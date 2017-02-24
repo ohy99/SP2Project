@@ -140,7 +140,17 @@
     <ClCompile Include="Source\InsideBarrackScene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+<<<<<<< HEAD
     <ClCompile Include="Source\Blueprints.cpp">
+=======
+    <ClCompile Include="Source\Camera2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\DataBase.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Inventory.cpp">
+>>>>>>> 1a0d4f914b1ccd671f05856094c76847f51826e4
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -301,8 +311,19 @@
     <ClInclude Include="Source\InsideBarrackScene.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+<<<<<<< HEAD
     <ClInclude Include="Source\Blueprints.h">
       <Filter>Header Files\Others</Filter>
+=======
+    <ClInclude Include="Source\Inventory.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Camera2.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\DataBase.h">
+      <Filter>Header Files</Filter>
+>>>>>>> 1a0d4f914b1ccd671f05856094c76847f51826e4
     </ClInclude>
   </ItemGroup>
 </Project>

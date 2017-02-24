@@ -132,18 +132,26 @@ void Application::Init()
 void Application::Run()
 {
 	//Main Loop
+	//Scene *scene1 = new MiniGame();
+	//SceneManager::getInstance()->AddScene(scene1);
+	//Scene *scene2 = new WorldScene();
+	//SceneManager::getInstance()->AddScene(scene2);
+	//Scene *scene3 = new MiniGame();
+	//SceneManager::getInstance()->AddScene(scene3);
 
-	Scene *tempScene = new MainScene();
+	Scene *tempScene = new MainScreen();	//0
 	SceneManager::getInstance()->AddScene(tempScene);
-	tempScene = new WorldScene();
+	tempScene = new MainScene();			//1
 	SceneManager::getInstance()->AddScene(tempScene);
-	tempScene = new InsideBarrackScene();
+	tempScene = new WorldScene();			//2
 	SceneManager::getInstance()->AddScene(tempScene);
-	tempScene = new BossScene();
+	tempScene = new InsideBarrackScene();	//3
 	SceneManager::getInstance()->AddScene(tempScene);
-	tempScene = new UndergroundScene();
+	tempScene = new BossScene();			//4
 	SceneManager::getInstance()->AddScene(tempScene);
-	tempScene = new MiniGame();
+	tempScene = new UndergroundScene();		//5
+	SceneManager::getInstance()->AddScene(tempScene);
+	tempScene = new MiniGame();				//6
 	SceneManager::getInstance()->AddScene(tempScene);
 
 

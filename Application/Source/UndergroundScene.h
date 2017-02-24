@@ -80,11 +80,6 @@ private:
 	//static std::vector<NPC*> CampNPC;
 	//std::vector
 
-	bool isPause;
-	bool isEscPressed, wasEscPressed;
-
-	MainScreen MainMenu;
-	UI renderUI;
 	Blueprints *blueprints;
 
 	void Interactions();

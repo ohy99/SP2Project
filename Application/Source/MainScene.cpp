@@ -16,11 +16,13 @@
 #include "NPC_Doc.h"
 #include "Environment.h"
 #include "Teleporter.h"
+#include "Inventory.h"
 
 #include "RenderMesh.h"
 
 #include "UI.h"
 #include "Blueprints.h"
+#include "Item.h"
 
 //MainScene::Text_Data MainScene::Text[TEXT_TYPE::Text_Count];
 //unsigned MainScene::m_parameters[U_TOTAL];
@@ -29,7 +31,6 @@ MS MainScene::modelStack, MainScene::viewStack, MainScene::projectionStack;
 //std::vector<GameObject*> MainScene::Game_Objects_(10, NULL);
 
 //std::vector<GameObject*> MainScene::Game_Objects_(10, NULL);
-UI renderMeshOnScreen;
 std::vector<EnvironmentObj*> MainScene::Env_Obj;
 std::vector<NPC*> MainScene::CampNPC;
 Teleporter* MainScene::MS_Teleporter;
@@ -174,8 +175,14 @@ void MainScene::Init()
 	meshList[GEO_GroundMesh_RedDirt]->textureID = LoadTGA("Image//GroundMesh_RedDirt_Texture.tga");
 	//Ground Mesh ---- Red Dirt ----------------- End
 
-
-
+	//textureList[test] = MeshBuilder::GenerateQuad("Test", Color(1, 1, 1), 1, 1);
+	//textureList[test]->textureID = LoadTGA("Image//inventory.tga");
+	Inventory::getInstance()->Init();
+	a = new Item("a");
+	//a->CollisionMesh_ = MeshBuilder::GenerateOBJ();
+	a->texture[0] = MeshBuilder::GenerateQuad("quad", Color(1, 1, 1), 1.f, 1.f);
+	a->texture[0]->textureID = LoadTGA("Image//inventory.tga");
+	Inventory::getInstance()->setItem(a);
 
 	//Skybox ------------ Base Camp Start
 	//Left Skybox 
@@ -349,20 +356,16 @@ void MainScene::Init()
 	//Powerbox ----------------------------------- END
 
 
-
-
 	for (auto it : Env_Obj)
 		Player::addCollisionObject(it);
 
 
+	UI::getInstance()->Init();
 
-	renderUI.Init();
-	wasEscPressed = false;
-	isPause = false;
-	//MainMenu.Init();
 
 	camera = new Camera3;
 	camera->Init(Vector3(0, 0, 7), Vector3(0, 0, 0), Vector3(0, 1, 0));
+
 
 
 	Mtx44 projection;
@@ -377,9 +380,9 @@ void MainScene::Update(double dt)
 {
 
 
-	int width, height;
+
 	glfwGetWindowSize(Application::m_window, &width, &height);
-	isEscPressed = Application::IsKeyPressed(VK_ESCAPE);
+
 
 
 	if (Application::IsKeyPressed(VK_NUMPAD1) || Application::IsKeyPressed('1'))
@@ -414,41 +417,14 @@ void MainScene::Update(double dt)
 		fpsonce = true;
 	}
 
-
-
-	if (isEscPressed && !wasEscPressed) // When you press ESC
-	{
-		//if (!MainMenu.isMainMenu)
-		//{
-			if (!isPause)
-			{
-				isPause = true;
-				glfwSetInputMode(Application::m_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-				glfwSetCursorPos(Application::m_window, width / 2, height / 2);				
-			}
-			else
-			{
-				isPause = false;
-				glfwSetInputMode(Application::m_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-				glfwSetCursorPos(Application::m_window, width / 2, height / 2);
-			}
-
-			wasEscPressed = isEscPressed;
-		//}
-	}
-		
-	if (!isEscPressed && wasEscPressed) // When you release the ESC button
-		wasEscPressed = isEscPressed;
-
 	Player::getInstance()->update(dt, camera);
-
-	for (size_t i = 0; i < CampNPC.size(); i++)
-	{
-		CampNPC.at(i)->update(dt);
-	}
+	Inventory::getInstance()->Update(dt);
+	UI::getInstance()->Update(dt);
 
 
-	if (!isPause/* && !MainMenu.isMainMenu*/)
+
+
+	if (!UI::getInstance()->isPauseOpen() && !Inventory::getInstance()->isInventoryOpen())
 	{
 		double c_posx, c_posy;
 		glfwGetCursorPos(Application::m_window, &c_posx, &c_posy);
@@ -460,10 +436,14 @@ void MainScene::Update(double dt)
 		dx = dt * double(width / 2 - c_posx);
 		dy = dt * double(height / 2 - c_posy);
 		camera->Update(dt, dx, dy);
+
+		for (size_t i = 0; i < CampNPC.size(); i++)
+		{
+			CampNPC.at(i)->update(dt);
+		}
 	}
 
 	FramesPerSec = 1 / dt;
-	//MainMenu.Update(dt);
 
 
 	//if (Application::IsKeyPressed('5'))
@@ -502,24 +482,32 @@ void MainScene::Render()
 		camera->getUp().x, camera->getUp().y, camera->getUp().z);
 	modelStack.LoadIdentity();
 
-	//if (MainMenu.isMainMenu)
-	//	MainMenu.Render();
 
-	//else
-	//{
+	RenderMeshClass::RenderMesh(meshList[GEO_AXES], false, &projectionStack, &viewStack, &modelStack, m_parameters);
+	Player::getInstance()->render(&projectionStack, &viewStack, &modelStack, m_parameters);
+
 		RenderMeshClass::RenderMesh(meshList[GEO_AXES], false, &projectionStack, &viewStack, &modelStack, m_parameters);
 		Player::getInstance()->render(&projectionStack, &viewStack, &modelStack, m_parameters);
 
 		RenderSkybox();
 		//	renderEnvironment();
 
-		//Ground Mesh
-		modelStack.PushMatrix();
-		modelStack.Scale(1000, 1000, 1000);
-		modelStack.Rotate(90, -1, 0, 0);
-		RenderMeshClass::RenderMesh(meshList[GEO_GroundMesh_RedDirt], true, &projectionStack, &viewStack, &modelStack, m_parameters);
-		modelStack.PopMatrix();
+	RenderSkybox();
+	//	renderEnvironment();
 
+	//Ground Mesh
+	modelStack.PushMatrix();
+	modelStack.Scale(1000, 1000, 1000);
+	modelStack.Rotate(90, -1, 0, 0);
+	RenderMeshClass::RenderMesh(meshList[GEO_GroundMesh_RedDirt], true, &projectionStack, &viewStack, &modelStack, m_parameters);
+	modelStack.PopMatrix();
+
+
+	for (size_t i = 0; i < CampNPC.size(); i++)
+	{
+		CampNPC.at(i)->render(&projectionStack, &viewStack, &modelStack, m_parameters);
+	}
+	RenderBaseCamp();
 
 		for (size_t i = 0; i < CampNPC.size(); i++)
 		{
@@ -531,14 +519,15 @@ void MainScene::Render()
 
 	/*	RenderMeshClass::RenderTextOnScreen(&Scene::Text[Scene::TEXT_TYPE::Century], std::to_string(numberOfBlueprints), Color(1, 0, 0), 2, 20, 20, &projectionStack, &viewStack, &modelStack, m_parameters);*/
 
-		if (isPause)
-			renderUI.renderPause(&projectionStack, &viewStack, &modelStack, m_parameters);
 
 
-		RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::to_string(FramesPerSec), Color(1, 0, 0), 1.5f, 45, 38, &projectionStack, &viewStack, &modelStack, m_parameters);
-		RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::to_string(Blueprints::GetBlueprintNumber()), Color(1, 0, 0), 1.5f, 20, 20, &projectionStack, &viewStack, &modelStack, m_parameters);
-	//}
 
+	UI::getInstance()->renderPause(&projectionStack, &viewStack, &modelStack, m_parameters);
+	Inventory::getInstance()->Render(&projectionStack, &viewStack, &modelStack, m_parameters);
+
+	RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::to_string(FramesPerSec), Color(1, 0, 0), 1.5f, 45, 38, &projectionStack, &viewStack, &modelStack, m_parameters);
+	RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::to_string(Blueprints::GetBlueprintNumber()), Color(1, 0, 0), 1.5f, 20, 20, &projectionStack, &viewStack, &modelStack, m_parameters);
+	
 }
 
 void MainScene::Interactions(){
@@ -552,7 +541,7 @@ void MainScene::Interactions(){
 			
 		if (Player::getInstance()->getPlayerPosition().x >= -8 && Player::getInstance()->getPlayerPosition().x <= -5 && Player::getInstance()->getPlayerPosition().z <= -11 && Player::getInstance()->getPlayerPosition().z >= -17){
 
-			SceneManager::getInstance()->SetNextSceneID(2);
+			SceneManager::getInstance()->SetNextSceneID(3);
 			SceneManager::getInstance()->SetNextScene();
 		}
 	}
@@ -566,7 +555,7 @@ void MainScene::Interactions(){
 
 		if (Player::getInstance()->getPlayerPosition().x >= -21 && Player::getInstance()->getPlayerPosition().x <= -17 && Player::getInstance()->getPlayerPosition().z <= 2 && Player::getInstance()->getPlayerPosition().z >= -2){
 
-			SceneManager::getInstance()->SetNextSceneID(1);
+			SceneManager::getInstance()->SetNextSceneID(2);
 			SceneManager::getInstance()->SetNextScene();
 			Player::getInstance()->setPosition(Vector3(94.0, 0.0, -8.0));
 		}

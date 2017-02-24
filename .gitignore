@@ -31,3 +31,5 @@ DM2122_Framework.opensdf
 DM2122_Framework.v12.suo
 Application/Debug
 Common/Debug
+Debug/Application.ilk
+Debug/Application.pdb
