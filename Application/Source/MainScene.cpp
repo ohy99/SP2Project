@@ -21,6 +21,7 @@
 #include "RenderMesh.h"
 
 #include "UI.h"
+#include "Blueprints.h"
 #include "Item.h"
 
 //MainScene::Text_Data MainScene::Text[TEXT_TYPE::Text_Count];
@@ -47,6 +48,8 @@ MainScene::~MainScene()
 void MainScene::Init()
 {
 	// Init VBO here
+
+	Player::getInstance()->setPosition(Vector3(12, 0, 11));
 
 	glClearColor(0.0f, 0.5f, 0.66f, 0.0f);
 
@@ -488,8 +491,16 @@ void MainScene::Render()
 	RenderMeshClass::RenderMesh(meshList[GEO_AXES], false, &projectionStack, &viewStack, &modelStack, m_parameters);
 	Player::getInstance()->render(&projectionStack, &viewStack, &modelStack, m_parameters);
 
+<<<<<<< HEAD
 	RenderSkybox();
 	//	renderEnvironment();
+=======
+		RenderMeshClass::RenderMesh(meshList[GEO_AXES], false, &projectionStack, &viewStack, &modelStack, m_parameters);
+		Player::getInstance()->render(&projectionStack, &viewStack, &modelStack, m_parameters);
+
+		RenderSkybox();
+		//	renderEnvironment();
+>>>>>>> a61f1ba9b91ec54e86018ebc4ab8c171a8b2fb4d
 
 	//Ground Mesh
 	modelStack.PushMatrix();
@@ -509,16 +520,21 @@ void MainScene::Render()
 	RenderBaseCamp();
 
 
+<<<<<<< HEAD
 	Interactions();
 
 
+=======
+	RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::to_string(FramesPerSec), Color(1, 0, 0), 1.5f, 45, 38, &projectionStack, &viewStack, &modelStack, m_parameters);
+	RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("Blueprints: ") + std::to_string(Blueprints::GetBlueprintNumber()) + std::string("/3"), Color(1, 0, 0), 2.f, 68, 57, &projectionStack, &viewStack, &modelStack, m_parameters);
+	
+	Player::getInstance()->render(&projectionStack, &viewStack, &modelStack, m_parameters);
+>>>>>>> a61f1ba9b91ec54e86018ebc4ab8c171a8b2fb4d
 
 	UI::getInstance()->renderPause(&projectionStack, &viewStack, &modelStack, m_parameters);
-
-
 	Inventory::getInstance()->Render(&projectionStack, &viewStack, &modelStack, m_parameters);
 
-	RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::to_string(FramesPerSec), Color(1, 0, 0), 1.5f, 45, 38, &projectionStack, &viewStack, &modelStack, m_parameters);
+	
 }
 
 void MainScene::Interactions(){
@@ -623,6 +639,14 @@ void MainScene::RenderSkybox()
 	modelStack.Scale(500.0f, 500.0f, 500.0f);
 	RenderMeshClass::RenderMesh(meshList[GEO_BOTTOM], false, &projectionStack, &viewStack, &modelStack, m_parameters);
 	modelStack.PopMatrix();
-
-
 }
+
+//int MainScene::GetBlueprintNumber()
+//{
+//	return numberOfBlueprints;
+//}
+//
+//void MainScene::SetBlueprintNumber(int new_number)
+//{
+//	numberOfBlueprints = new_number;
+//}

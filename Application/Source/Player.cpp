@@ -132,9 +132,9 @@ void Player::render(MS* projectionStack, MS* viewStack, MS* modelStack, unsigned
 
 	RenderMeshClass::RenderTextOnScreen(&Scene::Text[Scene::TEXT_TYPE::Century], std::to_string(hp_), Color(0, 1, 0), 2, 0, 55, projectionStack, viewStack, modelStack, m_parameters);
 
-	RenderMeshClass::RenderTextOnScreen(&Scene::Text[Scene::TEXT_TYPE::Century], std::to_string(pos_.x), Color(1, 0, 0), 2, 35, 26, projectionStack, viewStack, modelStack, m_parameters);
-	RenderMeshClass::RenderTextOnScreen(&Scene::Text[Scene::TEXT_TYPE::Century], std::to_string(pos_.y), Color(1, 0, 0), 2, 35, 24, projectionStack, viewStack, modelStack, m_parameters);
-	RenderMeshClass::RenderTextOnScreen(&Scene::Text[Scene::TEXT_TYPE::Century], std::to_string(pos_.z), Color(1, 0, 0), 2, 35, 22, projectionStack, viewStack, modelStack, m_parameters);
+	RenderMeshClass::RenderTextOnScreen(&Scene::Text[Scene::TEXT_TYPE::Century], std::to_string(pos_.x), Color(1, 0, 0), 1.8, 69, 54, projectionStack, viewStack, modelStack, m_parameters);
+	RenderMeshClass::RenderTextOnScreen(&Scene::Text[Scene::TEXT_TYPE::Century], std::to_string(pos_.y), Color(1, 0, 0), 1.8, 69, 52, projectionStack, viewStack, modelStack, m_parameters);
+	RenderMeshClass::RenderTextOnScreen(&Scene::Text[Scene::TEXT_TYPE::Century], std::to_string(pos_.z), Color(1, 0, 0), 1.8, 69, 50, projectionStack, viewStack, modelStack, m_parameters);
 
 	if (currentWeapon_ == weapons_[WEAPON_TYPE::RANGED])
 	{

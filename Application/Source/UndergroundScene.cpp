@@ -19,7 +19,9 @@
 #include "RenderMesh.h"
 
 #include "UI.h"
+#include "Blueprints.h"
 #include "Inventory.h"
+
 
 //UndergroundScene::Text_Data UndergroundScene::Text[TEXT_TYPE::Text_Count];
 //unsigned UndergroundScene::m_parameters[U_TOTAL];
@@ -300,8 +302,14 @@ void UndergroundScene::Init()
 	Env_Obj.push_back(Desk2);
 	Env_Obj.push_back(Desk3);
 	Env_Obj.push_back(Wardrobe);
-
 	//Furniture ------ End
+
+	//Blueprint 3 ----- Start
+	EnvironmentObj* Blueprint = new EnvironmentObj(MeshBuilder::GenerateOBJ("Blueprint", "OBJ//Blueprint3.obj"));
+	Blueprint->CollisionMesh_->textureID = LoadTGA("Image//BlueprintUV.tga");
+
+	Env_Obj.push_back(Blueprint);
+	//Blueprint 3 ----- End
 
 	for (auto it : Env_Obj)
 		Player::addCollisionObject(it);
@@ -401,7 +409,6 @@ void UndergroundScene::Render()
 	modelStack.LoadIdentity();
 
 	RenderMeshClass::RenderMesh(meshList[GEO_AXES], false, &projectionStack, &viewStack, &modelStack, m_parameters);
-	Player::getInstance()->render(&projectionStack, &viewStack, &modelStack, m_parameters);
 
 	RenderSkybox();
 	//	renderEnvironment();
@@ -418,27 +425,35 @@ void UndergroundScene::Render()
 		modelStack.PushMatrix();
 		RenderMeshClass::RenderMesh(Env_Obj.at(i)->CollisionMesh_, true, &projectionStack, &viewStack, &modelStack, m_parameters);
 		modelStack.PopMatrix();
+<<<<<<< HEAD
 
 	}
 
 	Interactions();
+=======
+	}
+>>>>>>> a61f1ba9b91ec54e86018ebc4ab8c171a8b2fb4d
 
+	Interactions();
 	//for (size_t i = 0; i < CampNPC.size(); i++)
 	//{
 	//	CampNPC.at(i)->render(&projectionStack, &viewStack, &modelStack, m_parameters);
 	//}
 
-	UI::getInstance()->renderPause(&projectionStack, &viewStack, &modelStack, m_parameters);
+	RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("Blueprints: ") + std::to_string(Blueprints::GetBlueprintNumber()) + std::string("/3"), Color(1, 0, 0), 2.f, 68, 57, &projectionStack, &viewStack, &modelStack, m_parameters);
 
+	UI::getInstance()->renderPause(&projectionStack, &viewStack, &modelStack, m_parameters);
+	Player::getInstance()->render(&projectionStack, &viewStack, &modelStack, m_parameters);
 	RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::to_string(FramesPerSec), Color(1, 0, 0), 1.5f, 45, 38, &projectionStack, &viewStack, &modelStack, m_parameters);
 }
 
 
-void UndergroundScene::Interactions(){
-	
+void UndergroundScene::Interactions()
+{
+	//Return to World Scene
 	if (Player::getInstance()->getPlayerPosition().x >= -39 && Player::getInstance()->getPlayerPosition().x <= -33 && Player::getInstance()->getPlayerPosition().z <= 33 && Player::getInstance()->getPlayerPosition().z >= 26)
 	{
-		RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("[Press [Space] to exit.]"), Color(1, 0, 0), 2.f, 35, 24, &projectionStack, &viewStack, &modelStack, m_parameters);
+		RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("[Press SPACE to exit.]"), Color(1, 0, 0), 2.f, 30, 30, &projectionStack, &viewStack, &modelStack, m_parameters);
 	}
 
 	if (Application::IsKeyPressed(VK_SPACE))
@@ -452,6 +467,25 @@ void UndergroundScene::Interactions(){
 		}
 	}
 
+	//Blueprint 3
+	if (Player::getInstance()->getPlayerPosition().x >= 41.5 && Player::getInstance()->getPlayerPosition().x <= 43 && Player::getInstance()->getPlayerPosition().z <= 39 && Player::getInstance()->getPlayerPosition().z >= 37){
+
+		if (Blueprint3 == false){
+
+			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("[Press SPACE to scan.]"), Color(1, 0, 0), 2.f, 30, 30, &projectionStack, &viewStack, &modelStack, m_parameters);
+			if (Application::IsKeyPressed(VK_SPACE))
+			{
+				Blueprint3 = true;
+				Blueprints::AddBlueprintNumber();
+			}
+		}
+		if (Blueprint3 == true){
+
+			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("*Object scanned*"), Color(1, 0, 0), 2.f, 10, 37, &projectionStack, &viewStack, &modelStack, m_parameters);
+			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("*Discovered: This appears to be a blueprint for a part of a machine."), Color(1, 0, 0), 2.f, 10, 35, &projectionStack, &viewStack, &modelStack, m_parameters);
+			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("Committing to memory... Blueprint saved*"), Color(1, 0, 0), 2.f, 10, 33, &projectionStack, &viewStack, &modelStack, m_parameters);
+		}
+	}
 }
 
 void UndergroundScene::Exit()

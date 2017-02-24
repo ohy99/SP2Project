@@ -19,8 +19,12 @@
 #include "UI.h"
 #include "NPC.h"
 #include "Environment.h"
+<<<<<<< HEAD
 #include "Item.h"
-
+=======
+#include "Blueprints.h"
+#include "Weapon.h"
+>>>>>>> a61f1ba9b91ec54e86018ebc4ab8c171a8b2fb4d
 
 class MainScene : public Scene
 {
@@ -63,12 +67,16 @@ public:
 	virtual void Update(double dt);
 	virtual void Render();
 	virtual void Exit();
+	//int GetBlueprintNumber();
+	//virtual void SetBlueprintNumber(int new_number);
 	//virtual std::vector<GameObject*> getCurrentSceneObjs(){ return Game_Objects_; }
 
 	static MS modelStack, viewStack, projectionStack;
 
 	static Teleporter* MS_Teleporter;
 	static Teleporter* Barrack;
+
+	//int numberOfBlueprints = 0;
 
 private:
 	unsigned m_vertexArrayID;
@@ -93,6 +101,7 @@ private:
 	int width, height;
 
 	MainScreen MainMenu;
+	Blueprints *blueprints;
 	Item* a;
 
 	double x, y;
