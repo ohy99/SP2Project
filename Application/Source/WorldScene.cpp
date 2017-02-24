@@ -695,7 +695,7 @@ void WorldScene::Interactions(){
 			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("apparently help to rejuvenate the Earth."), Color(1, 0, 0), 2.f, 10, 33, &projectionStack, &viewStack, &modelStack, m_parameters);
 			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("There are apparently three parts to the blueprints required to make this device."), Color(1, 0, 0), 2.f, 10, 31, &projectionStack, &viewStack, &modelStack, m_parameters);
 			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("One of the locations is recorded in this device. A hidden lab at somewhere"), Color(1, 0, 0), 2.f, 10, 29, &projectionStack, &viewStack, &modelStack, m_parameters);
-			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("around coordinates: -80, -80 *"), Color(1, 0, 0), 2.f, 10, 27, &projectionStack, &viewStack, &modelStack, m_parameters);
+			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("around coordinates: x;-80, y;-80 *"), Color(1, 0, 0), 2.f, 10, 27, &projectionStack, &viewStack, &modelStack, m_parameters);
 
 		}
 	}
@@ -717,12 +717,12 @@ void WorldScene::Interactions(){
 			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("*Extracting data…*"), Color(1, 0, 0), 2.f, 10, 37, &projectionStack, &viewStack, &modelStack, m_parameters);
 			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("*Discovered: This robot appears to be a research assistant "), Color(1, 0, 0), 2.f, 10, 35, &projectionStack, &viewStack, &modelStack, m_parameters);
 			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("from a time before Earth was abandoned. One registered area of interest."), Color(1, 0, 0), 2.f, 10, 33, &projectionStack, &viewStack, &modelStack, m_parameters);
-			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("New coordinates found: ... *"), Color(1, 0, 0), 2.f, 10, 31, &projectionStack, &viewStack, &modelStack, m_parameters);
+			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("New coordinates found: x; 54, y;-84*"), Color(1, 0, 0), 2.f, 10, 31, &projectionStack, &viewStack, &modelStack, m_parameters);
 		}
 	}
 
 	//Oil Barrel -- Fake Hint, A receipt instead.
-	if (Player::getInstance()->getPlayerPosition().x >= -109 && Player::getInstance()->getPlayerPosition().x <= -108 && Player::getInstance()->getPlayerPosition().z <= 89 && Player::getInstance()->getPlayerPosition().z >= 88){
+	if (Player::getInstance()->getPlayerPosition().x >= -110 && Player::getInstance()->getPlayerPosition().x <= -107 && Player::getInstance()->getPlayerPosition().z <= 90 && Player::getInstance()->getPlayerPosition().z >= 87){
 		
 		if (counter_text_fakeBlueprints == 0){
 			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("[Press SPACE to scan.]"), Color(1, 0, 0), 2.f, 30, 30, &projectionStack, &viewStack, &modelStack, m_parameters);
