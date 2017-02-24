@@ -20,6 +20,7 @@
 #include "RenderMesh.h"
 
 #include "UI.h"
+#include "Blueprints.h"
 
 //MainScene::Text_Data MainScene::Text[TEXT_TYPE::Text_Count];
 //unsigned MainScene::m_parameters[U_TOTAL];
@@ -528,12 +529,14 @@ void MainScene::Render()
 
 		Interactions();
 
+	/*	RenderMeshClass::RenderTextOnScreen(&Scene::Text[Scene::TEXT_TYPE::Century], std::to_string(numberOfBlueprints), Color(1, 0, 0), 2, 20, 20, &projectionStack, &viewStack, &modelStack, m_parameters);*/
 
 		if (isPause)
 			renderUI.renderPause(&projectionStack, &viewStack, &modelStack, m_parameters);
 
 
 		RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::to_string(FramesPerSec), Color(1, 0, 0), 1.5f, 45, 38, &projectionStack, &viewStack, &modelStack, m_parameters);
+		RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::to_string(Blueprints::GetBlueprintNumber()), Color(1, 0, 0), 1.5f, 20, 20, &projectionStack, &viewStack, &modelStack, m_parameters);
 	//}
 
 }
@@ -640,6 +643,14 @@ void MainScene::RenderSkybox()
 	modelStack.Scale(500.0f, 500.0f, 500.0f);
 	RenderMeshClass::RenderMesh(meshList[GEO_BOTTOM], false, &projectionStack, &viewStack, &modelStack, m_parameters);
 	modelStack.PopMatrix();
-
-
 }
+
+//int MainScene::GetBlueprintNumber()
+//{
+//	return numberOfBlueprints;
+//}
+//
+//void MainScene::SetBlueprintNumber(int new_number)
+//{
+//	numberOfBlueprints = new_number;
+//}

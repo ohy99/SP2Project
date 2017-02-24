@@ -19,6 +19,7 @@
 #include "RenderMesh.h"
 
 #include "UI.h"
+#include "Blueprints.h"
 
 //UndergroundScene::Text_Data UndergroundScene::Text[TEXT_TYPE::Text_Count];
 //unsigned UndergroundScene::m_parameters[U_TOTAL];

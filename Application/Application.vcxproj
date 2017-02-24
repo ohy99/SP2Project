@@ -83,6 +83,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Source\Application.cpp" />
+    <ClCompile Include="Source\Blueprints.cpp" />
     <ClCompile Include="Source\BossAI.cpp" />
     <ClCompile Include="Source\BossGSmash.cpp" />
     <ClCompile Include="Source\BossScene.cpp" />
@@ -118,6 +119,7 @@
   <ItemGroup>
     <ClInclude Include="Source\AllyNPC.h" />
     <ClInclude Include="Source\Application.h" />
+    <ClInclude Include="Source\Blueprints.h" />
     <ClInclude Include="Source\BossAI.h" />
     <ClInclude Include="Source\BossAttackStyles.h" />
     <ClInclude Include="Source\BossGSmash.h" />

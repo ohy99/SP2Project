@@ -18,7 +18,7 @@
 #include "UI.h"
 #include "NPC.h"
 #include "Environment.h"
-
+#include "Blueprints.h"
 
 class UndergroundScene : public Scene
 {
@@ -37,8 +37,6 @@ class UndergroundScene : public Scene
 		GEO_LIGHTBALL1,
 		GEO_MOSSY_GROUND,
 		GEO_STAIRS,
-
-
 
 		GEO_LEFT,
 		GEO_RIGHT,
@@ -87,6 +85,7 @@ private:
 
 	MainScreen MainMenu;
 	UI renderUI;
+	Blueprints *blueprints;
 
 	void Interactions();
 
@@ -94,7 +93,6 @@ private:
 	//void RenderText(Text_Data* TextData, std::string text, Color color);
 	//void RenderTextOnScreen(Text_Data* TextData, std::string text, Color color, float size, float x, float y);
 	//void RenderMeshOnScreen(Mesh* mesh, int x, int y, int sizex, int sizey);
-
 };
 
 #endif
