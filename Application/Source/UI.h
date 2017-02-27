@@ -20,14 +20,7 @@ public:
 private:
 	UI() { ; }
 
-	enum GEOMETRY_TYPE
-	{
-		QUAD, 
-
-		NUM_GEOMETRY,
-	};
-
-	Mesh* meshList[NUM_GEOMETRY];
+	Mesh* Quad;
 
 	bool isPause;
 	bool isEscPressed, wasEscPressed;

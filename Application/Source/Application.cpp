@@ -155,6 +155,7 @@ void Application::Run()
 	SceneManager::getInstance()->AddScene(tempScene);
 
 
+
 	SceneManager::getInstance()->SetNextSceneID(1);
 	//Scene *scene = scene1;
 	SceneManager::getInstance()->getCurrentScene()->Init();

@@ -149,8 +149,8 @@ void MiniGame::Init()
 
 
 
-	meshList[GEO_LIGHTBALL] = MeshBuilder::GenerateSphere("LightBall", Color(1.f, 1.f, 1.f), 12, 12, 1.f);
-	meshList[GEO_LIGHTBALL1] = MeshBuilder::GenerateCylinder("LightBall1", Color(1.f, 1.f, 1.f), 12, 1.f, 0.f, 1.f);
+	//meshList[GEO_LIGHTBALL] = MeshBuilder::GenerateSphere("LightBall", Color(1.f, 1.f, 1.f), 12, 12, 1.f);
+	//meshList[GEO_LIGHTBALL1] = MeshBuilder::GenerateCylinder("LightBall1", Color(1.f, 1.f, 1.f), 12, 1.f, 0.f, 1.f);
 
 	//	meshList[GEO_SPHERE] = MeshBuilder::GenerateSphere(...);
 	meshList[GEO_QUAD] = MeshBuilder::GenerateQuad("image", Color(0.9f, 0.9f, 0.9f), 1.0f, 1.0f);
@@ -264,11 +264,6 @@ void MiniGame::Init()
 		obstaclePosZ += 20.f;
 	}
 
-	//for (auto it : Obstacles)
-	//{
-	//	MGPlayer::addCollisionObject(it);
-	//}
-
 	for (size_t i = 0; i < Obstacles.size(); i++)
 	{
 		if (isObstacleActive[i])
@@ -279,6 +274,7 @@ void MiniGame::Init()
 	}
 
 	UI::getInstance()->Init();
+	MGPlayer::getInstance()->Init();
 
 	score = 0.f;
 	bonusScore = 0.2f; // Default score multiplier
@@ -291,7 +287,28 @@ void MiniGame::Init()
 	projectionStack.LoadMatrix(projection);
 
 	// Hide the mouse and enable unlimited mouvement
-	glfwSetInputMode(Application::m_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+
+	MGList[SCREEN] = MeshBuilder::GenerateQuad("image", Color(0.9f, 0.9f, 0.9f), 1.0f, 1.0f);
+	MGList[SCREEN]->textureID = LoadTGA("Image//inventory.tga");
+
+	MGList[START] = MeshBuilder::GenerateQuad("image", Color(1.f, 1.f, 1.f), 1.0f, 1.0f);
+	MGList[START]->textureID = LoadTGA("Image//start.tga");
+	MGList[START]->setHb(true, Vector3(-200.f, -50.f, 0.f), Vector3(200.f, 50.f, 2.f),
+		Vector3((float)Application::getWindowWidth() * 0.5f, (float)Application::getWindowHeight() * 0.5f, 0),
+		Vector3(0.f, 1.f, 0.f));
+
+
+	MGList[RESTART] = MeshBuilder::GenerateQuad("image", Color(1.f, 1.f, 1.f), 1.0f, 1.0f);
+	MGList[RESTART]->textureID = LoadTGA("Image//restart.tga");
+	MGList[RESTART]->setHb(true, Vector3(-200.f, -50.f, 0.f), Vector3(200.f, 50.f, 2.f),
+		Vector3((float)Application::getWindowWidth() * 0.5f, (float)(Application::getWindowHeight() / 768) * 400, 0.f),
+		Vector3(0.f, 1.f, 0.f));
+
+	MGList[QUIT] = MeshBuilder::GenerateQuad("image", Color(1.f, 1.f, 1.f), 1.0f, 1.0f);
+	MGList[QUIT]->textureID = LoadTGA("Image//quit.tga");
+	MGList[QUIT]->setHb(true, Vector3(-200.f, -50.f, 0.f), Vector3(200.f, 50.f, 2.f),
+		Vector3((float)Application::getWindowWidth() * 0.5f, (float)(Application::getWindowHeight() / 768) * (Application::getWindowHeight() - 200), 0.f),
+		Vector3(0.f, 1.f, 0.f));
 }
 
 void MiniGame::Update(double dt)
@@ -299,19 +316,21 @@ void MiniGame::Update(double dt)
 	glfwGetWindowSize(Application::m_window, &width, &height);
 
 	UI::getInstance()->Update(dt);
+	MGPlayer::getInstance()->Update(dt, camera);
 
-	if (!UI::getInstance()->isPauseOpen())
+	if (!MGPlayer::getInstance()->gameStarted() && !MGPlayer::getInstance()->isDead())
+		glfwSetInputMode(Application::m_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+
+	if (!UI::getInstance()->isPauseOpen() && MGPlayer::getInstance()->gameStarted() && !MGPlayer::getInstance()->isDead())
 	{
-		double c_posx, c_posy;
-		glfwGetCursorPos(Application::m_window, &c_posx, &c_posy);
+		glfwGetCursorPos(Application::m_window, &x, &y);
 		glfwSetCursorPos(Application::m_window, width / 2, height / 2);
 
-		glfwSetInputMode(Application::m_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+		//glfwSetInputMode(Application::m_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
-		double dx, dy;
-		dx = dt * double(width / 2 - c_posx);
-		dy = dt * double(height / 2 - c_posy);
-		camera->Update(dt, dx, dy);
+		x = dt * double(width / 2 - x);
+		y = dt * double(height / 2 - y);
+		camera->Update(dt, x, y);
 	}
 
 	for (int i = 0; i < 20; i++)
@@ -389,6 +408,7 @@ void MiniGame::Update(double dt)
 	}
 
 	score = MGPlayer::getInstance()->playerScore(bonusScore);
+	GameState();
 
 	FramesPerSec = 1 / dt; 
 
@@ -427,8 +447,12 @@ void MiniGame::Render()
 	UI::getInstance()->renderPause(&projectionStack, &viewStack, &modelStack, m_parameters);
 
 	RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::to_string(FramesPerSec), Color(1.f, 0.f, 0.f), 1.5f, 45.f, 38.f, &projectionStack, &viewStack, &modelStack, m_parameters);
-	Score = "Total score:" + std::to_string(score);
-	RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], Score, Color(1.f, 1.f, 1.f), 3.8f, 48.f, 56.5f, &projectionStack, &viewStack, &modelStack, m_parameters);
+
+	if (MGPlayer::getInstance()->gameStarted())
+	{
+		Score = "Total score:" + std::to_string(score);
+		RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], Score, Color(1.f, 1.f, 1.f), 3.8f, 48.f, 56.5f, &projectionStack, &viewStack, &modelStack, m_parameters);
+	}
 }
 
 void MiniGame::Exit()
@@ -438,7 +462,10 @@ void MiniGame::Exit()
 		if (meshList[i] != NULL)
 			delete meshList[i];
 	}
-	delete camera;
+	/*delete camera;*/
+
+	//delete road;
+	delete lorry->CollisionMesh_;
 
 	// Cleanup VBO here
 	glDeleteVertexArrays(1, &m_vertexArrayID);
@@ -471,6 +498,19 @@ void MiniGame::RenderMiniGame()
 			RenderMeshClass::RenderMesh(Obstacles.at(i)->CollisionMesh_, true, &projectionStack, &viewStack, &modelStack, m_parameters);
 			modelStack.PopMatrix();
 		}
+	}
+
+	if (!MGPlayer::getInstance()->gameStarted())
+	{
+		RenderMeshClass::RenderMeshOnScreen(MGList[SCREEN], (int)Application::getWindowWidth() * 0.5f, (int)Application::getWindowHeight() * 0.5f, 0, (int)(Application::getWindowWidth() / 1024) * 700, (int)(Application::getWindowHeight() / 768) * 700, &projectionStack, &viewStack, &modelStack, m_parameters);
+		RenderMeshClass::RenderMeshOnScreen(MGList[START], (int)Application::getWindowWidth() * 0.5f, (int)Application::getWindowHeight() * 0.5f, 0, (int)(Application::getWindowWidth() / 1024) * 400, (int)(Application::getWindowHeight() / 768) * 100, &projectionStack, &viewStack, &modelStack, m_parameters);
+	}
+
+	if (MGPlayer::getInstance()->isDead())
+	{
+		RenderMeshClass::RenderMeshOnScreen(MGList[SCREEN], (int)Application::getWindowWidth() * 0.5f, (int)Application::getWindowHeight() * 0.5f, 0, (int)(Application::getWindowWidth() / 1024) * 700, (int)(Application::getWindowHeight() / 768) * 700, &projectionStack, &viewStack, &modelStack, m_parameters);
+		RenderMeshClass::RenderMeshOnScreen(MGList[RESTART], (int)Application::getWindowWidth() * 0.5f, (int)(Application::getWindowHeight() / 768) * 400, 0, (int)(Application::getWindowWidth() / 1024) * 400, (int)(Application::getWindowHeight() / 768) * 100, &projectionStack, &viewStack, &modelStack, m_parameters);
+		RenderMeshClass::RenderMeshOnScreen(MGList[QUIT], (int)Application::getWindowWidth() * 0.5f, (int)(Application::getWindowHeight() / 768) * 200.f, 0, (int)(Application::getWindowWidth() / 1024) * 400, (int)(Application::getWindowHeight() / 768) * 100, &projectionStack, &viewStack, &modelStack, m_parameters);
 	}
 }
 
@@ -520,4 +560,112 @@ void MiniGame::RenderSkybox()
 	modelStack.PopMatrix();
 
 
+}
+
+void MiniGame::Reset()
+{
+	MGPlayer::getInstance()->setPlayerPosition(Vector3(0.f, 0.f, 0.f));
+	roadDistance = 0.f;
+	obstaclePosX = MGPlayer::getInstance()->getPlayerPosition().x;
+	obstaclePosZ = MGPlayer::getInstance()->getPlayerPosition().z + 80.f;
+
+
+	for (int i = 0; i < 20; i++)
+	{
+		roadPosition[i].z = roadDistance;
+		roadDistance += 10.f;
+	}
+
+	for (size_t i = 0; i < Obstacles.size(); i++)
+	{
+		isObstacleActive[i] = false;
+	}
+
+	for (size_t i = 0; i < Obstacles.size(); i++)
+	{
+		obstaclePosX = rand() % 3; // rand 0 - 1
+		order[0] = obstaclePosX;
+
+		obstaclePosX = rand() % 3; // rand 0 - 1
+
+		if (obstaclePosX == order[0])
+		{
+			order[1] = (int)(obstaclePosX + 1) % 3;
+		}
+
+		if (!isObstacleActive[i])
+		{
+			isObstacleActive[i] = true;
+
+			if ((int)count[i] == 0)
+			{
+				Obstacles[i]->CollisionMesh_->pos.x = -7.f + ((int)order[0] * 7.f);
+				Obstacles[i]->CollisionMesh_->pos.z = obstaclePosZ;
+			}
+
+
+			else if ((int)count[i] == 1)
+			{
+				if (i + 1 <= 15)
+				{
+					Obstacles[i]->CollisionMesh_->pos.x = -7.f + ((int)order[0] * 7.f);
+					Obstacles[i]->CollisionMesh_->pos.z = obstaclePosZ;
+					Obstacles[i + 1]->CollisionMesh_->pos.x = -7.f + ((int)order[1] * 7.f);
+					Obstacles[i + 1]->CollisionMesh_->pos.z = obstaclePosZ;
+
+					isObstacleActive[i + 1] = true;
+					i++;
+				}
+
+				else
+				{
+					Obstacles[i]->CollisionMesh_->pos.x = -7.f + ((int)order[1] * 7.f);
+					Obstacles[i]->CollisionMesh_->pos.z = obstaclePosZ;
+
+					isObstacleActive[i] = true;
+				}
+			}
+		}
+
+		obstaclePosZ += 20.f;
+	}
+}
+
+void MiniGame::GameState()
+{
+	glfwGetCursorPos(Application::m_window, &x, &y);
+	leftButton = glfwGetMouseButton(Application::m_window, GLFW_MOUSE_BUTTON_LEFT);
+	isLeftMouseButtonPressed = leftButton;
+
+	if (MGPlayer::getInstance()->isDead())
+		glfwSetInputMode(Application::m_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+
+	if (isLeftMouseButtonPressed && !wasLeftMouseButtonPressed)
+	{
+		if (MGList[START]->isPointInsideAABB(Position(x, y, 0)) && !MGPlayer::getInstance()->gameStarted())
+		{
+			MGPlayer::getInstance()->setGameState(true, false, false);
+			glfwSetInputMode(Application::m_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+		}
+
+		if (MGList[RESTART]->isPointInsideAABB(Position(x, y, 0)) && MGPlayer::getInstance()->isDead())
+		{
+			Reset();
+			MGPlayer::getInstance()->setGameState(true, true, false);
+			glfwSetInputMode(Application::m_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+		}
+
+		if (MGList[QUIT]->isPointInsideAABB(Position(x, y, 0)) && MGPlayer::getInstance()->isDead())
+		{
+			Reset();
+			MGPlayer::getInstance()->setGameState(false, false, false);
+			SceneManager::getInstance()->SetNextSceneID(1);
+			SceneManager::getInstance()->SetNextScene();
+		}
+
+		wasLeftMouseButtonPressed = isLeftMouseButtonPressed;
+	}
+
+	if (!isLeftMouseButtonPressed && wasLeftMouseButtonPressed)
+		wasLeftMouseButtonPressed = isLeftMouseButtonPressed;
 }

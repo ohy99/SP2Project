@@ -89,22 +89,8 @@ void CameraMG::Update(double dt, double dx, double dy)
 		sin(Math::DegreeToRadian(Cam_Phi)) * -cos(Math::DegreeToRadian(Cam_Theta))
 		);
 	up.Normalize();
-	//up = Right.Cross(dir).Normalized();
-
-	//int state = glfwGetMouseButton(Application::m_window, GLFW_MOUSE_BUTTON_LEFT);
-
-	//if (state)
-	//{
-	//	//this->position.x += (float)(dir.x * dt * 10.f);
-	//	//this->position.z += (float)(dir.z * dt * 10.f);
-	//	//this->position.y += (float)(dir.y * dt * 10.0f);
-	//}
-
-	
 
 	this->position = MGPlayer::getInstance()->CollisionMesh_->pos;
 	this->position.y += 1.8f;
 
-	//this->position = Player::getInstance()->CollisionMesh_->pos;
-	//this->position.y += 1.8f;
 }

@@ -156,6 +156,7 @@
     <ClInclude Include="Source\MeleeWeapon.h" />
     <ClInclude Include="Source\MGPlayer.h" />
     <ClInclude Include="Source\MiniGame.h" />
+    <ClInclude Include="Source\MiniMap.h" />
     <ClInclude Include="Source\NPC.h" />
     <ClInclude Include="Source\NPC_Doc.h" />
     <ClInclude Include="Source\Player.h" />

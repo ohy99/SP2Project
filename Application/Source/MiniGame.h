@@ -28,8 +28,8 @@ class MiniGame : public Scene
 		GEO_AXES,
 		GEO_QUAD,
 
-		GEO_LIGHTBALL,
-		GEO_LIGHTBALL1,
+		//GEO_LIGHTBALL,
+		//GEO_LIGHTBALL1,
 
 		GEO_LEFT,
 		GEO_RIGHT,
@@ -44,6 +44,16 @@ class MiniGame : public Scene
 		NUM_GEOMETRY,
 	};
 
+	enum MINI_GAME_UI
+	{
+		SCREEN,
+		START,
+		RESTART,
+		QUIT,
+
+		MG_UI_COUNT,
+	};
+
 public:
 	MiniGame();
 	~MiniGame();
@@ -52,6 +62,9 @@ public:
 	virtual void Update(double dt);
 	virtual void Render();
 	virtual void Exit();
+	virtual void Reset();
+
+	virtual void GameState();
 
 	static MS modelStack, viewStack, projectionStack;
 
@@ -76,16 +89,21 @@ private:
 	char counter;
 
 	double x, y;
+	double c_posx, c_posy;
 
 	float score;
 	float bonusScore;
 	float roadDistance;
 	float obstaclePosX, obstaclePosZ;
 
+	int leftButton;
+	bool isLeftMouseButtonPressed, wasLeftMouseButtonPressed;
+
+	Mesh* MGList[MG_UI_COUNT];
+
 	std::string Score;
 
 	Mesh* road;
-	Distance roadDis;
 	EnvironmentObj* lorry;
 };
 

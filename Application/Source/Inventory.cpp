@@ -42,22 +42,7 @@ void Inventory::setItem(Item* items)
 			Inventory_[i]->item_ = (items);
 			break;
 		}
-	}
-
-
-	//bool hasputed = false;
-	//for (size_t i = 0; i < 12; i++)
-	//{
-	//	if (itemSlots[i] == NULL)
-	//	{
-	//		itemSlots[i] = items;
-	//		hasputed = true;
-	//		break;
-	//	}
-	//}
-	//if (!hasputed)
-	//	isInventoryFull;
-		
+	}		
 }
 
 int Inventory::getInventorySize()
@@ -170,7 +155,7 @@ void Inventory::Render(MS* projectionStack, MS* viewStack, MS* modelStack, unsig
 		}
 
 		if (isInventoryFull())
-			RenderMeshClass::RenderTextOnScreen(&Scene::Text[Scene::TEXT_TYPE::Century], "Your inventory is full", Color(1.f, 1.f, 1.f), 10, 10, 26, projectionStack, viewStack, modelStack, m_parameters);
+			RenderMeshClass::RenderTextOnScreen(&Scene::Text[Scene::TEXT_TYPE::Century], "Your inventory is full", Color(1.f, 1.f, 1.f), 5, 15, 26, projectionStack, viewStack, modelStack, m_parameters);
 	}
 }
 
