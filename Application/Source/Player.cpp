@@ -60,17 +60,27 @@ Player::Player() : GameObject("Player"), wasFPressed(false)
 		bulletMesh[i]->CollisionMesh_->material.kSpecular = 0.8f;
 		bulletMesh[i]->CollisionMesh_->collisionEnabled = false;
 	}
+	//imaginaryBullet = new BulletsTrail(70, 0, false, false);
+	//imaginaryBullet->CollisionMesh_ = MeshBuilder::GenerateOBJ("Bullet", "OBJ//BulletTrail.obj");
+	//imaginaryBullet->CollisionMesh_->textureID = LoadTGA("Image//BulletTrailUV.tga");
+	//imaginaryBullet->CollisionMesh_->material.kShininess = 5.0f;
+	//imaginaryBullet->CollisionMesh_->material.kSpecular = 0.8f;
+	//imaginaryBullet->CollisionMesh_->collisionEnabled = false;
+
 
 	RangeWeapon* temp_rangedWeap = new RangeWeapon("PISTOL", 30, 50, 45, 45, 9);
 	temp_rangedWeap->setRangeWeapon(250, 0.025f, 2.f);
-	weapons_[WEAPON_TYPE::MELEE] = new MeleeWeapon("Melee", 80, 110);
+	weapons_[WEAPON_TYPE::MELEE] = new MeleeWeapon("Melee", 100, 150);
 	weapons_[WEAPON_TYPE::PISTOL] = temp_rangedWeap;
-	temp_rangedWeap = new RangeWeapon("RIFLE", 45, 55, 90, 120, 30);
+	temp_rangedWeap = new RangeWeapon("RIFLE", 55, 75, 90, 120, 30);
 	temp_rangedWeap->setRangeWeapon(500, 0.02f, 2.5f);
 	weapons_[WEAPON_TYPE::RIFLE] = temp_rangedWeap;
-	temp_rangedWeap = new RangeWeapon("MACHINE GUN", 10, 25, 400, 400, 200);
+	temp_rangedWeap = new RangeWeapon("MACHINE GUN", 30, 60, 400, 400, 200);
 	temp_rangedWeap->setRangeWeapon(800, 0.0275f, 4.f);
 	weapons_[WEAPON_TYPE::MACHINEGUN] = temp_rangedWeap;
+	temp_rangedWeap = new RangeWeapon("FLAME THROWER? HEH", 10, 25, 1000, 1000, 1000);
+	temp_rangedWeap->setRangeWeapon(3000, 0.03f, 3.f);
+	weapons_[WEAPON_TYPE::FLAMETHROWER] = temp_rangedWeap;
 
 	currentWeapon_ = weapons_[WEAPON_TYPE::MELEE];
 }
@@ -93,6 +103,8 @@ Player::~Player()
 	//delete attack;
 	delete Instance_;
 	delete Crosshair;
+	delete[] bulletMesh;
+	delete imaginaryBullet;
 }
 Player* Player::getInstance() 
 { 
@@ -396,24 +408,7 @@ void Player::RangedAttack(double dt)
 		{
 			if (Rweap->Shoot())
 			{
-				BulletsTrail* bulletOut = getBulletTrail();
-				bulletOut->active = true;
-				bulletOut->CollisionMesh_->right = right_;
-				bulletOut->CollisionMesh_->dir = FPSCam::getInstance()->getDir();
-				bulletOut->dmg = Rweap->getWeaponDamage();
-				bulletOut->CollisionMesh_->pos = FPSCam::getInstance()->getPosition();//bulletmesh initial pos = player pos
-				bulletOut->tDir = 0.0f;
-				bulletOut->scale = 0.5f;
-				bulletOut->initialPos = FPSCam::getInstance()->getPosition();
 
-				try
-				{
-					bulletOut->CollisionMesh_->up = bulletOut->CollisionMesh_->dir.Cross(bulletOut->CollisionMesh_->right).Normalized();
-				}
-				catch (char* what)
-				{
-					std::cout << what << std::endl;
-				}
 				float randSX, randSY, randSZ;
 				randSX = -Rweap->accuracy + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (Rweap->accuracy + Rweap->accuracy)));
 				randSY = -Rweap->accuracy + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (Rweap->accuracy + Rweap->accuracy)));
@@ -423,20 +418,76 @@ void Player::RangedAttack(double dt)
 				randSY1 = -Rweap->accuracy + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (Rweap->accuracy + Rweap->accuracy)));
 				randSZ1 = -Rweap->accuracy + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (Rweap->accuracy + Rweap->accuracy)));
 
-				bulletOut->CollisionMesh_->dir.Set(bulletOut->CollisionMesh_->dir.x + bulletOut->CollisionMesh_->right.x * randSX + bulletOut->CollisionMesh_->up.x * randSX1,
-					bulletOut->CollisionMesh_->dir.y + bulletOut->CollisionMesh_->right.y * randSY + bulletOut->CollisionMesh_->up.y * randSY1,
-					bulletOut->CollisionMesh_->dir.z + bulletOut->CollisionMesh_->right.z * randSZ + bulletOut->CollisionMesh_->up.z * randSZ1);
-				bulletOut->CollisionMesh_->dir.Normalize();
+				//bulletOut->CollisionMesh_->dir.Set(bulletOut->CollisionMesh_->dir.x + bulletOut->CollisionMesh_->right.x * randSX + bulletOut->CollisionMesh_->up.x * randSX1,
+				//	bulletOut->CollisionMesh_->dir.y + bulletOut->CollisionMesh_->right.y * randSY + bulletOut->CollisionMesh_->up.y * randSY1,
+				//	bulletOut->CollisionMesh_->dir.z + bulletOut->CollisionMesh_->right.z * randSZ + bulletOut->CollisionMesh_->up.z * randSZ1);
+				//bulletOut->CollisionMesh_->dir.Normalize();
 
+				Vector3 lineDir;
+				Vector3 bulletUp, bulletRight, bulletDir;
+				bulletRight = right_;
+				bulletDir = FPSCam::getInstance()->getDir();
+				try{
+					bulletUp = bulletRight.Cross(bulletDir).Normalized();
+				}
+				catch (DivideByZero what){
+					bulletUp.Set(0, 1, 0);
+				}
+				lineDir.Set(bulletDir.x + bulletRight.x * randSX + bulletUp.x * randSX1,
+					bulletDir.y + bulletRight.y * randSY + bulletUp.y * randSY1,
+					bulletDir.z + bulletRight.z * randSZ + bulletUp.z * randSZ1);
+				try{
+					lineDir.Normalize();
+				}
+				catch (DivideByZero){
+					lineDir = FPSCam::getInstance()->getDir();
+				}
+
+				//ATTEMP to get bullet trail from bulletpool.=========================
+				BulletsTrail* bulletOut = getBulletTrail();
+				if (bulletOut)
+				{
+					bulletOut->active = true;
+					bulletOut->CollisionMesh_->right = bulletRight;
+					bulletOut->CollisionMesh_->dir = lineDir;
+					bulletOut->dmg = Rweap->getWeaponDamage();
+					bulletOut->CollisionMesh_->pos = FPSCam::getInstance()->getPosition();//bulletmesh initial pos = player pos
+					bulletOut->tDir = 0.0f;
+					bulletOut->scale = 0.5f;
+					bulletOut->initialPos = FPSCam::getInstance()->getPosition();
+
+					try
+					{
+						bulletOut->CollisionMesh_->up = bulletOut->CollisionMesh_->dir.Cross(bulletOut->CollisionMesh_->right).Normalized();
+					}
+					catch (char* what)
+					{
+						std::cout << what << std::endl;
+					}
+					bulletOut->CollisionMesh_->dir = lineDir;
+				}
+
+			
 				//Check if line hit any enemies
 				if (Player::enemies_.size())
 				{
 					for (auto it : Player::enemies_)
 					{
-						if (it->CollisionMesh_->isLineIntersectAABB(FPSCam::getInstance()->getPosition(), bulletOut->CollisionMesh_->dir, bulletOut->hitPos) && !bulletOut->isHit)
+						if (bulletOut)
 						{
-							it->isHitUpdate(bulletOut->dmg);
-							bulletOut->isHit = true;
+							if (it->CollisionMesh_->isLineIntersectAABB(FPSCam::getInstance()->getPosition(), lineDir, bulletOut->hitPos) && !bulletOut->isHit)
+							{
+								it->isHitUpdate(bulletOut->dmg);
+								bulletOut->isHit = true;
+							}
+						}
+						else//if no active bullet from pool
+						{
+							if (it->CollisionMesh_->isLineIntersectAABB(FPSCam::getInstance()->getPosition(), lineDir))
+							{
+								it->isHitUpdate(Rweap->getWeaponDamage());
+								break;
+							}
 						}
 					}
 				}
@@ -498,9 +549,9 @@ void Player::updateBulletTrail(double dt)
 			{
 				bulletMesh[i]->angleRAxis = Vector3(bulletMesh[i]->CollisionMesh_->dir.x, 0, bulletMesh[i]->CollisionMesh_->dir.z).Normalized().Cross(DEFAULTMESHDIR).Normalized();
 			}
-			catch (char* what)
+			catch (DivideByZero what)
 			{
-				std::cout << "Render Bullet Rotate Axis for bullet[" << std::to_string(i) << "]: " << what << std::endl;
+				std::cout << "Render Bullet Rotate Axis for bullet[" << std::to_string(i) << "]: " << what.what() << std::endl;
 			}
 			bulletMesh[i]->pitchAngle = Math::RadianToDegree(asin(bulletMesh[i]->CollisionMesh_->dir.y));
 

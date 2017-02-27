@@ -24,6 +24,7 @@ class Player : public GameObject
 		PISTOL,
 		RIFLE,
 		MACHINEGUN,
+		FLAMETHROWER,
 		WT_COUNT
 	};
 	enum STATES
@@ -70,6 +71,7 @@ class Player : public GameObject
 	static std::vector<GameObject*> CollisionObjects;
 	BulletsTrail* bulletMesh[30];
 	BulletsTrail* getBulletTrail();
+	BulletsTrail* imaginaryBullet;
 	void updateBulletTrail(double dt);
 	void renderBulletTrail(MS* projectionStack, MS* viewStack, MS* modelStack, unsigned * m_parameters);
 
@@ -95,7 +97,7 @@ public:
 	static inline void addCollisionObject(GameObject* obj) { CollisionObjects.push_back(obj); }
 
 	static void clearCollisionObj(){ while (CollisionObjects.size() > 0) CollisionObjects.pop_back();  
-	while (enemies_.size()) enemies_.pop_back(); while (Teleport.size()) Teleport.pop_back();
+	while (enemies_.size()) enemies_.pop_back(); while (Teleport.size()) Teleport.pop_back(); while (Items.size()) Items.pop_back();
 	}
 
 	GameObject* getPointedObj() { return Pointed_Obj; }

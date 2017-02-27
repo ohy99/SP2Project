@@ -14,7 +14,6 @@
 #include <vector>
 
 #include "Player.h"
-#include "MainScreen.h"
 #include "UI.h"
 #include "NPC.h"
 #include "Environment.h"
@@ -108,6 +107,9 @@ private:
 	//void RenderText(Text_Data* TextData, std::string text, Color color);
 	//void RenderTextOnScreen(Text_Data* TextData, std::string text, Color color, float size, float x, float y);
 	//void RenderMeshOnScreen(Mesh* mesh, int x, int y, int sizex, int sizey)
-
+	void initEnvironment();
+	void initItems();
+	void initSkybox();
+	void initblueprints();
 };
 #endif

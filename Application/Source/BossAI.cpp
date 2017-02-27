@@ -9,18 +9,15 @@
 
 
 GoatBoss* GoatBoss::instance = NULL;
-std::vector<Projectile*> GoatBoss::bossProj_;
 double GoatBoss::BossProjSpeed;
-Projectile* GoatBoss::projMesh = NULL;
 Mesh* GoatBoss::AOESmash = NULL;
 Vector3 GoatBoss::dirBossToPlayer;
 double GoatBoss::particleAnimTime = 0.0;
-Mesh* GoatBoss::goatMinionMesh;
 GoatBoss::BOSSHPSTATUS GoatBoss::Bhp_status = GoatBoss::BOSSHPSTATUS::BHP_FULL;
 
 GoatBoss::GoatBoss() : EnemyAI("GoatBoss"), maxHp_(hp_)
 {
-	BossProjSpeed = 5.0;
+	BossProjSpeed = 10.0;
 	mesh[botParts::body] = MeshBuilder::GenerateOBJ("", "OBJ//GoatBossTemp.obj");
 	CollisionMesh_ = mesh[botParts::body];
 	attack = NULL;
@@ -28,7 +25,6 @@ GoatBoss::GoatBoss() : EnemyAI("GoatBoss"), maxHp_(hp_)
 	animTime = 0.0;
 	particleAnimTime = 0.0;
 	CollisionMesh_->up.Set(0, 1, 0);
-	goatMinionMesh = MeshBuilder::GenerateOBJ("Goat Minion", "OBJ//goat.obj");
 	for (size_t i = 0; i < (sizeof goatMinionPool) / sizeof(*goatMinionPool); ++i)
 	{
 		goatMinionPool[i] = new GoatMinion;
@@ -40,14 +36,23 @@ GoatBoss::GoatBoss() : EnemyAI("GoatBoss"), maxHp_(hp_)
 	{
 		TeleParticles[i] = MeshBuilder::GenerateOBJ("Particles", "OBJ//BossTeleParticles.obj");
 	}
+
+	//Projectile* temp_proj  = new Projectile("", BossProjSpeed, 10);
+	//temp_proj->CollisionMesh_ = MeshBuilder::GenerateOBJ("BossProj", "OBJ//goat.obj");
+	////temp_proj->setSpeed(BossProjSpeed);
+	//projMesh = temp_proj;
+
+	for (size_t i = 0; i < (sizeof projectilePool) / sizeof(*projectilePool); ++i)
+	{
+		projectilePool[i] = new Projectile("", BossProjSpeed, 10);//projecitle DEAD TIME =======================
+		projectilePool[i]->CollisionMesh_ = MeshBuilder::GenerateOBJ("BossProj", "OBJ//goat.obj");
+		projectilePool[i]->CollisionMesh_->collisionEnabled = false;
+	}
+
 	attackStateCD = 0.0;
 	GroundSmashCD = ShootProjCD = DropGoatCD = 0.0;
 
-	Projectile* temp_proj;
-	temp_proj = new Projectile("", BossProjSpeed);
-	temp_proj->CollisionMesh_ = MeshBuilder::GenerateOBJ("BossProj", "OBJ//goat.obj");
-	//temp_proj->setSpeed(BossProjSpeed);
-	projMesh = temp_proj;
+
 
 	AOESmash = MeshBuilder::GenerateOBJ("", "OBJ//GSAOE.obj");
 
@@ -58,11 +63,7 @@ GoatBoss::~GoatBoss()
 	delete mesh[botParts::body];
 	delete attack;
 	delete AOESmash;
-	delete goatMinionMesh;
 	delete[] goatMinionPool;
-	while (bossProj_.size())
-		bossProj_.pop_back();
-	delete projMesh;
 	delete instance;
 	delete[] TeleParticles;
 }
@@ -111,11 +112,11 @@ void GoatBoss::update(double dt)
 
 		if (rand() % 10 <= 8 && (Player::getInstance()->CollisionMesh_->pos -
 			GoatBoss::getInstance()->CollisionMesh_->pos).Length() < 5)
-			attack = new BossFlank;
-		//	attack = new BossGSmash;
+		//	attack = new BossFlank;
+			attack = new BossGSmash;
 		else if (getInactiveGoatMinion() && (rand() % 10 == 9))
 			attack = new BossDGoat;
-		else if (rand() % 10 <= 8)
+		else if (rand() % 10 <= 6)
 			attack = new BossShootProj;
 		else
 			attack = new BossFlank;
@@ -209,38 +210,59 @@ void GoatBoss::render(MS* projectionStack, MS* viewStack, MS* modelStack, unsign
 		}
 }
 
-void GoatBoss::addProjectiles(Projectile* inProj)
-{
-	bossProj_.push_back(inProj);
-}
 void GoatBoss::updateProjectiles(double dt)
 {
-	for (auto it : bossProj_)
-	{
-		it->CollisionMesh_->pos += (it->CollisionMesh_->dir * (float)dt * BossProjSpeed);
-		if (it->CollisionMesh_->isCollide(Player::getInstance()->CollisionMesh_))
-		{
-			Player::getInstance()->isHitUpdate(50);
-		}
-		for (size_t i = 0; i < (sizeof goatMinionPool) / sizeof(*goatMinionPool); ++i)
-		{
-			if (it->CollisionMesh_->isCollide(goatMinionPool[i]->CollisionMesh_) && goatMinionPool[i]->active)
-			{
-				goatMinionPool[i]->isHitUpdate(-10);
-			}
 
+
+	for (size_t i = 0; i < (sizeof projectilePool) / sizeof(*projectilePool); ++i)
+	{
+		if (projectilePool[i]->CollisionMesh_->collisionEnabled)
+		{
+			projectilePool[i]->CollisionMesh_->pos += projectilePool[i]->CollisionMesh_->dir * (float)dt * (float)projectilePool[i]->getSpeed();
+			projectilePool[i]->aliveTime += dt;
+			if (projectilePool[i]->CollisionMesh_->isCollide(Player::getInstance()->CollisionMesh_))
+			{
+				Player::getInstance()->isHitUpdate(50);
+				projectilePool[i]->CollisionMesh_->collisionEnabled = false;
+			}
+			for (size_t j = 0; j < (sizeof goatMinionPool) / sizeof(*goatMinionPool); ++j)
+			{
+				if (projectilePool[i]->CollisionMesh_->isCollide(goatMinionPool[j]->CollisionMesh_) && goatMinionPool[j]->active)
+				{
+					if (goatMinionPool[j]->getHp() < 1000)
+						goatMinionPool[j]->isHitUpdate(-10);
+				}
+
+			}
+			if (projectilePool[i]->aliveTime >= projectilePool[i]->deadTime)//if projectile travel longer than set-ed dead time, unactivate it
+			{
+				projectilePool[i]->CollisionMesh_->collisionEnabled = false;
+				projectilePool[i]->aliveTime = 0.0;
+			}
 		}
 	}
 }
 void GoatBoss::renderProjectiles(MS* projectionStack, MS* viewStack, MS* modelStack, unsigned * m_parameters)
 {
-	for (auto it : bossProj_)
+	//for (auto it : bossProj_)
+	//{
+	//	modelStack->PushMatrix();
+	//	modelStack->Translate(it->CollisionMesh_->pos.x, it->CollisionMesh_->pos.y, it->CollisionMesh_->pos.z);
+	//	RenderMeshClass::RenderMesh(it->CollisionMesh_, true, projectionStack, viewStack, modelStack, m_parameters);
+	//	modelStack->PopMatrix();
+	//}
+
+	for (size_t i = 0; i < (sizeof projectilePool) / sizeof(*projectilePool); ++i)
 	{
-		modelStack->PushMatrix();
-		modelStack->Translate(it->CollisionMesh_->pos.x, it->CollisionMesh_->pos.y, it->CollisionMesh_->pos.z);
-		RenderMeshClass::RenderMesh(it->CollisionMesh_, true, projectionStack, viewStack, modelStack, m_parameters);
-		modelStack->PopMatrix();
+		if (projectilePool[i]->CollisionMesh_->collisionEnabled)
+		{
+			modelStack->PushMatrix();
+			modelStack->Translate(projectilePool[i]->CollisionMesh_->pos.x, projectilePool[i]->CollisionMesh_->pos.y, projectilePool[i]->CollisionMesh_->pos.z);
+			RenderMeshClass::RenderMesh(projectilePool[i]->CollisionMesh_, true, projectionStack, viewStack, modelStack, m_parameters);
+			modelStack->PopMatrix();
+		}
 	}
+
 }
 
 void GoatBoss::resetState()
@@ -252,7 +274,9 @@ void GoatBoss::resetState()
 
 void GoatBoss::isHitUpdate(int dmg)
 {
-	hp_ -= dmg;
+	hp_ -= (int)((1.0f - resistance_) * (float)dmg);
+	if (hp_ < 0)
+		hp_ = 0;
 }
 
 
@@ -264,15 +288,6 @@ GoatMinion* GoatBoss::getInactiveGoatMinion()
 			return goatMinionPool[i];
 	}
 	return NULL;
-}
-//GoatMinion* GoatBoss::getMinionPool()
-//{
-//	return *goatMinionPool;
-//}
-
-void GoatBoss::moveToRandomLocation(double dt)
-{
-
 }
 
 void GoatBoss::updateHpStatus()
@@ -295,7 +310,7 @@ Projectile* GoatBoss::getInactiveProjectile()
 {
 	for (size_t i = 0; i < (sizeof projectilePool) / sizeof(*projectilePool); ++i)
 	{
-		//if (!projectilePool[i]->active)
+		if (!projectilePool[i]->CollisionMesh_->collisionEnabled)
 			return projectilePool[i];
 	}
 	return NULL;

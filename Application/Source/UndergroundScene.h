@@ -14,7 +14,6 @@
 #include <vector>
 
 #include "Player.h"
-#include "MainScreen.h"
 #include "UI.h"
 #include "NPC.h"
 #include "Environment.h"

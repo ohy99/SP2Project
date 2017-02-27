@@ -15,7 +15,7 @@
 #include <vector>
 
 #include "Player.h"
-#include "MainScreen.h"
+#include "MainMenu.h"
 #include "UI.h"
 #include "NPC.h"
 #include "Environment.h"
@@ -101,7 +101,7 @@ private:
 
 	int width, height;
 
-	MainScreen MainMenu;
+
 	Blueprints *blueprints;
 	Item* a;
 

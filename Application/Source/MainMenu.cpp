@@ -1,4 +1,4 @@
-#include "MainScreen.h"
+#include "MainMenu.h"
 #include "GL\glew.h"
 
 #include <GLFW\glfw3.h>
@@ -15,43 +15,22 @@
 #include "RenderMesh.h"
 
 #include "UI.h"
+#include "Player.h"
+#include "BossAI.h"
 
-MainScreen::MainScreen()
+MainMenu::MainMenu()
 {
 }
 
-MainScreen::~MainScreen()
+MainMenu::~MainMenu()
 {
 }
 
-void MainScreen::Init()
+void MainMenu::Init()
 {
 	// Init VBO here
 
 	glClearColor(0.0f, 0.5f, 0.66f, 0.0f);
-
-	//glEnable(GL_DEPTH_TEST);
-	glEnable(GL_CULL_FACE);
-
-	//Load vertex and fragment shaders
-	m_programID = LoadShaders("Shader//Texture.vertexshader", "Shader//Text.fragmentshader");
-
-	m_parameters[U_MVP] = glGetUniformLocation(m_programID, "MVP");
-	m_parameters[U_MODELVIEW] = glGetUniformLocation(m_programID, "MV");
-	m_parameters[U_MODELVIEW_INVERSE_TRANSPOSE] = glGetUniformLocation(m_programID, "MV_inverse_transpose");
-	m_parameters[U_MATERIAL_AMBIENT] = glGetUniformLocation(m_programID, "material.kAmbient");
-	m_parameters[U_MATERIAL_DIFFUSE] = glGetUniformLocation(m_programID, "material.kDiffuse");
-	m_parameters[U_MATERIAL_SPECULAR] = glGetUniformLocation(m_programID, "material.kSpecular");
-	m_parameters[U_MATERIAL_SHININESS] = glGetUniformLocation(m_programID, "material.kShininess");
-
-	m_parameters[U_LIGHTENABLED] = glGetUniformLocation(m_programID, "lightEnabled");
-
-	m_parameters[U_COLOR_TEXTURE_ENABLED] = glGetUniformLocation(m_programID, "colorTextureEnabled");
-	m_parameters[U_COLOR_TEXTURE] = glGetUniformLocation(m_programID, "colorTexture");
-
-	m_parameters[U_TEXT_ENABLED] = glGetUniformLocation(m_programID, "textEnabled");
-	m_parameters[U_TEXT_COLOR] = glGetUniformLocation(m_programID, "textColor");
-	glUseProgram(m_programID);
 
 	//Generate a default VAO for now
 	glGenVertexArrays(1, &m_vertexArrayID);
@@ -60,6 +39,10 @@ void MainScreen::Init()
 
 	for (size_t i = 0; i < GEOMETRY_TYPE::NUM_GEOMETRY; i++)
 		meshList[i] = NULL;
+
+
+	Player::getInstance();
+	GoatBoss::getInstance();
 
 	camera = new Camera3;
 	camera->Init(Vector3(0, 0, 7), Vector3(0, 0, 0), Vector3(0, 1, 0));
@@ -81,7 +64,7 @@ void MainScreen::Init()
 	glfwSetInputMode(Application::m_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 }
 
-void MainScreen::Update(double dt)
+void MainMenu::Update(double dt)
 {
 	glfwGetCursorPos(Application::m_window, &x, &y);
 
@@ -107,14 +90,14 @@ void MainScreen::Update(double dt)
 
 	if (isStartPressed)
 	{
-		SceneManager::getInstance()->SetNextSceneID(1);
+		SceneManager::getInstance()->SetNextSceneID(SceneManager::SCENES::CAMPSCENE);
 		SceneManager::getInstance()->SetNextScene();
 	}
 
 	FramesPerSec = 1 / dt;
 }
 
-void MainScreen::Render()
+void MainMenu::Render()
 {
 	// Render VBO here
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -130,7 +113,7 @@ void MainScreen::Render()
 	RenderMeshClass::RenderMeshOnScreen(meshList[START_BUTTON], (float)(Application::getWindowWidth() / 1024.f) * 300.f, (float)(Application::getWindowHeight() / 786.f) * 300.f, 2.f, (float)(Application::getWindowWidth() / 1024.f) * 200.f, (float)(Application::getWindowHeight() / 768.f) * 200.f, &projectionStack, &viewStack, &modelStack, Scene::m_parameters);
 }
 
-void MainScreen::Exit()
+void MainMenu::Exit()
 {
 	for (size_t i = 0; i < GEOMETRY_TYPE::NUM_GEOMETRY; i++)
 	{

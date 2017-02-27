@@ -50,65 +50,29 @@ void BossScene::Init()
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	//Load vertex and fragment shaders
-	//m_programID = LoadShaders("Shader//Texture.vertexshader", "Shader//Text.fragmentshader");
+	
 
-	//m_parameters[U_MVP] = glGetUniformLocation(m_programID, "MVP");
-	//m_parameters[U_MODELVIEW] = glGetUniformLocation(m_programID, "MV");
-	//m_parameters[U_MODELVIEW_INVERSE_TRANSPOSE] = glGetUniformLocation(m_programID, "MV_inverse_transpose");
-	//m_parameters[U_MATERIAL_AMBIENT] = glGetUniformLocation(m_programID, "material.kAmbient");
-	//m_parameters[U_MATERIAL_DIFFUSE] = glGetUniformLocation(m_programID, "material.kDiffuse");
-	//m_parameters[U_MATERIAL_SPECULAR] = glGetUniformLocation(m_programID, "material.kSpecular");
-	//m_parameters[U_MATERIAL_SHININESS] = glGetUniformLocation(m_programID, "material.kShininess");
+	light[0].position.Set(0.f, 1.f, 2.f); //the rotation is right. but the prob is why there is no light at the x axis
+	light[0].color.Set(1.f, 1.f, 1.f);
+	light[0].power = 1.f;
+	light[0].kC = 0.f;
+	light[0].kL = 0.01f;
+	light[0].kQ = 0.001f;
+	light[0].type = Light::LIGHT_POINT;
+	light[0].cosCutoff = cos(Math::DegreeToRadian(45.f));
+	light[0].cosInner = cos(Math::DegreeToRadian(30.f));
+	light[0].exponent = 100.0f;
+	light[0].spotDirection.Set(0.f, 1.f, 0.f);//in case
 
-	//m_parameters[U_NUMLIGHTS] = glGetUniformLocation(m_programID, "numLights");
-
-	//m_parameters[U_LIGHT0_TYPE] = glGetUniformLocation(m_programID, "lights[0].type");
-	//m_parameters[U_LIGHT0_SPOTDIRECTION] = glGetUniformLocation(m_programID, "lights[0].spotDirection");
-	//m_parameters[U_LIGHT0_COSCUTOFF] = glGetUniformLocation(m_programID, "lights[0].cosCutoff");
-	//m_parameters[U_LIGHT0_COSINNER] = glGetUniformLocation(m_programID, "lights[0].cosInner");
-	//m_parameters[U_LIGHT0_EXPONENT] = glGetUniformLocation(m_programID, "lights[0].exponent");
-	//m_parameters[U_LIGHT0_POSITION] = glGetUniformLocation(m_programID, "lights[0].position_cameraspace");
-	//m_parameters[U_LIGHT0_COLOR] = glGetUniformLocation(m_programID, "lights[0].color");
-	//m_parameters[U_LIGHT0_POWER] = glGetUniformLocation(m_programID, "lights[0].power");
-	//m_parameters[U_LIGHT0_KC] = glGetUniformLocation(m_programID, "lights[0].kC");
-	//m_parameters[U_LIGHT0_KL] = glGetUniformLocation(m_programID, "lights[0].kL");
-	//m_parameters[U_LIGHT0_KQ] = glGetUniformLocation(m_programID, "lights[0].kQ");
-
-	//m_parameters[U_LIGHTENABLED] = glGetUniformLocation(m_programID, "lightEnabled");
-
-	//m_parameters[U_COLOR_TEXTURE_ENABLED] = glGetUniformLocation(m_programID, "colorTextureEnabled");
-	//m_parameters[U_COLOR_TEXTURE] = glGetUniformLocation(m_programID, "colorTexture");
-
-	//m_parameters[U_TEXT_ENABLED] = glGetUniformLocation(m_programID, "textEnabled");
-	//m_parameters[U_TEXT_COLOR] = glGetUniformLocation(m_programID, "textColor");
-	//glUseProgram(m_programID);
-
-	//glUniform1i(m_parameters[U_NUMLIGHTS], 4);
-
-
-
-	//light[0].position.Set(0.f, 1.f, 2.f); //the rotation is right. but the prob is why there is no light at the x axis
-	//light[0].color.Set(1.f, 1.f, 1.f);
-	//light[0].power = 1.f;
-	//light[0].kC = 0.f;
-	//light[0].kL = 0.01f;
-	//light[0].kQ = 0.001f;
-	//light[0].type = Light::LIGHT_POINT;
-	//light[0].cosCutoff = cos(Math::DegreeToRadian(45.f));
-	//light[0].cosInner = cos(Math::DegreeToRadian(30.f));
-	//light[0].exponent = 100.0f;
-	//light[0].spotDirection.Set(0.f, 1.f, 0.f);//in case
-
-	//glUniform1i(m_parameters[U_LIGHT0_TYPE], light[0].type);
-	//glUniform3fv(m_parameters[U_LIGHT0_COLOR], 1, &light[0].color.r);
-	//glUniform1f(m_parameters[U_LIGHT0_POWER], light[0].power);
-	//glUniform1f(m_parameters[U_LIGHT0_KC], light[0].kC);
-	//glUniform1f(m_parameters[U_LIGHT0_KL], light[0].kL);
-	//glUniform1f(m_parameters[U_LIGHT0_KQ], light[0].kQ);
-	//glUniform1f(m_parameters[U_LIGHT0_COSCUTOFF], light[0].cosCutoff);
-	//glUniform1f(m_parameters[U_LIGHT0_COSINNER], light[0].cosInner);
-	//glUniform1f(m_parameters[U_LIGHT0_EXPONENT], light[0].exponent);
+	glUniform1i(m_parameters[U_LIGHT0_TYPE], light[0].type);
+	glUniform3fv(m_parameters[U_LIGHT0_COLOR], 1, &light[0].color.r);
+	glUniform1f(m_parameters[U_LIGHT0_POWER], light[0].power);
+	glUniform1f(m_parameters[U_LIGHT0_KC], light[0].kC);
+	glUniform1f(m_parameters[U_LIGHT0_KL], light[0].kL);
+	glUniform1f(m_parameters[U_LIGHT0_KQ], light[0].kQ);
+	glUniform1f(m_parameters[U_LIGHT0_COSCUTOFF], light[0].cosCutoff);
+	glUniform1f(m_parameters[U_LIGHT0_COSINNER], light[0].cosInner);
+	glUniform1f(m_parameters[U_LIGHT0_EXPONENT], light[0].exponent);
 
 	// Make sure you pass uniform parameters after glUseProgram()
 
@@ -120,26 +84,6 @@ void BossScene::Init()
 
 	for (size_t i = 0; i < GEOMETRY_TYPE::NUM_GEOMETRY; i++)
 		meshList[i] = NULL;
-
-
-
-
-	//INIT TEXTES
-	//Text[TEXT_TYPE::Calibri].Text_Mesh = MeshBuilder::GenerateText("Calibri", 16, 16);
-	//Text[TEXT_TYPE::Calibri].Text_Mesh->textureID = LoadTGA("Image//calibri.tga");
-	//LoadTextData("Image//Calibri Data.csv", Text[TEXT_TYPE::Calibri].TextWidth);
-	//Text[TEXT_TYPE::Chiller].Text_Mesh = MeshBuilder::GenerateText("Chiller", 16, 16);
-	//Text[TEXT_TYPE::Chiller].Text_Mesh->textureID = LoadTGA("Image//Chiller.tga");
-	//LoadTextData("Image//Chiller Data.csv", Text[TEXT_TYPE::Chiller].TextWidth);
-	//Text[TEXT_TYPE::Century].Text_Mesh = MeshBuilder::GenerateText("Century", 16, 16);
-	//Text[TEXT_TYPE::Century].Text_Mesh->textureID = LoadTGA("Image//Century.tga");
-	//LoadTextData("Image//Century Data.csv", Text[TEXT_TYPE::Century].TextWidth);
-	//Text[TEXT_TYPE::ScriptMTBold].Text_Mesh = MeshBuilder::GenerateText("ScriptMTBold", 16, 16);
-	//Text[TEXT_TYPE::ScriptMTBold].Text_Mesh->textureID = LoadTGA("Image//Script MT Bold.tga");
-	//LoadTextData("Image//Script MT Bold Data.csv", Text[TEXT_TYPE::ScriptMTBold].TextWidth);
-	//Text[TEXT_TYPE::SegoeMarker].Text_Mesh = MeshBuilder::GenerateText("SegoeMarker", 16, 16);
-	//Text[TEXT_TYPE::SegoeMarker].Text_Mesh->textureID = LoadTGA("Image//Segoe Marker.tga");
-	//LoadTextData("Image//Segoe Marker Data.csv", Text[TEXT_TYPE::SegoeMarker].TextWidth);
 
 
 	//Skybox ------------skyBoxScale, skyBoxDistance;
@@ -190,6 +134,7 @@ void BossScene::Init()
 	GoatBoss::getInstance();
 	Player::addCollisionObject(GoatBoss::getInstance());
 	Player::enemies_.push_back(GoatBoss::getInstance());
+	deadBossBackToBaseTimer = 0.0;
 
 	Mtx44 projection;
 	projection.SetToPerspective(45.f, 4.f / 3.f, 0.1f, 1000.f);
@@ -230,10 +175,15 @@ void BossScene::Update(double dt)
 	dy = dt * double(height / 2 - c_posy);
 	camera->Update(dt, dx, dy);
 
-	if (Application::IsKeyPressed(VK_F2))
+	if (GoatBoss::getInstance()->Bhp_status == GoatBoss::getInstance()->BHP_DEAD)
 	{
-		SceneManager::getInstance()->SetNextSceneID(1);
-		SceneManager::getInstance()->SetNextScene();
+		//boss dead.
+		deadBossBackToBaseTimer += dt;
+		if (deadBossBackToBaseTimer >= 10)
+		{
+			SceneManager::getInstance()->SetNextSceneID(SceneManager::SCENES::CAMPSCENE);
+			SceneManager::getInstance()->SetNextScene();
+		}
 	}
 
 	FramesPerSec = 1 / dt;
@@ -250,8 +200,6 @@ void BossScene::Render()
 		camera->getPosition().x + camera->getDir().x, camera->getPosition().y + camera->getDir().y, camera->getPosition().z + camera->getDir().z,
 		camera->getUp().x, camera->getUp().y, camera->getUp().z);
 	modelStack.LoadIdentity();
-
-	
 
 	RenderSkybox();
 	RenderBaseCamp();

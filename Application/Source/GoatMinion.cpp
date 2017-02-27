@@ -42,13 +42,8 @@ void GoatMinion::update(double dt)
 
 		for (size_t i = 0; i < (sizeof GoatBoss::getInstance()->goatMinionPool) / sizeof(*GoatBoss::getInstance()->goatMinionPool); i++)
 		{
-			if ((GoatBoss::getInstance()->goatMinionPool)[1]->active && (GoatBoss::getInstance()->goatMinionPool)[2]->active && i == 2)// || i == 2)
-				std::cout << projected.isCollide((GoatBoss::getInstance()->goatMinionPool)[1]->CollisionMesh_) << std::endl;
 			if ((GoatBoss::getInstance()->goatMinionPool)[i] != this && (GoatBoss::getInstance()->goatMinionPool)[i]->active && projected.isCollide((GoatBoss::getInstance()->goatMinionPool)[i]->CollisionMesh_))
-			{
 				return;
-			}
-
 		}
 		//for (auto it : CollisionObj)
 		//{

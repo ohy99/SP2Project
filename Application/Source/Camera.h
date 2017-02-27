@@ -5,7 +5,7 @@
 #include "Mtx44.h"
 #include "Vertex.h"
 
-class Camera
+class Camera abstract
 {
 
 	Vector3 position;

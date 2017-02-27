@@ -67,6 +67,8 @@ private:
 	bool isPause;
 	bool isEscPressed, wasEscPressed;
 	float skyBoxScale, skyBoxDistance;
+
+	double deadBossBackToBaseTimer;
 };
 
 #endif
