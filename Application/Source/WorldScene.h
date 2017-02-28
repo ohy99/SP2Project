@@ -18,7 +18,7 @@
 #include "NPC.h"
 #include "Environment.h"
 #include "Blueprints.h"
-
+#include "MinionAI.h"
 
 class WorldScene : public Scene
 {
@@ -64,7 +64,8 @@ public:
 	static Teleporter* WS_Teleporter;
 	static Teleporter* Underground_Door;
 
-	//MainScene* blueprint;
+	static MinionAI* goatMinionPool[5];
+	MinionAI* getInactiveGoatMinion();
 
 private:
 	unsigned m_vertexArrayID;
@@ -81,6 +82,7 @@ private:
 	Light light[8];
 
 	static std::vector<EnvironmentObj*> Env_Obj;
+	static std::vector<MinionAI*>Enemy_;
 
 	//static std::vector<NPC*> CampNPC;
 	//std::vector
@@ -111,5 +113,6 @@ private:
 	void initItems();
 	void initSkybox();
 	void initblueprints();
+	void initEnemies();
 };
 #endif

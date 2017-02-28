@@ -22,15 +22,19 @@
 #include "Blueprints.h"
 #include "Inventory.h"
 
+#include "MinionAI.h"
+
 //WorldScene::Text_Data WorldScene::Text[TEXT_TYPE::Text_Count];
 //unsigned WorldScene::m_parameters[U_TOTAL];
 MS WorldScene::modelStack, WorldScene::viewStack, WorldScene::projectionStack;
+MinionAI* WorldScene::goatMinionPool[5];
 
 //std::vector<GameObject*> WorldScene::Game_Objects_(10, NULL);
 
 //std::vector<GameObject*> WorldScene::Game_Objects_(10, NULL);
 //UI renderMeshOnScreen;
 std::vector<EnvironmentObj*> WorldScene::Env_Obj;
+std::vector<MinionAI*>WorldScene::Enemy_;
 Teleporter* WorldScene::WS_Teleporter;
 Teleporter* WorldScene::Underground_Door;
 
@@ -86,6 +90,7 @@ void WorldScene::Init()
 	initItems();
 	initblueprints();
 	initSkybox();
+	initEnemies();
 
 
 	for (auto it : Env_Obj)
@@ -103,6 +108,7 @@ void WorldScene::Init()
 	camera->Init(Vector3(0, 0, 7), Vector3(0, 0, 0), Vector3(0, 1, 0));
 
 
+
 	Mtx44 projection;
 	projection.SetToPerspective(45.f, 4.f / 3.f, 0.1f, 1000.f);
 	projectionStack.LoadMatrix(projection);
@@ -114,7 +120,6 @@ void WorldScene::Init()
 
 void WorldScene::Update(double dt)
 {
-
 	int width, height;
 	glfwGetWindowSize(Application::m_window, &width, &height);
 	isEscPressed = Application::IsKeyPressed(VK_ESCAPE);
@@ -144,6 +149,10 @@ void WorldScene::Update(double dt)
 		fpsonce = true;
 	}
 
+	for (int i = 0; i < Enemy_.size();i++)
+	{
+		Enemy_[i]->update(dt);
+	}
 	Player::getInstance()->update(dt, camera);
 	Inventory::getInstance()->Update(dt);
 	UI::getInstance()->Update(dt);
@@ -172,6 +181,24 @@ void WorldScene::Update(double dt)
 		//}
 	}
 
+	for (size_t i = 0; i < (sizeof goatMinionPool) / sizeof(*goatMinionPool); ++i)
+	{
+		if (goatMinionPool[i]->active)
+		{
+			if (goatMinionPool[i]->getHp() <= 0)
+			{
+				goatMinionPool[i]->active = false;
+				auto it = std::find(Player::enemies_.begin(), Player::enemies_.end(), goatMinionPool[i]);
+				std::swap(*it, Player::enemies_.back());
+				//goatMinionPool[i]->CollisionMesh_->pos = Vector3(0, -5, 0);
+				Player::enemies_.back() = NULL;
+				Player::enemies_.pop_back();
+				delete goatMinionPool[i]->CollisionMesh_;
+			}
+			else
+				goatMinionPool[i]->update(dt);
+		}
+	}
 
 	FramesPerSec = 1 / dt;
 	
@@ -215,11 +242,19 @@ void WorldScene::Render()
 		
 	}
 
+	for (size_t i = 0; i < (sizeof goatMinionPool) / sizeof(*goatMinionPool); ++i)
+	{
+		if (goatMinionPool[i]->active)
+			goatMinionPool[i]->render(&projectionStack, &viewStack, &modelStack, m_parameters);
+	}
+
 	Interactions();
 
 	RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("Blueprints: ") + std::to_string(Blueprints::GetBlueprintNumber()) + std::string("/3"), Color(1, 0, 0), 2.f, 68, 57, &projectionStack, &viewStack, &modelStack, m_parameters);
 
 	RenderMeshClass::RenderMesh(meshList[GEO_AXES], false, &projectionStack, &viewStack, &modelStack, m_parameters);
+	//MinionAI::MinionAI().render(&projectionStack, &viewStack, &modelStack, m_parameters);
+
 	Player::getInstance()->render(&projectionStack, &viewStack, &modelStack, m_parameters);
 
 	RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::to_string(FramesPerSec), Color(1, 0, 0), 1.5f, 45, 38, &projectionStack, &viewStack, &modelStack, m_parameters);
@@ -726,3 +761,28 @@ void WorldScene::initblueprints()
 
 
 }
+
+void WorldScene::initEnemies()
+{
+	for (size_t i = 0; i < (sizeof goatMinionPool) / sizeof(*goatMinionPool); ++i)
+	{
+		MinionAI* tempEnemy = new MinionAI();
+
+		tempEnemy->CollisionMesh_->pos = Vector3(i + rand(), 0, i + rand());
+		goatMinionPool[i] = tempEnemy;
+		goatMinionPool[i]->active = true;
+
+		Player::getInstance()->addCollisionObject(tempEnemy);
+		Player::getInstance()->enemies_.push_back(tempEnemy);
+	}
+}
+
+//MinionAI* WorldScene::getInactiveGoatMinion()
+//{
+//	for (size_t i = 0; i < (sizeof goatMinionPool) / sizeof(*goatMinionPool); ++i)
+//	{
+//		if (!goatMinionPool[i]->active)
+//			return goatMinionPool[i];
+//	}
+//	return NULL;
+//}

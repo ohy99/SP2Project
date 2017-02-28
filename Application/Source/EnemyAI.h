@@ -4,6 +4,7 @@
 #include "NPC.h"
 #include "Vector3.h"
 #include <string>
+#include "MatrixStack.h"]
 
 class EnemyAI abstract : public NPC
 {
@@ -14,6 +15,8 @@ public:
 	virtual void update(double dt) {}
 	virtual void render() {}
 	virtual void isHitUpdate(int dmg) {};
+
+	bool check = true;
 };
 
 #endif
