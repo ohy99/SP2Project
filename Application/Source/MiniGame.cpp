@@ -30,7 +30,11 @@ std::vector<char> count; // rand the number of lorry on one lane, max 2
 std::vector<EnvironmentObj*> MiniGame::Obstacles;
 
 MS MiniGame::modelStack, MiniGame::viewStack, MiniGame::projectionStack;
-
+//void MiniGame::Reset();
+float MiniGame::roadDistance = 0.f;
+float MiniGame::obstaclePosX = 0.f;
+float MiniGame::obstaclePosZ = 80.f;
+char MiniGame::order[2];
 
 MiniGame::MiniGame()
 {
@@ -186,10 +190,6 @@ void MiniGame::Init()
 	meshList[GEO_BOTTOM]->textureID = LoadTGA("Image//sky1_down.tga");
 	//Skybox ------------- Base Camp End
 
-	roadDistance = 0.f;
-	obstaclePosX = 0.f;
-	obstaclePosZ = 80.f;
-
 	for (int i = 0; i < 20; i++)
 	{
 		road = MeshBuilder::GenerateOBJ("road", "OBJ//road.obj");
@@ -309,6 +309,8 @@ void MiniGame::Init()
 	MGList[QUIT]->setHb(true, Vector3(-200.f, -50.f, 0.f), Vector3(200.f, 50.f, 2.f),
 		Vector3((float)Application::getWindowWidth() * 0.5f, (float)(Application::getWindowHeight() / 768) * (Application::getWindowHeight() - 200), 0.f),
 		Vector3(0.f, 1.f, 0.f));
+
+	//Reset();
 }
 
 void MiniGame::Update(double dt)
@@ -412,11 +414,11 @@ void MiniGame::Update(double dt)
 
 	FramesPerSec = 1 / dt; 
 
-	if (Application::IsKeyPressed('1'))
-	{
-		SceneManager::getInstance()->SetNextSceneID(0);
-		SceneManager::getInstance()->SetNextScene();
-	}
+	//if (Application::IsKeyPressed('1'))
+	//{
+	//	SceneManager::getInstance()->SetNextSceneID(0);
+	//	SceneManager::getInstance()->SetNextScene();
+	//}
 }
 
 void MiniGame::Render()

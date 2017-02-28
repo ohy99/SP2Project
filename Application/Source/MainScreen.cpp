@@ -32,6 +32,8 @@ void MainScreen::Init()
 
 	//glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	//Load vertex and fragment shaders
 	m_programID = LoadShaders("Shader//Texture.vertexshader", "Shader//Text.fragmentshader");
@@ -66,12 +68,21 @@ void MainScreen::Init()
 
 	meshList[MAIN_SCREEN] = MeshBuilder::GenerateQuad("Screen", Color(1, 1, 0), 1, 1);
 	meshList[MAIN_SCREEN]->textureID = LoadTGA("Image//main_menu.tga");
-	startButton = MeshBuilder::GenerateQuad("Screen", Color(1, 0, 0), 1, 1);
-	meshList[START_BUTTON] = startButton;
-	//startButton->textureID = LoadTGA("Image//Assignment//model_texture//Tree.tga");
+	meshList[START_BUTTON] = MeshBuilder::GenerateQuad("Start Button", Color(1, 0, 0), 1, 1);
+	meshList[QUIT] = MeshBuilder::GenerateQuad("Quit Button", Color(1, 0, 0), 1, 1);
 
 	wasLeftMouseButtonPressed = false;
 	isStartPressed = false;
+
+	min = Vector3((float)(Application::getWindowWidth() / 1024.f) * -200.f, (float)(Application::getWindowHeight() / 768.f) * -50.f, 0.f);
+	max = Vector3((float)(Application::getWindowWidth() / 1024.f) * 200.f, (float)(Application::getWindowHeight() / 768.f) * 50.f, 2.f);
+	pos = Vector3((float)Application::getWindowWidth() * 0.5f, (float)(Application::getWindowHeight() / 768.f) * (Application::getWindowHeight() - 395.f), 0.f);
+
+	meshList[START_BUTTON]->setHb(true, min, max, pos, Vector3(0.f, 1.f, 0.f));
+	meshList[QUIT]->setHb(true, Vector3((Application::getWindowWidth() / 1024.f) * -200.f, (float)(Application::getWindowHeight() / 768.f) * -50.f, 0.f),
+		Vector3((float)(Application::getWindowWidth() / 1024.f) * 200.f, (float)(Application::getWindowHeight() / 768.f) * 50.f, 2.f),
+		Vector3((float)Application::getWindowWidth() * 0.5f, (float)(Application::getWindowHeight() / 768.f) * (Application::getWindowHeight() - 250.f), 0.f),
+		Vector3(0.f, 1.f, 0.f));
 
 	//Mtx44 projection;
 	//projection.SetToPerspective(45.f, 4.f / 3.f, 0.1f, 1000.f);
@@ -88,22 +99,31 @@ void MainScreen::Update(double dt)
 	leftButton = glfwGetMouseButton(Application::m_window, GLFW_MOUSE_BUTTON_LEFT);
 	isLeftMouseButtonPressed = leftButton;
 
-	Vector3 min = Vector3((float)(Application::getWindowWidth() / 1024.f) * -100.f, (float)(Application::getWindowHeight() / 768.f) * -100.f, 0.f);
-	Vector3 max = Vector3((float)(Application::getWindowWidth() / 1024.f) * 100.f, (float)(Application::getWindowHeight() / 768.f) * 100.f, 2.f);
-	Vector3 pos = Vector3((float)(Application::getWindowWidth() / 1024.f) * 300.f, (float)(Application::getWindowHeight() / 768.f) * 467.f, 0.f);
-
-	startButton->setHb(true, min, max, pos, Vector3(0.f, 1.f, 0.f));
-
 	if (isLeftMouseButtonPressed && !wasLeftMouseButtonPressed)
 	{
-		if (startButton->isPointInsideAABB(Position(x, y, 0)))
+		if (meshList[START_BUTTON]->isPointInsideAABB(Position(x, y, 0.f)))
 			isStartPressed = true;
+
+		if (meshList[QUIT]->isPointInsideAABB(Position(x, y, 0.f)))
+			Application::setCloseWindow(true);
 
 		wasLeftMouseButtonPressed = isLeftMouseButtonPressed;
 	}
 
 	if (!isLeftMouseButtonPressed && wasLeftMouseButtonPressed)
 		wasLeftMouseButtonPressed = isLeftMouseButtonPressed;
+
+	if (meshList[START_BUTTON]->isPointInsideAABB(Position(x, y, 0.f)))
+		meshList[START_BUTTON]->textureID = LoadTGA("Image//mainstart2.tga");
+
+	else
+		meshList[START_BUTTON]->textureID = LoadTGA("Image//mainstart.tga");
+
+	if (meshList[QUIT]->isPointInsideAABB(Position(x, y, 0.f)))
+		meshList[QUIT]->textureID = LoadTGA("Image//mainquit2.tga");
+
+	else
+		meshList[QUIT]->textureID = LoadTGA("Image//mainquit.tga");
 
 	if (isStartPressed)
 	{
@@ -127,7 +147,8 @@ void MainScreen::Render()
 	modelStack.LoadIdentity();
 
 	RenderMeshClass::RenderMeshOnScreen(meshList[MAIN_SCREEN], (float)Application::getWindowWidth() * 0.5f, (float)Application::getWindowHeight() * 0.5f, 1.f, (float)Application::getWindowWidth(), (float)Application::getWindowHeight(), &projectionStack, &viewStack, &modelStack, Scene::m_parameters);
-	RenderMeshClass::RenderMeshOnScreen(meshList[START_BUTTON], (float)(Application::getWindowWidth() / 1024.f) * 300.f, (float)(Application::getWindowHeight() / 786.f) * 300.f, 2.f, (float)(Application::getWindowWidth() / 1024.f) * 200.f, (float)(Application::getWindowHeight() / 768.f) * 200.f, &projectionStack, &viewStack, &modelStack, Scene::m_parameters);
+	RenderMeshClass::RenderMeshOnScreen(meshList[START_BUTTON], (float)Application::getWindowWidth() * 0.5f, (float)(Application::getWindowHeight() / 786.f) * 400.f, 2.f, (float)(Application::getWindowWidth() / 1024.f) * 400.f, (float)(Application::getWindowHeight() / 768.f) * 100.f, &projectionStack, &viewStack, &modelStack, Scene::m_parameters);
+	RenderMeshClass::RenderMeshOnScreen(meshList[QUIT], (float)Application::getWindowWidth() * 0.5f, (float)(Application::getWindowHeight() / 768.f) * 250.f, 2.f, (float)(Application::getWindowWidth() / 1024.f) * 400.f, (float)(Application::getWindowHeight() / 768.f) * 100.f, &projectionStack, &viewStack, &modelStack, Scene::m_parameters);
 }
 
 void MainScreen::Exit()

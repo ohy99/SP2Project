@@ -18,13 +18,27 @@ public:
 	static UI* getInstance();
 
 private:
+	enum PAUSE_UI
+	{
+		PAUSE,
+		RESUME,
+		QUIT,
+
+		PUI_COUNT,
+	};
+
 	UI() { ; }
 
-	Mesh* Quad;
+	Mesh* count[PUI_COUNT];
 
 	bool isPause;
 	bool isEscPressed, wasEscPressed;
 	int width, height;
+
+	double cur_x, cur_y;
+	int leftButton;
+	bool isLeftMouseButtonPressed, wasLeftMouseButtonPressed;
+	bool isIPressed, wasIPressed, isInventory;
 
 	static UI* Instance_;
 };

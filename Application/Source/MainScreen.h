@@ -19,6 +19,7 @@ class MainScreen : public Scene
 		GEO_QUAD,
 		MAIN_SCREEN,
 		START_BUTTON,
+		QUIT,
 
 		NUM_GEOMETRY,
 	};
@@ -40,7 +41,7 @@ private:
 
 	Camera *camera;
 
-	Mesh* startButton;
+	Vector3 min, max, pos;
 
 	double x, y;
 	int leftButton;
