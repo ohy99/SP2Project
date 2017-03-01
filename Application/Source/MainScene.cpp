@@ -317,6 +317,9 @@ void MainScene::Init()
 	//Captain ----------------------------------------- END
 
 
+
+
+
 	InitGuards();
 
 	for (auto it : Env_Obj)
@@ -448,13 +451,27 @@ void MainScene::Render()
 
 	for (size_t i = 0; i < CampNPC.size(); i++)
 	{
+		modelStack.PushMatrix();
+		modelStack.Translate(7, 0, 0);
 		CampNPC.at(i)->render(&projectionStack, &viewStack, &modelStack, m_parameters);
+		modelStack.PopMatrix();
 	}
+
 	RenderBaseCamp();
 
 	robotsInteractions();
-
+	medicInteractions();
 	Interactions();
+	
+	modelStack.PushMatrix();
+	modelStack.Translate(11, 2, 5);
+	modelStack.Scale(0.3f, 0.3f, 0.3f);
+	if (counter_medic == 0){
+	
+		RenderMeshClass::RenderText(&Scene::Text[Scene::TEXT_TYPE::Century], std::string("Talk to Doctor!"), Color(1, 0, 0), &projectionStack, &viewStack, &modelStack, m_parameters);
+	}
+	modelStack.PopMatrix();
+
 
 	RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::to_string(FramesPerSec), Color(1, 0, 0), 1.5f, 45, 38, &projectionStack, &viewStack, &modelStack, m_parameters);
 	RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("Blueprints: ") + std::to_string(Blueprints::GetBlueprintNumber()) + std::string("/3"), Color(1, 0, 0), 2.f, 68, 57, &projectionStack, &viewStack, &modelStack, m_parameters);
@@ -463,7 +480,6 @@ void MainScene::Render()
 
 	UI::getInstance()->renderPause(&projectionStack, &viewStack, &modelStack, m_parameters);
 	Inventory::getInstance()->Render(&projectionStack, &viewStack, &modelStack, m_parameters);
-
 	
 }
 
@@ -677,6 +693,38 @@ void MainScene::InitGuards(){
 
 	//Guards ---------------------------------------------- END
 
+}
+
+void MainScene::medicInteractions(){
+		
+	RenderMeshClass::RenderText;
+
+	if (Player::getInstance()->getPlayerPosition().x >= 10 && Player::getInstance()->getPlayerPosition().x <= 14 && Player::getInstance()->getPlayerPosition().z <= 10 && Player::getInstance()->getPlayerPosition().z >= 5){
+	
+		if (counter_medic == 0){
+
+			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("Ah, Commander! I see that you have finished booting up!"), Color(1, 0, 0), 2.f, 15, 36, &projectionStack, &viewStack, &modelStack, m_parameters);
+			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("You might be a little disoriented, but you should be fine."), Color(1, 0, 0), 2.f, 15, 34, &projectionStack, &viewStack, &modelStack, m_parameters);
+			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("[Press F to continue]"), Color(1, 0, 0), 2.f, 15, 32, &projectionStack, &viewStack, &modelStack, m_parameters);
+		}
+	}
+
+	if (Application::IsKeyPressed('F')){
+
+		counter_medic = 1;
+	}
+
+	if (counter_medic == 1){
+
+		if (Player::getInstance()->getPlayerPosition().x >= 10 && Player::getInstance()->getPlayerPosition().x <= 14 && Player::getInstance()->getPlayerPosition().z <= 10 && Player::getInstance()->getPlayerPosition().z >= 5){
+
+			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("Excellent! You seem to be just fine!"), Color(1, 0, 0), 2.f, 10, 38, &projectionStack, &viewStack, &modelStack, m_parameters);
+			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("Now, then, you should get going to see the Captain, that one guy with a hat."), Color(1, 0, 0), 2.f, 10, 36, &projectionStack, &viewStack, &modelStack, m_parameters);
+			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("He should have some information that could help you in your search!"), Color(1, 0, 0), 2.f, 10, 34, &projectionStack, &viewStack, &modelStack, m_parameters);
+			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("[Use W, A, S, D keys to move]"), Color(1, 0, 0), 2.f, 10, 32, &projectionStack, &viewStack, &modelStack, m_parameters);
+
+		}
+	}
 }
 
 //int MainScene::GetBlueprintNumber()
