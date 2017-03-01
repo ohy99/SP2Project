@@ -341,9 +341,6 @@ void MainScene::Init()
 
 void MainScene::Update(double dt)
 {
-
-
-
 	glfwGetWindowSize(Application::m_window, &width, &height);
 
 
@@ -410,23 +407,6 @@ void MainScene::Update(double dt)
 
 	FramesPerSec = 1 / dt;
 
-
-	//if (Application::IsKeyPressed('5'))
-	//{
-	//	SceneManager::getInstance()->SetNextSceneID(5);
-	//	SceneManager::getInstance()->SetNextScene();
-	//}
-
-	//if (Application::IsKeyPressed('6'))
-	//{
-	//	SceneManager::getInstance()->SetNextSceneID(1);
-	//	SceneManager::getInstance()->SetNextScene();
-	//}
-	//if (Application::IsKeyPressed('7'))
-	//{
-	//	SceneManager::getInstance()->SetNextSceneID(4);
-	//	SceneManager::getInstance()->SetNextScene();
-	//}
 	if (Application::IsKeyPressed(VK_F1))
 	{
 		SceneManager::getInstance()->SetNextSceneID(SceneManager::SCENES::BOSSSCENE);
@@ -454,7 +434,6 @@ void MainScene::Render()
 
 	RenderSkybox();
 	//	renderEnvironment();
-	robotsInteractions();
 
 	//Ground Mesh
 	modelStack.PushMatrix();
@@ -473,6 +452,7 @@ void MainScene::Render()
 	}
 	RenderBaseCamp();
 
+	robotsInteractions();
 
 	Interactions();
 
@@ -623,7 +603,7 @@ void MainScene::robotsInteractions(){
 
 			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("Ah, Commander! Good to see you up and about."), Color(1, 0, 0), 2.f, 10, 36, &projectionStack, &viewStack, &modelStack, m_parameters);
 			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("Well, some of my scouts have reported several things."), Color(1, 0, 0), 2.f, 10, 34, &projectionStack, &viewStack, &modelStack, m_parameters);
-			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("I've got information at several different coordinates. Four, in fact."), Color(1, 0, 0), 2.f, 10, 32, &projectionStack, &viewStack, &modelStack, m_parameters);
+			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("I've got information at several different coordinates. Three, in fact."), Color(1, 0, 0), 2.f, 10, 32, &projectionStack, &viewStack, &modelStack, m_parameters);
 			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("[Press 1 / 2 / 3 and hold for the information.]"), Color(1, 0, 0), 2.f, 10, 30, &projectionStack, &viewStack, &modelStack, m_parameters);
 		}
 	}
