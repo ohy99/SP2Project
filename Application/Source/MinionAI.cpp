@@ -14,6 +14,11 @@ MinionAI::MinionAI() : EnemyAI("Goat Minion"), doHitDelay(0.5)
 	CollisionMesh_->collisionEnabled = true;
 
 	resetMinion();
+
+	//maxDmg_ = 100;
+	//minDmg_ = 50;
+	//doHitCD = 0.0;
+	//hp_ = 100;
 }
 
 MinionAI::~MinionAI()
@@ -26,7 +31,6 @@ void MinionAI::update(double dt)
 
 	if (!CollisionMesh_->isCollide(Player::getInstance()->CollisionMesh_)) //if bots havent collide with player
 	{
-		//std::vector<Mesh*> nearObjs;//including trees and car
 		doHitCD = 0.0;
 
 		//IF DISTANCE FROM MINION TO PLAYER IS LESS THAN 5 UNITS AWAY  OR  Minion is hit by player

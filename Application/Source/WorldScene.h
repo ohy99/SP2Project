@@ -18,6 +18,7 @@
 #include "NPC.h"
 #include "Environment.h"
 #include "Blueprints.h"
+
 #include "EnemyAI.h"
 #include "MinionAI.h"
 
@@ -65,6 +66,7 @@ public:
 	static Teleporter* WS_Teleporter;
 	static Teleporter* Underground_Door;
 
+
 	static MinionAI* WS_EnemyPool[5];
 	//MinionAI* getInactiveGoatMinion();
 
@@ -83,7 +85,6 @@ private:
 	void RenderSkybox();
 
 	Light light[8];
-
 
 
 	//static std::vector<NPC*> CampNPC;

@@ -90,6 +90,8 @@ private:
 	void RenderSkybox();
 	void RenderBaseCamp();
 	void Interactions();
+	void robotsInteractions();
+	void InitGuards();
 
 	Light light[8];
 
@@ -99,6 +101,7 @@ private:
 	//std::vector
 
 	int width, height;
+	int counter = 0;
 
 
 	Blueprints *blueprints;

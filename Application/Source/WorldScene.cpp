@@ -24,6 +24,8 @@
 #include "SandStorm.h"
 #include "MinionAI.h"
 
+#include "MinionAI.h"
+
 //WorldScene::Text_Data WorldScene::Text[TEXT_TYPE::Text_Count];
 //unsigned WorldScene::m_parameters[U_TOTAL];
 MS WorldScene::modelStack, WorldScene::viewStack, WorldScene::projectionStack;
@@ -107,6 +109,7 @@ void WorldScene::Init()
 	camera->Init(Vector3(0, 0, 7), Vector3(0, 0, 0), Vector3(0, 1, 0));
 
 
+
 	Mtx44 projection;
 	projection.SetToPerspective(45.f, 4.f / 3.f, 0.1f, 1000.f);
 	projectionStack.LoadMatrix(projection);
@@ -119,6 +122,7 @@ void WorldScene::Init()
 void WorldScene::Update(double dt)
 {
 	FramesPerSec = 1 / dt;
+
 	int width, height;
 	glfwGetWindowSize(Application::m_window, &width, &height);
 	isEscPressed = Application::IsKeyPressed(VK_ESCAPE);
@@ -205,8 +209,6 @@ void WorldScene::Update(double dt)
 					WS_EnemyPool[i]->resetMinion();
 			}
 		}
-
-
 		if (Blueprints::GetBlueprintNumber())//if i got one or more blueprints
 		{
 			//trigger global event
@@ -253,6 +255,7 @@ void WorldScene::Render()
 		modelStack.PopMatrix();
 		
 	}
+
 	if (Blueprints::GetBlueprintNumber())//if i got one or more blueprints
 	{
 		//trigger global event
@@ -263,11 +266,14 @@ void WorldScene::Render()
 		if (WS_EnemyPool[i]->active)
 			WS_EnemyPool[i]->render(&projectionStack, &viewStack, &modelStack, m_parameters);
 	}
+
 	Interactions();
 
 	RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("Blueprints: ") + std::to_string(Blueprints::GetBlueprintNumber()) + std::string("/3"), Color(1, 0, 0), 2.f, 68, 57, &projectionStack, &viewStack, &modelStack, m_parameters);
 
 	RenderMeshClass::RenderMesh(meshList[GEO_AXES], false, &projectionStack, &viewStack, &modelStack, m_parameters);
+	//MinionAI::MinionAI().render(&projectionStack, &viewStack, &modelStack, m_parameters);
+
 	Player::getInstance()->render(&projectionStack, &viewStack, &modelStack, m_parameters);
 
 	RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::to_string(FramesPerSec), Color(1, 0, 0), 1.5f, 45, 38, &projectionStack, &viewStack, &modelStack, m_parameters);
@@ -789,13 +795,3 @@ void WorldScene::initEnemies()
 		//Player::getInstance()->enemies_.push_back(tempEnemy);
 	}
 }
-
-//MinionAI* WorldScene::getInactiveGoatMinion()
-//{
-//    for (size_t i = 0; i < (sizeof goatMinionPool) / sizeof(*goatMinionPool); ++i)
-//    {
-//        if (!goatMinionPool[i]->active)
-//            return goatMinionPool[i];
-//    }
-//    return NULL;
-//}
