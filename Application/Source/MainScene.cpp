@@ -312,6 +312,7 @@ void MainScene::Init()
 
 	//Captain ------------------------------------------ START
 	EnvironmentObj* Captain = new EnvironmentObj(MeshBuilder::GenerateOBJ("Captain", "OBJ//Captain_OBJ.obj"));
+	Captain->CollisionMesh_->textureID = LoadTGA("Image//GuardUV.tga");
 
 	Env_Obj.push_back(Captain);
 	//Captain ----------------------------------------- END
@@ -454,7 +455,7 @@ void MainScene::Render()
 
 	RenderSkybox();
 	//	renderEnvironment();
-	robotsInteractions();
+
 
 	//Ground Mesh
 	modelStack.PushMatrix();
@@ -473,7 +474,7 @@ void MainScene::Render()
 	}
 	RenderBaseCamp();
 
-
+	robotsInteractions();
 	Interactions();
 
 	RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::to_string(FramesPerSec), Color(1, 0, 0), 1.5f, 45, 38, &projectionStack, &viewStack, &modelStack, m_parameters);
@@ -684,10 +685,15 @@ void MainScene::InitGuards(){
 
 	//Guards --------------------------------------------- START
 	EnvironmentObj* Guard1 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Guard1", "OBJ//Guard1_OBJ.obj"));
+	Guard1->CollisionMesh_->textureID = LoadTGA("Image//GuardUV.tga");
 	EnvironmentObj* Guard2 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Guard2", "OBJ//Guard2_OBJ.obj"));
+	Guard2->CollisionMesh_->textureID = LoadTGA("Image//GuardUV.tga");
 	EnvironmentObj* Guard3 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Guard3", "OBJ//Guard3_OBJ.obj"));
+	Guard3->CollisionMesh_->textureID = LoadTGA("Image//GuardUV.tga");
 	EnvironmentObj* Guard4 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Guard4", "OBJ//Guard4_OBJ.obj"));
+	Guard4->CollisionMesh_->textureID = LoadTGA("Image//GuardUV.tga");
 	EnvironmentObj* Guard5 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Guard5", "OBJ//Guard5_OBJ.obj"));
+	Guard5->CollisionMesh_->textureID = LoadTGA("Image//GuardUV.tga");
 
 	Env_Obj.push_back(Guard1);
 	Env_Obj.push_back(Guard2);

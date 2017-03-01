@@ -53,7 +53,7 @@ void FPSCam::Update(double dt, double dx, double dy)
 	float verticalDISAngle = 0;
 	horizontalDISAngle += mouseSpeed * dx; //taking displacement as pi
 	verticalDISAngle += mouseSpeed * dy;
-	Cam_Phi += Math::RadianToDegree(verticalDISAngle);
+
 
 	if (Cam_Theta + Math::RadianToDegree(horizontalDISAngle) > 360.0f)
 		Cam_Theta += Math::RadianToDegree(horizontalDISAngle) - 360.0f;
@@ -61,6 +61,13 @@ void FPSCam::Update(double dt, double dx, double dy)
 		Cam_Theta += 360.0f + Math::RadianToDegree(horizontalDISAngle);
 	else
 		Cam_Theta += Math::RadianToDegree(horizontalDISAngle);
+
+	if (Cam_Phi + Math::RadianToDegree(verticalDISAngle) > 75.0f)
+		Cam_Phi += 0.0f;
+	else if (Cam_Phi + Math::RadianToDegree(verticalDISAngle) < -75.0f)
+		Cam_Phi += 0.0f;
+	else
+		Cam_Phi += Math::RadianToDegree(verticalDISAngle);
 
 
 	this->position.x = Player::getInstance()->CollisionMesh_->pos.x + (float)(0.1f * dir.x);

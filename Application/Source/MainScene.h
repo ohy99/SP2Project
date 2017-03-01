@@ -1,5 +1,5 @@
-#ifndef MAIN_SCENE_H
-#define MAIN_SCENE_H
+#ifndef MAINSCENE_H
+#define MAINSCENE_H
 
 #include "Scene.h"
 #include "SceneManager.h"

@@ -24,8 +24,6 @@
 #include "SandStorm.h"
 #include "MinionAI.h"
 
-#include "MinionAI.h"
-
 //WorldScene::Text_Data WorldScene::Text[TEXT_TYPE::Text_Count];
 //unsigned WorldScene::m_parameters[U_TOTAL];
 MS WorldScene::modelStack, WorldScene::viewStack, WorldScene::projectionStack;
@@ -435,6 +433,8 @@ void WorldScene::Exit()
 	}
 	//delete camera;
 	Player::getInstance()->clearCollisionObj();
+
+	//delete[] WS_EnemyPool;
 
 	// Cleanup VBO here
 	glDeleteVertexArrays(1, &m_vertexArrayID);

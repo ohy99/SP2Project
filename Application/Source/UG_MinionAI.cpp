@@ -1,13 +1,13 @@
-#include "MinionAI.h"
-#include "WorldScene.h"
+#include "UG_MinionAI.h"
+#include "UndergroundScene.h"
 #include "Player.h"
 #include "RenderMesh.h"
 #include "MyMath.h"
 #include "MeshBuilder.h"
 
-//MinionAI* WorldScene::goatMinionPool[5];
+//UG_MinionAI* UndergroundScene::goatMinionPool[5];
 
-MinionAI::MinionAI() : EnemyAI("Goat Minion"), doHitDelay(0.5)
+UG_MinionAI::UG_MinionAI() : EnemyAI("Goat Minion"), doHitDelay(0.5)
 {
 
 	CollisionMesh_ = MeshBuilder::GenerateOBJ("", "OBJ//goat.obj");
@@ -21,12 +21,12 @@ MinionAI::MinionAI() : EnemyAI("Goat Minion"), doHitDelay(0.5)
 	//hp_ = 100;
 }
 
-MinionAI::~MinionAI()
+UG_MinionAI::~UG_MinionAI()
 {
 
 }
 
-void MinionAI::update(double dt)
+void UG_MinionAI::update(double dt)
 {
 
 	if (!CollisionMesh_->isCollide(Player::getInstance()->CollisionMesh_)) //if bots havent collide with player
@@ -53,7 +53,7 @@ void MinionAI::update(double dt)
 	}
 }
 
-void MinionAI::render(MS* projectionStack, MS* viewStack, MS* modelStack, unsigned * m_parameters)
+void UG_MinionAI::render(MS* projectionStack, MS* viewStack, MS* modelStack, unsigned * m_parameters)
 {
 	modelStack->PushMatrix();
 	modelStack->Translate(CollisionMesh_->pos.x, CollisionMesh_->pos.y, CollisionMesh_->pos.z);
@@ -70,7 +70,7 @@ void MinionAI::render(MS* projectionStack, MS* viewStack, MS* modelStack, unsign
 	modelStack->PopMatrix();
 }
 
-void MinionAI::isHitUpdate(int dmg)
+void UG_MinionAI::isHitUpdate(int dmg)
 {
 	hp_ -= dmg;
 	if (hp_ < 0)
@@ -79,22 +79,22 @@ void MinionAI::isHitUpdate(int dmg)
 	chasePlayer = true;
 }
 
-int MinionAI::getDmg()
+int UG_MinionAI::getDmg()
 {
 	return (rand() % (maxDmg_ - minDmg_ + 1) + minDmg_) * dmgMultiplier;
 }
 
-int MinionAI::getHp()
+int UG_MinionAI::getHp()
 {
 	return hp_;
 }
 
-void MinionAI::resetMinion()
+void UG_MinionAI::resetMinion()
 {
 	maxDmg_ = 100;
 	minDmg_ = 50;
 	doHitCD = 0.0;
-	hp_ = 100;
+	hp_ = 200;
 	chasePlayer = false;
 	//isHit = false;
 	deadTime = 0.0;
@@ -110,9 +110,9 @@ void MinionAI::resetMinion()
 		while (kenaStuck)
 		{
 			kenaStuck = false;
-			CollisionMesh_->pos.x = 25.f + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (35.f - 25.f)));
-			CollisionMesh_->pos.z = 13.f + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (23.f - 13.f)));
-			for (auto it : WorldScene::Env_Obj)
+			CollisionMesh_->pos.x = -33.f + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (-28.f + 38.f)));
+			CollisionMesh_->pos.z = -32.f + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (-27.f + 37.f)));
+			for (auto it : UndergroundScene::Env_Obj)
 			{
 				if (it->CollisionMesh_->isCollide(this->CollisionMesh_))
 				{
@@ -120,13 +120,13 @@ void MinionAI::resetMinion()
 					break;
 				}
 			}
-			for (size_t i = 0; i < (sizeof WorldScene::WS_EnemyPool) / sizeof(*WorldScene::WS_EnemyPool); i++)
+			for (size_t i = 0; i < (sizeof UndergroundScene::UG_EnemyPool) / sizeof(*UndergroundScene::UG_EnemyPool); i++)
 			{
-				if (WorldScene::WS_EnemyPool[i])
+				if (UndergroundScene::UG_EnemyPool[i])
 				{
-					if (WorldScene::WS_EnemyPool[i] != this &&
-						WorldScene::WS_EnemyPool[i]->active &&
-						this->CollisionMesh_->isCollide(WorldScene::WS_EnemyPool[i]->CollisionMesh_))//Because this function is called during init, not all enemy classes are created yet, so theere will
+					if (UndergroundScene::UG_EnemyPool[i] != this &&
+						UndergroundScene::UG_EnemyPool[i]->active &&
+						this->CollisionMesh_->isCollide(UndergroundScene::UG_EnemyPool[i]->CollisionMesh_))//Because this function is called during init, not all enemy classes are created yet, so theere will
 						//be null pointers which will cause programe to crash when trying to access NuLL
 					{
 						kenaStuck = true;
@@ -142,9 +142,9 @@ void MinionAI::resetMinion()
 		while (kenaStuck)
 		{
 			kenaStuck = false;
-			CollisionMesh_->pos.x = 98.f + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (108.f - 98.f)));
-			CollisionMesh_->pos.z = -101.f + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (-91.f + 101.f)));
-			for (auto it : WorldScene::Env_Obj)
+			CollisionMesh_->pos.x = 32.f + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (37.f - 27.f)));
+			CollisionMesh_->pos.z = -32.f + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (-27.f + 37.f)));
+			for (auto it : UndergroundScene::Env_Obj)
 			{
 				if (it->CollisionMesh_->isCollide(this->CollisionMesh_))
 				{
@@ -152,13 +152,13 @@ void MinionAI::resetMinion()
 					break;
 				}
 			}
-			for (size_t i = 0; i < (sizeof WorldScene::WS_EnemyPool) / sizeof(*WorldScene::WS_EnemyPool); i++)
+			for (size_t i = 0; i < (sizeof UndergroundScene::UG_EnemyPool) / sizeof(*UndergroundScene::UG_EnemyPool); i++)
 			{
-				if (WorldScene::WS_EnemyPool[i])
+				if (UndergroundScene::UG_EnemyPool[i])
 				{
-					if (WorldScene::WS_EnemyPool[i] != this &&
-						WorldScene::WS_EnemyPool[i]->active &&
-						this->CollisionMesh_->isCollide(WorldScene::WS_EnemyPool[i]->CollisionMesh_))//Because this function is called during init, not all enemy classes are created yet, so theere will
+					if (UndergroundScene::UG_EnemyPool[i] != this &&
+						UndergroundScene::UG_EnemyPool[i]->active &&
+						this->CollisionMesh_->isCollide(UndergroundScene::UG_EnemyPool[i]->CollisionMesh_))//Because this function is called during init, not all enemy classes are created yet, so theere will
 						//be null pointers which will cause programe to crash when trying to access NuLL
 					{
 						kenaStuck = true;
@@ -174,7 +174,7 @@ void MinionAI::resetMinion()
 	Player::getInstance()->addCollisionObject(this);
 }
 
-void MinionAI::runToPlayer(double dt)
+void UG_MinionAI::runToPlayer(double dt)
 {
 	Mesh projected("Projected");//for pre collision check
 	projected.setHb(true, CollisionMesh_->Hitbox_Min, CollisionMesh_->Hitbox_Max, CollisionMesh_->pos, CollisionMesh_->dir);
@@ -189,14 +189,14 @@ void MinionAI::runToPlayer(double dt)
 
 	projected.pos += (path * (float)dt * moveSpd);
 
-	for (size_t i = 0; i < (sizeof WorldScene::WS_EnemyPool) / sizeof(*WorldScene::WS_EnemyPool); i++)
+	for (size_t i = 0; i < (sizeof UndergroundScene::UG_EnemyPool) / sizeof(*UndergroundScene::UG_EnemyPool); i++)
 	{
-		if (WorldScene::WS_EnemyPool[i] != this &&
-			WorldScene::WS_EnemyPool[i]->active &&
-			projected.isCollide(WorldScene::WS_EnemyPool[i]->CollisionMesh_))
+		if (UndergroundScene::UG_EnemyPool[i] != this &&
+			UndergroundScene::UG_EnemyPool[i]->active &&
+			projected.isCollide(UndergroundScene::UG_EnemyPool[i]->CollisionMesh_))
 			return;
 	}
-	for (auto it : WorldScene::Env_Obj)
+	for (auto it : UndergroundScene::Env_Obj)
 	{
 		if (it->CollisionMesh_->isCollide(&projected))
 			return;
@@ -208,7 +208,7 @@ void MinionAI::runToPlayer(double dt)
 	}
 	catch (DivideByZero what)
 	{
-		std::cout << "MinionAI dir " << what.what() << std::endl;
+		std::cout << "UG_MinionAI dir " << what.what() << std::endl;
 		CollisionMesh_->dir.Set(0, 0, 1);
 	}
 	try
@@ -217,7 +217,7 @@ void MinionAI::runToPlayer(double dt)
 	}
 	catch (DivideByZero what)
 	{
-		std::cout << "MinionAI right " << what.what() << std::endl;
+		std::cout << "UG_MinionAI right " << what.what() << std::endl;
 		CollisionMesh_->dir.Set(1, 0, 0);
 	}
 	CollisionMesh_->pos.x += (path.x * (float)dt * moveSpd);

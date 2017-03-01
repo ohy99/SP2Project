@@ -1,110 +1,307 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="Source\Application.cpp" />
     <ClCompile Include="Source\Blueprints.cpp" />
-    <ClCompile Include="Source\BossAI.cpp" />
-    <ClCompile Include="Source\BossDropGoat.cpp" />
-    <ClCompile Include="Source\BossFlank.cpp" />
-    <ClCompile Include="Source\BossGSmash.cpp" />
-    <ClCompile Include="Source\BossScene.cpp" />
-    <ClCompile Include="Source\BossShootProj.cpp" />
-    <ClCompile Include="Source\Camera.cpp" />
-    <ClCompile Include="Source\Camera2.cpp" />
-    <ClCompile Include="Source\Camera3.cpp" />
-    <ClCompile Include="Source\CameraMG.cpp" />
     <ClCompile Include="Source\DataBase.cpp" />
     <ClCompile Include="Source\Environment.cpp" />
-    <ClCompile Include="Source\FPSCam.cpp" />
-    <ClCompile Include="Source\GoatMinion.cpp" />
-    <ClCompile Include="Source\InsideBarrackScene.cpp" />
     <ClCompile Include="Source\Inventory.cpp" />
-    <ClCompile Include="Source\LoadOBJ.cpp" />
-    <ClCompile Include="Source\LoadTextData.cpp" />
-    <ClCompile Include="Source\LoadTGA.cpp" />
     <ClCompile Include="Source\MGPlayer.cpp" />
-    <ClCompile Include="Source\MiniGame.cpp" />
     <ClCompile Include="Source\NPC_Doc.cpp" />
-    <ClCompile Include="Source\Player.cpp" />
-    <ClCompile Include="Source\RangeWeapon.cpp" />
-    <ClCompile Include="Source\main.cpp" />
-    <ClCompile Include="Source\MainScene.cpp" />
-    <ClCompile Include="Source\Mesh.cpp" />
-    <ClCompile Include="Source\MeshBuilder.cpp" />
-    <ClCompile Include="Source\LoadATOM.cpp" />
-    <ClCompile Include="Source\RenderMesh.cpp" />
-    <ClCompile Include="Source\shader.cpp" />
     <ClCompile Include="Source\UI.cpp" />
-    <ClCompile Include="Source\UndergroundScene.cpp" />
-    <ClCompile Include="Source\Utility.cpp" />
-    <ClCompile Include="Source\WorldScene.cpp" />
-    <ClCompile Include="Source\LoadingScreen.cpp" />
-    <ClCompile Include="Source\MainMenu.cpp" />
-    <ClCompile Include="Source\MinionAI.cpp" />
-    <ClCompile Include="Source\SandStorm.cpp" />
-    <ClCompile Include="Source\SplashScreen.cpp" />
+    <ClCompile Include="Source\BossAI.cpp">
+      <Filter>Boss</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\BossDropGoat.cpp">
+      <Filter>Boss</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\BossFlank.cpp">
+      <Filter>Boss</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\BossGSmash.cpp">
+      <Filter>Boss</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\BossScene.cpp">
+      <Filter>Boss</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\BossShootProj.cpp">
+      <Filter>Boss</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\InsideBarrackScene.cpp">
+      <Filter>Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\UndergroundScene.cpp">
+      <Filter>Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\WorldScene.cpp">
+      <Filter>Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\MainScene.cpp">
+      <Filter>Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\LoadATOM.cpp">
+      <Filter>LoadFiles</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\LoadOBJ.cpp">
+      <Filter>LoadFiles</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\LoadTextData.cpp">
+      <Filter>LoadFiles</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\LoadTGA.cpp">
+      <Filter>LoadFiles</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\RangeWeapon.cpp">
+      <Filter>GameObjs</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Player.cpp">
+      <Filter>Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GoatMinion.cpp">
+      <Filter>GameObjs</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Camera.cpp">
+      <Filter>Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Camera2.cpp">
+      <Filter>Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Camera3.cpp">
+      <Filter>Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\CameraMG.cpp">
+      <Filter>Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\FPSCam.cpp">
+      <Filter>Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Application.cpp">
+      <Filter>zOthers</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\main.cpp">
+      <Filter>zOthers</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Mesh.cpp">
+      <Filter>zOthers</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\MeshBuilder.cpp">
+      <Filter>zOthers</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\RenderMesh.cpp">
+      <Filter>zOthers</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\shader.cpp">
+      <Filter>zOthers</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Utility.cpp">
+      <Filter>zOthers</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\SplashScreen.cpp">
+      <Filter>Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\MainMenu.cpp">
+      <Filter>Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\MiniGame.cpp">
+      <Filter>Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\LoadingScreen.cpp">
+      <Filter>Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\SandStorm.cpp">
+      <Filter>GameObjs</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\MinionAI.cpp">
+      <Filter>GameObjs</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\UG_MinionAI.cpp">
+      <Filter>GameObjs</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\AllyNPC.h" />
-    <ClInclude Include="Source\Application.h" />
     <ClInclude Include="Source\Blueprints.h" />
-    <ClInclude Include="Source\BossAI.h" />
-    <ClInclude Include="Source\BossAttackStyles.h" />
-    <ClInclude Include="Source\BossDropGoat.h" />
-    <ClInclude Include="Source\BossFlank.h" />
-    <ClInclude Include="Source\BossGSmash.h" />
-    <ClInclude Include="Source\BossScene.h" />
     <ClInclude Include="Source\Bullets.h" />
-    <ClInclude Include="Source\Camera.h" />
-    <ClInclude Include="Source\Camera2.h" />
-    <ClInclude Include="Source\Camera3.h" />
-    <ClInclude Include="Source\CameraMG.h" />
     <ClInclude Include="Source\DataBase.h" />
-    <ClInclude Include="Source\DetectMemoryLeak.h" />
     <ClInclude Include="Source\Distance.h" />
-    <ClInclude Include="Source\EnemyAI.h" />
     <ClInclude Include="Source\Environment.h" />
-    <ClInclude Include="Source\FPSCam.h" />
     <ClInclude Include="Source\GameObject.h" />
-    <ClInclude Include="Source\GoatMinion.h" />
-    <ClInclude Include="Source\InsideBarrackScene.h" />
     <ClInclude Include="Source\Inventory.h" />
     <ClInclude Include="Source\Item.h" />
-    <ClInclude Include="Source\Light.h" />
-    <ClInclude Include="Source\LoadOBJ.h" />
-    <ClInclude Include="Source\LoadTextData.h" />
-    <ClInclude Include="Source\LoadTGA.h" />
-    <ClInclude Include="Source\MeleeWeapon.h" />
     <ClInclude Include="Source\MGPlayer.h" />
-    <ClInclude Include="Source\MiniGame.h" />
-    <ClInclude Include="Source\NPC.h" />
     <ClInclude Include="Source\NPC_Doc.h" />
-    <ClInclude Include="Source\Player.h" />
-    <ClInclude Include="Source\Potions.h" />
-    <ClInclude Include="Source\Projectile.h" />
-    <ClInclude Include="Source\RangeWeapon.h" />
-    <ClInclude Include="Source\MainScene.h" />
-    <ClInclude Include="Source\Material.h" />
-    <ClInclude Include="Source\Mesh.h" />
-    <ClInclude Include="Source\MeshBuilder.h" />
-    <ClInclude Include="Source\LoadATOM.h" />
-    <ClInclude Include="Source\RenderMesh.h" />
-    <ClInclude Include="Source\Scene.h" />
-    <ClInclude Include="Source\SceneManager.h" />
-    <ClInclude Include="Source\shader.hpp" />
-    <ClInclude Include="Source\BossShootProj.h" />
-    <ClInclude Include="Source\Teleporter.h" />
     <ClInclude Include="Source\UI.h" />
-    <ClInclude Include="Source\UndergroundScene.h" />
-    <ClInclude Include="Source\Usables.h" />
-    <ClInclude Include="Source\Utility.h" />
-    <ClInclude Include="Source\Vertex.h" />
-    <ClInclude Include="Source\Weapon.h" />
-    <ClInclude Include="Source\WorldScene.h" />
-    <ClInclude Include="Source\LoadingScreen.h" />
-    <ClInclude Include="Source\MainMenu.h" />
-    <ClInclude Include="Source\MinionAI.h" />
-    <ClInclude Include="Source\SandStorm.h" />
-    <ClInclude Include="Source\SplashScreen.h" />
+    <ClInclude Include="Source\BossAI.h">
+      <Filter>Boss</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\BossAttackStyles.h">
+      <Filter>Boss</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\BossDropGoat.h">
+      <Filter>Boss</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\BossFlank.h">
+      <Filter>Boss</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\BossGSmash.h">
+      <Filter>Boss</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\BossScene.h">
+      <Filter>Boss</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\BossShootProj.h">
+      <Filter>Boss</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\InsideBarrackScene.h">
+      <Filter>Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Scene.h">
+      <Filter>Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\UndergroundScene.h">
+      <Filter>Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\SceneManager.h">
+      <Filter>Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\WorldScene.h">
+      <Filter>Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\MainScene.h">
+      <Filter>Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\LoadATOM.h">
+      <Filter>LoadFiles</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\LoadOBJ.h">
+      <Filter>LoadFiles</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\LoadTextData.h">
+      <Filter>LoadFiles</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\LoadTGA.h">
+      <Filter>LoadFiles</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Weapon.h">
+      <Filter>GameObjs</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Usables.h">
+      <Filter>GameObjs</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Teleporter.h">
+      <Filter>GameObjs</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\RangeWeapon.h">
+      <Filter>GameObjs</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Projectile.h">
+      <Filter>GameObjs</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Potions.h">
+      <Filter>GameObjs</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\NPC.h">
+      <Filter>GameObjs</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Player.h">
+      <Filter>Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GoatMinion.h">
+      <Filter>GameObjs</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Camera.h">
+      <Filter>Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Camera2.h">
+      <Filter>Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Camera3.h">
+      <Filter>Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\CameraMG.h">
+      <Filter>Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\FPSCam.h">
+      <Filter>Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\MeleeWeapon.h">
+      <Filter>GameObjs</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Application.h">
+      <Filter>zOthers</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\DetectMemoryLeak.h">
+      <Filter>zOthers</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Light.h">
+      <Filter>zOthers</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Material.h">
+      <Filter>zOthers</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Mesh.h">
+      <Filter>zOthers</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\MeshBuilder.h">
+      <Filter>zOthers</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\RenderMesh.h">
+      <Filter>zOthers</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\shader.hpp">
+      <Filter>zOthers</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Utility.h">
+      <Filter>zOthers</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Vertex.h">
+      <Filter>zOthers</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\SplashScreen.h">
+      <Filter>Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\MainMenu.h">
+      <Filter>Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\MiniGame.h">
+      <Filter>Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\LoadingScreen.h">
+      <Filter>Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\SandStorm.h">
+      <Filter>GameObjs</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\EnemyAI.h">
+      <Filter>GameObjs</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\MinionAI.h">
+      <Filter>GameObjs</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\UG_MinionAI.h">
+      <Filter>GameObjs</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Boss">
+      <UniqueIdentifier>{f6a63eba-9ff8-4090-b5c8-4a49fc88b782}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scenes">
+      <UniqueIdentifier>{af1a8711-7e3e-4c9e-b52d-25c41d710d8b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Player">
+      <UniqueIdentifier>{194f1964-272a-4ff5-86cc-d1d712d12715}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="LoadFiles">
+      <UniqueIdentifier>{244a85c1-0857-4f20-97fb-7db2b6aa44a1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameObjs">
+      <UniqueIdentifier>{e1245254-52bb-4def-9676-17901ba485bb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Camera">
+      <UniqueIdentifier>{8878f02d-7383-4ce6-968b-ee961a1a6232}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="zOthers">
+      <UniqueIdentifier>{acec50e2-8212-4ab2-bcee-38b4616d03de}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
 </Project>
