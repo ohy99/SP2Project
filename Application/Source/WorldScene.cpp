@@ -100,6 +100,7 @@ void WorldScene::Init()
 	wasEscPressed = false;
 	isPause = false;
 	//MainMenu.Init();
+	countDownBackToBase = 5.0;
 
 	UI::getInstance()->Init();
 
@@ -125,24 +126,6 @@ void WorldScene::Update(double dt)
 	glfwGetWindowSize(Application::m_window, &width, &height);
 	isEscPressed = Application::IsKeyPressed(VK_ESCAPE);
 
-
-	if (Application::IsKeyPressed(VK_NUMPAD1) || Application::IsKeyPressed('1'))
-	{
-		glEnable(GL_CULL_FACE);
-	}
-	if (Application::IsKeyPressed(VK_NUMPAD2) || Application::IsKeyPressed('2'))
-	{
-		glDisable(GL_CULL_FACE);
-	}
-	if (Application::IsKeyPressed(VK_NUMPAD3) || Application::IsKeyPressed('3'))
-	{
-		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); //default fill mode
-	}
-	if (Application::IsKeyPressed(VK_NUMPAD4) || Application::IsKeyPressed('4'))
-	{
-		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); //wireframe mode
-	}
-
 	//bool fpsonce = false;
 	if (Application::IsKeyPressed('V')// && fpsonce == false)
 		|| !debugMode)
@@ -152,7 +135,6 @@ void WorldScene::Update(double dt)
 		//	fpsonce = true;
 	}
 
-	Player::getInstance()->update(dt, camera);
 	Inventory::getInstance()->Update(dt);
 	UI::getInstance()->Update(dt);
 
@@ -161,10 +143,27 @@ void WorldScene::Update(double dt)
 	//{
 	//	CampNPC.at(i)->update(dt);
 	//}
-	if (UI::getInstance()->isPauseOpen() && Inventory::getInstance()->isInventoryOpen())
-		return;
 
+	if (Player::getInstance()->getHp() <= 0){
 
+		isDead = true;
+		countDownBackToBase -= dt;
+
+		if (countDownBackToBase <= 0.0){
+
+			SceneManager::getInstance()->SetNextSceneID(SceneManager::SCENES::CAMPSCENE);
+			SceneManager::getInstance()->SetNextScene();
+			Player::getInstance()->setPosition(Vector3(12, 0, 11));
+		}
+	}
+	else{
+
+		isDead = false;
+		Player::getInstance()->update(dt, camera);
+	}
+
+	if (!UI::getInstance()->isPauseOpen() && !Inventory::getInstance()->isInventoryOpen()){
+	
 		double c_posx, c_posy;
 		glfwGetCursorPos(Application::m_window, &c_posx, &c_posy);
 		glfwSetCursorPos(Application::m_window, width / 2, height / 2);
@@ -175,46 +174,47 @@ void WorldScene::Update(double dt)
 		dx = dt * double(width / 2 - c_posx);
 		dy = dt * double(height / 2 - c_posy);
 		camera->Update(dt, dx, dy);
+	}
 
-		//for (size_t i = 0; i < CampNPC.size(); i++)
-		//{
-		//	CampNPC.at(i)->update(dt);
-		//}
-		for (size_t i = 0; i < (sizeof WS_EnemyPool) / sizeof(*WS_EnemyPool); ++i)
+	//for (size_t i = 0; i < CampNPC.size(); i++)
+	//{
+	//	CampNPC.at(i)->update(dt);
+	//}
+
+	for (size_t i = 0; i < (sizeof WS_EnemyPool) / sizeof(*WS_EnemyPool); ++i)
+	{
+		if (WS_EnemyPool[i]->active)
 		{
-			if (WS_EnemyPool[i]->active)
+			if (WS_EnemyPool[i]->getHp() <= 0)//REMOVE THE ENEMY FROM PLAYER ENEMY VECTOR SO PLAYER WILL NOT DETECT A DEAD ENEMY AS ENEMY
 			{
-				if (WS_EnemyPool[i]->getHp() <= 0)//REMOVE THE ENEMY FROM PLAYER ENEMY VECTOR SO PLAYER WILL NOT DETECT A DEAD ENEMY AS ENEMY
-				{
-					WS_EnemyPool[i]->active = false;
-					auto it = std::find(Player::getInstance()->enemies_.begin(), Player::getInstance()->enemies_.end(), WS_EnemyPool[i]);
-					if (it != Player::getInstance()->enemies_.end())
-						std::swap(*it, Player::getInstance()->enemies_.back());
-					//goatMinionPool[i]->CollisionMesh_->pos = Vector3(0, -5, 0);
-					Player::getInstance()->enemies_.back() = NULL;
-					Player::getInstance()->enemies_.pop_back();
+				WS_EnemyPool[i]->active = false;
+				auto it = std::find(Player::getInstance()->enemies_.begin(), Player::getInstance()->enemies_.end(), WS_EnemyPool[i]);
+				if (it != Player::getInstance()->enemies_.end())
+					std::swap(*it, Player::getInstance()->enemies_.back());
+				//goatMinionPool[i]->CollisionMesh_->pos = Vector3(0, -5, 0);
+				Player::getInstance()->enemies_.back() = NULL;
+				Player::getInstance()->enemies_.pop_back();
 
-					//for Collision
-					Player::getInstance()->removeCollisionObject(WS_EnemyPool[i]);
-				}
-				else//UPDATE ALIVE ENEMY
-					WS_EnemyPool[i]->update(dt);
+				//for Collision
+				Player::getInstance()->removeCollisionObject(WS_EnemyPool[i]);
 			}
-			else
-			{
-				WS_EnemyPool[i]->deadTime += dt;
-				if (WS_EnemyPool[i]->deadTime > 10)
-					WS_EnemyPool[i]->resetMinion();
-			}
+			else//UPDATE ALIVE ENEMY
+				WS_EnemyPool[i]->update(dt);
 		}
-		if (Blueprints::GetBlueprintNumber())//if i got one or more blueprints
+		else
 		{
-			//trigger global event
-			SandStorm::getInstance()->update(dt);
+			WS_EnemyPool[i]->deadTime += dt;
+			if (WS_EnemyPool[i]->deadTime > 10)
+				WS_EnemyPool[i]->resetMinion();
 		}
+	}
 
-	
-	//MainMenu.Update(dt);
+	if (Blueprints::GetBlueprintNumber())//if i got one or more blueprints
+	{
+		//trigger global event
+		SandStorm::getInstance()->update(dt);
+	}
+
 }
 
 void WorldScene::Render()
@@ -273,11 +273,18 @@ void WorldScene::Render()
 	//MinionAI::MinionAI().render(&projectionStack, &viewStack, &modelStack, m_parameters);
 
 	Player::getInstance()->render(&projectionStack, &viewStack, &modelStack, m_parameters);
+	
+	if (isDead){
+
+		RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], "You Died!", Color(1, 0, 0), 2.5f, 32, 48, &projectionStack, &viewStack, &modelStack, m_parameters);
+		RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], "Respawn Back to Base in " + std::to_string((int)countDownBackToBase), Color(1, 0, 0), 2.f, 31, 46, &projectionStack, &viewStack, &modelStack, m_parameters);
+	}
 
 	RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::to_string(FramesPerSec), Color(1, 0, 0), 1.5f, 45, 38, &projectionStack, &viewStack, &modelStack, m_parameters);
 
 	UI::getInstance()->renderPause(&projectionStack, &viewStack, &modelStack, m_parameters);
 	Inventory::getInstance()->Render(&projectionStack, &viewStack, &modelStack, m_parameters);
+
 
 }
 

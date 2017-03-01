@@ -92,6 +92,8 @@ private:
 
 	bool isPause;
 	bool isEscPressed, wasEscPressed;
+	bool isDead;
+	double countDownBackToBase;
 
 	//MainScreen MainMenu;
 	//UI renderUI;

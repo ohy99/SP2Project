@@ -25,7 +25,6 @@
 #include "Blueprints.h"
 #include "Weapon.h"
 
-
 class MainScene : public Scene
 {
 	enum GEOMETRY_TYPE
@@ -92,6 +91,7 @@ private:
 	void Interactions();
 	void robotsInteractions();
 	void InitGuards();
+	void medicInteractions();
 
 	Light light[8];
 
@@ -102,7 +102,7 @@ private:
 
 	int width, height;
 	int counter = 0;
-
+	int counter_medic = 0;
 
 	Blueprints *blueprints;
 	Item* a;
