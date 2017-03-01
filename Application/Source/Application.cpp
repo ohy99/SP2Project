@@ -44,6 +44,8 @@ unsigned Scene::m_parameters[U_TOTAL];
 unsigned Scene::m_programID;
 bool Scene::debugMode = true;
 
+bool Application::closeWindow = false;
+
 //Define an error callback
 static void error_callback(int error, const char* description)
 {
@@ -138,9 +140,9 @@ void Application::Run()
 
 	//Change the enum in scene Manager too.
 	Scene *tempScene;
-	tempScene = new SplashScreen();	//0
+	tempScene = new SplashScreen();	        //0
 	SceneManager::getInstance()->AddScene(tempScene);
-	tempScene = new MainMenu();	//1
+	tempScene = new MainMenu();	            //1
 	SceneManager::getInstance()->AddScene(tempScene);
 	tempScene = new MainScene();			//2
 	SceneManager::getInstance()->AddScene(tempScene);
@@ -160,6 +162,7 @@ void Application::Run()
 
 //	SceneManager::getInstance()->SetNextSceneID(1);
 	//SceneManager::getInstance()->SetNextScene();
+
 	//Scene *scene = scene1;
 	SceneManager::getInstance()->getCurrentScene()->Init();
 
@@ -172,7 +175,7 @@ void Application::Run()
 
 
 	m_timer.startTimer();    // Start timer to calculate how long it takes to render this frame
-	while (!glfwWindowShouldClose(m_window) && !IsKeyPressed(VK_BACK))
+	while (!glfwWindowShouldClose(m_window) && !closeWindow)
 	{
 		SceneManager::getInstance()->Update();
 	} //Check if the ESC key had been pressed or if the window had been closed

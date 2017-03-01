@@ -106,6 +106,7 @@ private:
 
 	Blueprints *blueprints;
 	Item* a;
+	Item* b;
 
 	double x, y;
 	//void RenderText(Text_Data* TextData, std::string text, Color color);

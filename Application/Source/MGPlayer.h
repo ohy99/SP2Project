@@ -11,6 +11,7 @@
 class MGPlayer : public GameObject
 {
 public:
+	void Init();
 	void Update(double dt, Camera* camera);
 	void Render(MS* projectionStack, MS* viewStack, MS* modelStack, unsigned * m_parameters);
 	void MGPlayerMovements(double dt);
@@ -24,6 +25,12 @@ public:
 	static std::vector<GameObject*> CollisionObjects;
 	Mesh* getCollisionMesh() { return PMesh[MESH_TYPE::BODY]; } 
 	static inline void addCollisionObject(GameObject* obj) { CollisionObjects.push_back(obj); }
+
+	bool Reset();
+	bool isDead();
+	bool gameStarted();
+
+	void setGameState(bool gameStarted, bool gameReset, bool isHit);
 
 private:
 	enum MESH_TYPE
@@ -41,16 +48,19 @@ private:
 
 	Mesh* PMesh[MESH_TYPE::MT_COUNT];
 
+	double x, y;
+
 	static MGPlayer* Instance;
 
 	float lane;
 	float moveSpeed;
 
+	char count;
+
 	bool isHit;
-	bool isDead();
 	bool isDPressed, wasDPressed, isAPressed, wasAPressed;
 
-	Distance distance;
+	bool isGameStarted, isGameReset;
 };
 
 #endif

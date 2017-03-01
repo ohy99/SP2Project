@@ -128,8 +128,13 @@ void MainScene::Init()
 	a->item2DTexture = MeshBuilder::GenerateQuad("quad", Color(1, 1, 1), 1.f, 1.f);
 	a->item2DTexture->textureID = LoadTGA("Image//inventory.tga");
 
+	b = new Item("b");
+	b->CollisionMesh_ = MeshBuilder::GenerateOBJ("Testing", "OBJ//goat.obj");
+	b->CollisionMesh_->textureID = LoadTGA("Image//testing.tga");
+	b->item2DTexture = MeshBuilder::GenerateQuad("quad", Color(1, 1, 1), 1.f, 1.f);
+	b->item2DTexture->textureID = LoadTGA("Image//CrossHair.tga");
+
 	//Inventory::getInstance()->setItem(a);
-	Player::Items.push_back(a);
 
 	//Skybox ------------ Base Camp Start
 	//Left Skybox 
@@ -360,13 +365,13 @@ void MainScene::Update(double dt)
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); //wireframe mode
 	}
 
-	//bool once = false;
-	//if (Application::IsKeyPressed('1') && once == false)
-	//{
-	//	SceneManager::getInstance()->SetNextScene();
-	//	//SceneManager::getInstance()->SetNextSceneID(0);
-	//	once = true;
-	//}
+	bool once = false;
+	if (Application::IsKeyPressed('1') && once == false)
+	{
+		SceneManager::getInstance()->SetNextSceneID(6);
+		SceneManager::getInstance()->SetNextScene();
+		once = true;
+	}
 
 	//bool fpsonce = false;
 	if (Application::IsKeyPressed('V') || !debugMode)

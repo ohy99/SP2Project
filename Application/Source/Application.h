@@ -21,7 +21,7 @@ public:
 	static inline int getWindowHeight() { return windowHeight; }
 
 	static inline void setWindowSize(int w, int h) { windowWidth = w; windowHeight = h; }
-
+	static inline void setCloseWindow(bool cw) { closeWindow = cw; }
 
 	static StopWatch m_timer;
 	static GLFWwindow* m_window;
@@ -30,6 +30,9 @@ public:
 private:
 
 	//Declare a window object
+	//static double windowWidth, windowHeight;
+	static bool closeWindow;
+
 	static int windowWidth, windowHeight;
 };
 
