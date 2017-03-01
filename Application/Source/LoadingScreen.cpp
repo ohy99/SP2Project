@@ -53,8 +53,6 @@ void LoadingScreen::Init()
 
 	// Hide the mouse and enable unlimited mouvement
 	glfwSetInputMode(Application::m_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-	goThroughRenderOnce = false;
-
 }
 
 void LoadingScreen::Update(double dt)

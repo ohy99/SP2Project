@@ -33,7 +33,6 @@ MS MainScene::modelStack, MainScene::viewStack, MainScene::projectionStack;
 //std::vector<GameObject*> MainScene::Game_Objects_(10, NULL);
 std::vector<EnvironmentObj*> MainScene::Env_Obj;
 std::vector<NPC*> MainScene::CampNPC;
-Teleporter* MainScene::MS_Teleporter;
 Teleporter* MainScene::Barrack;
 
 
@@ -181,8 +180,8 @@ void MainScene::Init()
 
 
 	//Teleporter ------------------ START
-	//MS_Teleporter = new Teleporter(MeshBuilder::GenerateOBJ("Teleporter", "OBJ//Teleporter_OBJ.obj"), 1);
-	//MS_Teleporter->CollisionMesh_->textureID = LoadTGA("Image//InteractableItem_Teleporter_UV_Texture.tga");
+	Teleporter* MS_Teleporter = new Teleporter(MeshBuilder::GenerateOBJ("Boss", "OBJ//Teleporter1_OBJ.obj"), SceneManager::SCENES::BOSSSCENE);
+	MS_Teleporter->CollisionMesh_->textureID = LoadTGA("Image//InteractableItem_Teleporter_UV_Texture.tga");
 
 	EnvironmentObj* Teleporter = new EnvironmentObj(MeshBuilder::GenerateOBJ("Teleporter", "OBJ//Teleporter_OBJ.obj"));
 	Teleporter->CollisionMesh_->textureID = LoadTGA("Image//InteractableItem_Teleporter_UV_Texture.tga");
@@ -197,7 +196,8 @@ void MainScene::Init()
 	Env_Obj.push_back(Teleporter);
 	//Env_Obj.push_back(Teleporter1);
 
-	//Player::getInstance()->Teleport.push_back(MS_Teleporter);
+	Player::getInstance()->teleporters_.push_back(MS_Teleporter);
+	Player::getInstance()->addCollisionObject(MS_Teleporter);
 	//Teleporter -----------------------END
 
 
@@ -307,7 +307,7 @@ void MainScene::Init()
 	for (auto it : Env_Obj)
 		Player::addCollisionObject(it);
 
-
+	Player::getInstance()->setHpToMax();
 	UI::getInstance()->Init();
 
 
@@ -358,11 +358,13 @@ void MainScene::Update(double dt)
 	//	once = true;
 	//}
 
-	bool fpsonce = false;
-	if (Application::IsKeyPressed('V') && fpsonce == false)
+	//bool fpsonce = false;
+	if (Application::IsKeyPressed('V') || !debugMode)
 	{
+		//delete camera;
+		//camera = NULL;
 		camera = FPSCam::getInstance();
-		fpsonce = true;
+		//fpsonce = true;
 	}
 
 	Player::getInstance()->update(dt, camera);
@@ -522,7 +524,6 @@ void MainScene::Exit()
 	}
 	//delete camera;
 	Player::getInstance()->clearCollisionObj();
-	delete MS_Teleporter;
 	delete Barrack;
 	//for (size_t i = 0; i < NUM_GEOMETRY; i++)
 	//{

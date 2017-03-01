@@ -17,6 +17,7 @@
 #include "UI.h"
 #include "Player.h"
 #include "BossAI.h"
+#include "SandStorm.h"
 
 MainMenu::MainMenu()
 {
@@ -43,6 +44,7 @@ void MainMenu::Init()
 
 	Player::getInstance();
 	GoatBoss::getInstance();
+	SandStorm::getInstance();
 
 	camera = new Camera3;
 	camera->Init(Vector3(0, 0, 7), Vector3(0, 0, 0), Vector3(0, 1, 0));
@@ -79,7 +81,7 @@ void MainMenu::Update(double dt)
 
 	if (isLeftMouseButtonPressed && !wasLeftMouseButtonPressed)
 	{
-		if (startButton->isPointInsideAABB(Position(x, y, 0)))
+		if (startButton->isPointInsideAABB(Position((float)x, (float)y, 0.f)))
 			isStartPressed = true;
 
 		wasLeftMouseButtonPressed = isLeftMouseButtonPressed;
@@ -120,7 +122,7 @@ void MainMenu::Exit()
 		if (meshList[i] != NULL)
 			delete meshList[i];
 	}
-	//delete camera;
+	delete camera;
 
 	// Cleanup VBO here
 	glDeleteVertexArrays(1, &m_vertexArrayID);

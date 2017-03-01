@@ -73,7 +73,6 @@ public:
 
 	static MS modelStack, viewStack, projectionStack;
 
-	static Teleporter* MS_Teleporter;
 	static Teleporter* Barrack;
 
 	//int numberOfBlueprints = 0;

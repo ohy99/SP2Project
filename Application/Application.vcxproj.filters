@@ -107,6 +107,12 @@
     <ClCompile Include="Source\LoadingScreen.cpp">
       <Filter>Scenes</Filter>
     </ClCompile>
+    <ClCompile Include="Source\SandStorm.cpp">
+      <Filter>GameObjs</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\MinionAI.cpp">
+      <Filter>GameObjs</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\AllyNPC.h" />
@@ -114,7 +120,6 @@
     <ClInclude Include="Source\Bullets.h" />
     <ClInclude Include="Source\DataBase.h" />
     <ClInclude Include="Source\Distance.h" />
-    <ClInclude Include="Source\EnemyAI.h" />
     <ClInclude Include="Source\Environment.h" />
     <ClInclude Include="Source\GameObject.h" />
     <ClInclude Include="Source\Inventory.h" />
@@ -259,6 +264,15 @@
     </ClInclude>
     <ClInclude Include="Source\LoadingScreen.h">
       <Filter>Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\SandStorm.h">
+      <Filter>GameObjs</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\EnemyAI.h">
+      <Filter>GameObjs</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\MinionAI.h">
+      <Filter>GameObjs</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

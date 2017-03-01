@@ -4,7 +4,7 @@
 #include "GameObject.h"
 #include <string>
 
-class Projectile :public GameObject
+class Projectile : public GameObject
 {
 	double pSpeed_;
 

@@ -31,8 +31,8 @@ const unsigned char Application::FPS = 60; // FPS of this game
 const unsigned int Application::frameTime = 1000 / FPS; // time for each frame
 
 //change window size here
-double Application::windowWidth = 1024;
-double Application::windowHeight = 768;
+int Application::windowWidth = 1024;
+int Application::windowHeight = 768;
 StopWatch Application::m_timer;
 
 std::vector<Scene*> SceneManager::scenes;
@@ -42,6 +42,7 @@ int SceneManager::nextSceneID = 0;
 Scene::Text_Data Scene::Text[Scene::TEXT_TYPE::Text_Count];
 unsigned Scene::m_parameters[U_TOTAL];
 unsigned Scene::m_programID;
+bool Scene::debugMode = true;
 
 //Define an error callback
 static void error_callback(int error, const char* description)

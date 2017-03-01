@@ -21,6 +21,8 @@
 #include "UI.h"
 #include "Blueprints.h"
 #include "Inventory.h"
+#include "SandStorm.h"
+#include "MinionAI.h"
 
 //WorldScene::Text_Data WorldScene::Text[TEXT_TYPE::Text_Count];
 //unsigned WorldScene::m_parameters[U_TOTAL];
@@ -36,6 +38,7 @@ Teleporter* WorldScene::Underground_Door;
 
 //std::vector<NPC*> WorldScene::CampNPC;
 
+MinionAI* WorldScene::WS_EnemyPool[5];
 
 
 
@@ -86,6 +89,7 @@ void WorldScene::Init()
 	initItems();
 	initblueprints();
 	initSkybox();
+	initEnemies();
 
 
 	for (auto it : Env_Obj)
@@ -114,7 +118,7 @@ void WorldScene::Init()
 
 void WorldScene::Update(double dt)
 {
-
+	FramesPerSec = 1 / dt;
 	int width, height;
 	glfwGetWindowSize(Application::m_window, &width, &height);
 	isEscPressed = Application::IsKeyPressed(VK_ESCAPE);
@@ -137,11 +141,13 @@ void WorldScene::Update(double dt)
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); //wireframe mode
 	}
 
-	bool fpsonce = false;
-	if (Application::IsKeyPressed('V') && fpsonce == false)
+	//bool fpsonce = false;
+	if (Application::IsKeyPressed('V')// && fpsonce == false)
+		|| !debugMode)
 	{
+		//delete camera;
 		camera = FPSCam::getInstance();
-		fpsonce = true;
+		//	fpsonce = true;
 	}
 
 	Player::getInstance()->update(dt, camera);
@@ -153,8 +159,10 @@ void WorldScene::Update(double dt)
 	//{
 	//	CampNPC.at(i)->update(dt);
 	//}
-	if (!UI::getInstance()->isPauseOpen() && !Inventory::getInstance()->isInventoryOpen())
-	{
+	if (UI::getInstance()->isPauseOpen() && Inventory::getInstance()->isInventoryOpen())
+		return;
+
+
 		double c_posx, c_posy;
 		glfwGetCursorPos(Application::m_window, &c_posx, &c_posy);
 		glfwSetCursorPos(Application::m_window, width / 2, height / 2);
@@ -170,10 +178,41 @@ void WorldScene::Update(double dt)
 		//{
 		//	CampNPC.at(i)->update(dt);
 		//}
-	}
+		for (size_t i = 0; i < (sizeof WS_EnemyPool) / sizeof(*WS_EnemyPool); ++i)
+		{
+			if (WS_EnemyPool[i]->active)
+			{
+				if (WS_EnemyPool[i]->getHp() <= 0)//REMOVE THE ENEMY FROM PLAYER ENEMY VECTOR SO PLAYER WILL NOT DETECT A DEAD ENEMY AS ENEMY
+				{
+					WS_EnemyPool[i]->active = false;
+					auto it = std::find(Player::getInstance()->enemies_.begin(), Player::getInstance()->enemies_.end(), WS_EnemyPool[i]);
+					if (it != Player::getInstance()->enemies_.end())
+						std::swap(*it, Player::getInstance()->enemies_.back());
+					//goatMinionPool[i]->CollisionMesh_->pos = Vector3(0, -5, 0);
+					Player::getInstance()->enemies_.back() = NULL;
+					Player::getInstance()->enemies_.pop_back();
+
+					//for Collision
+					Player::getInstance()->removeCollisionObject(WS_EnemyPool[i]);
+				}
+				else//UPDATE ALIVE ENEMY
+					WS_EnemyPool[i]->update(dt);
+			}
+			else
+			{
+				WS_EnemyPool[i]->deadTime += dt;
+				if (WS_EnemyPool[i]->deadTime > 10)
+					WS_EnemyPool[i]->resetMinion();
+			}
+		}
 
 
-	FramesPerSec = 1 / dt;
+		if (Blueprints::GetBlueprintNumber())//if i got one or more blueprints
+		{
+			//trigger global event
+			SandStorm::getInstance()->update(dt);
+		}
+
 	
 	//MainMenu.Update(dt);
 }
@@ -214,7 +253,16 @@ void WorldScene::Render()
 		modelStack.PopMatrix();
 		
 	}
-
+	if (Blueprints::GetBlueprintNumber())//if i got one or more blueprints
+	{
+		//trigger global event
+		SandStorm::getInstance()->render(&projectionStack, &viewStack, &modelStack, m_parameters);
+	}
+	for (size_t i = 0; i < (sizeof WS_EnemyPool) / sizeof(*WS_EnemyPool); i++)
+	{
+		if (WS_EnemyPool[i]->active)
+			WS_EnemyPool[i]->render(&projectionStack, &viewStack, &modelStack, m_parameters);
+	}
 	Interactions();
 
 	RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("Blueprints: ") + std::to_string(Blueprints::GetBlueprintNumber()) + std::string("/3"), Color(1, 0, 0), 2.f, 68, 57, &projectionStack, &viewStack, &modelStack, m_parameters);
@@ -726,3 +774,28 @@ void WorldScene::initblueprints()
 
 
 }
+
+void WorldScene::initEnemies()
+{
+	for (size_t i = 0; i < (sizeof WS_EnemyPool) / sizeof(*WS_EnemyPool); ++i)
+	{
+		MinionAI* tempEnemy = new MinionAI();
+
+		//tempEnemy->CollisionMesh_->pos = Vector3(i + rand(), 0, i + rand()); do u know what rand() returns?
+		WS_EnemyPool[i] = tempEnemy;
+		WS_EnemyPool[i]->active = true;
+
+		//Player::getInstance()->addCollisionObject(tempEnemy);
+		//Player::getInstance()->enemies_.push_back(tempEnemy);
+	}
+}
+
+//MinionAI* WorldScene::getInactiveGoatMinion()
+//{
+//    for (size_t i = 0; i < (sizeof goatMinionPool) / sizeof(*goatMinionPool); ++i)
+//    {
+//        if (!goatMinionPool[i]->active)
+//            return goatMinionPool[i];
+//    }
+//    return NULL;
+//}

@@ -20,7 +20,7 @@ public:
 	virtual void render(MS* projectionStack, MS* viewStack, MS* modelStack, unsigned * m_parameters);
 	virtual void isHitUpdate(int dmg);
 	int getDmg();
-	int getHp();
+	virtual int getHp();
 	void resetGoat();
 	std::vector<GameObject*> CollisionObj;
 };

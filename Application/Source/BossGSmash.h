@@ -9,7 +9,9 @@ class BossGSmash : public BossAttack
 	bool isStartAOE = false;
 	bool isEndAOE = false;
 	double SmashAOETime = 0.0;
+	int dmg;
 public:
+	BossGSmash(int inDmg){ dmg = inDmg; };
 	virtual bool performAttack(double dt, double& animTime);
 	virtual void renderAttack(MS* projectionStack, MS* viewStack, MS* modelStack, unsigned * m_parameters);
 };

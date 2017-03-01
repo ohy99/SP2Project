@@ -30,7 +30,8 @@ MS BossScene::modelStack, BossScene::viewStack, BossScene::projectionStack;
 //std::vector<GameObject*> BossScene::Game_Objects_(10, NULL);
 //UI renderMeshOnScreen;
 std::vector<EnvironmentObj*> BossScene::Env_Obj;
-
+float BossScene::skyBoxScale = 0.f;
+float BossScene::skyBoxDistance = 0.f;
 BossScene::BossScene()
 {
 }
@@ -88,7 +89,7 @@ void BossScene::Init()
 
 	//Skybox ------------skyBoxScale, skyBoxDistance;
 	skyBoxScale = 500;
-	skyBoxDistance = skyBoxScale * 0.5f * 0.99;
+	skyBoxDistance = skyBoxScale * 0.5f * 0.99f;
 	//Left Skybox 
 	meshList[GEO_LEFT] = MeshBuilder::GenerateQuad("Left", Color(1, 1, 1), skyBoxScale, skyBoxScale);
 	meshList[GEO_LEFT]->textureID = LoadTGA("Image//BossSceneSkyBoxLeft.tga");
@@ -127,11 +128,14 @@ void BossScene::Init()
 	wasEscPressed = false;
 	isPause = false;
 
-
+	fpsonce = false;
+	playerDied = false;
+	countDownbackToBase = 5.0;
 	//camera = new Camera3;
 	//camera->Init(Vector3(0, 0, 7), Vector3(0, 0, 0), Vector3(0, 1, 0));
 
 	GoatBoss::getInstance();
+	Player::getInstance()->CollisionMesh_->pos.Set(0, 0, 5);
 	Player::addCollisionObject(GoatBoss::getInstance());
 	Player::enemies_.push_back(GoatBoss::getInstance());
 	deadBossBackToBaseTimer = 0.0;
@@ -151,15 +155,29 @@ void BossScene::Update(double dt)
 	int width, height;
 	glfwGetWindowSize(Application::m_window, &width, &height);
 
-	static bool fpsonce = false;
-	if (Application::IsKeyPressed('V') && fpsonce == false)
+	
+	if (Application::IsKeyPressed('V') //&& fpsonce == false 
+		|| !debugMode)
 	{
+		//delete camera;
 		camera = FPSCam::getInstance();
-		fpsonce = true;
+//		fpsonce = true;
 	}
 
 
-	Player::getInstance()->update(dt, camera);
+	if (Player::getInstance()->getHp() <= 0)
+	{
+		playerDied = true;
+		countDownbackToBase -= dt;
+		if (countDownbackToBase <= 0.0)
+		{
+			GoatBoss::getInstance()->resetBoss();
+			SceneManager::getInstance()->SetNextSceneID(SceneManager::SCENES::CAMPSCENE);
+			SceneManager::getInstance()->SetNextScene();
+		}
+	}
+	else
+		Player::getInstance()->update(dt, camera);
 	//for (size_t i = 0; i < CampNPC.size(); i++)
 	//	CampNPC.at(i)->update(dt);
 	GoatBoss::getInstance()->update(dt);
@@ -181,6 +199,7 @@ void BossScene::Update(double dt)
 		deadBossBackToBaseTimer += dt;
 		if (deadBossBackToBaseTimer >= 10)
 		{
+			GoatBoss::getInstance()->resetBoss();
 			SceneManager::getInstance()->SetNextSceneID(SceneManager::SCENES::CAMPSCENE);
 			SceneManager::getInstance()->SetNextScene();
 		}
@@ -216,6 +235,11 @@ void BossScene::Render()
 	GoatBoss::getInstance()->render(&projectionStack, &viewStack, &modelStack, m_parameters);
 	Player::getInstance()->render(&projectionStack, &viewStack, &modelStack, m_parameters);
 
+	if (playerDied)
+	{
+		RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], "Oh Nos You Died!", Color(1, 0, 0), 2.5f, 32, 50, &projectionStack, &viewStack, &modelStack, m_parameters);
+		RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], "Back to Base in " + std::to_string((int)countDownbackToBase), Color(1, 0, 0), 2.f, 31, 47, &projectionStack, &viewStack, &modelStack, m_parameters);
+	}
 	RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::to_string(FramesPerSec), Color(1, 0, 0), 1.5f, 45, 38, &projectionStack, &viewStack, &modelStack, m_parameters);
 }
 
@@ -233,8 +257,9 @@ void BossScene::Exit()
 		if (meshList[i] != NULL)
 			delete meshList[i];
 	}
-	delete camera;
+	//delete camera;
 	Player::getInstance()->clearCollisionObj();
+	fpsonce = false;
 
 	// Cleanup VBO here
 	glDeleteVertexArrays(1, &m_vertexArrayID);

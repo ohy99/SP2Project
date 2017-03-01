@@ -37,7 +37,7 @@ void GoatMinion::update(double dt)
 		path.y = Player::getInstance()->CollisionMesh_->pos.y - (CollisionMesh_->pos).y;
 		path.z = Player::getInstance()->CollisionMesh_->pos.z - (CollisionMesh_->pos).z;
 
-		projected.pos += (path * dt * Speed);
+		projected.pos += (path * (float)dt * Speed);
 		
 
 		for (size_t i = 0; i < (sizeof GoatBoss::getInstance()->goatMinionPool) / sizeof(*GoatBoss::getInstance()->goatMinionPool); i++)
@@ -69,9 +69,9 @@ void GoatMinion::update(double dt)
 			std::cout << "goatminion right " << what.what() << std::endl;
 			CollisionMesh_->dir.Set(1, 0, 0);
 		}
-		CollisionMesh_->pos.x += (path.x * dt * Speed);
-		CollisionMesh_->pos.y += (path.y * dt * Speed);
-		CollisionMesh_->pos.z += (path.z * dt * Speed);
+		CollisionMesh_->pos.x += (path.x * (float)dt * Speed);
+		CollisionMesh_->pos.y += (path.y * (float)dt * Speed);
+		CollisionMesh_->pos.z += (path.z * (float)dt * Speed);
 	}
 	else
 	{
@@ -104,6 +104,8 @@ void GoatMinion::render(MS* projectionStack, MS* viewStack, MS* modelStack, unsi
 void GoatMinion::isHitUpdate(int dmg)
 {
 	hp_ -= dmg;
+	if (hp_ < 0)
+		hp_ = 0;
 }
 
 int GoatMinion::getDmg()

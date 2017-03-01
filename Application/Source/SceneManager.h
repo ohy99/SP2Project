@@ -41,6 +41,7 @@ public:
 		}
 		scenes.at(nextSceneID)->Init(); 
 		currSceneID = nextSceneID;
+		Update();
 	}
 	static Scene* getCurrentScene() { return scenes.at(currSceneID); }
 	void Update() {

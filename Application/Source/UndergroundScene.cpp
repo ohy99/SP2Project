@@ -301,11 +301,13 @@ void UndergroundScene::Update(double dt)
 	//	SceneManager::getInstance()->SetNextScene();
 	//}
 
-	bool fpsonce = false;
-	if (Application::IsKeyPressed('V') && fpsonce == false)
+	//bool fpsonce = false;
+	if (Application::IsKeyPressed('V')// && fpsonce == false 
+		|| !debugMode)
 	{
+		//delete camera;
 		camera = FPSCam::getInstance();
-		fpsonce = true;
+		//fpsonce = true;
 	}
 
 	UI::getInstance()->Update(dt);
@@ -389,7 +391,7 @@ void UndergroundScene::Interactions()
 		RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("[Press SPACE to exit.]"), Color(1, 0, 0), 2.f, 30, 30, &projectionStack, &viewStack, &modelStack, m_parameters);
 		if (Application::IsKeyPressed(VK_SPACE))
 		{
-			SceneManager::getInstance()->SetNextSceneID(SceneManager::SCENES::CAMPSCENE);
+			SceneManager::getInstance()->SetNextSceneID(SceneManager::SCENES::WORLDSCENE);
 			SceneManager::getInstance()->SetNextScene();
 
 			Player::getInstance()->setPosition(Vector3(-87.0, 0.0, -69.0));

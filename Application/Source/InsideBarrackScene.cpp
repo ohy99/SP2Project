@@ -265,12 +265,12 @@ void InsideBarrackScene::Update(double dt)
 	//	once = true;
 	//}
 
-	bool fpsonce = false;
-	if (Application::IsKeyPressed('V') && fpsonce == false)
-	{
-		camera = FPSCam::getInstance();
-		fpsonce = true;
-	}
+	//bool fpsonce = false;
+	//if (Application::IsKeyPressed('V') && fpsonce == false)
+	//{
+	//	camera = FPSCam::getInstance();
+	//	fpsonce = true;
+	//}
 
 
 

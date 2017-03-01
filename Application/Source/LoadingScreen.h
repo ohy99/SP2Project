@@ -28,7 +28,6 @@ private:
 
 	Camera *camera;
 	std::string loadingText;
-	bool goThroughRenderOnce;
 };
 
 #endif

@@ -107,6 +107,7 @@
     <ClCompile Include="Source\MainMenu.cpp" />
     <ClCompile Include="Source\MGPlayer.cpp" />
     <ClCompile Include="Source\MiniGame.cpp" />
+    <ClCompile Include="Source\MinionAI.cpp" />
     <ClCompile Include="Source\NPC_Doc.cpp" />
     <ClCompile Include="Source\Player.cpp" />
     <ClCompile Include="Source\RangeWeapon.cpp" />
@@ -116,6 +117,7 @@
     <ClCompile Include="Source\MeshBuilder.cpp" />
     <ClCompile Include="Source\LoadATOM.cpp" />
     <ClCompile Include="Source\RenderMesh.cpp" />
+    <ClCompile Include="Source\SandStorm.cpp" />
     <ClCompile Include="Source\shader.cpp" />
     <ClCompile Include="Source\SplashScreen.cpp" />
     <ClCompile Include="Source\UI.cpp" />
@@ -158,6 +160,7 @@
     <ClInclude Include="Source\MeleeWeapon.h" />
     <ClInclude Include="Source\MGPlayer.h" />
     <ClInclude Include="Source\MiniGame.h" />
+    <ClInclude Include="Source\MinionAI.h" />
     <ClInclude Include="Source\NPC.h" />
     <ClInclude Include="Source\NPC_Doc.h" />
     <ClInclude Include="Source\Player.h" />
@@ -170,6 +173,7 @@
     <ClInclude Include="Source\MeshBuilder.h" />
     <ClInclude Include="Source\LoadATOM.h" />
     <ClInclude Include="Source\RenderMesh.h" />
+    <ClInclude Include="Source\SandStorm.h" />
     <ClInclude Include="Source\Scene.h" />
     <ClInclude Include="Source\SceneManager.h" />
     <ClInclude Include="Source\shader.hpp" />
