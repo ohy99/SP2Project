@@ -702,20 +702,57 @@ void Player::updateRadar()
 		if ((it->CollisionMesh_->pos - Player::CollisionMesh_->pos).LengthSquared() < radarDetectRadius * radarDetectRadius)//not using sqrt would be faster
 		{
 			PositionOfEnemiesInProximity.push_back(it->CollisionMesh_->pos - Player::CollisionMesh_->pos);
+			//PositionOfEnemiesInProximity.push_back(it->CollisionMesh_->pos - FPSCam::getInstance()->getDir());
 		}
 	}
 }
 void Player::renderRadar(MS* projectionStack, MS* viewStack, MS* modelStack, unsigned * m_parameters)
 {
+
 	//This is the player location
 	RenderMeshClass::RenderMeshOnScreen(bulletHitQuad, (float)Application::getWindowWidth() * 0.5f, (float)Application::getWindowHeight() * 0.5f
 		, 1, 0.01f *(float)Application::getWindowWidth(), 0.01f * (float)Application::getWindowHeight(), projectionStack, viewStack, modelStack, m_parameters);
+
 	for (auto it: PositionOfEnemiesInProximity)
 	{
-		modelStack->PushMatrix();
-		//modelStack->Translate();
-		RenderMeshClass::RenderMeshOnScreen(bulletHitQuad, (float)Application::getWindowWidth() * 0.5f + it.x, (float)Application::getWindowHeight() * 0.5f + it.z
+		//float angle = Math::RadianToDegree(acos(Vector3(0, 0, 1).Dot(Vector3(FPSCam::getInstance()->getDir().x, 0, FPSCam::getInstance()->getDir().z).Normalized())));
+		//Vector3 wad = FPSCam::getInstance()->getDir();
+		//wad.y = 0;
+		//try
+		//{
+		//	wad.Normalize();
+		//}
+		//catch (DivideByZero)
+		//{
+
+		//}
+
+		RenderMeshClass::RenderMeshOnScreen(bulletHitQuad, (float)Application::getWindowWidth() * 0.5f + it.x * FPSCam::getInstance()->getDir().x,
+			(float)Application::getWindowHeight() * 0.5f + it.z * FPSCam::getInstance()->getDir().z
 			, 1.5f, 0.01f *(float)Application::getWindowWidth(), 0.01f * (float)Application::getWindowHeight(), projectionStack, viewStack, modelStack, m_parameters);
-		modelStack->PopMatrix();
+
 	}
+}
+
+void RenderMeshClass::RMoS_RotationAfterTranslate(Mesh* mesh, int x, int y, int z, int sizex, int sizey, float rotateAngle, MS* projectionStack, MS* viewStack, MS* modelStack, unsigned * m_parameters)
+{
+	glDisable(GL_DEPTH_TEST);
+	Mtx44 ortho;
+	ortho.SetToOrtho(0, Application::getWindowWidth(), 0, Application::getWindowHeight(), -10, 10); //size of screen UI
+	projectionStack->PushMatrix();
+	projectionStack->LoadMatrix(ortho);
+	viewStack->PushMatrix();
+	viewStack->LoadIdentity(); //No need camera for ortho mode
+	modelStack->PushMatrix();
+	modelStack->LoadIdentity();
+	//to do: scale and translate accordingly
+
+	modelStack->Rotate(rotateAngle, 0, 0, 1);
+	modelStack->Translate(x, y, z);
+	modelStack->Scale(sizex, sizey, 1);
+	RenderMeshClass::RenderMesh(mesh, false, projectionStack, viewStack, modelStack, m_parameters); //UI should not have light
+	projectionStack->PopMatrix();
+	viewStack->PopMatrix();
+	modelStack->PopMatrix();
+	glEnable(GL_DEPTH_TEST);
 }
