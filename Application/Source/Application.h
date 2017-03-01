@@ -17,8 +17,8 @@ public:
 	void Exit();
 	static bool IsKeyPressed(unsigned short key);
 
-	static inline double getWindowWidth() { return windowWidth; }
-	static inline double getWindowHeight() { return windowHeight; }
+	static inline int getWindowWidth() { return windowWidth; }
+	static inline int getWindowHeight() { return windowHeight; }
 
 	static inline void setWindowSize(int w, int h) { windowWidth = w; windowHeight = h; }
 	static inline void setCloseWindow(bool cw) { closeWindow = cw; }
@@ -30,8 +30,10 @@ public:
 private:
 
 	//Declare a window object
-	static double windowWidth, windowHeight;
+	//static double windowWidth, windowHeight;
 	static bool closeWindow;
+
+	static int windowWidth, windowHeight;
 };
 
 #endif

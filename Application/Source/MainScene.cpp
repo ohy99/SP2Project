@@ -31,10 +31,8 @@ MS MainScene::modelStack, MainScene::viewStack, MainScene::projectionStack;
 //std::vector<GameObject*> MainScene::Game_Objects_(10, NULL);
 
 //std::vector<GameObject*> MainScene::Game_Objects_(10, NULL);
-std::vector<Item*> MainScene::Item_Obj;
 std::vector<EnvironmentObj*> MainScene::Env_Obj;
 std::vector<NPC*> MainScene::CampNPC;
-Teleporter* MainScene::MS_Teleporter;
 Teleporter* MainScene::Barrack;
 
 
@@ -61,43 +59,6 @@ void MainScene::Init()
 
 	//Load vertex and fragment shaders
 	//m_programID = LoadShaders("Shader//Texture.vertexshader", "Shader//Blending.fragmentshader");
-	m_programID = LoadShaders("Shader//Texture.vertexshader", "Shader//Text.fragmentshader");
-
-
-
-	m_parameters[U_MVP] = glGetUniformLocation(m_programID, "MVP");
-	m_parameters[U_MODELVIEW] = glGetUniformLocation(m_programID, "MV");
-	m_parameters[U_MODELVIEW_INVERSE_TRANSPOSE] = glGetUniformLocation(m_programID, "MV_inverse_transpose");
-	m_parameters[U_MATERIAL_AMBIENT] = glGetUniformLocation(m_programID, "material.kAmbient");
-	m_parameters[U_MATERIAL_DIFFUSE] = glGetUniformLocation(m_programID, "material.kDiffuse");
-	m_parameters[U_MATERIAL_SPECULAR] = glGetUniformLocation(m_programID, "material.kSpecular");
-	m_parameters[U_MATERIAL_SHININESS] = glGetUniformLocation(m_programID, "material.kShininess");
-
-	m_parameters[U_NUMLIGHTS] = glGetUniformLocation(m_programID, "numLights");
-
-	m_parameters[U_LIGHT0_TYPE] = glGetUniformLocation(m_programID, "lights[0].type");
-	m_parameters[U_LIGHT0_SPOTDIRECTION] = glGetUniformLocation(m_programID, "lights[0].spotDirection");
-	m_parameters[U_LIGHT0_COSCUTOFF] = glGetUniformLocation(m_programID, "lights[0].cosCutoff");
-	m_parameters[U_LIGHT0_COSINNER] = glGetUniformLocation(m_programID, "lights[0].cosInner");
-	m_parameters[U_LIGHT0_EXPONENT] = glGetUniformLocation(m_programID, "lights[0].exponent");
-	m_parameters[U_LIGHT0_POSITION] = glGetUniformLocation(m_programID, "lights[0].position_cameraspace");
-	m_parameters[U_LIGHT0_COLOR] = glGetUniformLocation(m_programID, "lights[0].color");
-	m_parameters[U_LIGHT0_POWER] = glGetUniformLocation(m_programID, "lights[0].power");
-	m_parameters[U_LIGHT0_KC] = glGetUniformLocation(m_programID, "lights[0].kC");
-	m_parameters[U_LIGHT0_KL] = glGetUniformLocation(m_programID, "lights[0].kL");
-	m_parameters[U_LIGHT0_KQ] = glGetUniformLocation(m_programID, "lights[0].kQ");
-
-	m_parameters[U_LIGHTENABLED] = glGetUniformLocation(m_programID, "lightEnabled");
-
-	m_parameters[U_COLOR_TEXTURE_ENABLED] = glGetUniformLocation(m_programID, "colorTextureEnabled");
-	m_parameters[U_COLOR_TEXTURE] = glGetUniformLocation(m_programID, "colorTexture");
-
-	m_parameters[U_TEXT_ENABLED] = glGetUniformLocation(m_programID, "textEnabled");
-	m_parameters[U_TEXT_COLOR] = glGetUniformLocation(m_programID, "textColor");
-	glUseProgram(m_programID);
-
-	glUniform1i(m_parameters[U_NUMLIGHTS], 4);
-
 
 
 	light[0].position.Set(0.f, 1.f, 2.f); //the rotation is right. but the prob is why there is no light at the x axis
@@ -132,26 +93,6 @@ void MainScene::Init()
 
 	for (size_t i = 0; i < GEOMETRY_TYPE::NUM_GEOMETRY; i++)
 		meshList[i] = NULL;
-
-
-
-
-	//INIT TEXTES
-	Text[TEXT_TYPE::Calibri].Text_Mesh = MeshBuilder::GenerateText("Calibri", 16, 16);
-	Text[TEXT_TYPE::Calibri].Text_Mesh->textureID = LoadTGA("Image//calibri.tga");
-	LoadTextData("Image//Calibri Data.csv", Text[TEXT_TYPE::Calibri].TextWidth);
-	Text[TEXT_TYPE::Chiller].Text_Mesh = MeshBuilder::GenerateText("Chiller", 16, 16);
-	Text[TEXT_TYPE::Chiller].Text_Mesh->textureID = LoadTGA("Image//Chiller.tga");
-	LoadTextData("Image//Chiller Data.csv", Text[TEXT_TYPE::Chiller].TextWidth);
-	Text[TEXT_TYPE::Century].Text_Mesh = MeshBuilder::GenerateText("Century", 16, 16);
-	Text[TEXT_TYPE::Century].Text_Mesh->textureID = LoadTGA("Image//Century.tga");
-	LoadTextData("Image//Century Data.csv", Text[TEXT_TYPE::Century].TextWidth);
-	Text[TEXT_TYPE::ScriptMTBold].Text_Mesh = MeshBuilder::GenerateText("ScriptMTBold", 16, 16);
-	Text[TEXT_TYPE::ScriptMTBold].Text_Mesh->textureID = LoadTGA("Image//Script MT Bold.tga");
-	LoadTextData("Image//Script MT Bold Data.csv", Text[TEXT_TYPE::ScriptMTBold].TextWidth);
-	Text[TEXT_TYPE::SegoeMarker].Text_Mesh = MeshBuilder::GenerateText("SegoeMarker", 16, 16);
-	Text[TEXT_TYPE::SegoeMarker].Text_Mesh->textureID = LoadTGA("Image//Segoe Marker.tga");
-	LoadTextData("Image//Segoe Marker Data.csv", Text[TEXT_TYPE::SegoeMarker].TextWidth);
 
 	meshList[GEO_AXES] = MeshBuilder::GenerateAxes("Axes", 1000, 1000, 1000);
 
@@ -194,8 +135,6 @@ void MainScene::Init()
 	b->item2DTexture->textureID = LoadTGA("Image//CrossHair.tga");
 
 	//Inventory::getInstance()->setItem(a);
-	Item_Obj.push_back(a);
-	Item_Obj.push_back(b);
 
 	//Skybox ------------ Base Camp Start
 	//Left Skybox 
@@ -246,8 +185,8 @@ void MainScene::Init()
 
 
 	//Teleporter ------------------ START
-	//MS_Teleporter = new Teleporter(MeshBuilder::GenerateOBJ("Teleporter", "OBJ//Teleporter_OBJ.obj"), 1);
-	//MS_Teleporter->CollisionMesh_->textureID = LoadTGA("Image//InteractableItem_Teleporter_UV_Texture.tga");
+	Teleporter* MS_Teleporter = new Teleporter(MeshBuilder::GenerateOBJ("Boss", "OBJ//Teleporter1_OBJ.obj"), SceneManager::SCENES::BOSSSCENE);
+	MS_Teleporter->CollisionMesh_->textureID = LoadTGA("Image//InteractableItem_Teleporter_UV_Texture.tga");
 
 	EnvironmentObj* Teleporter = new EnvironmentObj(MeshBuilder::GenerateOBJ("Teleporter", "OBJ//Teleporter_OBJ.obj"));
 	Teleporter->CollisionMesh_->textureID = LoadTGA("Image//InteractableItem_Teleporter_UV_Texture.tga");
@@ -262,7 +201,8 @@ void MainScene::Init()
 	Env_Obj.push_back(Teleporter);
 	//Env_Obj.push_back(Teleporter1);
 
-	//Player::getInstance()->Teleport.push_back(MS_Teleporter);
+	Player::getInstance()->teleporters_.push_back(MS_Teleporter);
+	Player::getInstance()->addCollisionObject(MS_Teleporter);
 	//Teleporter -----------------------END
 
 
@@ -369,12 +309,20 @@ void MainScene::Init()
 	//Powerbox ----------------------------------- END
 
 
+
+	//Captain ------------------------------------------ START
+	EnvironmentObj* Captain = new EnvironmentObj(MeshBuilder::GenerateOBJ("Captain", "OBJ//Captain_OBJ.obj"));
+
+	Env_Obj.push_back(Captain);
+	//Captain ----------------------------------------- END
+
+
+	InitGuards();
+
 	for (auto it : Env_Obj)
 		Player::addCollisionObject(it);
 
-	for (auto it : Item_Obj)
-		Player::Items.push_back(it);
-
+	Player::getInstance()->setHpToMax();
 	UI::getInstance()->Init();
 
 
@@ -425,11 +373,13 @@ void MainScene::Update(double dt)
 		once = true;
 	}
 
-	bool fpsonce = false;
-	if (Application::IsKeyPressed('V') && fpsonce == false)
+	//bool fpsonce = false;
+	if (Application::IsKeyPressed('V') || !debugMode)
 	{
+		//delete camera;
+		//camera = NULL;
 		camera = FPSCam::getInstance();
-		fpsonce = true;
+		//fpsonce = true;
 	}
 
 	Player::getInstance()->update(dt, camera);
@@ -479,7 +429,7 @@ void MainScene::Update(double dt)
 	//}
 	if (Application::IsKeyPressed(VK_F1))
 	{
-		SceneManager::getInstance()->SetNextSceneID(4);
+		SceneManager::getInstance()->SetNextSceneID(SceneManager::SCENES::BOSSSCENE);
 		SceneManager::getInstance()->SetNextScene();
 	}
 }
@@ -504,6 +454,7 @@ void MainScene::Render()
 
 	RenderSkybox();
 	//	renderEnvironment();
+	robotsInteractions();
 
 	//Ground Mesh
 	modelStack.PushMatrix();
@@ -512,15 +463,9 @@ void MainScene::Render()
 	RenderMeshClass::RenderMesh(meshList[GEO_GroundMesh_RedDirt], true, &projectionStack, &viewStack, &modelStack, m_parameters);
 	modelStack.PopMatrix();
 
-	for (size_t i = 0; i < Item_Obj.size(); i++)
-	{
-		if (!Player::Items[i]->isItemInInventory)
-		{
-			modelStack.PushMatrix();
-			RenderMeshClass::RenderMesh(Item_Obj.at(i)->CollisionMesh_, true, &projectionStack, &viewStack, &modelStack, m_parameters);
-			modelStack.PopMatrix();
-		}
-	}
+	modelStack.PushMatrix();
+	RenderMeshClass::RenderMesh(a->CollisionMesh_, true, &projectionStack, &viewStack, &modelStack, m_parameters);
+	modelStack.PopMatrix();
 
 	for (size_t i = 0; i < CampNPC.size(); i++)
 	{
@@ -553,7 +498,7 @@ void MainScene::Interactions(){
 			
 		if (Player::getInstance()->getPlayerPosition().x >= -8 && Player::getInstance()->getPlayerPosition().x <= -5 && Player::getInstance()->getPlayerPosition().z <= -11 && Player::getInstance()->getPlayerPosition().z >= -17){
 
-			SceneManager::getInstance()->SetNextSceneID(3);
+			SceneManager::getInstance()->SetNextSceneID(SceneManager::SCENES::BARRACKSCENE);
 			SceneManager::getInstance()->SetNextScene();
 		}
 	}
@@ -567,7 +512,7 @@ void MainScene::Interactions(){
 
 		if (Player::getInstance()->getPlayerPosition().x >= -21 && Player::getInstance()->getPlayerPosition().x <= -17 && Player::getInstance()->getPlayerPosition().z <= 2 && Player::getInstance()->getPlayerPosition().z >= -2){
 
-			SceneManager::getInstance()->SetNextSceneID(2);
+			SceneManager::getInstance()->SetNextSceneID(SceneManager::SCENES::WORLDSCENE);
 			SceneManager::getInstance()->SetNextScene();
 			Player::getInstance()->setPosition(Vector3(94.0, 0.0, -8.0));
 		}
@@ -595,7 +540,6 @@ void MainScene::Exit()
 	}
 	//delete camera;
 	Player::getInstance()->clearCollisionObj();
-	delete MS_Teleporter;
 	delete Barrack;
 	//for (size_t i = 0; i < NUM_GEOMETRY; i++)
 	//{
@@ -655,6 +599,104 @@ void MainScene::RenderSkybox()
 	modelStack.Scale(500.0f, 500.0f, 500.0f);
 	RenderMeshClass::RenderMesh(meshList[GEO_BOTTOM], false, &projectionStack, &viewStack, &modelStack, m_parameters);
 	modelStack.PopMatrix();
+}
+
+void MainScene::robotsInteractions(){
+
+
+	if (Player::getInstance()->getPlayerPosition().x >= -12 && Player::getInstance()->getPlayerPosition().x <= -9 && Player::getInstance()->getPlayerPosition().z <= -0.5 && Player::getInstance()->getPlayerPosition().z >= -4){
+
+		if (counter == 0){
+
+			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("[Press SPACE to talk.]"), Color(1, 0, 0), 2.f, 35, 24, &projectionStack, &viewStack, &modelStack, m_parameters);
+		}
+	}
+
+	if (Application::IsKeyPressed(VK_SPACE)){
+
+		counter = 1;
+	}
+
+	if (counter == 1){
+
+		if (Player::getInstance()->getPlayerPosition().x >= -12 && Player::getInstance()->getPlayerPosition().x <= -9 && Player::getInstance()->getPlayerPosition().z <= -0.5 && Player::getInstance()->getPlayerPosition().z >= -4){
+
+			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("Ah, Commander! Good to see you up and about."), Color(1, 0, 0), 2.f, 10, 36, &projectionStack, &viewStack, &modelStack, m_parameters);
+			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("Well, some of my scouts have reported several things."), Color(1, 0, 0), 2.f, 10, 34, &projectionStack, &viewStack, &modelStack, m_parameters);
+			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("I've got information at several different coordinates. Four, in fact."), Color(1, 0, 0), 2.f, 10, 32, &projectionStack, &viewStack, &modelStack, m_parameters);
+			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("[Press 1 / 2 / 3 and hold for the information.]"), Color(1, 0, 0), 2.f, 10, 30, &projectionStack, &viewStack, &modelStack, m_parameters);
+		}
+	}
+
+
+	if (Application::IsKeyPressed('1')){
+
+		counter = 2;
+
+		if (Player::getInstance()->getPlayerPosition().x >= -12 && Player::getInstance()->getPlayerPosition().x <= -9 && Player::getInstance()->getPlayerPosition().z <= -0.5 && Player::getInstance()->getPlayerPosition().z >= -4){
+
+			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("There's a half destroyed robot, around coordinates X:75 Z:74."), Color(1, 0, 0), 2.f, 10, 36, &projectionStack, &viewStack, &modelStack, m_parameters);
+			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("It's heavily guarded, for some reason. Might have something you're looking for."), Color(1, 0, 0), 2.f, 10, 34, &projectionStack, &viewStack, &modelStack, m_parameters);
+			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("Might have something you're looking for."), Color(1, 0, 0), 2.f, 10, 32, &projectionStack, &viewStack, &modelStack, m_parameters);
+		}
+
+	}
+
+	if (Application::IsKeyPressed('2')){
+
+		counter = 2;
+
+		if (Player::getInstance()->getPlayerPosition().x >= -12 && Player::getInstance()->getPlayerPosition().x <= -9 && Player::getInstance()->getPlayerPosition().z <= -0.5 && Player::getInstance()->getPlayerPosition().z >= -4){
+
+			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("There's a functioning computer, around coordinates X:-59 Z:39."), Color(1, 0, 0), 2.f, 10, 36, &projectionStack, &viewStack, &modelStack, m_parameters);
+			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("Its stuck in a wall, though, so the scout couldn't bring it back."), Color(1, 0, 0), 2.f, 10, 34, &projectionStack, &viewStack, &modelStack, m_parameters);
+			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("You might want to check it out."), Color(1, 0, 0), 2.f, 10, 32, &projectionStack, &viewStack, &modelStack, m_parameters);
+		}
+
+	}
+
+	if (Application::IsKeyPressed('3')){
+
+		counter = 2;
+
+		if (Player::getInstance()->getPlayerPosition().x >= -12 && Player::getInstance()->getPlayerPosition().x <= -9 && Player::getInstance()->getPlayerPosition().z <= -0.5 && Player::getInstance()->getPlayerPosition().z >= -4){
+
+			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("There's something around the oil barrels, around coordinates X:-110 Z:90."), Color(1, 0, 0), 2.f, 10, 36, &projectionStack, &viewStack, &modelStack, m_parameters);
+			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("You might want to check it out."), Color(1, 0, 0), 2.f, 10, 34, &projectionStack, &viewStack, &modelStack, m_parameters);
+		}
+
+	}
+
+
+	if (counter == 2){
+		if (Player::getInstance()->getPlayerPosition().x >= -12 && Player::getInstance()->getPlayerPosition().x <= -9 && Player::getInstance()->getPlayerPosition().z <= -0.5 && Player::getInstance()->getPlayerPosition().z >= -4){
+
+			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("[Press C to go back]"), Color(1, 0, 0), 2.f, 10, 38, &projectionStack, &viewStack, &modelStack, m_parameters);
+		}
+	}
+	if (Application::IsKeyPressed('C')){
+
+		counter = 1;
+	}
+}
+
+void MainScene::InitGuards(){
+
+	//Guards --------------------------------------------- START
+	EnvironmentObj* Guard1 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Guard1", "OBJ//Guard1_OBJ.obj"));
+	EnvironmentObj* Guard2 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Guard2", "OBJ//Guard2_OBJ.obj"));
+	EnvironmentObj* Guard3 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Guard3", "OBJ//Guard3_OBJ.obj"));
+	EnvironmentObj* Guard4 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Guard4", "OBJ//Guard4_OBJ.obj"));
+	EnvironmentObj* Guard5 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Guard5", "OBJ//Guard5_OBJ.obj"));
+
+	Env_Obj.push_back(Guard1);
+	Env_Obj.push_back(Guard2);
+	Env_Obj.push_back(Guard3);
+	Env_Obj.push_back(Guard4);
+	Env_Obj.push_back(Guard5);
+
+	//Guards ---------------------------------------------- END
+
 }
 
 //int MainScene::GetBlueprintNumber()

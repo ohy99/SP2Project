@@ -24,6 +24,8 @@ class Player : public GameObject
 		PISTOL,
 		RIFLE,
 		MACHINEGUN,
+		FLAMETHROWER,
+		SNIPER,
 		WT_COUNT
 	};
 	enum STATES
@@ -53,6 +55,7 @@ class Player : public GameObject
 	float moveSPD = 20.0f;
 
 	Mesh* Crosshair;
+	Mesh* bulletHitQuad;
 
 	GameObject* Pointed_Obj;
 
@@ -90,12 +93,14 @@ public:
 	void isHitUpdate(int dmg);
 	
 	Mesh* getCollisionMesh() { return PMesh[MESH_TYPE::Body]; };
-	inline int getHp() { return hp_; }
+	int getHp() { return hp_; }
+	void setHpToMax() { hp_ = 1000; }
 	void PlayerMovement(double dt);
 	static inline void addCollisionObject(GameObject* obj) { CollisionObjects.push_back(obj); }
+	static GameObject* removeCollisionObject(GameObject* obj);
 
 	static void clearCollisionObj(){ while (CollisionObjects.size() > 0) CollisionObjects.pop_back();  
-	while (enemies_.size()) enemies_.pop_back(); while (Teleport.size()) Teleport.pop_back();
+	while (enemies_.size()) enemies_.pop_back(); while (teleporters_.size()) teleporters_.pop_back(); while (Items.size()) Items.pop_back();
 	}
 
 	GameObject* getPointedObj() { return Pointed_Obj; }
@@ -104,7 +109,8 @@ public:
 
 	void checkTeleport();
 	void checkPickUpItem();
-	static std::vector<Teleporter*> Teleport;
+	static std::vector<Teleporter*> teleporters_;
+	bool PointedAtTeleporter;
 	static std::vector<Item*> Items;
 
 	//void TeleportToInsideBarrack();
@@ -118,6 +124,12 @@ public:
 	void RangedAttack(double dt);
 
 	void checkSwapWeapon();
+	
+
+	int radarDetectRadius;
+	std::vector<Vector3> PositionOfEnemiesInProximity;
+	void updateRadar();
+	void renderRadar(MS* projectionStack, MS* viewStack, MS* modelStack, unsigned * m_parameters);
 };
 
 #endif

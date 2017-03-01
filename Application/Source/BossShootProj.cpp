@@ -15,13 +15,25 @@ bool BossShootProj::performAttack(double dt, double& animTime)
 
 	if (!performOnce)//Spawn projectile once
 	{
-		Projectile* temp_proj;
-		temp_proj = GoatBoss::getInstance()->projMesh;
-		temp_proj->CollisionMesh_->pos = GoatBoss::getInstance()->CollisionMesh_->pos;
-		temp_proj->CollisionMesh_->dir = GoatBoss::getInstance()->dirBossToPlayer;
+		//Projectile* temp_proj;
+		//temp_proj = GoatBoss::getInstance()->projMesh;
+		//temp_proj->CollisionMesh_->pos = GoatBoss::getInstance()->CollisionMesh_->pos;
+		//temp_proj->CollisionMesh_->dir = GoatBoss::getInstance()->dirBossToPlayer;
 
-		GoatBoss::getInstance()->addProjectiles(temp_proj);
-		performOnce = true;
+		//GoatBoss::getInstance()->addProjectiles(temp_proj);
+		//performOnce = true;
+
+
+
+		Projectile* newProj = GoatBoss::getInstance()->getInactiveProjectile();
+		if (newProj)
+		{
+			newProj->CollisionMesh_->collisionEnabled = true;
+			newProj->CollisionMesh_->pos = GoatBoss::getInstance()->CollisionMesh_->pos;
+			newProj->CollisionMesh_->dir = GoatBoss::getInstance()->dirBossToPlayer;
+			performOnce = true;
+		}
+		
 	}
 
 	

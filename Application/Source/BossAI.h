@@ -32,25 +32,19 @@ class GoatBoss : public EnemyAI
 
 		botSTATES_Count,
 	};
-	static enum BOSSHPSTATUS
-	{
-		BHP_FULL,
-		BHP_BELOW100,
-		BHP_BELOW75,
-		BHP_BELOW50,
-		BHP_BELOW25,
-		BHP_DEAD
-	};
+
 	botSTATES currState_;
 	Vector3 pos_;
 
 	//HP VALUE
 	int hp_ = 5000;
 	const int maxHp_;
-	int damage_;
+	int MinProjDmg_, MaxProjDmg_;
+	int minGsDmg_, maxGsDmg_;
 	Mesh* mesh[botParts_count];
 	BossAttack* attack;
-
+	float resistance_ = 0.5f;
+	bool hasSecondWind;
 
 	double animTime;
 	bool attReturn;
@@ -58,26 +52,22 @@ class GoatBoss : public EnemyAI
 	double attackStateCD;
 	double GroundSmashCD, ShootProjCD, DropGoatCD;
 
-	static std::vector<Projectile*> bossProj_;
-
 	static GoatBoss* instance;
 	GoatBoss();
 public:
 
 	static Mesh* AOESmash;
 	static double particleAnimTime;
-	static Projectile* projMesh;
 	static Vector3 dirBossToPlayer;
 	static double BossProjSpeed;
-	static Mesh* goatMinionMesh;
 
+	void resetBoss();
 	void isHitUpdate(int dmg);
 	static GoatBoss* getInstance();
 	~GoatBoss();
 	void update(double dt);
 	void render(MS* projectionStack, MS* viewStack, MS* modelStack, unsigned * m_parameters);
-
-	static void addProjectiles(Projectile*);
+	int getHp() { return hp_; }
 	void updateProjectiles(double dt);
 	void renderProjectiles(MS* projectionStack, MS* viewStack, MS* modelStack, unsigned * m_parameters);
 
@@ -92,8 +82,20 @@ public:
 
 	void resetState();
 
+	static enum BOSSHPSTATUS
+	{
+		BHP_FULL = 0,
+		BHP_BELOW100,
+		BHP_BELOW75,
+		BHP_BELOW50,
+		BHP_BELOW25,
+		BHP_DEAD
+	};
 	static BOSSHPSTATUS Bhp_status;
 	void updateHpStatus();
+
+	inline int getProjectileDmg();
+	inline int getGSDmg();
 };
 
 #endif

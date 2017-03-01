@@ -1,4 +1,4 @@
-#include "MainScreen.h"
+#include "MainMenu.h"
 #include "GL\glew.h"
 
 #include <GLFW\glfw3.h>
@@ -15,16 +15,19 @@
 #include "RenderMesh.h"
 
 #include "UI.h"
+#include "Player.h"
+#include "BossAI.h"
+#include "SandStorm.h"
 
-MainScreen::MainScreen()
+MainMenu::MainMenu()
 {
 }
 
-MainScreen::~MainScreen()
+MainMenu::~MainMenu()
 {
 }
 
-void MainScreen::Init()
+void MainMenu::Init()
 {
 	// Init VBO here
 
@@ -63,13 +66,18 @@ void MainScreen::Init()
 	for (size_t i = 0; i < GEOMETRY_TYPE::NUM_GEOMETRY; i++)
 		meshList[i] = NULL;
 
-	camera = new Camera3;
-	camera->Init(Vector3(0, 0, 7), Vector3(0, 0, 0), Vector3(0, 1, 0));
 
-	meshList[MAIN_SCREEN] = MeshBuilder::GenerateQuad("Screen", Color(1, 1, 0), 1, 1);
+	Player::getInstance();
+	GoatBoss::getInstance();
+	SandStorm::getInstance();
+
+	camera = new Camera3;
+	camera->Init(Vector3(0.f, 0.f, 7.f), Vector3(0.f, 0.f, 0.f), Vector3(0.f, 1.f, 0.f));
+
+	meshList[MAIN_SCREEN] = MeshBuilder::GenerateQuad("Screen", Color(1.f, 1.f, 0.f), 1.f, 1.f);
 	meshList[MAIN_SCREEN]->textureID = LoadTGA("Image//main_menu.tga");
-	meshList[START_BUTTON] = MeshBuilder::GenerateQuad("Start Button", Color(1, 0, 0), 1, 1);
-	meshList[QUIT] = MeshBuilder::GenerateQuad("Quit Button", Color(1, 0, 0), 1, 1);
+	meshList[START_BUTTON] = MeshBuilder::GenerateQuad("Start Button", Color(1.f, 0.f, 0.f), 1.f, 1.f);
+	meshList[QUIT] = MeshBuilder::GenerateQuad("Quit Button", Color(1.f, 0.f, 0.f), 1.f, 1.f);
 
 	wasLeftMouseButtonPressed = false;
 	isStartPressed = false;
@@ -92,7 +100,7 @@ void MainScreen::Init()
 	glfwSetInputMode(Application::m_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 }
 
-void MainScreen::Update(double dt)
+void MainMenu::Update(double dt)
 {
 	glfwGetCursorPos(Application::m_window, &x, &y);
 
@@ -101,10 +109,11 @@ void MainScreen::Update(double dt)
 
 	if (isLeftMouseButtonPressed && !wasLeftMouseButtonPressed)
 	{
-		if (meshList[START_BUTTON]->isPointInsideAABB(Position(x, y, 0.f)))
+
+		if (meshList[START_BUTTON]->isPointInsideAABB(Position((float)x, (float)y, 0.f)))
 			isStartPressed = true;
 
-		if (meshList[QUIT]->isPointInsideAABB(Position(x, y, 0.f)))
+		if (meshList[QUIT]->isPointInsideAABB(Position((float)x, (float)y, 0.f)))
 			Application::setCloseWindow(true);
 
 		wasLeftMouseButtonPressed = isLeftMouseButtonPressed;
@@ -112,14 +121,14 @@ void MainScreen::Update(double dt)
 
 	if (!isLeftMouseButtonPressed && wasLeftMouseButtonPressed)
 		wasLeftMouseButtonPressed = isLeftMouseButtonPressed;
-
-	if (meshList[START_BUTTON]->isPointInsideAABB(Position(x, y, 0.f)))
+	
+	if (meshList[START_BUTTON]->isPointInsideAABB(Position((float)x, (float)y, 0.f)))
 		meshList[START_BUTTON]->textureID = LoadTGA("Image//mainstart2.tga");
 
 	else
 		meshList[START_BUTTON]->textureID = LoadTGA("Image//mainstart.tga");
-
-	if (meshList[QUIT]->isPointInsideAABB(Position(x, y, 0.f)))
+	
+	if (meshList[QUIT]->isPointInsideAABB(Position((float)x, (float)y, 0.f)))
 		meshList[QUIT]->textureID = LoadTGA("Image//mainquit2.tga");
 
 	else
@@ -127,14 +136,14 @@ void MainScreen::Update(double dt)
 
 	if (isStartPressed)
 	{
-		SceneManager::getInstance()->SetNextSceneID(1);
+		SceneManager::getInstance()->SetNextSceneID(SceneManager::SCENES::CAMPSCENE);
 		SceneManager::getInstance()->SetNextScene();
 	}
 
 	FramesPerSec = 1 / dt;
 }
 
-void MainScreen::Render()
+void MainMenu::Render()
 {
 	// Render VBO here
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -151,14 +160,14 @@ void MainScreen::Render()
 	RenderMeshClass::RenderMeshOnScreen(meshList[QUIT], (float)Application::getWindowWidth() * 0.5f, (float)(Application::getWindowHeight() / 768.f) * 250.f, 2.f, (float)(Application::getWindowWidth() / 1024.f) * 400.f, (float)(Application::getWindowHeight() / 768.f) * 100.f, &projectionStack, &viewStack, &modelStack, Scene::m_parameters);
 }
 
-void MainScreen::Exit()
+void MainMenu::Exit()
 {
 	for (size_t i = 0; i < GEOMETRY_TYPE::NUM_GEOMETRY; i++)
 	{
 		if (meshList[i] != NULL)
 			delete meshList[i];
 	}
-	//delete camera;
+	delete camera;
 
 	// Cleanup VBO here
 	glDeleteVertexArrays(1, &m_vertexArrayID);

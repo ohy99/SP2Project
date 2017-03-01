@@ -16,7 +16,6 @@
 #include "MGPlayer.h"
 #include "Player.h"
 #include "Distance.h"
-#include "MainScreen.h"
 #include "Environment.h"
 #include "UI.h"
 

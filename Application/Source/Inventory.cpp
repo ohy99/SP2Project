@@ -107,7 +107,7 @@ void Inventory::Update(double dt)
 	{
 		for (size_t i = 0; i < Inventory_.size(); i++)
 		{
-			if (Inventory_[i]->hitBox->isPointInsideAABB(Position(cur_x, Application::getWindowHeight() - cur_y, 0.f)))
+			if (Inventory_[i]->hitBox->isPointInsideAABB(Position(cur_x, Application::getWindowHeight() - (float)cur_y, 0.f)))
 			{
 				Inventory::getItem(i);
 				break;

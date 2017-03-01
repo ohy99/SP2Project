@@ -18,13 +18,17 @@ bool BossFlank::performAttack(double dt, double& animTime)
 
 	if (!performOnce)//Spawn projectile once
 	{
-		float randSX, randSZ;
-		randSX = -15.f + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (15.f + 15.f)));
-		randSZ = -15.f + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (15.f + 15.f)));
+		do
+		{
+			float randSX, randSZ;
+			randSX = -15.f + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (15.f + 15.f)));
+			randSZ = -15.f + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (15.f + 15.f)));
 
-		GoatBoss::getInstance()->CollisionMesh_->pos.Set(GoatBoss::getInstance()->CollisionMesh_->pos.x + GoatBoss::getInstance()->CollisionMesh_->right.x * randSX,
-			GoatBoss::getInstance()->CollisionMesh_->pos.y,
-			GoatBoss::getInstance()->CollisionMesh_->pos.z + GoatBoss::getInstance()->CollisionMesh_->right.z * randSZ);
+			GoatBoss::getInstance()->CollisionMesh_->pos.Set(GoatBoss::getInstance()->CollisionMesh_->pos.x + GoatBoss::getInstance()->CollisionMesh_->right.x * randSX,
+				GoatBoss::getInstance()->CollisionMesh_->pos.y,
+				GoatBoss::getInstance()->CollisionMesh_->pos.z + GoatBoss::getInstance()->CollisionMesh_->right.z * randSZ);
+		} while (GoatBoss::getInstance()->CollisionMesh_->pos.x >= maxX || GoatBoss::getInstance()->CollisionMesh_->pos.z >= maxZ);
+		//redo if the position of the boss is outside of skybox.
 
 		performOnce = true;
 	}

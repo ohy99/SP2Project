@@ -17,7 +17,7 @@ wasDPressed(false), wasAPressed(false), isGameStarted(false), isGameReset(false)
 
 MGPlayer::~MGPlayer()
 {
-
+	delete[] PMesh;
 }
 
 MGPlayer* MGPlayer::getInstance()
@@ -84,8 +84,8 @@ void MGPlayer::MGPlayerMovements(double dt)
 				}
 			}
 
-			pos_.x += (dir_.x * dt * moveSpeed);
-			pos_.z += (dir_.z * dt * moveSpeed);
+		pos_.x += (dir_.x * (float)dt * moveSpeed);
+		pos_.z += (dir_.z * (float)dt * moveSpeed);
 
 			if (isDPressed && !wasDPressed)
 			{

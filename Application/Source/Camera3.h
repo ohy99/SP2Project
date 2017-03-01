@@ -1,9 +1,9 @@
 #ifndef CAMERA3_H
 #define CAMERA3_H
 
-#include "Vector3.h"
-#include "Mtx44.h"
-#include "Vertex.h"
+//#include "Vector3.h"
+//#include "Mtx44.h"
+//#include "Vertex.h"
 
 #include "Camera.h"
 

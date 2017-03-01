@@ -12,7 +12,7 @@
 #include <vector>
 
 
-class MainScreen : public Scene
+class MainMenu : public Scene
 {
 	enum GEOMETRY_TYPE
 	{
@@ -25,8 +25,8 @@ class MainScreen : public Scene
 	};
 
 public:
-	MainScreen();
-	~MainScreen();
+	MainMenu();
+	~MainMenu();
 
 	virtual void Init();
 	virtual void Update(double dt);

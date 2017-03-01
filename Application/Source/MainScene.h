@@ -15,7 +15,7 @@
 #include <vector>
 
 #include "Player.h"
-#include "MainScreen.h"
+#include "MainMenu.h"
 #include "UI.h"
 #include "NPC.h"
 #include "Environment.h"
@@ -73,7 +73,6 @@ public:
 
 	static MS modelStack, viewStack, projectionStack;
 
-	static Teleporter* MS_Teleporter;
 	static Teleporter* Barrack;
 
 	//int numberOfBlueprints = 0;
@@ -91,6 +90,8 @@ private:
 	void RenderSkybox();
 	void RenderBaseCamp();
 	void Interactions();
+	void robotsInteractions();
+	void InitGuards();
 
 	Light light[8];
 
@@ -100,8 +101,9 @@ private:
 	//std::vector
 
 	int width, height;
+	int counter = 0;
 
-	MainScreen MainMenu;
+
 	Blueprints *blueprints;
 	Item* a;
 	Item* b;

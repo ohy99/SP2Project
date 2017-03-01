@@ -44,7 +44,7 @@ public:
 	//virtual std::vector<GameObject*> getCurrentSceneObjs(){ return Game_Objects_; }
 
 	static MS modelStack, viewStack, projectionStack;
-
+	static float skyBoxScale, skyBoxDistance;
 
 private:
 	unsigned m_vertexArrayID;
@@ -66,7 +66,12 @@ private:
 
 	bool isPause;
 	bool isEscPressed, wasEscPressed;
-	float skyBoxScale, skyBoxDistance;
+	
+
+	double deadBossBackToBaseTimer;
+	bool fpsonce;
+	bool playerDied;
+	double countDownbackToBase;
 };
 
 #endif
