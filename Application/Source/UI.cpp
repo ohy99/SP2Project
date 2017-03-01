@@ -79,7 +79,9 @@ void UI::Update(double dt)
 			SceneManager::getInstance()->SetNextScene();
 		}
 
-		else*/ if (count[QUIT]->isPointInsideAABB(Position(cur_x, Application::getWindowHeight() - cur_y, 0.f)))
+		else*/ 
+		
+		 if (count[QUIT]->isPointInsideAABB(Position(cur_x, Application::getWindowHeight() - cur_y, 0.f)))
 			Application::setCloseWindow(true);
 
 		wasLeftMouseButtonPressed = isLeftMouseButtonPressed;
@@ -88,15 +90,18 @@ void UI::Update(double dt)
 	if (!isLeftMouseButtonPressed && wasLeftMouseButtonPressed)
 		wasLeftMouseButtonPressed = isLeftMouseButtonPressed;
 
-	if (count[RESUME]->isPointInsideAABB(Position(cur_x, Application::getWindowHeight() - cur_y, 0.f)))
-		count[RESUME]->textureID = LoadTGA("Image//pauseresume2.tga");
-	else
-		count[RESUME]->textureID = LoadTGA("Image//pauseresume.tga");
+	if (isPause)
+	{
+		if (count[RESUME]->isPointInsideAABB(Position(cur_x, Application::getWindowHeight() - cur_y, 0.f)))
+			count[RESUME]->textureID = LoadTGA("Image//pauseresume2.tga");
+		else
+			count[RESUME]->textureID = LoadTGA("Image//pauseresume.tga");
 
-	if (count[QUIT]->isPointInsideAABB(Position(cur_x, Application::getWindowHeight() - cur_y, 0.f)))
-		count[QUIT]->textureID = LoadTGA("Image//pausequit2.tga");
-	else
-		count[QUIT]->textureID = LoadTGA("Image//pausequit.tga");
+		if (count[QUIT]->isPointInsideAABB(Position(cur_x, Application::getWindowHeight() - cur_y, 0.f)))
+			count[QUIT]->textureID = LoadTGA("Image//pausequit2.tga");
+		else
+			count[QUIT]->textureID = LoadTGA("Image//pausequit.tga");
+	}
 
 	if (!isEscPressed && wasEscPressed) // When you release the ESC button
 		wasEscPressed = isEscPressed;

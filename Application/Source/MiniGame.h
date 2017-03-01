@@ -62,7 +62,7 @@ public:
 	virtual void Update(double dt);
 	virtual void Render();
 	virtual void Exit();
-	static void Reset();
+	virtual void Reset();
 
 	virtual void GameState();
 
@@ -85,7 +85,7 @@ private:
 
 	int width, height;
 
-	static char order[2]; // rand the order of lorry, 0 & 1
+	char order[2]; // rand the order of lorry, 0 & 1
 	char counter;
 
 	double x, y;
@@ -93,8 +93,8 @@ private:
 
 	float score;
 	float bonusScore;
-	static float roadDistance;
-	static float obstaclePosX, obstaclePosZ;
+	float roadDistance;
+	float obstaclePosX, obstaclePosZ;
 
 	int leftButton;
 	bool isLeftMouseButtonPressed, wasLeftMouseButtonPressed;

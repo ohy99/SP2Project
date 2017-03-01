@@ -31,10 +31,7 @@ std::vector<EnvironmentObj*> MiniGame::Obstacles;
 
 MS MiniGame::modelStack, MiniGame::viewStack, MiniGame::projectionStack;
 //void MiniGame::Reset();
-float MiniGame::roadDistance = 0.f;
-float MiniGame::obstaclePosX = 0.f;
-float MiniGame::obstaclePosZ = 80.f;
-char MiniGame::order[2];
+
 
 MiniGame::MiniGame()
 {
@@ -190,6 +187,10 @@ void MiniGame::Init()
 	meshList[GEO_BOTTOM]->textureID = LoadTGA("Image//sky1_down.tga");
 	//Skybox ------------- Base Camp End
 
+	roadDistance = 0.f;
+	obstaclePosX = 0.f;
+	obstaclePosZ = 80.f;
+
 	for (int i = 0; i < 20; i++)
 	{
 		road = MeshBuilder::GenerateOBJ("road", "OBJ//road.obj");
@@ -289,7 +290,7 @@ void MiniGame::Init()
 	// Hide the mouse and enable unlimited mouvement
 
 	MGList[SCREEN] = MeshBuilder::GenerateQuad("image", Color(0.9f, 0.9f, 0.9f), 1.0f, 1.0f);
-	MGList[SCREEN]->textureID = LoadTGA("Image//inventory.tga");
+
 
 	MGList[START] = MeshBuilder::GenerateQuad("image", Color(1.f, 1.f, 1.f), 1.0f, 1.0f);
 	MGList[START]->textureID = LoadTGA("Image//start.tga");
@@ -409,6 +410,12 @@ void MiniGame::Update(double dt)
 		}
 	}
 
+	//if (!MGPlayer::getInstance()->isDead())
+	//	MGList[SCREEN]->textureID = LoadTGA("Image//minigame.tga");
+
+	//else
+	//	MGList[SCREEN]->textureID = LoadTGA("Image//minigame2.tga");
+
 	score = MGPlayer::getInstance()->playerScore(bonusScore);
 	GameState();
 
@@ -504,12 +511,14 @@ void MiniGame::RenderMiniGame()
 
 	if (!MGPlayer::getInstance()->gameStarted())
 	{
+		MGList[SCREEN]->textureID = LoadTGA("Image//minigame.tga");
 		RenderMeshClass::RenderMeshOnScreen(MGList[SCREEN], (int)Application::getWindowWidth() * 0.5f, (int)Application::getWindowHeight() * 0.5f, 0, (int)(Application::getWindowWidth() / 1024) * 700, (int)(Application::getWindowHeight() / 768) * 700, &projectionStack, &viewStack, &modelStack, m_parameters);
 		RenderMeshClass::RenderMeshOnScreen(MGList[START], (int)Application::getWindowWidth() * 0.5f, (int)Application::getWindowHeight() * 0.5f, 0, (int)(Application::getWindowWidth() / 1024) * 400, (int)(Application::getWindowHeight() / 768) * 100, &projectionStack, &viewStack, &modelStack, m_parameters);
 	}
 
 	if (MGPlayer::getInstance()->isDead())
 	{
+		MGList[SCREEN]->textureID = LoadTGA("Image//minigame2.tga");
 		RenderMeshClass::RenderMeshOnScreen(MGList[SCREEN], (int)Application::getWindowWidth() * 0.5f, (int)Application::getWindowHeight() * 0.5f, 0, (int)(Application::getWindowWidth() / 1024) * 700, (int)(Application::getWindowHeight() / 768) * 700, &projectionStack, &viewStack, &modelStack, m_parameters);
 		RenderMeshClass::RenderMeshOnScreen(MGList[RESTART], (int)Application::getWindowWidth() * 0.5f, (int)(Application::getWindowHeight() / 768) * 400, 0, (int)(Application::getWindowWidth() / 1024) * 400, (int)(Application::getWindowHeight() / 768) * 100, &projectionStack, &viewStack, &modelStack, m_parameters);
 		RenderMeshClass::RenderMeshOnScreen(MGList[QUIT], (int)Application::getWindowWidth() * 0.5f, (int)(Application::getWindowHeight() / 768) * 200.f, 0, (int)(Application::getWindowWidth() / 1024) * 400, (int)(Application::getWindowHeight() / 768) * 100, &projectionStack, &viewStack, &modelStack, m_parameters);
