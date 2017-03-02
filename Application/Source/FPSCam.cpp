@@ -1,7 +1,7 @@
 #include "FPSCam.h"
 #include "Player.h"
 
-FPSCam* FPSCam::Instance = 0;
+FPSCam* FPSCam::Instance = NULL;
 
 #include "Camera3.h"
 #include "Application.h"

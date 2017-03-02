@@ -14,7 +14,7 @@
 
 #define DEFAULTMESHDIR Vector3(0,0,1)
 
-Player* Player::Instance_ = 0;
+Player* Player::Instance_ = NULL;
 std::vector<GameObject*> Player::CollisionObjects;
 
 std::vector<EnemyAI*> Player::enemies_;
@@ -38,11 +38,12 @@ Player::Player() : GameObject("Player"), wasFPressed(false)
 
 	//Weapon* weapons_[Weapon_types::wt_Count];
 	//Weapon* currentWeapon_; 
-	PMesh[MESH_TYPE::Body] = MeshBuilder::GenerateOBJ("", "OBJ//goat.obj");
+	PMesh[MESH_TYPE::Body] = MeshBuilder::GenerateOBJ("", "OBJ//playerHitBox.obj");
 	PMesh[MESH_TYPE::Body]->collisionEnabled = true;
 	PMesh[MESH_TYPE::Body]->up = Vector3(0, 1, 0);
 	PMesh[MESH_TYPE::Body]->dir = Vector3(0, 0, 1);
 	PMesh[MESH_TYPE::Body]->right = Vector3(1, 0, 0);
+	CollisionMesh_ = PMesh[MESH_TYPE::Body];
 	dir_.Set(0, 0, 1);
 
 	hp_ = 1000;
@@ -214,12 +215,12 @@ void Player::getPointedObj(Camera* cam)
 {
 	Position TargetPointFar;
 	TargetPointFar.Set(cam->getPosition().x + (cam->getDir().x * 2.f),
-		cam->getPosition().x + (cam->getDir().x * 2.f),
-		cam->getPosition().x + (cam->getDir().x * 2.f));
+		cam->getPosition().y + (cam->getDir().y * 2.f),
+		cam->getPosition().z + (cam->getDir().z * 2.f));
 	Position TargetPointNear;
-	TargetPointNear.Set(cam->getPosition().x + (cam->getDir().x * 0.5f),
-		cam->getPosition().y + (cam->getDir().y * 0.5f),
-		cam->getPosition().z + (cam->getDir().z * 0.5f));
+	TargetPointNear.Set(cam->getPosition().x + (cam->getDir().x * 1.f),
+		cam->getPosition().y + (cam->getDir().y * 1.f),
+		cam->getPosition().z + (cam->getDir().z * 1.f));
 
 	Pointed_Obj = NULL;
 	PointedAtTeleporter = false;

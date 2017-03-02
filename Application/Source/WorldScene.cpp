@@ -140,12 +140,6 @@ void WorldScene::Update(double dt)
 	UI::getInstance()->Update(dt);
 
 
-
-	//for (size_t i = 0; i < CampNPC.size(); i++)
-	//{
-	//	CampNPC.at(i)->update(dt);
-	//}
-
 	if (Player::getInstance()->getHp() <= 0){
 
 		isDead = true;

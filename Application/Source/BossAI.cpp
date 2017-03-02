@@ -144,6 +144,10 @@ void GoatBoss::update(double dt)
 		goatMinionPool[i]->setDmgMultipler(this->dmgMultiplier);
 		goatMinionPool[i]->setMoveSpd(this->moveSpd);
 	}
+
+	updateShowDmgTaken(dt);
+
+
 	//IF BOSS IS DEADDED DO NOT UPDATE
 	if (Bhp_status == BHP_DEAD)
 		return;
@@ -208,7 +212,7 @@ void GoatBoss::update(double dt)
 
 
 
-	updateShowDmgTaken(dt);
+
 
 }
 void GoatBoss::render(MS* projectionStack, MS* viewStack, MS* modelStack, unsigned * m_parameters)
@@ -324,7 +328,7 @@ void GoatBoss::isHitUpdate(int dmg)
 	if (hp_ < 0)
 		hp_ = 0;
 
-	isHitShowDmgTaken(dmg);
+	isHitShowDmgTaken((int)((1.0f - resistance_) * (float)dmg));
 }
 
 

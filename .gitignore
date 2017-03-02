@@ -38,3 +38,6 @@ Common/Debug
 Debug/Application.ilk
 Debug/Application.pdb
 
+*.lastbuildstate
+*.tlog
+Release/
