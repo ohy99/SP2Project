@@ -1,27 +1,26 @@
-#ifndef MINIONAI_H
-#define MINIONAI_H
+#ifndef UG_MINIONAI_H
+#define UG_MINIONAI_H
 
 #include "EnemyAI.h"
 #include <string>
 #include "MatrixStack.h"
 #include <vector>
 
-class MinionAI : public EnemyAI
+class UG_MinionAI : public EnemyAI
 {
-	int minDmg_, maxDmg_, Dmg_;
+	int minDmg_, maxDmg_;
 	int hp_;
 	double doHitCD;
 	const double doHitDelay;
 	bool chasePlayer;
 	//bool isHit;
-	
+
 public:
 
-	MinionAI();
-	virtual ~MinionAI();
+	UG_MinionAI();
+	virtual ~UG_MinionAI();
 
 	bool active;
-	bool test = false;
 
 	virtual void update(double dt);
 	virtual void render(MS* projectionStack, MS* viewStack, MS* modelStack, unsigned * m_parameters);
@@ -41,7 +40,5 @@ public:
 	double deadTime;
 
 };
-
-
 
 #endif

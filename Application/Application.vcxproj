@@ -95,6 +95,7 @@
     <ClCompile Include="Source\Camera3.cpp" />
     <ClCompile Include="Source\CameraMG.cpp" />
     <ClCompile Include="Source\DataBase.cpp" />
+    <ClCompile Include="Source\EnemyAI.cpp" />
     <ClCompile Include="Source\Environment.cpp" />
     <ClCompile Include="Source\FPSCam.cpp" />
     <ClCompile Include="Source\GoatMinion.cpp" />
@@ -120,6 +121,7 @@
     <ClCompile Include="Source\SandStorm.cpp" />
     <ClCompile Include="Source\shader.cpp" />
     <ClCompile Include="Source\SplashScreen.cpp" />
+    <ClCompile Include="Source\UG_MinionAI.cpp" />
     <ClCompile Include="Source\UI.cpp" />
     <ClCompile Include="Source\UndergroundScene.cpp" />
     <ClCompile Include="Source\Utility.cpp" />
@@ -180,6 +182,7 @@
     <ClInclude Include="Source\BossShootProj.h" />
     <ClInclude Include="Source\SplashScreen.h" />
     <ClInclude Include="Source\Teleporter.h" />
+    <ClInclude Include="Source\UG_MinionAI.h" />
     <ClInclude Include="Source\UI.h" />
     <ClInclude Include="Source\UndergroundScene.h" />
     <ClInclude Include="Source\Usables.h" />

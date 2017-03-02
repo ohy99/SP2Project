@@ -185,17 +185,17 @@ void Player::render(MS* projectionStack, MS* viewStack, MS* modelStack, unsigned
 	if (PointedAtTeleporter)
 	{
 		RenderMeshClass::RenderTextOnScreen(&Scene::Text[Scene::TEXT_TYPE::Century], "[Press SPACE to Teleport into the " + 
-			Pointed_Obj->getName() + ".]", Color(1, 0, 0), 2.f, 28, 24,
+			Pointed_Obj->getName() + ".]", Color(0, 1, 0), 2.f, 28, 24,
 			projectionStack, viewStack, modelStack, m_parameters);
 	}
 	else if (Pointed_Obj)
 		RenderMeshClass::RenderTextOnScreen(&Scene::Text[Scene::TEXT_TYPE::Century], Pointed_Obj->getName(), Color(0, 1, 0), 2, 35, 55, projectionStack, viewStack, modelStack, m_parameters);
 
-	RenderMeshClass::RenderTextOnScreen(&Scene::Text[Scene::TEXT_TYPE::Century], std::to_string(hp_), Color(0, 1, 0), 2, 0, 55, projectionStack, viewStack, modelStack, m_parameters);
+	RenderMeshClass::RenderTextOnScreen(&Scene::Text[Scene::TEXT_TYPE::Century], std::string("HP:") + std::to_string(hp_), Color(0, 1, 0), 2, 0, 56, projectionStack, viewStack, modelStack, m_parameters);
 
-	RenderMeshClass::RenderTextOnScreen(&Scene::Text[Scene::TEXT_TYPE::Century], std::to_string(pos_.x), Color(1, 0, 0), 1.8, 69, 54, projectionStack, viewStack, modelStack, m_parameters);
-	RenderMeshClass::RenderTextOnScreen(&Scene::Text[Scene::TEXT_TYPE::Century], std::to_string(pos_.y), Color(1, 0, 0), 1.8, 69, 52, projectionStack, viewStack, modelStack, m_parameters);
-	RenderMeshClass::RenderTextOnScreen(&Scene::Text[Scene::TEXT_TYPE::Century], std::to_string(pos_.z), Color(1, 0, 0), 1.8, 69, 50, projectionStack, viewStack, modelStack, m_parameters);
+	RenderMeshClass::RenderTextOnScreen(&Scene::Text[Scene::TEXT_TYPE::Century], std::to_string(pos_.x), Color(0, 1, 0), 1.8, 69, 54, projectionStack, viewStack, modelStack, m_parameters);
+	RenderMeshClass::RenderTextOnScreen(&Scene::Text[Scene::TEXT_TYPE::Century], std::to_string(pos_.y), Color(0, 1, 0), 1.8, 69, 52, projectionStack, viewStack, modelStack, m_parameters);
+	RenderMeshClass::RenderTextOnScreen(&Scene::Text[Scene::TEXT_TYPE::Century], std::to_string(pos_.z), Color(0, 1, 0), 1.8, 69, 50, projectionStack, viewStack, modelStack, m_parameters);
 
 	if //(currentWeapon_ == weapons_[WEAPON_TYPE::PISTOL] || currentWeapon_ == weapons_[WEAPON_TYPE::RIFLE])
 		(currWeap >= WEAPON_TYPE::PISTOL)

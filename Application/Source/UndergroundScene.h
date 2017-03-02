@@ -19,6 +19,9 @@
 #include "Environment.h"
 #include "Blueprints.h"
 
+#include "EnemyAI.h"
+#include "UG_MinionAI.h"
+
 class UndergroundScene : public Scene
 {
 	enum GEOMETRY_TYPE
@@ -61,6 +64,8 @@ public:
 
 	static Teleporter* Stairs;
 
+	static UG_MinionAI* UG_EnemyPool[6];
+	static std::vector<EnvironmentObj*> Env_Obj;
 private:
 	unsigned m_vertexArrayID;
 	Mesh* meshList[NUM_GEOMETRY];
@@ -75,7 +80,6 @@ private:
 
 	Light light[8];
 
-	static std::vector<EnvironmentObj*> Env_Obj;
 	//static std::vector<NPC*> CampNPC;
 	//std::vector
 
@@ -83,6 +87,7 @@ private:
 	bool Blueprint3 = false;
 
 	void Interactions();
+	void initEnemies();
 
 	double x, y;
 	//void RenderText(Text_Data* TextData, std::string text, Color color);
