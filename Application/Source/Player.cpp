@@ -692,6 +692,24 @@ void Player::checkPickUpItem()
 		wasFPressed = isFPressed;
 
 }
+void Player::checkIfTalkedWithNPC()
+{
+	isFPressed = Application::IsKeyPressed('F');
+
+	if (isFPressed && !wasFPressed)
+	{
+		for (size_t i = 0; i < NPCs.size(); i++)
+		{
+
+		}
+
+		wasFPressed = isFPressed;
+	}
+
+	if (!isFPressed && wasFPressed)
+		wasFPressed = isFPressed;
+}
+
 
 GameObject* Player::removeCollisionObject(GameObject* obj) {
 	auto it = std::find(Player::getInstance()->CollisionObjects.begin(), Player::getInstance()->CollisionObjects.end(), obj);
@@ -739,6 +757,7 @@ void Player::renderRadar(MS* projectionStack, MS* viewStack, MS* modelStack, uns
 	}
 }
 
+
 void RenderMeshClass::RMoS_RadarUse(Mesh* mesh, Vector3 origin, Vector3 dirRelativeToOrigin, Vector3 dir, int sizex, int sizey, float scale, MS* projectionStack, MS* viewStack, MS* modelStack, unsigned * m_parameters)
 {
 	glDisable(GL_DEPTH_TEST);
@@ -752,9 +771,7 @@ void RenderMeshClass::RMoS_RadarUse(Mesh* mesh, Vector3 origin, Vector3 dirRelat
 	modelStack->LoadIdentity();
 	//to do: scale and translate accordingly
 
-	
 	modelStack->Translate(origin.x, origin.y, origin.z);
-
 
 	Vector3 wad = FPSCam::getInstance()->getDir();
 	wad.y = 0;
@@ -765,26 +782,6 @@ void RenderMeshClass::RMoS_RadarUse(Mesh* mesh, Vector3 origin, Vector3 dirRelat
 	catch (DivideByZero){
 		wad.Set(0, 0, 1); wad2.Set(0, 0, 1);
 	}
-<<<<<<< HEAD
-}
-
-void Player::checkIfTalkedWithNPC()
-{
-	isFPressed = Application::IsKeyPressed('F');
-
-	if (isFPressed && !wasFPressed)
-	{
-		for (size_t i = 0; i < NPCs.size(); i++)
-		{
-
-		}
-
-		wasFPressed = isFPressed;
-	}
-
-	if (!isFPressed && wasFPressed)
-		wasFPressed = isFPressed;
-=======
 
 	float angle = Math::RadianToDegree(acos(wad.Dot(wad2)));
 	float distance = dirRelativeToOrigin.Length();
@@ -801,11 +798,9 @@ void Player::checkIfTalkedWithNPC()
 	modelStack->Translate(0, distance * scale, 1);
 	modelStack->Scale(sizex, sizey, 1);
 
-
 	RenderMeshClass::RenderMesh(mesh, false, projectionStack, viewStack, modelStack, m_parameters); //UI should not have light
 	projectionStack->PopMatrix();
 	viewStack->PopMatrix();
 	modelStack->PopMatrix();
 	glEnable(GL_DEPTH_TEST);
->>>>>>> 5c9363a0c2279e8b480099cc2c4f1fca928c25d9
 }

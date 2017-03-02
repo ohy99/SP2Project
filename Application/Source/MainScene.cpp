@@ -30,8 +30,6 @@ MS MainScene::modelStack, MainScene::viewStack, MainScene::projectionStack;
 
 //std::vector<GameObject*> MainScene::Game_Objects_(10, NULL);
 std::vector<Item*> MainScene::Item_Obj;
-//std::vector<GameObject*> MainScene::Game_Objects_(10, NULL);
-std::vector<Item*> MainScene::Item_Obj;
 std::vector<EnvironmentObj*> MainScene::Env_Obj;
 std::vector<NPC*> MainScene::CampNPC;
 Teleporter* MainScene::Barrack;
@@ -456,23 +454,20 @@ void MainScene::Render()
 	RenderMeshClass::RenderMesh(meshList[GEO_AXES], false, &projectionStack, &viewStack, &modelStack, m_parameters);
 
 
-	for (size_t i = 0; i < Item_Obj.size(); i++)
-	{
-		if (!Player::Items[i]->isItemInInventory)
-		{
-			modelStack.PushMatrix();
-			RenderMeshClass::RenderMesh(Item_Obj.at(i)->CollisionMesh_, true, &projectionStack, &viewStack, &modelStack, m_parameters);
-			modelStack.PopMatrix();
-		}
-	}
+	//for (size_t i = 0; i < Item_Obj.size(); i++)
+	//{
+	//	if (!Player::Items[i]->isItemInInventory)
+	//	{
+	//		modelStack.PushMatrix();
+	//		RenderMeshClass::RenderMesh(Item_Obj.at(i)->CollisionMesh_, true, &projectionStack, &viewStack, &modelStack, m_parameters);
+	//		modelStack.PopMatrix();
+	//	}
+	//}
 
 	RenderSkybox();
-<<<<<<< HEAD
 	robotsInteractions();
-=======
 	//	renderEnvironment();
 
->>>>>>> 5c9363a0c2279e8b480099cc2c4f1fca928c25d9
 
 	//Ground Mesh
 	modelStack.PushMatrix();
@@ -481,20 +476,6 @@ void MainScene::Render()
 	RenderMeshClass::RenderMesh(meshList[GEO_GroundMesh_RedDirt], true, &projectionStack, &viewStack, &modelStack, m_parameters);
 	modelStack.PopMatrix();
 
-<<<<<<< HEAD
-=======
-	//for (size_t i = 0; i < Item_Obj.size(); i++)
-	//	{
-	//		if (!Player::Items[i]->isItemInInventory)
-	//		{
-	//			modelStack.PushMatrix();
-	//			RenderMeshClass::RenderMesh(Item_Obj.at(i)->CollisionMesh_, true, &projectionStack, &viewStack, &modelStack, m_parameters);
-	//			modelStack.PopMatrix();
-	//		}
-	//	}
-
-
->>>>>>> 5c9363a0c2279e8b480099cc2c4f1fca928c25d9
 	for (size_t i = 0; i < CampNPC.size(); i++)
 	{
 		modelStack.PushMatrix();

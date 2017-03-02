@@ -140,94 +140,61 @@ void WorldScene::Update(double dt)
 	UI::getInstance()->Update(dt);
 
 
-<<<<<<< HEAD
-
 	if (!UI::getInstance()->isPauseOpen() && !Inventory::getInstance()->isInventoryOpen())
 	{
-=======
+		if (Player::getInstance()->getHp() <= 0){
 
-	//for (size_t i = 0; i < CampNPC.size(); i++)
-	//{
-	//	CampNPC.at(i)->update(dt);
-	//}
+			isDead = true;
+			countDownBackToBase -= dt;
 
-	if (Player::getInstance()->getHp() <= 0){
+			if (countDownBackToBase <= 0.0){
 
-		isDead = true;
-		countDownBackToBase -= dt;
-
-		if (countDownBackToBase <= 0.0){
-
-			SceneManager::getInstance()->SetNextSceneID(SceneManager::SCENES::CAMPSCENE);
-			SceneManager::getInstance()->SetNextScene();
-			Player::getInstance()->setPosition(Vector3(12, 0, 11));
+				SceneManager::getInstance()->SetNextSceneID(SceneManager::SCENES::CAMPSCENE);
+				SceneManager::getInstance()->SetNextScene();
+				Player::getInstance()->setPosition(Vector3(12, 0, 11));
+			}
 		}
-	}
-	else{
+		else{
 
-		isDead = false;
-		Player::getInstance()->update(dt, camera);
-	}
-
-	if (!UI::getInstance()->isPauseOpen() && !Inventory::getInstance()->isInventoryOpen()){
-	
->>>>>>> 5c9363a0c2279e8b480099cc2c4f1fca928c25d9
-		double c_posx, c_posy;
-		glfwGetCursorPos(Application::m_window, &c_posx, &c_posy);
-		glfwSetCursorPos(Application::m_window, width / 2, height / 2);
-
-		glfwSetInputMode(Application::m_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-
-		double dx, dy;
-		dx = dt * double(width / 2 - c_posx);
-		dy = dt * double(height / 2 - c_posy);
-
-		camera->Update(dt, dx, dy);
-	}
-<<<<<<< HEAD
+			isDead = false;
+			Player::getInstance()->update(dt, camera);
+		}
 
 		for (size_t i = 0; i < (sizeof WS_EnemyPool) / sizeof(*WS_EnemyPool); ++i)
-=======
-
-
-
-
-	for (size_t i = 0; i < (sizeof WS_EnemyPool) / sizeof(*WS_EnemyPool); ++i)
-	{
-		if (WS_EnemyPool[i]->active)
-
->>>>>>> 5c9363a0c2279e8b480099cc2c4f1fca928c25d9
 		{
-			if (WS_EnemyPool[i]->getHp() <= 0)//REMOVE THE ENEMY FROM PLAYER ENEMY VECTOR SO PLAYER WILL NOT DETECT A DEAD ENEMY AS ENEMY
+			if (WS_EnemyPool[i]->active)
 			{
-				WS_EnemyPool[i]->active = false;
-				auto it = std::find(Player::getInstance()->enemies_.begin(), Player::getInstance()->enemies_.end(), WS_EnemyPool[i]);
-				if (it != Player::getInstance()->enemies_.end())
-					std::swap(*it, Player::getInstance()->enemies_.back());
-				//goatMinionPool[i]->CollisionMesh_->pos = Vector3(0, -5, 0);
-				Player::getInstance()->enemies_.back() = NULL;
-				Player::getInstance()->enemies_.pop_back();
+				if (WS_EnemyPool[i]->getHp() <= 0)//REMOVE THE ENEMY FROM PLAYER ENEMY VECTOR SO PLAYER WILL NOT DETECT A DEAD ENEMY AS ENEMY
+				{
+					WS_EnemyPool[i]->active = false;
+					auto it = std::find(Player::getInstance()->enemies_.begin(), Player::getInstance()->enemies_.end(), WS_EnemyPool[i]);
+					if (it != Player::getInstance()->enemies_.end())
+						std::swap(*it, Player::getInstance()->enemies_.back());
+					//goatMinionPool[i]->CollisionMesh_->pos = Vector3(0, -5, 0);
+					Player::getInstance()->enemies_.back() = NULL;
+					Player::getInstance()->enemies_.pop_back();
 
-				//for Collision
-				Player::getInstance()->removeCollisionObject(WS_EnemyPool[i]);
+					//for Collision
+					Player::getInstance()->removeCollisionObject(WS_EnemyPool[i]);
+				}
+				else//UPDATE ALIVE ENEMY
+					WS_EnemyPool[i]->update(dt);
 			}
-			else//UPDATE ALIVE ENEMY
-				WS_EnemyPool[i]->update(dt);
+			else
+			{
+				WS_EnemyPool[i]->deadTime += dt;
+				if (WS_EnemyPool[i]->deadTime > 10)
+					WS_EnemyPool[i]->resetMinion();
+			}
 		}
-		else
+
+		if (Blueprints::GetBlueprintNumber())//if i got one or more blueprints
 		{
-			WS_EnemyPool[i]->deadTime += dt;
-			if (WS_EnemyPool[i]->deadTime > 10)
-				WS_EnemyPool[i]->resetMinion();
+			//trigger global event
+			SandStorm::getInstance()->update(dt);
 		}
-	}
 
-	if (Blueprints::GetBlueprintNumber())//if i got one or more blueprints
-	{
-		//trigger global event
-		SandStorm::getInstance()->update(dt);
 	}
-
 }
 
 void WorldScene::Render()
