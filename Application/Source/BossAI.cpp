@@ -131,7 +131,7 @@ void GoatBoss::update(double dt)
 				this->attSpdDelayMultiplier = 0.5f;
 				if (hasSecondWind)
 				{
-					this->hp_ += 0.5f * maxHp_;
+					this->hp_ += (int)(0.5f * (float)maxHp_);
 					hasSecondWind = false;
 				}
 			}
@@ -370,12 +370,12 @@ Projectile* GoatBoss::getInactiveProjectile()
 
 int GoatBoss::getProjectileDmg()
 {
-	return (rand() % (MaxProjDmg_ - MinProjDmg_ + 1) + MinProjDmg_) * dmgMultiplier;
+	return (int)((float)(rand() % (MaxProjDmg_ - MinProjDmg_ + 1) + MinProjDmg_) * dmgMultiplier);
 }
 
 int GoatBoss::getGSDmg()
 {
-	return (rand() % (maxGsDmg_ - minGsDmg_ + 1) + minGsDmg_) * dmgMultiplier;
+	return (int)((float)(rand() % (maxGsDmg_ - minGsDmg_ + 1) + minGsDmg_) * dmgMultiplier);
 }
 
 void GoatBoss::resetBoss()

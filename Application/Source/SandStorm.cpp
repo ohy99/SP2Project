@@ -15,7 +15,7 @@ Vector3* SandStorm::dustDir = new Vector3(0,0,0);
 //Mesh* SandStorm::dustQuad = NULL;
 SandStorm::SandStorm()
 {
-	int numOfDusts = 30 + rand() % 20;
+	unsigned int numOfDusts = 30 + rand() % 20;
 
 	dustDir->x = -1.f + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (1.f + 1.f)));
 	dustDir->z = -1.f + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (1.f + 1.f)));

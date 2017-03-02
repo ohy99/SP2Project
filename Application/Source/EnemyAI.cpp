@@ -10,8 +10,8 @@ void EnemyAI::updateShowDmgTaken(double dt){
 	for (size_t i = 0; i < dmgTakenVector.size(); ++i)
 	{
 		dmgTakenVector.at(i).timeElapsed += dt;
-		dmgTakenVector.at(i).tY += dt * dmgTakenVector.at(i).tySpd;
-		dmgTakenVector.at(i).tySpd -= dt;
+		dmgTakenVector.at(i).tY += (float)dt * dmgTakenVector.at(i).tySpd;
+		dmgTakenVector.at(i).tySpd -= (float)dt;
 
 		dmgTakenVector.at(i).Dscale = (this->CollisionMesh_->pos - Player::getInstance()->CollisionMesh_->pos).Length() / 10.0f;
 		if (dmgTakenVector.at(i).Dscale <= 1.f)//if player and this is less than 10units apart

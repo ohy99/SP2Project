@@ -62,8 +62,8 @@ void CameraMG::Update(double dt, double dx, double dy)
 
 	float horizontalDISAngle = 0;
 	float verticalDISAngle = 0;
-	horizontalDISAngle += mouseSpeed * dx; //taking displacement as pi
-	verticalDISAngle += mouseSpeed * dy;
+	horizontalDISAngle += mouseSpeed * (float)dx; //taking displacement as pi
+	verticalDISAngle += mouseSpeed * (float)dy;
 	Cam_Phi += Math::RadianToDegree(verticalDISAngle);
 
 	if (Cam_Theta + Math::RadianToDegree(horizontalDISAngle) > 360.0f)
