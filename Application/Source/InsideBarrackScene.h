@@ -18,6 +18,8 @@
 #include "UI.h"
 #include "NPC.h"
 #include "Environment.h"
+#include "Inventory.h"
+#include "Blueprints.h"
 
 
 class InsideBarrackScene : public Scene
