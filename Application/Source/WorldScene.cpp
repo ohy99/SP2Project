@@ -159,14 +159,9 @@ void WorldScene::Update(double dt)
 	UI::getInstance()->Update(dt);
 
 
-	//for (size_t i = 0; i < CampNPC.size(); i++)
-	//{
-	//	CampNPC.at(i)->update(dt);
-	//}
-	if (UI::getInstance()->isPauseOpen() && Inventory::getInstance()->isInventoryOpen())
-		return;
 
-
+	if (!UI::getInstance()->isPauseOpen() && !Inventory::getInstance()->isInventoryOpen())
+	{
 		double c_posx, c_posy;
 		glfwGetCursorPos(Application::m_window, &c_posx, &c_posy);
 		glfwSetCursorPos(Application::m_window, width / 2, height / 2);
@@ -176,12 +171,10 @@ void WorldScene::Update(double dt)
 		double dx, dy;
 		dx = dt * double(width / 2 - c_posx);
 		dy = dt * double(height / 2 - c_posy);
-		camera->Update(dt, dx, dy);
 
-		//for (size_t i = 0; i < CampNPC.size(); i++)
-		//{
-		//	CampNPC.at(i)->update(dt);
-		//}
+		camera->Update(dt, dx, dy);
+	}
+
 		for (size_t i = 0; i < (sizeof WS_EnemyPool) / sizeof(*WS_EnemyPool); ++i)
 		{
 			if (WS_EnemyPool[i]->active)

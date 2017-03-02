@@ -32,7 +32,7 @@ GoatBoss::GoatBoss() : EnemyAI("GoatBoss"), maxHp_(hp_)
 		goatMinionPool[i]->active = false;
 		goatMinionPool[i]->CollisionMesh_->collisionEnabled = true;
 	}
-	for (size_t i = 0; i < (sizeof goatMinionPool) / sizeof(*goatMinionPool); ++i)
+	for (size_t i = 0; i < (sizeof TeleParticles) / sizeof(*TeleParticles); ++i)
 	{
 		TeleParticles[i] = MeshBuilder::GenerateOBJ("Particles", "OBJ//BossTeleParticles.obj");
 	}

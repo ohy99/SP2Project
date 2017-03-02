@@ -15,6 +15,7 @@ public:
 	void Update(double dt, Camera* camera);
 	void Render(MS* projectionStack, MS* viewStack, MS* modelStack, unsigned * m_parameters);
 	void MGPlayerMovements(double dt);
+	void clearOBJ();
 
 	static MGPlayer* getInstance();
 	void setPlayerPosition(Vector3& pos);

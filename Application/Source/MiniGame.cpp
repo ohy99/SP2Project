@@ -86,6 +86,9 @@ void MiniGame::Init()
 	for (size_t i = 0; i < GEOMETRY_TYPE::NUM_GEOMETRY; i++)
 		meshList[i] = NULL;
 
+	for (size_t i = 0; i < MINI_GAME_UI::MG_UI_COUNT; i++)
+		MGList[i] = NULL;
+
 	meshList[GEO_AXES] = MeshBuilder::GenerateAxes("Axes", 1000.f, 1000.f, 1000.f);
 
 
@@ -214,7 +217,7 @@ void MiniGame::Init()
 			continue;
 	}
 
-	UI::getInstance()->Init();
+	UI::getInstance()->Init(); 
 	MGPlayer::getInstance()->Init();
 
 	score = 0.f;
@@ -229,7 +232,10 @@ void MiniGame::Init()
 
 	// Hide the mouse and enable unlimited mouvement
 
-	MGList[SCREEN] = MeshBuilder::GenerateQuad("image", Color(0.9f, 0.9f, 0.9f), 1.0f, 1.0f);
+	MGList[START_SCREEN] = MeshBuilder::GenerateQuad("start screen", Color(1.f, 1.f, 1.f), 1.f, 1.f);
+	MGList[START_SCREEN]->textureID = LoadTGA("Image//minigame.tga");
+	MGList[END_SCREEN] = MeshBuilder::GenerateQuad("end screen", Color(1.f, 1.f, 1.f), 1.f, 1.f);
+	MGList[END_SCREEN]->textureID = LoadTGA("Image//minigame2.tga");
 
 
 	MGList[START] = MeshBuilder::GenerateQuad("image", Color(1.f, 1.f, 1.f), 1.0f, 1.0f);
@@ -350,14 +356,17 @@ void MiniGame::Update(double dt)
 		}
 	}
 
+	score = MGPlayer::getInstance()->playerScore(bonusScore);
+
+	GameState();
+
 	//if (!MGPlayer::getInstance()->isDead())
 	//	MGList[SCREEN]->textureID = LoadTGA("Image//minigame.tga");
 
 	//else
 	//	MGList[SCREEN]->textureID = LoadTGA("Image//minigame2.tga");
 
-	score = MGPlayer::getInstance()->playerScore(bonusScore);
-	GameState();
+
 
 	FramesPerSec = 1 / dt; 
 
@@ -411,10 +420,22 @@ void MiniGame::Exit()
 		if (meshList[i] != NULL)
 			delete meshList[i];
 	}
+
+	for (size_t i = 0; i < MINI_GAME_UI::MG_UI_COUNT; i++)
+	{
+		if (MGList[i] != NULL)
+			delete MGList[i];
+	}
+
 	delete camera;
 
 	//delete road;
-	delete[] lorry->CollisionMesh_;
+	delete lorry->CollisionMesh_;
+
+	while (Obstacles.size() != 0)
+		Obstacles.pop_back();
+
+	MGPlayer::getInstance()->clearOBJ();
 
 	// Cleanup VBO here
 	glDeleteVertexArrays(1, &m_vertexArrayID);
@@ -451,15 +472,13 @@ void MiniGame::RenderMiniGame()
 
 	if (!MGPlayer::getInstance()->gameStarted())
 	{
-		MGList[SCREEN]->textureID = LoadTGA("Image//minigame.tga");
-		RenderMeshClass::RenderMeshOnScreen(MGList[SCREEN], (int)Application::getWindowWidth() * 0.5f, (int)Application::getWindowHeight() * 0.5f, 0, (int)(Application::getWindowWidth() / 1024) * 700, (int)(Application::getWindowHeight() / 768) * 700, &projectionStack, &viewStack, &modelStack, m_parameters);
+		RenderMeshClass::RenderMeshOnScreen(MGList[START_SCREEN], (int)Application::getWindowWidth() * 0.5f, (int)Application::getWindowHeight() * 0.5f, 0, (int)(Application::getWindowWidth() / 1024) * 700, (int)(Application::getWindowHeight() / 768) * 700, &projectionStack, &viewStack, &modelStack, m_parameters);
 		RenderMeshClass::RenderMeshOnScreen(MGList[START], (int)Application::getWindowWidth() * 0.5f, (int)Application::getWindowHeight() * 0.5f, 0, (int)(Application::getWindowWidth() / 1024) * 400, (int)(Application::getWindowHeight() / 768) * 100, &projectionStack, &viewStack, &modelStack, m_parameters);
 	}
 
 	if (MGPlayer::getInstance()->isDead())
 	{
-		MGList[SCREEN]->textureID = LoadTGA("Image//minigame2.tga");
-		RenderMeshClass::RenderMeshOnScreen(MGList[SCREEN], (int)Application::getWindowWidth() * 0.5f, (int)Application::getWindowHeight() * 0.5f, 0, (int)(Application::getWindowWidth() / 1024) * 700, (int)(Application::getWindowHeight() / 768) * 700, &projectionStack, &viewStack, &modelStack, m_parameters);
+		RenderMeshClass::RenderMeshOnScreen(MGList[END_SCREEN], (int)Application::getWindowWidth() * 0.5f, (int)Application::getWindowHeight() * 0.5f, 0, (int)(Application::getWindowWidth() / 1024) * 700, (int)(Application::getWindowHeight() / 768) * 700, &projectionStack, &viewStack, &modelStack, m_parameters);
 		RenderMeshClass::RenderMeshOnScreen(MGList[RESTART], (int)Application::getWindowWidth() * 0.5f, (int)(Application::getWindowHeight() / 768) * 400, 0, (int)(Application::getWindowWidth() / 1024) * 400, (int)(Application::getWindowHeight() / 768) * 100, &projectionStack, &viewStack, &modelStack, m_parameters);
 		RenderMeshClass::RenderMeshOnScreen(MGList[QUIT], (int)Application::getWindowWidth() * 0.5f, (int)(Application::getWindowHeight() / 768) * 200.f, 0, (int)(Application::getWindowWidth() / 1024) * 400, (int)(Application::getWindowHeight() / 768) * 100, &projectionStack, &viewStack, &modelStack, m_parameters);
 	}
@@ -610,7 +629,7 @@ void MiniGame::GameState()
 		{
 			Reset();
 			MGPlayer::getInstance()->setGameState(false, false, false);
-			SceneManager::getInstance()->SetNextSceneID(1);
+			SceneManager::getInstance()->SetNextSceneID(SceneManager::SCENES::CAMPSCENE);
 			SceneManager::getInstance()->SetNextScene();
 		}
 

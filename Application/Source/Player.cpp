@@ -21,6 +21,7 @@ std::vector<EnemyAI*> Player::enemies_;
 
 std::vector<Teleporter*> Player::teleporters_;
 std::vector<Item*> Player::Items;
+std::vector<NPC*> Player::NPCs;
 //std::vector<EnvironmentObj*> Player::Teleport_Barrack;
 
 Player::Player() : GameObject("Player"), wasFPressed(false)
@@ -158,6 +159,7 @@ void Player::update(double dt, Camera* cam)
 	checkTeleport();
 	updateRadar();
 	//TeleportToInsideBarrack();
+	checkIfTalkedWithNPC();
 
 }
 
@@ -194,11 +196,10 @@ void Player::render(MS* projectionStack, MS* viewStack, MS* modelStack, unsigned
 	if //(currentWeapon_ == weapons_[WEAPON_TYPE::PISTOL] || currentWeapon_ == weapons_[WEAPON_TYPE::RIFLE])
 		(currWeap >= WEAPON_TYPE::PISTOL)
 	{
-		//RangeWeapon* Rweap = dynamic_cast<RangeWeapon*>(currentWeapon_);
-		RangeWeapon* Rweap = dynamic_cast<RangeWeapon*>(weapons_[currWeap]);
-		RenderMeshClass::RenderTextOnScreen(&Scene::Text[Scene::TEXT_TYPE::SegoeMarker], std::to_string(Rweap->getGunAmmo()), Color(1, 1, 1), 2, 73, 5, projectionStack, viewStack, modelStack, m_parameters);
-		//RenderMeshClass::RenderTextOnScreen(&Scene::Text[Scene::TEXT_TYPE::SegoeMarker], std::to_string(Rweap->getWeaponAmmo()), Color(1, 1, 1), 2, 75, 5, projectionStack, viewStack, modelStack, m_parameters);
-		RenderMeshClass::RenderTextOnScreen(&Scene::Text[Scene::TEXT_TYPE::SegoeMarker], std::to_string(Rweap->getWeaponAmmo()), Color(1, 1, 1), 2, 75, 5, projectionStack, viewStack, modelStack, m_parameters);
+		//RangeWeapon* Rweap = dynamic_cast<RangeWeapon*>(currentWeapon_);								 // new code, delete this comment after you solve the conflict
+		RangeWeapon* Rweap = dynamic_cast<RangeWeapon*>(weapons_[currWeap]);							 // new code, delete this comment after you solve the conflict
+		AMMO = std::to_string(Rweap->getGunAmmo()) + "/" + std::to_string(Rweap->getWeaponAmmo());		 // new code, delete this comment after you solve the conflict
+		RenderMeshClass::RenderTextOnScreen(&Scene::Text[Scene::TEXT_TYPE::SegoeMarker], AMMO, Color(1, 1, 1), 2, 73, 5, projectionStack, viewStack, modelStack, m_parameters);
 	}
 
 }
@@ -403,6 +404,9 @@ void Player::RangedAttack(double dt)
 	static float reloadTimeElapsed = 0.0f;
 	//RangeWeapon* Rweap = dynamic_cast<RangeWeapon*>(currentWeapon_);
 	RangeWeapon* Rweap = dynamic_cast<RangeWeapon*>(weapons_[currWeap]);
+	if (glfwGetMouseButton(Application::m_window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && Rweap->getGunAmmo() <= 0)
+		reloading = true;
+
 	if (glfwGetMouseButton(Application::m_window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS)
 	{
 		if (Rweap->shotCooldown <= 0)
@@ -718,4 +722,22 @@ void Player::renderRadar(MS* projectionStack, MS* viewStack, MS* modelStack, uns
 			, 1.5f, 0.01f *(float)Application::getWindowWidth(), 0.01f * (float)Application::getWindowHeight(), projectionStack, viewStack, modelStack, m_parameters);
 		modelStack->PopMatrix();
 	}
+}
+
+void Player::checkIfTalkedWithNPC()
+{
+	isFPressed = Application::IsKeyPressed('F');
+
+	if (isFPressed && !wasFPressed)
+	{
+		for (size_t i = 0; i < NPCs.size(); i++)
+		{
+
+		}
+
+		wasFPressed = isFPressed;
+	}
+
+	if (!isFPressed && wasFPressed)
+		wasFPressed = isFPressed;
 }

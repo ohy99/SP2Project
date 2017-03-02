@@ -45,7 +45,8 @@ class MiniGame : public Scene
 
 	enum MINI_GAME_UI
 	{
-		SCREEN,
+		START_SCREEN,
+		END_SCREEN,
 		START,
 		RESTART,
 		QUIT,
