@@ -350,6 +350,29 @@ void MainScene::Init()
 	camera = new Camera3;
 	camera->Init(Vector3(0, 0, 7), Vector3(0, 0, 0), Vector3(0, 1, 0));
 
+	wantPlay = false;
+	talktoGuard = false;
+
+	meshList[WANTPLAY] = MeshBuilder::GenerateQuad("want play", Color(1.f, 1.f, 1.f), 1.f, 1.f);
+	meshList[WANTPLAY]->textureID = LoadTGA("Image//wantplay.tga");
+
+	meshList[YES] = MeshBuilder::GenerateQuad("yes", Color(1.f, 1.f, 1.f), 1.0f, 1.0f);
+	meshList[YES]->textureID = LoadTGA("Image//yes.tga");
+	meshList[YES]->setHb(true, Vector3(-100.f, -50.f, 0.f), Vector3(100.f, 50.f, 2.f),
+		Vector3((float)Application::getWindowWidth() * 0.5f, (float)(Application::getWindowHeight() / 768) * (Application::getWindowHeight() - 400), 0.f),
+		Vector3(0.f, 1.f, 0.f));
+
+	meshList[YES2] = MeshBuilder::GenerateQuad("yes", Color(1.f, 1.f, 1.f), 1.0f, 1.0f);
+	meshList[YES2]->textureID = LoadTGA("Image//yes2.tga");
+
+	meshList[NO] = MeshBuilder::GenerateQuad("no", Color(1.f, 1.f, 1.f), 1.0f, 1.0f);
+	meshList[NO]->textureID = LoadTGA("Image//no.tga");
+	meshList[NO]->setHb(true, Vector3(-100.f, -50.f, 0.f), Vector3(100.f, 50.f, 2.f),
+		Vector3((float)Application::getWindowWidth() * 0.5f, (float)(Application::getWindowHeight() / 768) * (Application::getWindowHeight() - 200), 0.f),
+		Vector3(0.f, 1.f, 0.f));
+
+	meshList[NO2] = MeshBuilder::GenerateQuad("no", Color(1.f, 1.f, 1.f), 1.0f, 1.0f);
+	meshList[NO2]->textureID = LoadTGA("Image//no2.tga");
 
 	Mtx44 projection;
 	projection.SetToPerspective(45.f, 4.f / 3.f, 0.1f, 1000.f);
@@ -410,16 +433,19 @@ void MainScene::Update(double dt)
 
 	if (!UI::getInstance()->isPauseOpen() && !Inventory::getInstance()->isInventoryOpen())
 	{
-		double c_posx, c_posy;
+		
 		glfwGetCursorPos(Application::m_window, &c_posx, &c_posy);
-		glfwSetCursorPos(Application::m_window, width / 2, height / 2);
 
-		glfwSetInputMode(Application::m_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+		if (!wantPlay)
+		{
+			glfwSetCursorPos(Application::m_window, width / 2, height / 2);
+			dx, dy;
+			dx = dt * double(width / 2 - c_posx);
+			dy = dt * double(height / 2 - c_posy);
 
-		double dx, dy;
-		dx = dt * double(width / 2 - c_posx);
-		dy = dt * double(height / 2 - c_posy);
-		camera->Update(dt, dx, dy);
+			camera->Update(dt, dx, dy);
+			glfwSetInputMode(Application::m_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+		}
 
 		for (size_t i = 0; i < CampNPC.size(); i++)
 		{
@@ -427,9 +453,57 @@ void MainScene::Update(double dt)
 		}
 	}
 
+	if (Player::getInstance()->getPlayerPosition().x <= 3.f && Player::getInstance()->getPlayerPosition().x >= 1.f && Player::getInstance()->getPlayerPosition().z >= -9.f && Player::getInstance()->getPlayerPosition().z <= -6.f)
+		talktoGuard = true;
+
+	else
+		talktoGuard = false;
+
+	if (talktoGuard)
+	{
+		if (Application::IsKeyPressed(VK_SPACE))
+		{
+			wantPlay = true;
+			glfwSetInputMode(Application::m_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+		}
+	}
+
+	if (wantPlay)
+	{
+		if (meshList[YES]->isPointInsideAABB(Position((float)c_posx, (float)c_posy, 0.f)))
+		{
+			yes = true;
+
+			if (glfwGetMouseButton(Application::m_window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS)
+			{
+				SceneManager::getInstance()->SetNextSceneID(SceneManager::SCENES::MINIGAMESCENE);
+				SceneManager::getInstance()->SetNextScene();
+			}
+
+		}
+
+		else
+			yes = false;
+
+		if (meshList[NO]->isPointInsideAABB(Position((float)c_posx, (float)c_posy, 0.f)))
+		{
+			no = true;
+
+			if (glfwGetMouseButton(Application::m_window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS)
+			{
+				wantPlay = false;
+				glfwSetInputMode(Application::m_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+			}
+
+		}
+
+		else
+			no = false;
+	}
+
+
 	FramesPerSec = 1 / dt;
 }
-
 
 void MainScene::Render()
 {
@@ -508,6 +582,25 @@ void MainScene::Render()
 	UI::getInstance()->renderPause(&projectionStack, &viewStack, &modelStack, m_parameters);
 	Inventory::getInstance()->Render(&projectionStack, &viewStack, &modelStack, m_parameters);
 	
+	if (talktoGuard)
+		RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], "[Press SPACE to talk to Guard 5.]", Color(0, 1, 0), 2.f, 35, 24, &projectionStack, &viewStack, &modelStack, m_parameters);
+
+	if (wantPlay)
+	{
+		RenderMeshClass::RenderMeshOnScreen(meshList[WANTPLAY], Application::getWindowWidth() * 0.5f, Application::getWindowHeight() * 0.5f, 0, 700, 700, &projectionStack, &viewStack, &modelStack, m_parameters);
+
+		if (!yes)
+			RenderMeshClass::RenderMeshOnScreen(meshList[YES], (int)Application::getWindowWidth() * 0.5f, (int)(Application::getWindowHeight() / 768) * 400, 0, (int)(Application::getWindowWidth() / 1024) * 200, (int)(Application::getWindowHeight() / 768) * 100, &projectionStack, &viewStack, &modelStack, m_parameters);
+
+		else
+			RenderMeshClass::RenderMeshOnScreen(meshList[YES2], (int)Application::getWindowWidth() * 0.5f, (int)(Application::getWindowHeight() / 768) * 400, 0, (int)(Application::getWindowWidth() / 1024) * 200, (int)(Application::getWindowHeight() / 768) * 100, &projectionStack, &viewStack, &modelStack, m_parameters);
+
+		if (!no)
+			RenderMeshClass::RenderMeshOnScreen(meshList[NO], (int)Application::getWindowWidth() * 0.5f, (int)(Application::getWindowHeight() / 768) * 200.f, 0, (int)(Application::getWindowWidth() / 1024) * 200, (int)(Application::getWindowHeight() / 768) * 100, &projectionStack, &viewStack, &modelStack, m_parameters);
+
+		else
+			RenderMeshClass::RenderMeshOnScreen(meshList[NO2], (int)Application::getWindowWidth() * 0.5f, (int)(Application::getWindowHeight() / 768) * 200.f, 0, (int)(Application::getWindowWidth() / 1024) * 200, (int)(Application::getWindowHeight() / 768) * 100, &projectionStack, &viewStack, &modelStack, m_parameters);
+	}
 }
 
 void MainScene::Interactions(){
@@ -518,7 +611,7 @@ void MainScene::Interactions(){
 	}
 
 	if (Application::IsKeyPressed(VK_SPACE)){
-			
+
 		if (Player::getInstance()->getPlayerPosition().x >= -8 && Player::getInstance()->getPlayerPosition().x <= -5 && Player::getInstance()->getPlayerPosition().z <= -11 && Player::getInstance()->getPlayerPosition().z >= -17){
 
 			SceneManager::getInstance()->SetNextSceneID(SceneManager::SCENES::BARRACKSCENE);
@@ -526,22 +619,6 @@ void MainScene::Interactions(){
 			return;
 		}
 	}
-	
-	//if (Player::getInstance()->getPlayerPosition().x >= -21 && Player::getInstance()->getPlayerPosition().x <= -17 && Player::getInstance()->getPlayerPosition().z <= 2 && Player::getInstance()->getPlayerPosition().z >= -2){
-
-	//	RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("[Press SPACE to Teleport into the City.]"), Color(1, 0, 0), 2.f, 28, 24, &projectionStack, &viewStack, &modelStack, m_parameters);
-	//}
-
-	//if (Application::IsKeyPressed(VK_SPACE)){
-
-	//	if (Player::getInstance()->getPlayerPosition().x >= -21 && Player::getInstance()->getPlayerPosition().x <= -17 && Player::getInstance()->getPlayerPosition().z <= 2 && Player::getInstance()->getPlayerPosition().z >= -2){
-
-	//		SceneManager::getInstance()->SetNextSceneID(SceneManager::SCENES::WORLDSCENE);
-	//		SceneManager::getInstance()->SetNextScene();
-	//		Player::getInstance()->setPosition(Vector3(94.0, 0.0, -8.0));
-	//	}
-	//}
-
 }
 
 void MainScene::RenderBaseCamp(){

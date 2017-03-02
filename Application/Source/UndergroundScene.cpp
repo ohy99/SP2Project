@@ -32,6 +32,7 @@ MS UndergroundScene::modelStack, UndergroundScene::viewStack, UndergroundScene::
 
 //std::vector<GameObject*> UndergroundScene::Game_Objects_(10, NULL);
 //UI renderMeshOnScreen;
+std::vector<Item*> UndergroundScene::Item_Obj;
 std::vector<EnvironmentObj*> UndergroundScene::Env_Obj;
 Teleporter* UndergroundScene::Stairs;
 //std::vector<NPC*> UndergroundScene::CampNPC;
@@ -245,14 +246,22 @@ void UndergroundScene::Init()
 	//Furniture ------ End
 
 	//Blueprint 3 ----- Start
-	//EnvironmentObj* Blueprint = new EnvironmentObj(MeshBuilder::GenerateOBJ("Blueprint", "OBJ//Blueprint3.obj"));
-	//Blueprint->CollisionMesh_->textureID = LoadTGA("Image//BlueprintUV.tga");
-
-	//Env_Obj.push_back(Blueprint);
+	Item* Blueprint = new Item("Blueprint2");
+	Blueprint->CollisionMesh_ = MeshBuilder::GenerateOBJ("Blueprint", "OBJ//Blueprint3.obj");
+	Blueprint->CollisionMesh_->textureID = LoadTGA("Image//BlueprintUV.tga");
+	Blueprint->item2DTexture = MeshBuilder::GenerateQuad("Blueprint", Color(1.f, 1.f, 1.f), 1.f, 1.f);
+	Blueprint->item2DTexture->textureID = LoadTGA("Image//Blueprints(Item).tga");
+	Blueprint->CollisionMesh_->Hitbox_Min -= Vector3(0.5f, 0.5f, 0.5f);
+	Blueprint->CollisionMesh_->Hitbox_Max += Vector3(0.5f, 0.5f, 0.5f);
 	//Blueprint 3 ----- End
+
+	Item_Obj.push_back(Blueprint);
 
 	for (auto it : Env_Obj)
 		Player::addCollisionObject(it);
+
+	for (auto it : Item_Obj)
+		Player::Items.push_back(it);
 
 	initEnemies();
 	UI::getInstance()->Init();
@@ -304,6 +313,7 @@ void UndergroundScene::Update(double dt)
 		//fpsonce = true;
 	}
 
+	Inventory::getInstance()->Update(dt);
 	UI::getInstance()->Update(dt);
 
 
@@ -322,39 +332,36 @@ void UndergroundScene::Update(double dt)
 		dy = dt * double(height / 2 - c_posy);
 		camera->Update(dt, dx, dy);
 
-		//for (size_t i = 0; i < CampNPC.size(); i++)
-		//{
-		//	CampNPC.at(i)->update(dt);
-		//}
-	}
-
-	for (size_t i = 0; i < (sizeof UG_EnemyPool) / sizeof(*UG_EnemyPool); ++i)
-	{
-		if (UG_EnemyPool[i]->active)
+		for (size_t i = 0; i < (sizeof UG_EnemyPool) / sizeof(*UG_EnemyPool); ++i)
 		{
-			if (UG_EnemyPool[i]->getHp() <= 0)//REMOVE THE ENEMY FROM PLAYER ENEMY VECTOR SO PLAYER WILL NOT DETECT A DEAD ENEMY AS ENEMY
+			if (UG_EnemyPool[i]->active)
 			{
-				UG_EnemyPool[i]->active = false;
-				auto it = std::find(Player::getInstance()->enemies_.begin(), Player::getInstance()->enemies_.end(), UG_EnemyPool[i]);
-				if (it != Player::getInstance()->enemies_.end())
-					std::swap(*it, Player::getInstance()->enemies_.back());
-				//goatMinionPool[i]->CollisionMesh_->pos = Vector3(0, -5, 0);
-				Player::getInstance()->enemies_.back() = NULL;
-				Player::getInstance()->enemies_.pop_back();
+				if (UG_EnemyPool[i]->getHp() <= 0)//REMOVE THE ENEMY FROM PLAYER ENEMY VECTOR SO PLAYER WILL NOT DETECT A DEAD ENEMY AS ENEMY
+				{
+					UG_EnemyPool[i]->active = false;
+					auto it = std::find(Player::getInstance()->enemies_.begin(), Player::getInstance()->enemies_.end(), UG_EnemyPool[i]);
+					if (it != Player::getInstance()->enemies_.end())
+						std::swap(*it, Player::getInstance()->enemies_.back());
+					//goatMinionPool[i]->CollisionMesh_->pos = Vector3(0, -5, 0);
+					Player::getInstance()->enemies_.back() = NULL;
+					Player::getInstance()->enemies_.pop_back();
 
-				//for Collision
-				Player::getInstance()->removeCollisionObject(UG_EnemyPool[i]);
+					//for Collision
+					Player::getInstance()->removeCollisionObject(UG_EnemyPool[i]);
+				}
+				else//UPDATE ALIVE ENEMY
+					UG_EnemyPool[i]->update(dt);
 			}
-			else//UPDATE ALIVE ENEMY
-				UG_EnemyPool[i]->update(dt);
-		}
-		else
-		{
-			UG_EnemyPool[i]->deadTime += dt;
-			if (UG_EnemyPool[i]->deadTime > 10)
-				UG_EnemyPool[i]->resetMinion();
+			else
+			{
+				UG_EnemyPool[i]->deadTime += dt;
+				if (UG_EnemyPool[i]->deadTime > 10)
+					UG_EnemyPool[i]->resetMinion();
+			}
 		}
 	}
+
+
 
 	FramesPerSec = 1 / dt;
 }
@@ -408,6 +415,16 @@ void UndergroundScene::Render()
 	RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::to_string(FramesPerSec), Color(0, 1, 0), 1.5f, 45, 38, &projectionStack, &viewStack, &modelStack, m_parameters);
 	UI::getInstance()->renderPause(&projectionStack, &viewStack, &modelStack, m_parameters);
 	Inventory::getInstance()->Render(&projectionStack, &viewStack, &modelStack, m_parameters);
+
+	for (size_t i = 0; i < Item_Obj.size(); i++)
+	{
+		if (!Player::Items[i]->isItemInInventory)
+		{
+			modelStack.PushMatrix();
+			RenderMeshClass::RenderMesh(Item_Obj.at(i)->CollisionMesh_, true, &projectionStack, &viewStack, &modelStack, m_parameters);
+			modelStack.PopMatrix();
+		}
+	}
 }
 
 
@@ -456,6 +473,9 @@ void UndergroundScene::Exit()
 	}
 	//delete camera;
 	Player::getInstance()->clearCollisionObj();
+
+	while (Item_Obj.size() != 0)
+		Item_Obj.pop_back();
 
 	// Cleanup VBO here
 	glDeleteVertexArrays(1, &m_vertexArrayID);

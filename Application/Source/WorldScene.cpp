@@ -171,43 +171,42 @@ void WorldScene::Update(double dt)
 		dy = dt * double(height / 2 - c_posy);
 		camera->Update(dt, dx, dy);
 
-	}
 
-
-
-	for (size_t i = 0; i < (sizeof WS_EnemyPool) / sizeof(*WS_EnemyPool); ++i)
-	{
-		if (WS_EnemyPool[i]->active)
+		for (size_t i = 0; i < (sizeof WS_EnemyPool) / sizeof(*WS_EnemyPool); ++i)
 		{
-			if (WS_EnemyPool[i]->getHp() <= 0)//REMOVE THE ENEMY FROM PLAYER ENEMY VECTOR SO PLAYER WILL NOT DETECT A DEAD ENEMY AS ENEMY
+			if (WS_EnemyPool[i]->active)
 			{
-				WS_EnemyPool[i]->active = false;
-				auto it = std::find(Player::getInstance()->enemies_.begin(), Player::getInstance()->enemies_.end(), WS_EnemyPool[i]);
-				if (it != Player::getInstance()->enemies_.end())
-					std::swap(*it, Player::getInstance()->enemies_.back());
-				//goatMinionPool[i]->CollisionMesh_->pos = Vector3(0, -5, 0);
-				Player::getInstance()->enemies_.back() = NULL;
-				Player::getInstance()->enemies_.pop_back();
+				if (WS_EnemyPool[i]->getHp() <= 0)//REMOVE THE ENEMY FROM PLAYER ENEMY VECTOR SO PLAYER WILL NOT DETECT A DEAD ENEMY AS ENEMY
+				{
+					WS_EnemyPool[i]->active = false;
+					auto it = std::find(Player::getInstance()->enemies_.begin(), Player::getInstance()->enemies_.end(), WS_EnemyPool[i]);
+					if (it != Player::getInstance()->enemies_.end())
+						std::swap(*it, Player::getInstance()->enemies_.back());
+					//goatMinionPool[i]->CollisionMesh_->pos = Vector3(0, -5, 0);
+					Player::getInstance()->enemies_.back() = NULL;
+					Player::getInstance()->enemies_.pop_back();
 
-				//for Collision
-				Player::getInstance()->removeCollisionObject(WS_EnemyPool[i]);
+					//for Collision
+					Player::getInstance()->removeCollisionObject(WS_EnemyPool[i]);
+				}
+				else//UPDATE ALIVE ENEMY
+					WS_EnemyPool[i]->update(dt);
 			}
-			else//UPDATE ALIVE ENEMY
-				WS_EnemyPool[i]->update(dt);
+			else
+			{
+				WS_EnemyPool[i]->deadTime += dt;
+				if (WS_EnemyPool[i]->deadTime > 10)
+					WS_EnemyPool[i]->resetMinion();
+			}
 		}
-		else
+
+		if (Blueprints::GetBlueprintNumber())//if i got one or more blueprints
 		{
-			WS_EnemyPool[i]->deadTime += dt;
-			if (WS_EnemyPool[i]->deadTime > 10)
-				WS_EnemyPool[i]->resetMinion();
+			//trigger global event
+			SandStorm::getInstance()->update(dt);
 		}
 	}
 
-	if (Blueprints::GetBlueprintNumber())//if i got one or more blueprints
-	{
-		//trigger global event
-		SandStorm::getInstance()->update(dt);
-	}
 }
 
 void WorldScene::Render()

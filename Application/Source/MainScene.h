@@ -55,6 +55,12 @@ class MainScene : public Scene
 		GEO_FRONT,
 		GEO_BACK,
 
+		WANTPLAY,
+		YES,
+		YES2,
+		NO,
+		NO2,
+
 		NUM_GEOMETRY,
 	};
 
@@ -115,6 +121,11 @@ private:
 	//void RenderTextOnScreen(Text_Data* TextData, std::string text, Color color, float size, float x, float y);
 	//void RenderMeshOnScreen(Mesh* mesh, int x, int y, int sizex, int sizey);
 
+	double dx, dy;
+	double c_posx, c_posy;
+
+	bool yes, no;
+	bool talktoGuard, wantPlay;
 };
 
 #endif

@@ -65,6 +65,8 @@ public:
 	static Teleporter* Stairs;
 
 	static UG_MinionAI* UG_EnemyPool[6];
+
+	static std::vector<Item*> Item_Obj;
 	static std::vector<EnvironmentObj*> Env_Obj;
 private:
 	unsigned m_vertexArrayID;
