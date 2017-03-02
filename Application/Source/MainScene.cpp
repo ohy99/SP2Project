@@ -527,21 +527,6 @@ void MainScene::Interactions(){
 		}
 	}
 	
-	//if (Player::getInstance()->getPlayerPosition().x >= -21 && Player::getInstance()->getPlayerPosition().x <= -17 && Player::getInstance()->getPlayerPosition().z <= 2 && Player::getInstance()->getPlayerPosition().z >= -2){
-
-	//	RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("[Press SPACE to Teleport into the City.]"), Color(1, 0, 0), 2.f, 28, 24, &projectionStack, &viewStack, &modelStack, m_parameters);
-	//}
-
-	//if (Application::IsKeyPressed(VK_SPACE)){
-
-	//	if (Player::getInstance()->getPlayerPosition().x >= -21 && Player::getInstance()->getPlayerPosition().x <= -17 && Player::getInstance()->getPlayerPosition().z <= 2 && Player::getInstance()->getPlayerPosition().z >= -2){
-
-	//		SceneManager::getInstance()->SetNextSceneID(SceneManager::SCENES::WORLDSCENE);
-	//		SceneManager::getInstance()->SetNextScene();
-	//		Player::getInstance()->setPosition(Vector3(94.0, 0.0, -8.0));
-	//	}
-	//}
-
 }
 
 void MainScene::RenderBaseCamp(){
