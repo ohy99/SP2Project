@@ -36,7 +36,7 @@ void EnemyAI::renderShowDmgTaken(MS* projectionStack, MS* viewStack, MS* modelSt
 		modelStack->PushMatrix();
 		modelStack->Translate(0, it.tY, 0);
 		modelStack->Scale(it.Dscale, it.Dscale, 1);
-		RenderMeshClass::RenderText(&Scene::Text[Scene::TEXT_TYPE::Chiller], std::to_string(it.dmg), dmgcolor, projectionStack, viewStack, modelStack, m_parameters);
+		RenderMeshClass::RenderText(&Scene::Text[Scene::TEXT_TYPE::Chiller], std::to_string(abs(it.dmg)), dmgcolor, projectionStack, viewStack, modelStack, m_parameters);
 		modelStack->PopMatrix();
 	}
 }

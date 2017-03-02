@@ -34,7 +34,7 @@ void UG_MinionAI::update(double dt)
 		doHitCD = 0.0;
 
 		//IF DISTANCE FROM MINION TO PLAYER IS LESS THAN 5 UNITS AWAY  OR  Minion is hit by player
-		if ((Player::getInstance()->CollisionMesh_->pos - this->CollisionMesh_->pos).Length() < 10 || this->chasePlayer)
+		if ((Player::getInstance()->CollisionMesh_->pos - this->CollisionMesh_->pos).Length() < 30 || this->chasePlayer)
 		{
 			runToPlayer(dt);
 			chasePlayer = true;
