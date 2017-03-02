@@ -76,7 +76,7 @@ class Player : public GameObject
 	void updateBulletTrail(double dt);
 	void renderBulletTrail(MS* projectionStack, MS* viewStack, MS* modelStack, unsigned * m_parameters);
 
-	bool isFPressed, wasFPressed;
+	bool isSpacePressed, wasSpacePressed;
 
 
 public:

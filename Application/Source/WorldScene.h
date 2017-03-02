@@ -71,6 +71,7 @@ public:
 	//MinionAI* getInactiveGoatMinion();
 
 	//MainScene* blueprint;
+	static std::vector<Item*> Item_Obj;
 	static std::vector<EnvironmentObj*> Env_Obj;
 private:
 	unsigned m_vertexArrayID;
@@ -97,7 +98,7 @@ private:
 
 	//MainScreen MainMenu;
 	//UI renderUI;
-	Blueprints *blueprints;
+	//Blueprints *blueprints;
 
 	void Interactions();
 

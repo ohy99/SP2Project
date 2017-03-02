@@ -19,19 +19,19 @@ Inventory* Inventory::getInstance()
 		return (Instance_ = new Inventory("Inventory"));
 }
 
-Item* Inventory::getItem(int i)
-{
-	if (Inventory_.size() > 0)
-	{
-		currItem = Inventory_[i]->item_;
-		Inventory_[i]->item_ = NULL;
-
-		return currItem;
-	}
-
-	else
-		return currItem;
-}
+//Item* Inventory::getItem(int i)
+//{
+//	if (Inventory_.size() > 0)
+//	{
+//		currItem = Inventory_[i]->item_;
+//		Inventory_[i]->item_ = NULL;
+//
+//		return currItem;
+//	}
+//
+//	else
+//		return currItem;
+//}
 
 void Inventory::setItem(Item* items)
 {
@@ -103,22 +103,22 @@ void Inventory::Update(double dt)
 	leftButton = glfwGetMouseButton(Application::m_window, GLFW_MOUSE_BUTTON_LEFT);
 	isLeftMouseButtonPressed = leftButton;
 
-	if (isLeftMouseButtonPressed && !wasLeftMouseButtonPressed)
-	{
-		for (size_t i = 0; i < Inventory_.size(); i++)
-		{
-			if (Inventory_[i]->hitBox->isPointInsideAABB(Position(cur_x, Application::getWindowHeight() - (float)cur_y, 0.f)))
-			{
-				Inventory::getItem(i);
-				break;
-			}				
-		}
+	//if (isLeftMouseButtonPressed && !wasLeftMouseButtonPressed)
+	//{
+	//	for (size_t i = 0; i < Inventory_.size(); i++)
+	//	{
+	//		if (Inventory_[i]->hitBox->isPointInsideAABB(Position(cur_x, Application::getWindowHeight() - (float)cur_y, 0.f)))
+	//		{
+	//			Inventory::getItem(i);
+	//			break;
+	//		}				
+	//	}
 
-		wasLeftMouseButtonPressed = isLeftMouseButtonPressed;
-	}
+	//	wasLeftMouseButtonPressed = isLeftMouseButtonPressed;
+	//}
 
-	if (!isLeftMouseButtonPressed && wasLeftMouseButtonPressed)
-		wasLeftMouseButtonPressed = isLeftMouseButtonPressed;
+	//if (!isLeftMouseButtonPressed && wasLeftMouseButtonPressed)
+	//	wasLeftMouseButtonPressed = isLeftMouseButtonPressed;
 
 	if (isIPressed && !wasIPressed)
 	{

@@ -46,7 +46,6 @@ MainScene::~MainScene()
 void MainScene::Init()
 {
 	// Init VBO here
-
 	Player::getInstance()->setPosition(Vector3(12, 0, 11));
 
 	glClearColor(0.0f, 0.5f, 0.66f, 0.0f);
@@ -384,13 +383,13 @@ void MainScene::Update(double dt)
 	}
 
 	//NEEEDS TO CHANGE SOOOONNN
-	bool once = false;
-	if (Application::IsKeyPressed('1') && once == false)
-	{
-		SceneManager::getInstance()->SetNextSceneID(SceneManager::SCENES::MINIGAMESCENE);
-		SceneManager::getInstance()->SetNextScene();
-		once = true;
-	}
+	//bool once = false;
+	//if (Application::IsKeyPressed('1') && once == false)
+	//{
+	//	SceneManager::getInstance()->SetNextSceneID(SceneManager::SCENES::MINIGAMESCENE);
+	//	SceneManager::getInstance()->SetNextScene();
+	//	once = true;
+	//}
 
 
 	//bool fpsonce = false;
@@ -429,12 +428,6 @@ void MainScene::Update(double dt)
 	}
 
 	FramesPerSec = 1 / dt;
-
-	if (Application::IsKeyPressed(VK_F1))
-	{
-		SceneManager::getInstance()->SetNextSceneID(SceneManager::SCENES::BOSSSCENE);
-		SceneManager::getInstance()->SetNextScene();
-	}
 }
 
 
@@ -530,6 +523,7 @@ void MainScene::Interactions(){
 
 			SceneManager::getInstance()->SetNextSceneID(SceneManager::SCENES::BARRACKSCENE);
 			SceneManager::getInstance()->SetNextScene();
+			return;
 		}
 	}
 	

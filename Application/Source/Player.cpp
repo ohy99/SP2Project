@@ -24,7 +24,7 @@ std::vector<Item*> Player::Items;
 std::vector<NPC*> Player::NPCs;
 //std::vector<EnvironmentObj*> Player::Teleport_Barrack;
 
-Player::Player() : GameObject("Player"), wasFPressed(false)
+Player::Player() : GameObject("Player"), wasSpacePressed(false)
 {
 	for (size_t i = 0; i < MESH_TYPE::mt_Count; i++)
 		PMesh[i] = NULL;
@@ -215,12 +215,12 @@ void Player::getPointedObj(Camera* cam)
 {
 	Position TargetPointFar;
 	TargetPointFar.Set(cam->getPosition().x + (cam->getDir().x * 2.f),
-		cam->getPosition().x + (cam->getDir().x * 2.f),
-		cam->getPosition().x + (cam->getDir().x * 2.f));
+		cam->getPosition().y + (cam->getDir().y * 2.f),
+		cam->getPosition().z + (cam->getDir().z * 2.f));
 	Position TargetPointNear;
-	TargetPointNear.Set(cam->getPosition().x + (cam->getDir().x * 0.5f),
-		cam->getPosition().y + (cam->getDir().y * 0.5f),
-		cam->getPosition().z + (cam->getDir().z * 0.5f));
+	TargetPointNear.Set(cam->getPosition().x + (cam->getDir().x * 1.f),
+		cam->getPosition().y + (cam->getDir().y * 1.f),
+		cam->getPosition().z + (cam->getDir().z * 1.f));
 
 	Pointed_Obj = NULL;
 	PointedAtTeleporter = false;
@@ -671,13 +671,13 @@ void Player::checkSwapWeapon()
 
 void Player::checkPickUpItem()
 {
-	isFPressed = Application::IsKeyPressed('F');
+	isSpacePressed = Application::IsKeyPressed(VK_SPACE);
 
-	if (isFPressed && !wasFPressed)
+	if (isSpacePressed && !wasSpacePressed)
 	{
 		for (size_t i = 0; i < Items.size(); i++)
 		{
-			if (Pointed_Obj && !Inventory::getInstance()->isInventoryFull() && !Items[i]->isItemInInventory)
+			if (Pointed_Obj == Items[i] && !Inventory::getInstance()->isInventoryFull() && !Items[i]->isItemInInventory)
 			{
 				Inventory::getInstance()->setItem(Items[i]);
 				Items[i]->isItemInInventory = true;
@@ -685,29 +685,29 @@ void Player::checkPickUpItem()
 			}
 		}
 
-		wasFPressed = isFPressed;
+		wasSpacePressed = isSpacePressed;
 	}
 
-	if (!isFPressed && wasFPressed)
-		wasFPressed = isFPressed;
+	if (!isSpacePressed && wasSpacePressed)
+		wasSpacePressed = isSpacePressed;
 
 }
 void Player::checkIfTalkedWithNPC()
 {
-	isFPressed = Application::IsKeyPressed('F');
+	isSpacePressed = Application::IsKeyPressed('F');
 
-	if (isFPressed && !wasFPressed)
+	if (isSpacePressed && !wasSpacePressed)
 	{
 		for (size_t i = 0; i < NPCs.size(); i++)
 		{
 
 		}
 
-		wasFPressed = isFPressed;
+		wasSpacePressed = isSpacePressed;
 	}
 
-	if (!isFPressed && wasFPressed)
-		wasFPressed = isFPressed;
+	if (!isSpacePressed && wasSpacePressed)
+		wasSpacePressed = isSpacePressed;
 }
 
 

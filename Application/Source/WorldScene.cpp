@@ -32,6 +32,7 @@ MS WorldScene::modelStack, WorldScene::viewStack, WorldScene::projectionStack;
 
 //std::vector<GameObject*> WorldScene::Game_Objects_(10, NULL);
 //UI renderMeshOnScreen;
+std::vector<Item*> WorldScene::Item_Obj;
 std::vector<EnvironmentObj*> WorldScene::Env_Obj;
 Teleporter* WorldScene::WS_Teleporter;
 Teleporter* WorldScene::Underground_Door;
@@ -139,61 +140,73 @@ void WorldScene::Update(double dt)
 	Inventory::getInstance()->Update(dt);
 	UI::getInstance()->Update(dt);
 
+	if (Player::getInstance()->getHp() <= 0){
+
+		isDead = true;
+		countDownBackToBase -= dt;
+
+		if (countDownBackToBase <= 0.0){
+
+			SceneManager::getInstance()->SetNextSceneID(SceneManager::SCENES::CAMPSCENE);
+			SceneManager::getInstance()->SetNextScene();
+			Player::getInstance()->setPosition(Vector3(12, 0, 11));
+		}
+	}
+	else{
+
+		isDead = false;
+		Player::getInstance()->update(dt, camera);
+	}
 
 	if (!UI::getInstance()->isPauseOpen() && !Inventory::getInstance()->isInventoryOpen())
 	{
-		if (Player::getInstance()->getHp() <= 0){
+		double c_posx, c_posy;
+		glfwGetCursorPos(Application::m_window, &c_posx, &c_posy);
+		glfwSetCursorPos(Application::m_window, width / 2, height / 2);
 
-			isDead = true;
-			countDownBackToBase -= dt;
+		glfwSetInputMode(Application::m_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
-			if (countDownBackToBase <= 0.0){
+		double dx, dy;
+		dx = dt * double(width / 2 - c_posx);
+		dy = dt * double(height / 2 - c_posy);
+		camera->Update(dt, dx, dy);
 
-				SceneManager::getInstance()->SetNextSceneID(SceneManager::SCENES::CAMPSCENE);
-				SceneManager::getInstance()->SetNextScene();
-				Player::getInstance()->setPosition(Vector3(12, 0, 11));
-			}
-		}
-		else{
+	}
 
-			isDead = false;
-			Player::getInstance()->update(dt, camera);
-		}
 
-		for (size_t i = 0; i < (sizeof WS_EnemyPool) / sizeof(*WS_EnemyPool); ++i)
+
+	for (size_t i = 0; i < (sizeof WS_EnemyPool) / sizeof(*WS_EnemyPool); ++i)
+	{
+		if (WS_EnemyPool[i]->active)
 		{
-			if (WS_EnemyPool[i]->active)
+			if (WS_EnemyPool[i]->getHp() <= 0)//REMOVE THE ENEMY FROM PLAYER ENEMY VECTOR SO PLAYER WILL NOT DETECT A DEAD ENEMY AS ENEMY
 			{
-				if (WS_EnemyPool[i]->getHp() <= 0)//REMOVE THE ENEMY FROM PLAYER ENEMY VECTOR SO PLAYER WILL NOT DETECT A DEAD ENEMY AS ENEMY
-				{
-					WS_EnemyPool[i]->active = false;
-					auto it = std::find(Player::getInstance()->enemies_.begin(), Player::getInstance()->enemies_.end(), WS_EnemyPool[i]);
-					if (it != Player::getInstance()->enemies_.end())
-						std::swap(*it, Player::getInstance()->enemies_.back());
-					//goatMinionPool[i]->CollisionMesh_->pos = Vector3(0, -5, 0);
-					Player::getInstance()->enemies_.back() = NULL;
-					Player::getInstance()->enemies_.pop_back();
+				WS_EnemyPool[i]->active = false;
+				auto it = std::find(Player::getInstance()->enemies_.begin(), Player::getInstance()->enemies_.end(), WS_EnemyPool[i]);
+				if (it != Player::getInstance()->enemies_.end())
+					std::swap(*it, Player::getInstance()->enemies_.back());
+				//goatMinionPool[i]->CollisionMesh_->pos = Vector3(0, -5, 0);
+				Player::getInstance()->enemies_.back() = NULL;
+				Player::getInstance()->enemies_.pop_back();
 
-					//for Collision
-					Player::getInstance()->removeCollisionObject(WS_EnemyPool[i]);
-				}
-				else//UPDATE ALIVE ENEMY
-					WS_EnemyPool[i]->update(dt);
+				//for Collision
+				Player::getInstance()->removeCollisionObject(WS_EnemyPool[i]);
 			}
-			else
-			{
-				WS_EnemyPool[i]->deadTime += dt;
-				if (WS_EnemyPool[i]->deadTime > 10)
-					WS_EnemyPool[i]->resetMinion();
-			}
+			else//UPDATE ALIVE ENEMY
+				WS_EnemyPool[i]->update(dt);
 		}
-
-		if (Blueprints::GetBlueprintNumber())//if i got one or more blueprints
+		else
 		{
-			//trigger global event
-			SandStorm::getInstance()->update(dt);
+			WS_EnemyPool[i]->deadTime += dt;
+			if (WS_EnemyPool[i]->deadTime > 10)
+				WS_EnemyPool[i]->resetMinion();
 		}
+	}
 
+	if (Blueprints::GetBlueprintNumber())//if i got one or more blueprints
+	{
+		//trigger global event
+		SandStorm::getInstance()->update(dt);
 	}
 }
 
@@ -266,6 +279,15 @@ void WorldScene::Render()
 	Inventory::getInstance()->Render(&projectionStack, &viewStack, &modelStack, m_parameters);
 
 
+	for (size_t i = 0; i < Item_Obj.size(); i++)
+	{
+		if (!Player::Items[i]->isItemInInventory)
+		{
+			modelStack.PushMatrix();
+			RenderMeshClass::RenderMesh(Item_Obj.at(i)->CollisionMesh_, true, &projectionStack, &viewStack, &modelStack, m_parameters);
+			modelStack.PopMatrix();
+		}
+	}
 }
 
 
@@ -422,6 +444,9 @@ void WorldScene::Exit()
 	Player::getInstance()->clearCollisionObj();
 
 	//delete[] WS_EnemyPool;
+
+	while (Item_Obj.size() != 0)
+		Item_Obj.pop_back();
 
 	// Cleanup VBO here
 	glDeleteVertexArrays(1, &m_vertexArrayID);
@@ -695,22 +720,49 @@ void WorldScene::initItems()
 	Tablet->CollisionMesh_->textureID = LoadTGA("Image//WorldScene//InteractableItem_OffTablet_UV_Texture.tga");
 	EnvironmentObj* Robot = new EnvironmentObj(MeshBuilder::GenerateOBJ("Robot", "OBJ//WorldScene//BrokenRobot_OBJ.obj"));
 	Robot->CollisionMesh_->textureID = LoadTGA("Image//WorldScene//InteractableItem_BrokenRobot_UV_Texture.tga");
-	EnvironmentObj* Blueprint1 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Blueprint", "OBJ//Blueprint1.obj"));
+
+	Item* Blueprint1 = new Item("Blueprint1");
+	Blueprint1->CollisionMesh_ = MeshBuilder::GenerateOBJ("Blueprint1", "OBJ//Blueprint1.obj");
 	Blueprint1->CollisionMesh_->textureID = LoadTGA("Image//BlueprintUV.tga");
-	EnvironmentObj* Blueprint2 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Blueprint", "OBJ//Blueprint2.obj"));
+	Blueprint1->item2DTexture = MeshBuilder::GenerateQuad("Blueprint1", Color(1.f, 1.f, 1.f), 1.f, 1.f);
+	Blueprint1->item2DTexture->textureID = LoadTGA("Image//Blueprints(Item).tga");
+	Blueprint1->CollisionMesh_->Hitbox_Min -= Vector3(0.5f,0.5f,0.5f);
+	Blueprint1->CollisionMesh_->Hitbox_Max += Vector3(0.5f, 0.5f, 0.5f);
+
+	Item* Blueprint2 = new Item("Blueprint2");
+	Blueprint2->CollisionMesh_ = MeshBuilder::GenerateOBJ("Blueprint2", "OBJ//Blueprint2.obj");
 	Blueprint2->CollisionMesh_->textureID = LoadTGA("Image//BlueprintUV.tga");
-	EnvironmentObj* Blueprint_Fakehint = new EnvironmentObj(MeshBuilder::GenerateOBJ("Blueprint", "OBJ//Blueprint_FakeHint.obj"));
+	Blueprint2->item2DTexture = MeshBuilder::GenerateQuad("Blueprint", Color(1.f, 1.f, 1.f), 1.f, 1.f);
+	Blueprint2->item2DTexture->textureID = LoadTGA("Image//Blueprints(Item).tga");
+	Blueprint2->CollisionMesh_->Hitbox_Min -= Vector3(0.5f, 0.5f, 0.5f);
+	Blueprint2->CollisionMesh_->Hitbox_Max += Vector3(0.5f, 0.5f, 0.5f);
+
+	Item* Blueprint_Fakehint = new Item("Blueprint_Fakehint");
+	Blueprint_Fakehint->CollisionMesh_ = MeshBuilder::GenerateOBJ("Blueprint_Fakehint", "OBJ//Blueprint_FakeHint.obj");
 	Blueprint_Fakehint->CollisionMesh_->textureID = LoadTGA("Image//BlueprintUV.tga");
+	Blueprint_Fakehint->item2DTexture = MeshBuilder::GenerateQuad("Blueprint", Color(1.f, 1.f, 1.f), 1.f, 1.f);
+	Blueprint_Fakehint->item2DTexture->textureID = LoadTGA("Image//Blueprints(Item)(Fake).tga");
+	Blueprint_Fakehint->CollisionMesh_->Hitbox_Min -= Vector3(0.5f, 0.5f, 0.5f);
+	Blueprint_Fakehint->CollisionMesh_->Hitbox_Max += Vector3(0.5f, 0.5f, 0.5f);
+
+	//EnvironmentObj* Blueprint2 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Blueprint", "OBJ//Blueprint2.obj"));
+	//Blueprint2->CollisionMesh_->textureID = LoadTGA("Image//BlueprintUV.tga");
+	//EnvironmentObj* Blueprint_Fakehint = new EnvironmentObj(MeshBuilder::GenerateOBJ("Blueprint", "OBJ//Blueprint_FakeHint.obj"));
+	//Blueprint_Fakehint->CollisionMesh_->textureID = LoadTGA("Image//BlueprintUV.tga");
 	EnvironmentObj* BrokenGuard = new EnvironmentObj(MeshBuilder::GenerateOBJ("Broken Guard", "OBJ//WorldScene//DestroyedGuard.obj"));
 
 
 	Env_Obj.push_back(Tablet);
 	Env_Obj.push_back(Robot);
-	Env_Obj.push_back(Blueprint1);
-	Env_Obj.push_back(Blueprint2);
-	Env_Obj.push_back(Blueprint_Fakehint);
+	Item_Obj.push_back(Blueprint1);
+	Item_Obj.push_back(Blueprint2);
+	Item_Obj.push_back(Blueprint_Fakehint);
 	Env_Obj.push_back(BrokenGuard);
 	//Interactable Items ----------------------------------------------- END
+
+
+	for (auto it : Item_Obj)
+		Player::Items.push_back(it);
 }
 void WorldScene::initSkybox()
 {
