@@ -7,10 +7,11 @@
 
 //MinionAI* WorldScene::goatMinionPool[5];
 
-MinionAI::MinionAI() : EnemyAI("Goat Minion"), doHitDelay(0.5)
+MinionAI::MinionAI() : EnemyAI("Enemy Robot"), doHitDelay(0.5)
 {
 
-	CollisionMesh_ = MeshBuilder::GenerateOBJ("", "OBJ//goat.obj");
+	CollisionMesh_ = MeshBuilder::GenerateOBJ("", "OBJ//Enemy.obj");
+	CollisionMesh_->textureID = LoadTGA("Image//EnemyUV.tga");
 	CollisionMesh_->collisionEnabled = true;
 
 	resetMinion();
