@@ -63,7 +63,7 @@ Player::Player() : GameObject("Player"), wasSpacePressed(false)
 		bulletMesh[i]->deadTime = 0.5;//this time is used to render the bullet hit texture quad
 	}
 	bulletHitQuad = MeshBuilder::GenerateQuad("bullethit", Color(1, 1, 1), 1.f, 1.f);
-	bulletHitQuad->textureID = LoadTGA("IMAGE//BULLETHOLE.tga");
+	bulletHitQuad->textureID = LoadTGA("Image//blood.tga");
 	
 	radarPlayer = MeshBuilder::GenerateSphere("", Color(0, 1, 0), 10, 10, 1);
 	radarEnemy = MeshBuilder::GenerateSphere("", Color(1, 0, 0), 10, 10, 1);
@@ -588,7 +588,7 @@ void Player::updateBulletTrail(double dt)
 				{
 					//if (bulletMesh[i]->scale > 0.5f)
 					//	bulletMesh[i]->scale -= (float)(10.0);
-					bulletMesh[i]->scale = 0.1f;
+					bulletMesh[i]->scale = 0.01f;
 					bulletMesh[i]->CollisionMesh_->pos = bulletMesh[i]->hitPos + bulletMesh[i]->CollisionMesh_->dir * bulletMesh[i]->scale;
 				}
 				bulletMesh[i]->aliveTime += (float)dt;
@@ -631,7 +631,7 @@ void Player::renderBulletTrail(MS* projectionStack, MS* viewStack, MS* modelStac
 				modelStack->PushMatrix();
 				modelStack->Translate(bulletMesh[i]->hitPos.x, bulletMesh[i]->hitPos.y, bulletMesh[i]->hitPos.z);
 				modelStack->Rotate(bulletMesh[i]->angleRotate + 180.f, bulletMesh[i]->angleRAxis.x, bulletMesh[i]->angleRAxis.y, bulletMesh[i]->angleRAxis.z);
-				modelStack->Scale(0.1f, 0.1f, 1.f);
+				modelStack->Scale(0.3f, 0.3f, 1.f);
 				RenderMeshClass::RenderMesh(bulletHitQuad, false, projectionStack, viewStack, modelStack, m_parameters);
 				modelStack->PopMatrix();
 			}

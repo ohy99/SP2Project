@@ -205,10 +205,7 @@ void UndergroundScene::Init()
 	Blueprint->CollisionMesh_->Hitbox_Max += Vector3(0.5f, 0.5f, 0.5f);
 	//Blueprint 3 ----- End
 
-<<<<<<< HEAD
 	Item_Obj.push_back(Blueprint);
-=======
->>>>>>> 35606b5622f8e01cce745ee44ac53e2f0a4fcb8d
 
 	for (auto it : Env_Obj)
 		Player::addCollisionObject(it);
