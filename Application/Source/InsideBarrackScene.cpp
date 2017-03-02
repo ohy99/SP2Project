@@ -220,6 +220,8 @@ void InsideBarrackScene::Init()
 	isPause = false;
 	//MainMenu.Init();
 
+	UI::getInstance()->Init();
+
 	camera = FPSCam::getInstance();
 	//camera->Init(Vector3(0, 0, 7), Vector3(0, 0, 0), Vector3(0, 1, 0));
 
@@ -299,15 +301,16 @@ void InsideBarrackScene::Update(double dt)
 		wasEscPressed = isEscPressed;
 
 	Player::getInstance()->update(dt, camera);
-
+	Inventory::getInstance()->Update(dt);
+	UI::getInstance()->Update(dt);
 	//for (size_t i = 0; i < CampNPC.size(); i++)
 	//{
 	//	CampNPC.at(i)->update(dt);
 	//}
 
 
-	if (!isPause /*&& !mainmenu.ismainmenu*/)
-	{
+	if (!UI::getInstance()->isPauseOpen() && !Inventory::getInstance()->isInventoryOpen()){
+
 		double c_posx, c_posy;
 		glfwGetCursorPos(Application::m_window, &c_posx, &c_posy);
 		glfwSetCursorPos(Application::m_window, width / 2, height / 2);
@@ -382,8 +385,11 @@ void InsideBarrackScene::Render()
 	RenderMeshClass::RenderMesh(meshList[GEO_AXES], false, &projectionStack, &viewStack, &modelStack, m_parameters);
 	Player::getInstance()->render(&projectionStack, &viewStack, &modelStack, m_parameters);
 
-	RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::to_string(FramesPerSec), Color(1, 0, 0), 1.5f, 45, 38, &projectionStack, &viewStack, &modelStack, m_parameters);
+	RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::to_string(FramesPerSec), Color(0, 1, 0), 1.5f, 45, 38, &projectionStack, &viewStack, &modelStack, m_parameters);
+	RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("Blueprints: ") + std::to_string(Blueprints::GetBlueprintNumber()) + std::string("/3"), Color(0, 1, 0), 2.f, 68, 57, &projectionStack, &viewStack, &modelStack, m_parameters);
 
+	UI::getInstance()->renderPause(&projectionStack, &viewStack, &modelStack, m_parameters);
+	Inventory::getInstance()->Render(&projectionStack, &viewStack, &modelStack, m_parameters);
 
 }
 
@@ -391,7 +397,7 @@ void InsideBarrackScene::Interactions(){
 
 	if (Player::getInstance()->getPlayerPosition().x >= -1 && Player::getInstance()->getPlayerPosition().x <= 1 && Player::getInstance()->getPlayerPosition().z <= -1.5 && Player::getInstance()->getPlayerPosition().z >= -2){
 
-		RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("[Press SPACE to exit.]"), Color(1, 0, 0), 2.f, 35, 24, &projectionStack, &viewStack, &modelStack, m_parameters);
+		RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("[Press SPACE to exit.]"), Color(0, 1, 0), 2.f, 35, 24, &projectionStack, &viewStack, &modelStack, m_parameters);
 
 		if (Application::IsKeyPressed(VK_SPACE)){
 

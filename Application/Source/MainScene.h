@@ -108,6 +108,8 @@ private:
 	Item* a;
 	Item* b;
 
+	bool testRender;
+
 	double x, y;
 	//void RenderText(Text_Data* TextData, std::string text, Color color);
 	//void RenderTextOnScreen(Text_Data* TextData, std::string text, Color color, float size, float x, float y);

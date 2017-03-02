@@ -19,7 +19,9 @@ class MainMenu : public Scene
 		GEO_QUAD,
 		MAIN_SCREEN,
 		START_BUTTON,
+		START_BUTTON2,
 		QUIT,
+		QUIT2,
 
 		NUM_GEOMETRY,
 	};
@@ -47,6 +49,7 @@ private:
 	int leftButton;
 	bool isStartPressed;
 	bool isLeftMouseButtonPressed, wasLeftMouseButtonPressed;
+	bool start, quit;
 };
 
 #endif

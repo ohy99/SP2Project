@@ -56,8 +56,19 @@ void MainMenu::Init()
 
 	meshList[MAIN_SCREEN] = MeshBuilder::GenerateQuad("Screen", Color(1.f, 1.f, 0.f), 1.f, 1.f);
 	meshList[MAIN_SCREEN]->textureID = LoadTGA("Image//main_menu.tga");
+
 	meshList[START_BUTTON] = MeshBuilder::GenerateQuad("Start Button", Color(1.f, 0.f, 0.f), 1.f, 1.f);
+	meshList[START_BUTTON]->textureID = LoadTGA("Image//mainstart.tga");
+
+	meshList[START_BUTTON2] = MeshBuilder::GenerateQuad("Start Button", Color(1.f, 0.f, 0.f), 1.f, 1.f);
+	meshList[START_BUTTON2]->textureID = LoadTGA("Image//mainstart2.tga");
+
 	meshList[QUIT] = MeshBuilder::GenerateQuad("Quit Button", Color(1.f, 0.f, 0.f), 1.f, 1.f);
+	meshList[QUIT]->textureID = LoadTGA("Image//mainquit.tga");
+
+	meshList[QUIT2] = MeshBuilder::GenerateQuad("Quit Button", Color(1.f, 0.f, 0.f), 1.f, 1.f);
+	meshList[QUIT2]->textureID = LoadTGA("Image//mainquit2.tga");
+
 
 	wasLeftMouseButtonPressed = false;
 	isStartPressed = false;
@@ -71,6 +82,9 @@ void MainMenu::Init()
 		Vector3((float)(Application::getWindowWidth() / 1024.f) * 200.f, (float)(Application::getWindowHeight() / 768.f) * 50.f, 2.f),
 		Vector3((float)Application::getWindowWidth() * 0.5f, (float)(Application::getWindowHeight() / 768.f) * (Application::getWindowHeight() - 250.f), 0.f),
 		Vector3(0.f, 1.f, 0.f));
+
+	quit = false;
+	start = false;
 
 	//Mtx44 projection;
 	//projection.SetToPerspective(45.f, 4.f / 3.f, 0.1f, 1000.f);
@@ -103,16 +117,14 @@ void MainMenu::Update(double dt)
 		wasLeftMouseButtonPressed = isLeftMouseButtonPressed;
 	
 	if (meshList[START_BUTTON]->isPointInsideAABB(Position((float)x, (float)y, 0.f)))
-		meshList[START_BUTTON]->textureID = LoadTGA("Image//mainstart2.tga");
-
+		start = true;
 	else
-		meshList[START_BUTTON]->textureID = LoadTGA("Image//mainstart.tga");
+		start = false;
 	
 	if (meshList[QUIT]->isPointInsideAABB(Position((float)x, (float)y, 0.f)))
-		meshList[QUIT]->textureID = LoadTGA("Image//mainquit2.tga");
-
+		quit = true;
 	else
-		meshList[QUIT]->textureID = LoadTGA("Image//mainquit.tga");
+		quit = false;
 
 	if (isStartPressed)
 	{
@@ -136,8 +148,18 @@ void MainMenu::Render()
 	modelStack.LoadIdentity();
 
 	RenderMeshClass::RenderMeshOnScreen(meshList[MAIN_SCREEN], (float)Application::getWindowWidth() * 0.5f, (float)Application::getWindowHeight() * 0.5f, 1.f, (float)Application::getWindowWidth(), (float)Application::getWindowHeight(), &projectionStack, &viewStack, &modelStack, Scene::m_parameters);
-	RenderMeshClass::RenderMeshOnScreen(meshList[START_BUTTON], (float)Application::getWindowWidth() * 0.5f, (float)(Application::getWindowHeight() / 786.f) * 400.f, 2.f, (float)(Application::getWindowWidth() / 1024.f) * 400.f, (float)(Application::getWindowHeight() / 768.f) * 100.f, &projectionStack, &viewStack, &modelStack, Scene::m_parameters);
-	RenderMeshClass::RenderMeshOnScreen(meshList[QUIT], (float)Application::getWindowWidth() * 0.5f, (float)(Application::getWindowHeight() / 768.f) * 250.f, 2.f, (float)(Application::getWindowWidth() / 1024.f) * 400.f, (float)(Application::getWindowHeight() / 768.f) * 100.f, &projectionStack, &viewStack, &modelStack, Scene::m_parameters);
+
+	if (!start)
+		RenderMeshClass::RenderMeshOnScreen(meshList[START_BUTTON], (float)Application::getWindowWidth() * 0.5f, (float)(Application::getWindowHeight() / 786.f) * 400.f, 2.f, (float)(Application::getWindowWidth() / 1024.f) * 400.f, (float)(Application::getWindowHeight() / 768.f) * 100.f, &projectionStack, &viewStack, &modelStack, Scene::m_parameters);
+
+	else
+		RenderMeshClass::RenderMeshOnScreen(meshList[START_BUTTON2], (float)Application::getWindowWidth() * 0.5f, (float)(Application::getWindowHeight() / 786.f) * 400.f, 2.f, (float)(Application::getWindowWidth() / 1024.f) * 400.f, (float)(Application::getWindowHeight() / 768.f) * 100.f, &projectionStack, &viewStack, &modelStack, Scene::m_parameters);
+
+	if (!quit)
+		RenderMeshClass::RenderMeshOnScreen(meshList[QUIT], (float)Application::getWindowWidth() * 0.5f, (float)(Application::getWindowHeight() / 768.f) * 250.f, 2.f, (float)(Application::getWindowWidth() / 1024.f) * 400.f, (float)(Application::getWindowHeight() / 768.f) * 100.f, &projectionStack, &viewStack, &modelStack, Scene::m_parameters);
+
+	else
+		RenderMeshClass::RenderMeshOnScreen(meshList[QUIT2], (float)Application::getWindowWidth() * 0.5f, (float)(Application::getWindowHeight() / 768.f) * 250.f, 2.f, (float)(Application::getWindowWidth() / 1024.f) * 400.f, (float)(Application::getWindowHeight() / 768.f) * 100.f, &projectionStack, &viewStack, &modelStack, Scene::m_parameters);
 }
 
 void MainMenu::Exit()

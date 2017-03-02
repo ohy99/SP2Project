@@ -81,6 +81,7 @@ protected:
 	//std::vector<GameObject*> Game_Objects_;
 	//virtual std::vector<GameObject*> getCurrentSceneObjs(){ return Game_Objects_; }
 	static bool debugMode;
+
 };
 
 

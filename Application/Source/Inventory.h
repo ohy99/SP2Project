@@ -13,7 +13,7 @@ public:
 
 
 	// Getter
-	Item* getItem(int i); // Be able to get item from inventory
+	//Item* getItem(int i); // Be able to get item from inventory
 
 	int getInventorySize(); // Get the size of the inventory
 

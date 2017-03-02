@@ -30,7 +30,6 @@ MS MainScene::modelStack, MainScene::viewStack, MainScene::projectionStack;
 
 //std::vector<GameObject*> MainScene::Game_Objects_(10, NULL);
 std::vector<Item*> MainScene::Item_Obj;
-//std::vector<GameObject*> MainScene::Game_Objects_(10, NULL);
 std::vector<EnvironmentObj*> MainScene::Env_Obj;
 std::vector<NPC*> MainScene::CampNPC;
 Teleporter* MainScene::Barrack;
@@ -47,7 +46,6 @@ MainScene::~MainScene()
 void MainScene::Init()
 {
 	// Init VBO here
-
 	Player::getInstance()->setPosition(Vector3(12, 0, 11));
 
 	glClearColor(0.0f, 0.5f, 0.66f, 0.0f);
@@ -339,13 +337,18 @@ void MainScene::Init()
 	for (auto it : Env_Obj)
 		Player::addCollisionObject(it);
 
+	for (auto it : Item_Obj)
+		Player::Items.push_back(it);
+
+	for (auto it : CampNPC)
+		Player::NPCs.push_back(it);
+
 	Player::getInstance()->setHpToMax();
 	UI::getInstance()->Init();
 
 
 	camera = new Camera3;
 	camera->Init(Vector3(0, 0, 7), Vector3(0, 0, 0), Vector3(0, 1, 0));
-
 
 
 	Mtx44 projection;
@@ -380,13 +383,13 @@ void MainScene::Update(double dt)
 	}
 
 	//NEEEDS TO CHANGE SOOOONNN
-	bool once = false;
-	if (Application::IsKeyPressed('1') && once == false)
-	{
-		SceneManager::getInstance()->SetNextSceneID(SceneManager::SCENES::MINIGAMESCENE);
-		SceneManager::getInstance()->SetNextScene();
-		once = true;
-	}
+	//bool once = false;
+	//if (Application::IsKeyPressed('1') && once == false)
+	//{
+	//	SceneManager::getInstance()->SetNextSceneID(SceneManager::SCENES::MINIGAMESCENE);
+	//	SceneManager::getInstance()->SetNextScene();
+	//	once = true;
+	//}
 
 
 	//bool fpsonce = false;
@@ -425,12 +428,6 @@ void MainScene::Update(double dt)
 	}
 
 	FramesPerSec = 1 / dt;
-
-	if (Application::IsKeyPressed(VK_F1))
-	{
-		SceneManager::getInstance()->SetNextSceneID(SceneManager::SCENES::BOSSSCENE);
-		SceneManager::getInstance()->SetNextScene();
-	}
 }
 
 
@@ -448,10 +445,20 @@ void MainScene::Render()
 
 
 	RenderMeshClass::RenderMesh(meshList[GEO_AXES], false, &projectionStack, &viewStack, &modelStack, m_parameters);
-	Player::getInstance()->render(&projectionStack, &viewStack, &modelStack, m_parameters);
 
+
+	//for (size_t i = 0; i < Item_Obj.size(); i++)
+	//{
+	//	if (!Player::Items[i]->isItemInInventory)
+	//	{
+	//		modelStack.PushMatrix();
+	//		RenderMeshClass::RenderMesh(Item_Obj.at(i)->CollisionMesh_, true, &projectionStack, &viewStack, &modelStack, m_parameters);
+	//		modelStack.PopMatrix();
+	//	}
+	//}
 
 	RenderSkybox();
+	robotsInteractions();
 	//	renderEnvironment();
 
 
@@ -461,17 +468,6 @@ void MainScene::Render()
 	modelStack.Rotate(90, -1, 0, 0);
 	RenderMeshClass::RenderMesh(meshList[GEO_GroundMesh_RedDirt], true, &projectionStack, &viewStack, &modelStack, m_parameters);
 	modelStack.PopMatrix();
-
-	//for (size_t i = 0; i < Item_Obj.size(); i++)
-	//	{
-	//		if (!Player::Items[i]->isItemInInventory)
-	//		{
-	//			modelStack.PushMatrix();
-	//			RenderMeshClass::RenderMesh(Item_Obj.at(i)->CollisionMesh_, true, &projectionStack, &viewStack, &modelStack, m_parameters);
-	//			modelStack.PopMatrix();
-	//		}
-	//	}
-
 
 	for (size_t i = 0; i < CampNPC.size(); i++)
 	{
@@ -527,6 +523,7 @@ void MainScene::Interactions(){
 
 			SceneManager::getInstance()->SetNextSceneID(SceneManager::SCENES::BARRACKSCENE);
 			SceneManager::getInstance()->SetNextScene();
+			return;
 		}
 	}
 	
@@ -568,11 +565,7 @@ void MainScene::Exit()
 	//delete camera;
 	Player::getInstance()->clearCollisionObj();
 	delete Barrack;
-	//for (size_t i = 0; i < NUM_GEOMETRY; i++)
-	//{
-	//	if (meshList[i])
-	//		delete meshList[i];
-	//}
+
 	while (Env_Obj.size())
 		Env_Obj.pop_back();
 	while (CampNPC.size())

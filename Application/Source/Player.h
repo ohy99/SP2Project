@@ -76,7 +76,7 @@ class Player : public GameObject
 	void updateBulletTrail(double dt);
 	void renderBulletTrail(MS* projectionStack, MS* viewStack, MS* modelStack, unsigned * m_parameters);
 
-	bool isFPressed, wasFPressed;
+	bool isSpacePressed, wasSpacePressed;
 
 
 public:
@@ -112,6 +112,7 @@ public:
 	static std::vector<Teleporter*> teleporters_;
 	bool PointedAtTeleporter;
 	static std::vector<Item*> Items;
+	static std::vector<NPC*> NPCs;
 
 	//void TeleportToInsideBarrack();
 	//static std::vector<EnvironmentObj*> Teleport_Barrack;
@@ -132,6 +133,10 @@ public:
 	std::vector<Vector3> PositionOfEnemiesInProximity;
 	void updateRadar();
 	void renderRadar(MS* projectionStack, MS* viewStack, MS* modelStack, unsigned * m_parameters);
+
+	std::string AMMO;
+
+	void checkIfTalkedWithNPC();
 };
 
 #endif

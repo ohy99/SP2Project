@@ -22,7 +22,9 @@ private:
 	{
 		PAUSE,
 		RESUME,
+		RESUME2,
 		QUIT,
+		QUIT2,
 
 		PUI_COUNT,
 	};
@@ -39,6 +41,7 @@ private:
 	int leftButton;
 	bool isLeftMouseButtonPressed, wasLeftMouseButtonPressed;
 	bool isIPressed, wasIPressed, isInventory;
+	bool resume, quit;
 
 	static UI* Instance_;
 };

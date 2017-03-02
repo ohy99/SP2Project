@@ -3,12 +3,13 @@
 
 #include "Mesh.h"
 #include "MatrixStack.h"
+#include "Item.h"
 
-class Blueprints
+class Blueprints : public Item
 {
 public:
-	Blueprints() { }
-	~Blueprints() { }
+	Blueprints(std::string name) : Item(name) { ; }
+	~Blueprints() { ; }
 
 	static int numberOfBlueprints;
 	static int GetBlueprintNumber();

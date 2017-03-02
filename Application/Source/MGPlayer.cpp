@@ -17,7 +17,7 @@ wasDPressed(false), wasAPressed(false), isGameStarted(false), isGameReset(false)
 
 MGPlayer::~MGPlayer()
 {
-	delete[] PMesh;
+	//delete[] PMesh;
 }
 
 MGPlayer* MGPlayer::getInstance()
@@ -154,4 +154,10 @@ void MGPlayer::setGameState(bool gameStarted, bool gameReset, bool isHit)
 	isGameStarted = gameStarted;
 	isGameReset = gameReset;
 	this->isHit = isHit;
+}
+
+void MGPlayer::clearOBJ()
+{
+	while (CollisionObjects.size() != 0)
+		CollisionObjects.pop_back();
 }

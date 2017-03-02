@@ -21,9 +21,10 @@ std::vector<EnemyAI*> Player::enemies_;
 
 std::vector<Teleporter*> Player::teleporters_;
 std::vector<Item*> Player::Items;
+std::vector<NPC*> Player::NPCs;
 //std::vector<EnvironmentObj*> Player::Teleport_Barrack;
 
-Player::Player() : GameObject("Player"), wasFPressed(false)
+Player::Player() : GameObject("Player"), wasSpacePressed(false)
 {
 	for (size_t i = 0; i < MESH_TYPE::mt_Count; i++)
 		PMesh[i] = NULL;
@@ -165,6 +166,7 @@ void Player::update(double dt, Camera* cam)
 	checkTeleport();
 	updateRadar();
 	//TeleportToInsideBarrack();
+	checkIfTalkedWithNPC();
 
 }
 
@@ -201,11 +203,10 @@ void Player::render(MS* projectionStack, MS* viewStack, MS* modelStack, unsigned
 	if //(currentWeapon_ == weapons_[WEAPON_TYPE::PISTOL] || currentWeapon_ == weapons_[WEAPON_TYPE::RIFLE])
 		(currWeap >= WEAPON_TYPE::PISTOL)
 	{
-		//RangeWeapon* Rweap = dynamic_cast<RangeWeapon*>(currentWeapon_);
-		RangeWeapon* Rweap = dynamic_cast<RangeWeapon*>(weapons_[currWeap]);
-		RenderMeshClass::RenderTextOnScreen(&Scene::Text[Scene::TEXT_TYPE::SegoeMarker], std::to_string(Rweap->getGunAmmo()), Color(1, 1, 1), 2, 73, 5, projectionStack, viewStack, modelStack, m_parameters);
-		//RenderMeshClass::RenderTextOnScreen(&Scene::Text[Scene::TEXT_TYPE::SegoeMarker], std::to_string(Rweap->getWeaponAmmo()), Color(1, 1, 1), 2, 75, 5, projectionStack, viewStack, modelStack, m_parameters);
-		RenderMeshClass::RenderTextOnScreen(&Scene::Text[Scene::TEXT_TYPE::SegoeMarker], std::to_string(Rweap->getWeaponAmmo()), Color(1, 1, 1), 2, 75, 5, projectionStack, viewStack, modelStack, m_parameters);
+		//RangeWeapon* Rweap = dynamic_cast<RangeWeapon*>(currentWeapon_);								 // new code, delete this comment after you solve the conflict
+		RangeWeapon* Rweap = dynamic_cast<RangeWeapon*>(weapons_[currWeap]);							 // new code, delete this comment after you solve the conflict
+		AMMO = std::to_string(Rweap->getGunAmmo()) + "/" + std::to_string(Rweap->getWeaponAmmo());		 // new code, delete this comment after you solve the conflict
+		RenderMeshClass::RenderTextOnScreen(&Scene::Text[Scene::TEXT_TYPE::SegoeMarker], AMMO, Color(1, 1, 1), 2, 73, 5, projectionStack, viewStack, modelStack, m_parameters);
 	}
 
 }
@@ -410,6 +411,9 @@ void Player::RangedAttack(double dt)
 	static float reloadTimeElapsed = 0.0f;
 	//RangeWeapon* Rweap = dynamic_cast<RangeWeapon*>(currentWeapon_);
 	RangeWeapon* Rweap = dynamic_cast<RangeWeapon*>(weapons_[currWeap]);
+	if (glfwGetMouseButton(Application::m_window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && Rweap->getGunAmmo() <= 0)
+		reloading = true;
+
 	if (glfwGetMouseButton(Application::m_window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS)
 	{
 		if (Rweap->shotCooldown <= 0)
@@ -668,13 +672,13 @@ void Player::checkSwapWeapon()
 
 void Player::checkPickUpItem()
 {
-	isFPressed = Application::IsKeyPressed('F');
+	isSpacePressed = Application::IsKeyPressed(VK_SPACE);
 
-	if (isFPressed && !wasFPressed)
+	if (isSpacePressed && !wasSpacePressed)
 	{
 		for (size_t i = 0; i < Items.size(); i++)
 		{
-			if (Pointed_Obj && !Inventory::getInstance()->isInventoryFull() && !Items[i]->isItemInInventory)
+			if (Pointed_Obj == Items[i] && !Inventory::getInstance()->isInventoryFull() && !Items[i]->isItemInInventory)
 			{
 				Inventory::getInstance()->setItem(Items[i]);
 				Items[i]->isItemInInventory = true;
@@ -682,13 +686,31 @@ void Player::checkPickUpItem()
 			}
 		}
 
-		wasFPressed = isFPressed;
+		wasSpacePressed = isSpacePressed;
 	}
 
-	if (!isFPressed && wasFPressed)
-		wasFPressed = isFPressed;
+	if (!isSpacePressed && wasSpacePressed)
+		wasSpacePressed = isSpacePressed;
 
 }
+void Player::checkIfTalkedWithNPC()
+{
+	isSpacePressed = Application::IsKeyPressed('F');
+
+	if (isSpacePressed && !wasSpacePressed)
+	{
+		for (size_t i = 0; i < NPCs.size(); i++)
+		{
+
+		}
+
+		wasSpacePressed = isSpacePressed;
+	}
+
+	if (!isSpacePressed && wasSpacePressed)
+		wasSpacePressed = isSpacePressed;
+}
+
 
 GameObject* Player::removeCollisionObject(GameObject* obj) {
 	auto it = std::find(Player::getInstance()->CollisionObjects.begin(), Player::getInstance()->CollisionObjects.end(), obj);
@@ -736,6 +758,7 @@ void Player::renderRadar(MS* projectionStack, MS* viewStack, MS* modelStack, uns
 	}
 }
 
+
 void RenderMeshClass::RMoS_RadarUse(Mesh* mesh, Vector3 origin, Vector3 dirRelativeToOrigin, Vector3 dir, int sizex, int sizey, float scale, MS* projectionStack, MS* viewStack, MS* modelStack, unsigned * m_parameters)
 {
 	glDisable(GL_DEPTH_TEST);
@@ -749,9 +772,7 @@ void RenderMeshClass::RMoS_RadarUse(Mesh* mesh, Vector3 origin, Vector3 dirRelat
 	modelStack->LoadIdentity();
 	//to do: scale and translate accordingly
 
-	
 	modelStack->Translate(origin.x, origin.y, origin.z);
-
 
 	Vector3 wad = FPSCam::getInstance()->getDir();
 	wad.y = 0;
@@ -777,7 +798,6 @@ void RenderMeshClass::RMoS_RadarUse(Mesh* mesh, Vector3 origin, Vector3 dirRelat
 	//modelStack->Scale(1, scale, 1);
 	modelStack->Translate(0, distance * scale, 1);
 	modelStack->Scale(sizex, sizey, 1);
-
 
 	RenderMeshClass::RenderMesh(mesh, false, projectionStack, viewStack, modelStack, m_parameters); //UI should not have light
 	projectionStack->PopMatrix();
