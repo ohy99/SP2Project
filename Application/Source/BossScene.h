@@ -71,6 +71,7 @@ private:
 	double deadBossBackToBaseTimer;
 	bool fpsonce;
 	bool playerDied;
+	bool bossDieded;
 	double countDownbackToBase;
 };
 

@@ -95,6 +95,7 @@
     <ClCompile Include="Source\Camera3.cpp" />
     <ClCompile Include="Source\CameraMG.cpp" />
     <ClCompile Include="Source\DataBase.cpp" />
+    <ClCompile Include="Source\EnemyAI.cpp" />
     <ClCompile Include="Source\Environment.cpp" />
     <ClCompile Include="Source\FPSCam.cpp" />
     <ClCompile Include="Source\GoatMinion.cpp" />

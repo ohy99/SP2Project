@@ -19,6 +19,7 @@ GoatBoss::GoatBoss() : EnemyAI("GoatBoss"), maxHp_(hp_)
 {
 	BossProjSpeed = 50.0;
 	mesh[botParts::body] = MeshBuilder::GenerateOBJ("", "OBJ//GoatBossTemp.obj");
+	mesh[botParts::body]->textureID = LoadTGA("IMAGE//BossScene//goatbossUV.tga");
 	CollisionMesh_ = mesh[botParts::body];
 	attack = NULL;
 	currState_ = BS_IDLE;
@@ -29,12 +30,14 @@ GoatBoss::GoatBoss() : EnemyAI("GoatBoss"), maxHp_(hp_)
 	{
 		goatMinionPool[i] = new GoatMinion;
 		goatMinionPool[i]->CollisionMesh_ = MeshBuilder::GenerateOBJ("Goat Minion", "OBJ//goat.obj");
+		goatMinionPool[i]->CollisionMesh_->textureID = LoadTGA("IMAGE//GoatUV.tga");
 		goatMinionPool[i]->active = false;
 		goatMinionPool[i]->CollisionMesh_->collisionEnabled = true;
 	}
-	for (size_t i = 0; i < (sizeof goatMinionPool) / sizeof(*goatMinionPool); ++i)
+	for (size_t i = 0; i < (sizeof TeleParticles) / sizeof(*TeleParticles); ++i)
 	{
 		TeleParticles[i] = MeshBuilder::GenerateOBJ("Particles", "OBJ//BossTeleParticles.obj");
+		TeleParticles[i]->textureID = LoadTGA("IMAGE//BossScene//BossParticleUV.tga");
 	}
 
 	//Projectile* temp_proj  = new Projectile("", BossProjSpeed, 10);
@@ -46,6 +49,7 @@ GoatBoss::GoatBoss() : EnemyAI("GoatBoss"), maxHp_(hp_)
 	{
 		projectilePool[i] = new Projectile("", BossProjSpeed, 3);//projecitle DEAD TIME =======================
 		projectilePool[i]->CollisionMesh_ = MeshBuilder::GenerateOBJ("BossProj", "OBJ//goat.obj");
+		projectilePool[i]->CollisionMesh_->textureID = LoadTGA("IMAGE//BossScene//goatProjUV.tga");
 		projectilePool[i]->CollisionMesh_->collisionEnabled = false;
 	}
 
@@ -57,6 +61,7 @@ GoatBoss::GoatBoss() : EnemyAI("GoatBoss"), maxHp_(hp_)
 	hasSecondWind = true;
 
 	AOESmash = MeshBuilder::GenerateOBJ("", "OBJ//GSAOE.obj");
+	AOESmash->textureID = LoadTGA("IMAGE//BossScene//GSAOEUV.tga");
 
 	srand(time(NULL));
 }
@@ -203,7 +208,7 @@ void GoatBoss::update(double dt)
 
 
 
-
+	updateShowDmgTaken(dt);
 
 }
 void GoatBoss::render(MS* projectionStack, MS* viewStack, MS* modelStack, unsigned * m_parameters)
@@ -229,6 +234,9 @@ void GoatBoss::render(MS* projectionStack, MS* viewStack, MS* modelStack, unsign
 	modelStack->Rotate((CollisionMesh_->dir.x < 0 ? -1.0f : 1.0f) * Math::RadianToDegree(acos(CollisionMesh_->dir.Dot(Vector3(0.f, 0.f, 1.f)))), 0.f, 1.f, 0.f);
 	modelStack->Scale(0.3f, 0.3f, 0.3f);
 	RenderMeshClass::RenderText(&Scene::Text[Scene::TEXT_TYPE::Chiller], std::to_string(hp_), Color(1, 0, 0), projectionStack, viewStack, modelStack, m_parameters);
+
+	renderShowDmgTaken(projectionStack, viewStack, modelStack, m_parameters);
+
 	modelStack->PopMatrix();
 	
 	renderProjectiles(projectionStack, viewStack, modelStack, m_parameters);
@@ -315,6 +323,8 @@ void GoatBoss::isHitUpdate(int dmg)
 	hp_ -= (int)((1.0f - resistance_) * (float)dmg);
 	if (hp_ < 0)
 		hp_ = 0;
+
+	isHitShowDmgTaken(dmg);
 }
 
 

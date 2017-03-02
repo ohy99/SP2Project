@@ -52,6 +52,7 @@ void MinionAI::update(double dt)
 			doHitCD += dt;
 	}
 
+	updateShowDmgTaken(dt);
 }
 
 void MinionAI::render(MS* projectionStack, MS* viewStack, MS* modelStack, unsigned * m_parameters)
@@ -68,19 +69,22 @@ void MinionAI::render(MS* projectionStack, MS* viewStack, MS* modelStack, unsign
 	modelStack->Rotate((CollisionMesh_->dir.x < 0 ? -1.0f : 1.0f) * Math::RadianToDegree(acos(CollisionMesh_->dir.Dot(Vector3(0.f, 0.f, 1.f)))), 0.f, 1.f, 0.f);
 	modelStack->Scale(0.3f, 0.3f, 0.3f);
 	RenderMeshClass::RenderText(&Scene::Text[Scene::TEXT_TYPE::Chiller], std::to_string(hp_), Color(1, 0, 0), projectionStack, viewStack, modelStack, m_parameters);
+	
+	renderShowDmgTaken(projectionStack, viewStack, modelStack, m_parameters);
+
 	modelStack->PopMatrix();
 
-	if (test == true){
-		
+	//if (test == true){
+	//	
 
-		modelStack->PushMatrix();
-		modelStack->Translate(0.15f * CollisionMesh_->right.x, 2.f, (0.15f * CollisionMesh_->right.z));
-		modelStack->Translate(CollisionMesh_->pos.x, CollisionMesh_->pos.y + 0.5, CollisionMesh_->pos.z);//y always 0
-		modelStack->Rotate((CollisionMesh_->dir.x < 0 ? -1.0f : 1.0f) * Math::RadianToDegree(acos(CollisionMesh_->dir.Dot(Vector3(0.f, 0.f, 1.f)))), 0.f, 1.f, 0.f);
-		modelStack->Scale(0.3f, 0.3f, 0.3f);
-		RenderMeshClass::RenderText(&Scene::Text[Scene::TEXT_TYPE::Chiller], std::string("-") + std::to_string(Dmg_), Color(1, 0, 0), projectionStack, viewStack, modelStack, m_parameters);
-		modelStack->PopMatrix();
-	}
+	//	modelStack->PushMatrix();
+	//	modelStack->Translate(0.15f * CollisionMesh_->right.x, 2.f, (0.15f * CollisionMesh_->right.z));
+	//	modelStack->Translate(CollisionMesh_->pos.x, CollisionMesh_->pos.y + 0.5, CollisionMesh_->pos.z);//y always 0
+	//	modelStack->Rotate((CollisionMesh_->dir.x < 0 ? -1.0f : 1.0f) * Math::RadianToDegree(acos(CollisionMesh_->dir.Dot(Vector3(0.f, 0.f, 1.f)))), 0.f, 1.f, 0.f);
+	//	modelStack->Scale(0.3f, 0.3f, 0.3f);
+	//	RenderMeshClass::RenderText(&Scene::Text[Scene::TEXT_TYPE::Chiller], std::string("-") + std::to_string(Dmg_), Color(1, 0, 0), projectionStack, viewStack, modelStack, m_parameters);
+	//	modelStack->PopMatrix();
+	//}
 }
 
 void MinionAI::isHitUpdate(int dmg)
@@ -88,10 +92,13 @@ void MinionAI::isHitUpdate(int dmg)
 	test = true;
 	hp_ -= dmg;
 	Dmg_ = dmg;
+
 	if (hp_ < 0)
 		hp_ = 0;
 	//isHit = true;
 	chasePlayer = true;
+
+	isHitShowDmgTaken(dmg);
 }
 
 int MinionAI::getDmg()

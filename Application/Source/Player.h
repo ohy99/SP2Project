@@ -125,7 +125,9 @@ public:
 
 	void checkSwapWeapon();
 	
-
+	Mesh* radarPlayer;
+	Mesh* radarEnemy;
+	Mesh* radar_mesh;
 	int radarDetectRadius;
 	std::vector<Vector3> PositionOfEnemiesInProximity;
 	void updateRadar();

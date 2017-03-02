@@ -58,6 +58,7 @@ void WorldScene::Init()
 	glClearColor(0.0f, 0.5f, 0.66f, 0.0f);
 
 	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_ALPHA_TEST);
 	glEnable(GL_CULL_FACE);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -107,7 +108,7 @@ void WorldScene::Init()
 	camera = new Camera3;
 	camera->Init(Vector3(0, 0, 7), Vector3(0, 0, 0), Vector3(0, 1, 0));
 
-
+	
 
 	Mtx44 projection;
 	projection.SetToPerspective(45.f, 4.f / 3.f, 0.1f, 1000.f);
@@ -137,6 +138,7 @@ void WorldScene::Update(double dt)
 
 	Inventory::getInstance()->Update(dt);
 	UI::getInstance()->Update(dt);
+
 
 
 	//for (size_t i = 0; i < CampNPC.size(); i++)
@@ -176,14 +178,13 @@ void WorldScene::Update(double dt)
 		camera->Update(dt, dx, dy);
 	}
 
-	//for (size_t i = 0; i < CampNPC.size(); i++)
-	//{
-	//	CampNPC.at(i)->update(dt);
-	//}
+
+
 
 	for (size_t i = 0; i < (sizeof WS_EnemyPool) / sizeof(*WS_EnemyPool); ++i)
 	{
 		if (WS_EnemyPool[i]->active)
+
 		{
 			if (WS_EnemyPool[i]->getHp() <= 0)//REMOVE THE ENEMY FROM PLAYER ENEMY VECTOR SO PLAYER WILL NOT DETECT A DEAD ENEMY AS ENEMY
 			{

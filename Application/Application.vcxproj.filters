@@ -116,6 +116,9 @@
     <ClCompile Include="Source\UG_MinionAI.cpp">
       <Filter>GameObjs</Filter>
     </ClCompile>
+    <ClCompile Include="Source\EnemyAI.cpp">
+      <Filter>GameObjs</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\AllyNPC.h" />

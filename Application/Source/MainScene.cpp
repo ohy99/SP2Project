@@ -29,7 +29,7 @@
 MS MainScene::modelStack, MainScene::viewStack, MainScene::projectionStack;
 
 //std::vector<GameObject*> MainScene::Game_Objects_(10, NULL);
-
+std::vector<Item*> MainScene::Item_Obj;
 //std::vector<GameObject*> MainScene::Game_Objects_(10, NULL);
 std::vector<EnvironmentObj*> MainScene::Env_Obj;
 std::vector<NPC*> MainScene::CampNPC;
@@ -101,13 +101,6 @@ void MainScene::Init()
 	meshList[GEO_LIGHTBALL] = MeshBuilder::GenerateSphere("LightBall", Color(1, 1, 1), 12, 12, 1);
 	meshList[GEO_LIGHTBALL1] = MeshBuilder::GenerateCylinder("LightBall1", Color(1, 1, 1), 12, 1, 0, 1);
 
-	//	meshList[GEO_SPHERE] = MeshBuilder::GenerateSphere(...);
-	meshList[GEO_QUAD] = MeshBuilder::GenerateQuad("image", Color(0.9f, 0.9f, 0.9f), 1.0f, 1.0f);
-	//meshList[GEO_QUAD]->textureID = LoadTGA("Image//imagey.tga");
-	meshList[GEO_QUAD]->material.kAmbient.Set(0.6f, 0.6f, 0.6f);
-	meshList[GEO_QUAD]->material.kDiffuse.Set(0.3f, 0.3f, 0.3f);
-	meshList[GEO_QUAD]->material.kSpecular.Set(0.1f, 0.1f, 0.1f);
-	meshList[GEO_QUAD]->material.kShininess = 1.0f;
 
 
 	//Ground Mesh ---- Red Dirt --------------- Start
@@ -127,13 +120,17 @@ void MainScene::Init()
 	a->CollisionMesh_->textureID = LoadTGA("Image//testing.tga");
 	a->item2DTexture = MeshBuilder::GenerateQuad("quad", Color(1, 1, 1), 1.f, 1.f);
 	a->item2DTexture->textureID = LoadTGA("Image//inventory.tga");
+	Player::getInstance()->Items.push_back(a);
 
 	b = new Item("b");
 	b->CollisionMesh_ = MeshBuilder::GenerateOBJ("Testing", "OBJ//goat.obj");
 	b->CollisionMesh_->textureID = LoadTGA("Image//testing.tga");
 	b->item2DTexture = MeshBuilder::GenerateQuad("quad", Color(1, 1, 1), 1.f, 1.f);
 	b->item2DTexture->textureID = LoadTGA("Image//CrossHair.tga");
+	Player::getInstance()->Items.push_back(b);
 
+	Item_Obj.push_back(a);
+	Item_Obj.push_back(b);
 	//Inventory::getInstance()->setItem(a);
 
 	//Skybox ------------ Base Camp Start
@@ -185,6 +182,10 @@ void MainScene::Init()
 
 
 	//Teleporter ------------------ START
+	//Teleporter* MS_Teleporter = new Teleporter(MeshBuilder::GenerateOBJ("Boss", "OBJ//Teleporter1_OBJ.obj"), SceneManager::SCENES::BOSSSCENE);
+	//MS_Teleporter->CollisionMesh_->textureID = LoadTGA("Image//InteractableItem_Teleporter_UV_Texture.tga");
+	//Env_Obj.push_back(MS_Teleporter);
+
 
 	Teleporter* To_WS_Teleporter = new Teleporter(MeshBuilder::GenerateOBJ("City", "OBJ//Teleporter_OBJ.obj"), SceneManager::SCENES::WORLDSCENE);
 	To_WS_Teleporter->CollisionMesh_->textureID = LoadTGA("Image//InteractableItem_Teleporter_UV_Texture.tga");
@@ -378,14 +379,15 @@ void MainScene::Update(double dt)
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); //wireframe mode
 	}
 
+	//NEEEDS TO CHANGE SOOOONNN
 	bool once = false;
+	if (Application::IsKeyPressed('1') && once == false)
+	{
+		SceneManager::getInstance()->SetNextSceneID(SceneManager::SCENES::MINIGAMESCENE);
+		SceneManager::getInstance()->SetNextScene();
+		once = true;
+	}
 
-	//if (Application::IsKeyPressed('1') && once == false)
-	//{
-	//	SceneManager::getInstance()->SetNextSceneID(6);
-	//	SceneManager::getInstance()->SetNextScene();
-	//	once = true;
-	//}
 
 	//bool fpsonce = false;
 	if (Application::IsKeyPressed('V') || !debugMode)
@@ -460,9 +462,16 @@ void MainScene::Render()
 	RenderMeshClass::RenderMesh(meshList[GEO_GroundMesh_RedDirt], true, &projectionStack, &viewStack, &modelStack, m_parameters);
 	modelStack.PopMatrix();
 
-	modelStack.PushMatrix();
-	RenderMeshClass::RenderMesh(a->CollisionMesh_, true, &projectionStack, &viewStack, &modelStack, m_parameters);
-	modelStack.PopMatrix();
+	//for (size_t i = 0; i < Item_Obj.size(); i++)
+	//	{
+	//		if (!Player::Items[i]->isItemInInventory)
+	//		{
+	//			modelStack.PushMatrix();
+	//			RenderMeshClass::RenderMesh(Item_Obj.at(i)->CollisionMesh_, true, &projectionStack, &viewStack, &modelStack, m_parameters);
+	//			modelStack.PopMatrix();
+	//		}
+	//	}
+
 
 	for (size_t i = 0; i < CampNPC.size(); i++)
 	{

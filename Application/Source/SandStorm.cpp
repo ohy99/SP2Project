@@ -37,6 +37,7 @@ SandStorm::SandStorm()
 	{
 		DustParticles* temp = new DustParticles;
 		temp->dustQuad = MeshBuilder::GenerateQuad("Dust" + std::to_string(i), Color(1, 1, 1), 1, 1);
+		temp->dustQuad->textureID = LoadTGA("Image//Sandy.tga");
 		temp->dustQuad->dir = *dustDir;
 		temp->resetDust();
 		dust_.push_back(temp);
@@ -83,13 +84,14 @@ void SandStorm::update(double dt)
 void SandStorm::render(MS* projectionStack, MS* viewStack, MS* modelStack, unsigned * m_parameters)
 {
 	glDisable(GL_CULL_FACE);
+	
 	for (auto it : dust_){
 		modelStack->PushMatrix();
 		modelStack->Translate(it->dustQuad->pos.x, it->dustQuad->pos.y, it->dustQuad->pos.z);
 		modelStack->Rotate(it->rotationUp, it->dustQuad->dir.x, it->dustQuad->dir.y, it->dustQuad->dir.z);
 		modelStack->Rotate(rotateAngleDir, rotateAxis.x, rotateAxis.y, rotateAxis.z);
 		modelStack->Scale(it->scaleX, it->scaleY, 1);
-		RenderMeshClass::RenderMesh(it->dustQuad, true, projectionStack, viewStack, modelStack, m_parameters);
+		RenderMeshClass::RenderMesh(it->dustQuad, false, projectionStack, viewStack, modelStack, m_parameters);
 		modelStack->PopMatrix();
 	}
 	glEnable(GL_CULL_FACE);
@@ -97,20 +99,20 @@ void SandStorm::render(MS* projectionStack, MS* viewStack, MS* modelStack, unsig
 
 void SandStorm::DustParticles::resetDust()
 {
-	this->scaleX = 15.f + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (40.f - 15.f)));
-	this->scaleY = 10.f + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (25.f - 10.f)));
+	this->scaleX = 50.f + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (70.f - 50.f)));
+	this->scaleY = 20.f + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (40.f - 20.f)));
 	this->rotationUp = -75.f + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (75.f + 75.f)));
 	this->speed = 10.f + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (30.f - 10.f)));
 	this->dustQuad->pos.y = 0.f + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (10.f - 0.f)));
 
 	if (spawnAtQuad == DustParticles::pXAXIS)
 	{
-		this->dustQuad->pos.x = 150;
+		this->dustQuad->pos.x = outerBorderX;
 		this->dustQuad->pos.z = -outerBorderZ + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (outerBorderZ + outerBorderZ)));
 	}
 	else if (spawnAtQuad == DustParticles::nXAXIS)
 	{
-		this->dustQuad->pos.x = -150;
+		this->dustQuad->pos.x = -outerBorderX;
 		this->dustQuad->pos.z = -outerBorderZ + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (outerBorderZ + outerBorderZ)));
 	}
 	else if (spawnAtQuad == DustParticles::pZAXIS)
