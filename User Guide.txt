@@ -1,0 +1,14 @@
+Camera controls
+-Mouse
+
+Player Movement Controls
+-W Forward
+-S Backward
+-A Strafe Left
+-D Strafe Right
+
+Actions
+-I Open inventory
+-Space Interactions
+
+-Left_click Shoot/Attack
