@@ -185,8 +185,6 @@ void MainScene::Init()
 
 
 	//Teleporter ------------------ START
-	Teleporter* MS_Teleporter = new Teleporter(MeshBuilder::GenerateOBJ("Boss", "OBJ//Teleporter1_OBJ.obj"), SceneManager::SCENES::BOSSSCENE);
-	MS_Teleporter->CollisionMesh_->textureID = LoadTGA("Image//InteractableItem_Teleporter_UV_Texture.tga");
 
 	Teleporter* To_WS_Teleporter = new Teleporter(MeshBuilder::GenerateOBJ("City", "OBJ//Teleporter_OBJ.obj"), SceneManager::SCENES::WORLDSCENE);
 	To_WS_Teleporter->CollisionMesh_->textureID = LoadTGA("Image//InteractableItem_Teleporter_UV_Texture.tga");
@@ -194,20 +192,27 @@ void MainScene::Init()
 	//Teleporter1 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Teleporter1", "OBJ//Teleporter1_OBJ.obj"));
 	//Teleporter1->CollisionMesh_->textureID = LoadTGA("Image//InteractableItem_Teleporter_UV_Texture.tga");
 
+	EnvironmentObj* MS_Teleporter = new EnvironmentObj(MeshBuilder::GenerateOBJ("Collect 3 Blueprints to enter", "OBJ//Teleporter1_OBJ.obj"));
+	MS_Teleporter->CollisionMesh_->textureID = LoadTGA("Image//InteractableItem_Teleporter_UV_Texture.tga");
+
 	meshList[GEO_Teleporter] = MeshBuilder::GenerateOBJ("Teleporter to WS", "OBJ//Teleporter_OBJ.obj");
 	meshList[GEO_Teleporter]->textureID = LoadTGA("Image//InteractableItem_Teleporter_UV_Texture.tga");
 	
-	meshList[GEO_Teleporter1] = MeshBuilder::GenerateOBJ("Teleporter to BS", "OBJ//Teleporter1_OBJ.obj");
-	meshList[GEO_Teleporter1]->textureID = LoadTGA("Image//InteractableItem_Teleporter_UV_Texture.tga");
+	//meshList[GEO_Teleporter1] = MeshBuilder::GenerateOBJ("Teleporter to BS", "OBJ//Teleporter1_OBJ.obj");
+	//meshList[GEO_Teleporter1]->textureID = LoadTGA("Image//InteractableItem_Teleporter_UV_Texture.tga");
 
+	if (Blueprints::GetBlueprintNumber() == 3){
 
-	//Env_Obj.push_back(Teleporter);
-	//Env_Obj.push_back(Teleporter1);
+		Teleporter* MS_Teleporter = new Teleporter(MeshBuilder::GenerateOBJ("Boss", "OBJ//Teleporter1_OBJ.obj"), SceneManager::SCENES::BOSSSCENE);
+		MS_Teleporter->CollisionMesh_->textureID = LoadTGA("Image//InteractableItem_Teleporter_UV_Texture.tga");
 
-	Player::getInstance()->teleporters_.push_back(MS_Teleporter);
+		Player::getInstance()->teleporters_.push_back(MS_Teleporter);
+		Player::getInstance()->addCollisionObject(MS_Teleporter);
+	}
+
+	Env_Obj.push_back(MS_Teleporter);
+
 	Player::getInstance()->teleporters_.push_back(To_WS_Teleporter);
-	
-	Player::getInstance()->addCollisionObject(MS_Teleporter);
 	Player::getInstance()->addCollisionObject(To_WS_Teleporter);
 
 	//Teleporter -----------------------END
@@ -472,7 +477,7 @@ void MainScene::Render()
 
 	modelStack.PushMatrix();
 	RenderMeshClass::RenderMesh(meshList[GEO_Teleporter], true, &projectionStack, &viewStack, &modelStack, m_parameters);
-	RenderMeshClass::RenderMesh(meshList[GEO_Teleporter1], true, &projectionStack, &viewStack, &modelStack, m_parameters);
+	//RenderMeshClass::RenderMesh(meshList[GEO_Teleporter1], true, &projectionStack, &viewStack, &modelStack, m_parameters);
 	modelStack.PopMatrix();
 
 	robotsInteractions();
