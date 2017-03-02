@@ -60,6 +60,7 @@ void WorldScene::Init()
 	glClearColor(0.0f, 0.5f, 0.66f, 0.0f);
 
 	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_ALPHA_TEST);
 	glEnable(GL_CULL_FACE);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -108,7 +109,7 @@ void WorldScene::Init()
 	camera = new Camera3;
 	camera->Init(Vector3(0, 0, 7), Vector3(0, 0, 0), Vector3(0, 1, 0));
 
-
+	
 
 	Mtx44 projection;
 	projection.SetToPerspective(45.f, 4.f / 3.f, 0.1f, 1000.f);
@@ -159,14 +160,8 @@ void WorldScene::Update(double dt)
 	UI::getInstance()->Update(dt);
 
 
-	//for (size_t i = 0; i < CampNPC.size(); i++)
-	//{
-	//	CampNPC.at(i)->update(dt);
-	//}
-	if (UI::getInstance()->isPauseOpen() && Inventory::getInstance()->isInventoryOpen())
-		return;
-
-
+	if (!UI::getInstance()->isPauseOpen() && !Inventory::getInstance()->isInventoryOpen())
+	{
 		double c_posx, c_posy;
 		glfwGetCursorPos(Application::m_window, &c_posx, &c_posy);
 		glfwSetCursorPos(Application::m_window, width / 2, height / 2);
@@ -178,10 +173,8 @@ void WorldScene::Update(double dt)
 		dy = dt * double(height / 2 - c_posy);
 		camera->Update(dt, dx, dy);
 
-		//for (size_t i = 0; i < CampNPC.size(); i++)
-		//{
-		//	CampNPC.at(i)->update(dt);
-		//}
+
+		//UPDATE ENEMY
 		for (size_t i = 0; i < (sizeof WS_EnemyPool) / sizeof(*WS_EnemyPool); ++i)
 		{
 			if (WS_EnemyPool[i]->active)
@@ -215,7 +208,8 @@ void WorldScene::Update(double dt)
 			SandStorm::getInstance()->update(dt);
 		}
 
-	
+	}
+
 	//MainMenu.Update(dt);
 }
 

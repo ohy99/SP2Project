@@ -244,10 +244,10 @@ void UndergroundScene::Init()
 	//Furniture ------ End
 
 	//Blueprint 3 ----- Start
-	EnvironmentObj* Blueprint = new EnvironmentObj(MeshBuilder::GenerateOBJ("Blueprint", "OBJ//Blueprint3.obj"));
-	Blueprint->CollisionMesh_->textureID = LoadTGA("Image//BlueprintUV.tga");
+	//EnvironmentObj* Blueprint = new EnvironmentObj(MeshBuilder::GenerateOBJ("Blueprint", "OBJ//Blueprint3.obj"));
+	//Blueprint->CollisionMesh_->textureID = LoadTGA("Image//BlueprintUV.tga");
 
-	Env_Obj.push_back(Blueprint);
+	//Env_Obj.push_back(Blueprint);
 	//Blueprint 3 ----- End
 
 	for (auto it : Env_Obj)

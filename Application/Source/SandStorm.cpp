@@ -37,6 +37,7 @@ SandStorm::SandStorm()
 	{
 		DustParticles* temp = new DustParticles;
 		temp->dustQuad = MeshBuilder::GenerateQuad("Dust" + std::to_string(i), Color(1, 1, 1), 1, 1);
+		temp->dustQuad->textureID = LoadTGA("Image//Sandy.tga");
 		temp->dustQuad->dir = *dustDir;
 		temp->resetDust();
 		dust_.push_back(temp);
@@ -83,13 +84,14 @@ void SandStorm::update(double dt)
 void SandStorm::render(MS* projectionStack, MS* viewStack, MS* modelStack, unsigned * m_parameters)
 {
 	glDisable(GL_CULL_FACE);
+	
 	for (auto it : dust_){
 		modelStack->PushMatrix();
 		modelStack->Translate(it->dustQuad->pos.x, it->dustQuad->pos.y, it->dustQuad->pos.z);
 		modelStack->Rotate(it->rotationUp, it->dustQuad->dir.x, it->dustQuad->dir.y, it->dustQuad->dir.z);
 		modelStack->Rotate(rotateAngleDir, rotateAxis.x, rotateAxis.y, rotateAxis.z);
 		modelStack->Scale(it->scaleX, it->scaleY, 1);
-		RenderMeshClass::RenderMesh(it->dustQuad, true, projectionStack, viewStack, modelStack, m_parameters);
+		RenderMeshClass::RenderMesh(it->dustQuad, false, projectionStack, viewStack, modelStack, m_parameters);
 		modelStack->PopMatrix();
 	}
 	glEnable(GL_CULL_FACE);

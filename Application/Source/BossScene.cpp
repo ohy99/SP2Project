@@ -92,30 +92,37 @@ void BossScene::Init()
 	skyBoxDistance = skyBoxScale * 0.5f * 0.99f;
 	//Left Skybox 
 	meshList[GEO_LEFT] = MeshBuilder::GenerateQuad("Left", Color(1, 1, 1), skyBoxScale, skyBoxScale);
-	meshList[GEO_LEFT]->textureID = LoadTGA("Image//BossSceneSkyBoxLeft.tga");
+	//meshList[GEO_LEFT]->textureID = LoadTGA("Image//BossScene//BossSceneSkyBoxLeft.tga");
+	meshList[GEO_LEFT]->textureID = LoadTGA("Image//BossScene//SBSides.tga");
+
 
 	//Right Skybox 
 	meshList[GEO_RIGHT] = MeshBuilder::GenerateQuad("Right", Color(1, 1, 1), skyBoxScale, skyBoxScale);
-	meshList[GEO_RIGHT]->textureID = LoadTGA("Image//BossSceneSkyBoxRight.tga");
+	//meshList[GEO_RIGHT]->textureID = LoadTGA("Image//BossScene//BossSceneSkyBoxRight.tga");
+	meshList[GEO_RIGHT]->textureID = LoadTGA("Image//BossScene//SBSides.tga");
 
 	//Front Skybox 
 	meshList[GEO_FRONT] = MeshBuilder::GenerateQuad("Front", Color(1, 1, 1), skyBoxScale, skyBoxScale);
-	meshList[GEO_FRONT]->textureID = LoadTGA("Image//BossSceneSkyBoxFront.tga");
+	//meshList[GEO_FRONT]->textureID = LoadTGA("Image//BossScene//BossSceneSkyBoxFront.tga");
+	meshList[GEO_FRONT]->textureID = LoadTGA("Image//BossScene//SBSides.tga");
 
 	//Back Skybox 
 	meshList[GEO_BACK] = MeshBuilder::GenerateQuad("Back", Color(1, 1, 1), skyBoxScale, skyBoxScale);
-	meshList[GEO_BACK]->textureID = LoadTGA("Image//BossSceneSkyBoxBack.tga");
+	//meshList[GEO_BACK]->textureID = LoadTGA("Image//BossScene//BossSceneSkyBoxBack.tga");
+	meshList[GEO_BACK]->textureID = LoadTGA("Image//BossScene//SBSides.tga");
 
 	//Top Skybox 
 	meshList[GEO_TOP] = MeshBuilder::GenerateQuad("Top", Color(1, 1, 1), skyBoxScale, skyBoxScale);
-	meshList[GEO_TOP]->textureID = LoadTGA("Image//BossSceneSkyBoxTop.tga");
+	//meshList[GEO_TOP]->textureID = LoadTGA("Image//BossScene//BossSceneSkyBoxTop.tga");
+	meshList[GEO_TOP]->textureID = LoadTGA("Image//BossScene//SBBottom.tga");
 
 	//Bottom Skybox 
 	meshList[GEO_BOTTOM] = MeshBuilder::GenerateQuad("Bottom", Color(1, 1, 1), skyBoxScale, skyBoxScale);
-	meshList[GEO_BOTTOM]->textureID = LoadTGA("Image//BossSceneSkyBoxBottom.tga");
+	//meshList[GEO_BOTTOM]->textureID = LoadTGA("Image//BossScene//BossSceneSkyBoxBottom.tga");
+	meshList[GEO_BOTTOM]->textureID = LoadTGA("Image//BossScene//SBBottom.tga");
 	//Skybox -------------
 	meshList[GROUND] = MeshBuilder::GenerateQuad("Ground Mesh", Color(0.1f, 0.1f, 0.1f), skyBoxScale, skyBoxScale);
-//	meshList[GROUND]->textureID = LoadTGA("Image//");
+	meshList[GROUND]->textureID = LoadTGA("Image//BossScene//SBBottom.tga");
 
 
 	for (auto it : Env_Obj)
