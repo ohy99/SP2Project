@@ -29,7 +29,7 @@
 MS MainScene::modelStack, MainScene::viewStack, MainScene::projectionStack;
 
 //std::vector<GameObject*> MainScene::Game_Objects_(10, NULL);
-
+std::vector<Item*> MainScene::Item_Obj;
 //std::vector<GameObject*> MainScene::Game_Objects_(10, NULL);
 std::vector<Item*> MainScene::Item_Obj;
 std::vector<EnvironmentObj*> MainScene::Env_Obj;
@@ -102,13 +102,6 @@ void MainScene::Init()
 	meshList[GEO_LIGHTBALL] = MeshBuilder::GenerateSphere("LightBall", Color(1, 1, 1), 12, 12, 1);
 	meshList[GEO_LIGHTBALL1] = MeshBuilder::GenerateCylinder("LightBall1", Color(1, 1, 1), 12, 1, 0, 1);
 
-	//	meshList[GEO_SPHERE] = MeshBuilder::GenerateSphere(...);
-	meshList[GEO_QUAD] = MeshBuilder::GenerateQuad("image", Color(0.9f, 0.9f, 0.9f), 1.0f, 1.0f);
-	//meshList[GEO_QUAD]->textureID = LoadTGA("Image//imagey.tga");
-	meshList[GEO_QUAD]->material.kAmbient.Set(0.6f, 0.6f, 0.6f);
-	meshList[GEO_QUAD]->material.kDiffuse.Set(0.3f, 0.3f, 0.3f);
-	meshList[GEO_QUAD]->material.kSpecular.Set(0.1f, 0.1f, 0.1f);
-	meshList[GEO_QUAD]->material.kShininess = 1.0f;
 
 
 	//Ground Mesh ---- Red Dirt --------------- Start
@@ -128,12 +121,14 @@ void MainScene::Init()
 	a->CollisionMesh_->textureID = LoadTGA("Image//testing.tga");
 	a->item2DTexture = MeshBuilder::GenerateQuad("quad", Color(1, 1, 1), 1.f, 1.f);
 	a->item2DTexture->textureID = LoadTGA("Image//inventory.tga");
+	Player::getInstance()->Items.push_back(a);
 
 	b = new Item("b");
 	b->CollisionMesh_ = MeshBuilder::GenerateOBJ("Testing", "OBJ//goat.obj");
 	b->CollisionMesh_->textureID = LoadTGA("Image//testing.tga");
 	b->item2DTexture = MeshBuilder::GenerateQuad("quad", Color(1, 1, 1), 1.f, 1.f);
 	b->item2DTexture->textureID = LoadTGA("Image//CrossHair.tga");
+	Player::getInstance()->Items.push_back(b);
 
 	Item_Obj.push_back(a);
 	Item_Obj.push_back(b);
@@ -188,24 +183,40 @@ void MainScene::Init()
 
 
 	//Teleporter ------------------ START
-	Teleporter* MS_Teleporter = new Teleporter(MeshBuilder::GenerateOBJ("Boss", "OBJ//Teleporter1_OBJ.obj"), SceneManager::SCENES::BOSSSCENE);
-	MS_Teleporter->CollisionMesh_->textureID = LoadTGA("Image//InteractableItem_Teleporter_UV_Texture.tga");
+	//Teleporter* MS_Teleporter = new Teleporter(MeshBuilder::GenerateOBJ("Boss", "OBJ//Teleporter1_OBJ.obj"), SceneManager::SCENES::BOSSSCENE);
+	//MS_Teleporter->CollisionMesh_->textureID = LoadTGA("Image//InteractableItem_Teleporter_UV_Texture.tga");
+	//Env_Obj.push_back(MS_Teleporter);
 
-	EnvironmentObj* Teleporter = new EnvironmentObj(MeshBuilder::GenerateOBJ("Teleporter", "OBJ//Teleporter_OBJ.obj"));
-	Teleporter->CollisionMesh_->textureID = LoadTGA("Image//InteractableItem_Teleporter_UV_Texture.tga");
+
+	Teleporter* To_WS_Teleporter = new Teleporter(MeshBuilder::GenerateOBJ("City", "OBJ//Teleporter_OBJ.obj"), SceneManager::SCENES::WORLDSCENE);
+	To_WS_Teleporter->CollisionMesh_->textureID = LoadTGA("Image//InteractableItem_Teleporter_UV_Texture.tga");
 
 	//Teleporter1 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Teleporter1", "OBJ//Teleporter1_OBJ.obj"));
 	//Teleporter1->CollisionMesh_->textureID = LoadTGA("Image//InteractableItem_Teleporter_UV_Texture.tga");
 
-	//meshList[GEO_Teleporter] = MeshBuilder::GenerateOBJ("Teleporter", "OBJ//Teleporter_OBJ.obj");
-	//meshList[GEO_Teleporter]->textureID = LoadTGA("Image//InteractableItem_Teleporter_UV_Texture.tga");
+	EnvironmentObj* MS_Teleporter = new EnvironmentObj(MeshBuilder::GenerateOBJ("Collect 3 Blueprints to enter", "OBJ//Teleporter1_OBJ.obj"));
+	MS_Teleporter->CollisionMesh_->textureID = LoadTGA("Image//InteractableItem_Teleporter_UV_Texture.tga");
+
+	meshList[GEO_Teleporter] = MeshBuilder::GenerateOBJ("Teleporter to WS", "OBJ//Teleporter_OBJ.obj");
+	meshList[GEO_Teleporter]->textureID = LoadTGA("Image//InteractableItem_Teleporter_UV_Texture.tga");
 	
+	//meshList[GEO_Teleporter1] = MeshBuilder::GenerateOBJ("Teleporter to BS", "OBJ//Teleporter1_OBJ.obj");
+	//meshList[GEO_Teleporter1]->textureID = LoadTGA("Image//InteractableItem_Teleporter_UV_Texture.tga");
 
-	Env_Obj.push_back(Teleporter);
-	//Env_Obj.push_back(Teleporter1);
+	if (Blueprints::GetBlueprintNumber() == 3){
 
-	Player::getInstance()->teleporters_.push_back(MS_Teleporter);
-	Player::getInstance()->addCollisionObject(MS_Teleporter);
+		Teleporter* MS_Teleporter = new Teleporter(MeshBuilder::GenerateOBJ("Boss", "OBJ//Teleporter1_OBJ.obj"), SceneManager::SCENES::BOSSSCENE);
+		MS_Teleporter->CollisionMesh_->textureID = LoadTGA("Image//InteractableItem_Teleporter_UV_Texture.tga");
+
+		Player::getInstance()->teleporters_.push_back(MS_Teleporter);
+		Player::getInstance()->addCollisionObject(MS_Teleporter);
+	}
+
+	Env_Obj.push_back(MS_Teleporter);
+
+	Player::getInstance()->teleporters_.push_back(To_WS_Teleporter);
+	Player::getInstance()->addCollisionObject(To_WS_Teleporter);
+
 	//Teleporter -----------------------END
 
 
@@ -315,9 +326,13 @@ void MainScene::Init()
 
 	//Captain ------------------------------------------ START
 	EnvironmentObj* Captain = new EnvironmentObj(MeshBuilder::GenerateOBJ("Captain", "OBJ//Captain_OBJ.obj"));
+	Captain->CollisionMesh_->textureID = LoadTGA("Image//GuardUV.tga");
 
 	Env_Obj.push_back(Captain);
 	//Captain ----------------------------------------- END
+
+
+
 
 
 	InitGuards();
@@ -349,9 +364,6 @@ void MainScene::Init()
 
 void MainScene::Update(double dt)
 {
-
-
-
 	glfwGetWindowSize(Application::m_window, &width, &height);
 
 
@@ -373,6 +385,7 @@ void MainScene::Update(double dt)
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); //wireframe mode
 	}
 
+	//NEEEDS TO CHANGE SOOOONNN
 	bool once = false;
 	if (Application::IsKeyPressed('1') && once == false)
 	{
@@ -380,6 +393,7 @@ void MainScene::Update(double dt)
 		SceneManager::getInstance()->SetNextScene();
 		once = true;
 	}
+
 
 	//bool fpsonce = false;
 	if (Application::IsKeyPressed('V') || !debugMode)
@@ -453,7 +467,12 @@ void MainScene::Render()
 	}
 
 	RenderSkybox();
+<<<<<<< HEAD
 	robotsInteractions();
+=======
+	//	renderEnvironment();
+
+>>>>>>> 5c9363a0c2279e8b480099cc2c4f1fca928c25d9
 
 	//Ground Mesh
 	modelStack.PushMatrix();
@@ -462,23 +481,58 @@ void MainScene::Render()
 	RenderMeshClass::RenderMesh(meshList[GEO_GroundMesh_RedDirt], true, &projectionStack, &viewStack, &modelStack, m_parameters);
 	modelStack.PopMatrix();
 
+<<<<<<< HEAD
+=======
+	//for (size_t i = 0; i < Item_Obj.size(); i++)
+	//	{
+	//		if (!Player::Items[i]->isItemInInventory)
+	//		{
+	//			modelStack.PushMatrix();
+	//			RenderMeshClass::RenderMesh(Item_Obj.at(i)->CollisionMesh_, true, &projectionStack, &viewStack, &modelStack, m_parameters);
+	//			modelStack.PopMatrix();
+	//		}
+	//	}
+
+
+>>>>>>> 5c9363a0c2279e8b480099cc2c4f1fca928c25d9
 	for (size_t i = 0; i < CampNPC.size(); i++)
 	{
+		modelStack.PushMatrix();
+		modelStack.Translate(7, 0, 0);
 		CampNPC.at(i)->render(&projectionStack, &viewStack, &modelStack, m_parameters);
+		modelStack.PopMatrix();
 	}
+
+
 	RenderBaseCamp();
 
+	modelStack.PushMatrix();
+	RenderMeshClass::RenderMesh(meshList[GEO_Teleporter], true, &projectionStack, &viewStack, &modelStack, m_parameters);
+	//RenderMeshClass::RenderMesh(meshList[GEO_Teleporter1], true, &projectionStack, &viewStack, &modelStack, m_parameters);
+	modelStack.PopMatrix();
+
+	robotsInteractions();
+	medicInteractions();
 
 	Interactions();
+	
+	modelStack.PushMatrix();
+	modelStack.Translate(11, 2, 5);
+	modelStack.Scale(0.3f, 0.3f, 0.3f);
+	if (counter_medic == 0){
+	
+		RenderMeshClass::RenderText(&Scene::Text[Scene::TEXT_TYPE::Century], std::string("Talk to Doctor!"), Color(0, 1, 0), &projectionStack, &viewStack, &modelStack, m_parameters);
+	}
+	modelStack.PopMatrix();
 
-	RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::to_string(FramesPerSec), Color(1, 0, 0), 1.5f, 45, 38, &projectionStack, &viewStack, &modelStack, m_parameters);
-	RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("Blueprints: ") + std::to_string(Blueprints::GetBlueprintNumber()) + std::string("/3"), Color(1, 0, 0), 2.f, 68, 57, &projectionStack, &viewStack, &modelStack, m_parameters);
+
+	RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::to_string(FramesPerSec), Color(0, 1, 0), 1.5f, 45, 38, &projectionStack, &viewStack, &modelStack, m_parameters);
+	RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("Blueprints: ") + std::to_string(Blueprints::GetBlueprintNumber()) + std::string("/3"), Color(0, 1, 0), 2.f, 68, 57, &projectionStack, &viewStack, &modelStack, m_parameters);
 	
 	Player::getInstance()->render(&projectionStack, &viewStack, &modelStack, m_parameters);
 
 	UI::getInstance()->renderPause(&projectionStack, &viewStack, &modelStack, m_parameters);
 	Inventory::getInstance()->Render(&projectionStack, &viewStack, &modelStack, m_parameters);
-
 	
 }
 
@@ -486,7 +540,7 @@ void MainScene::Interactions(){
 
 	if (Player::getInstance()->getPlayerPosition().x >= -8 && Player::getInstance()->getPlayerPosition().x <= -5 && Player::getInstance()->getPlayerPosition().z <= -11 && Player::getInstance()->getPlayerPosition().z >= -17){
 
-		RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("[Press SPACE to enter.]"), Color(1, 0, 0), 2.f, 35, 24, &projectionStack, &viewStack, &modelStack, m_parameters);
+		RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("[Press SPACE to enter.]"), Color(0, 1, 0), 2.f, 35, 24, &projectionStack, &viewStack, &modelStack, m_parameters);
 	}
 
 	if (Application::IsKeyPressed(VK_SPACE)){
@@ -498,20 +552,20 @@ void MainScene::Interactions(){
 		}
 	}
 	
-	if (Player::getInstance()->getPlayerPosition().x >= -21 && Player::getInstance()->getPlayerPosition().x <= -17 && Player::getInstance()->getPlayerPosition().z <= 2 && Player::getInstance()->getPlayerPosition().z >= -2){
+	//if (Player::getInstance()->getPlayerPosition().x >= -21 && Player::getInstance()->getPlayerPosition().x <= -17 && Player::getInstance()->getPlayerPosition().z <= 2 && Player::getInstance()->getPlayerPosition().z >= -2){
 
-		RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("[Press SPACE to Teleport into the City.]"), Color(1, 0, 0), 2.f, 28, 24, &projectionStack, &viewStack, &modelStack, m_parameters);
-	}
+	//	RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("[Press SPACE to Teleport into the City.]"), Color(1, 0, 0), 2.f, 28, 24, &projectionStack, &viewStack, &modelStack, m_parameters);
+	//}
 
-	if (Application::IsKeyPressed(VK_SPACE)){
+	//if (Application::IsKeyPressed(VK_SPACE)){
 
-		if (Player::getInstance()->getPlayerPosition().x >= -21 && Player::getInstance()->getPlayerPosition().x <= -17 && Player::getInstance()->getPlayerPosition().z <= 2 && Player::getInstance()->getPlayerPosition().z >= -2){
+	//	if (Player::getInstance()->getPlayerPosition().x >= -21 && Player::getInstance()->getPlayerPosition().x <= -17 && Player::getInstance()->getPlayerPosition().z <= 2 && Player::getInstance()->getPlayerPosition().z >= -2){
 
-			SceneManager::getInstance()->SetNextSceneID(SceneManager::SCENES::WORLDSCENE);
-			SceneManager::getInstance()->SetNextScene();
-			Player::getInstance()->setPosition(Vector3(94.0, 0.0, -8.0));
-		}
-	}
+	//		SceneManager::getInstance()->SetNextSceneID(SceneManager::SCENES::WORLDSCENE);
+	//		SceneManager::getInstance()->SetNextScene();
+	//		Player::getInstance()->setPosition(Vector3(94.0, 0.0, -8.0));
+	//	}
+	//}
 
 }
 
@@ -599,7 +653,7 @@ void MainScene::robotsInteractions(){
 
 		if (counter == 0){
 
-			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("[Press SPACE to talk.]"), Color(1, 0, 0), 2.f, 35, 24, &projectionStack, &viewStack, &modelStack, m_parameters);
+			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("[Press SPACE to talk.]"), Color(0, 1, 0), 2.f, 35, 24, &projectionStack, &viewStack, &modelStack, m_parameters);
 		}
 	}
 
@@ -612,10 +666,10 @@ void MainScene::robotsInteractions(){
 
 		if (Player::getInstance()->getPlayerPosition().x >= -12 && Player::getInstance()->getPlayerPosition().x <= -9 && Player::getInstance()->getPlayerPosition().z <= -0.5 && Player::getInstance()->getPlayerPosition().z >= -4){
 
-			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("Ah, Commander! Good to see you up and about."), Color(1, 0, 0), 2.f, 10, 36, &projectionStack, &viewStack, &modelStack, m_parameters);
-			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("Well, some of my scouts have reported several things."), Color(1, 0, 0), 2.f, 10, 34, &projectionStack, &viewStack, &modelStack, m_parameters);
-			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("I've got information at several different coordinates. Four, in fact."), Color(1, 0, 0), 2.f, 10, 32, &projectionStack, &viewStack, &modelStack, m_parameters);
-			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("[Press 1 / 2 / 3 and hold for the information.]"), Color(1, 0, 0), 2.f, 10, 30, &projectionStack, &viewStack, &modelStack, m_parameters);
+			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("Ah, Commander! Good to see you up and about."), Color(0, 1, 0), 2.f, 10, 36, &projectionStack, &viewStack, &modelStack, m_parameters);
+			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("Well, some of my scouts have reported several things."), Color(0, 1, 0), 2.f, 10, 34, &projectionStack, &viewStack, &modelStack, m_parameters);
+			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("I've got information at several different coordinates. Three, in fact."), Color(0, 1, 0), 2.f, 10, 32, &projectionStack, &viewStack, &modelStack, m_parameters);
+			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("[Press 1 / 2 / 3 and hold for the information.]"), Color(0, 1, 0), 2.f, 10, 30, &projectionStack, &viewStack, &modelStack, m_parameters);
 		}
 	}
 
@@ -626,9 +680,9 @@ void MainScene::robotsInteractions(){
 
 		if (Player::getInstance()->getPlayerPosition().x >= -12 && Player::getInstance()->getPlayerPosition().x <= -9 && Player::getInstance()->getPlayerPosition().z <= -0.5 && Player::getInstance()->getPlayerPosition().z >= -4){
 
-			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("There's a half destroyed robot, around coordinates X:75 Z:74."), Color(1, 0, 0), 2.f, 10, 36, &projectionStack, &viewStack, &modelStack, m_parameters);
-			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("It's heavily guarded, for some reason. Might have something you're looking for."), Color(1, 0, 0), 2.f, 10, 34, &projectionStack, &viewStack, &modelStack, m_parameters);
-			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("Might have something you're looking for."), Color(1, 0, 0), 2.f, 10, 32, &projectionStack, &viewStack, &modelStack, m_parameters);
+			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("There's a half destroyed robot, around coordinates X:75 Z:74."), Color(0, 1, 0), 2.f, 10, 36, &projectionStack, &viewStack, &modelStack, m_parameters);
+			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("It's heavily guarded, for some reason. Might have something you're looking for."), Color(0, 1, 0), 2.f, 10, 34, &projectionStack, &viewStack, &modelStack, m_parameters);
+			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("Might have something you're looking for."), Color(0, 1, 0), 2.f, 10, 32, &projectionStack, &viewStack, &modelStack, m_parameters);
 		}
 
 	}
@@ -639,9 +693,9 @@ void MainScene::robotsInteractions(){
 
 		if (Player::getInstance()->getPlayerPosition().x >= -12 && Player::getInstance()->getPlayerPosition().x <= -9 && Player::getInstance()->getPlayerPosition().z <= -0.5 && Player::getInstance()->getPlayerPosition().z >= -4){
 
-			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("There's a functioning computer, around coordinates X:-59 Z:39."), Color(1, 0, 0), 2.f, 10, 36, &projectionStack, &viewStack, &modelStack, m_parameters);
-			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("Its stuck in a wall, though, so the scout couldn't bring it back."), Color(1, 0, 0), 2.f, 10, 34, &projectionStack, &viewStack, &modelStack, m_parameters);
-			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("You might want to check it out."), Color(1, 0, 0), 2.f, 10, 32, &projectionStack, &viewStack, &modelStack, m_parameters);
+			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("There's a functioning computer, around coordinates X:-59 Z:39."), Color(0, 1, 0), 2.f, 10, 36, &projectionStack, &viewStack, &modelStack, m_parameters);
+			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("Its stuck in a wall, though, so the scout couldn't bring it back."), Color(0, 1, 0), 2.f, 10, 34, &projectionStack, &viewStack, &modelStack, m_parameters);
+			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("You might want to check it out."), Color(0, 1, 0), 2.f, 10, 32, &projectionStack, &viewStack, &modelStack, m_parameters);
 		}
 
 	}
@@ -652,8 +706,8 @@ void MainScene::robotsInteractions(){
 
 		if (Player::getInstance()->getPlayerPosition().x >= -12 && Player::getInstance()->getPlayerPosition().x <= -9 && Player::getInstance()->getPlayerPosition().z <= -0.5 && Player::getInstance()->getPlayerPosition().z >= -4){
 
-			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("There's something around the oil barrels, around coordinates X:-110 Z:90."), Color(1, 0, 0), 2.f, 10, 36, &projectionStack, &viewStack, &modelStack, m_parameters);
-			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("You might want to check it out."), Color(1, 0, 0), 2.f, 10, 34, &projectionStack, &viewStack, &modelStack, m_parameters);
+			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("There's something around the oil barrels, around coordinates X:-110 Z:90."), Color(0, 1, 0), 2.f, 10, 36, &projectionStack, &viewStack, &modelStack, m_parameters);
+			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("You might want to check it out."), Color(0, 1, 0), 2.f, 10, 34, &projectionStack, &viewStack, &modelStack, m_parameters);
 		}
 
 	}
@@ -662,7 +716,7 @@ void MainScene::robotsInteractions(){
 	if (counter == 2){
 		if (Player::getInstance()->getPlayerPosition().x >= -12 && Player::getInstance()->getPlayerPosition().x <= -9 && Player::getInstance()->getPlayerPosition().z <= -0.5 && Player::getInstance()->getPlayerPosition().z >= -4){
 
-			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("[Press C to go back]"), Color(1, 0, 0), 2.f, 10, 38, &projectionStack, &viewStack, &modelStack, m_parameters);
+			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("[Press C to go back]"), Color(0, 1, 0), 2.f, 10, 38, &projectionStack, &viewStack, &modelStack, m_parameters);
 		}
 	}
 	if (Application::IsKeyPressed('C')){
@@ -675,10 +729,15 @@ void MainScene::InitGuards(){
 
 	//Guards --------------------------------------------- START
 	EnvironmentObj* Guard1 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Guard1", "OBJ//Guard1_OBJ.obj"));
+	Guard1->CollisionMesh_->textureID = LoadTGA("Image//GuardUV.tga");
 	EnvironmentObj* Guard2 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Guard2", "OBJ//Guard2_OBJ.obj"));
+	Guard2->CollisionMesh_->textureID = LoadTGA("Image//GuardUV.tga");
 	EnvironmentObj* Guard3 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Guard3", "OBJ//Guard3_OBJ.obj"));
+	Guard3->CollisionMesh_->textureID = LoadTGA("Image//GuardUV.tga");
 	EnvironmentObj* Guard4 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Guard4", "OBJ//Guard4_OBJ.obj"));
+	Guard4->CollisionMesh_->textureID = LoadTGA("Image//GuardUV.tga");
 	EnvironmentObj* Guard5 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Guard5", "OBJ//Guard5_OBJ.obj"));
+	Guard5->CollisionMesh_->textureID = LoadTGA("Image//GuardUV.tga");
 
 	Env_Obj.push_back(Guard1);
 	Env_Obj.push_back(Guard2);
@@ -688,6 +747,38 @@ void MainScene::InitGuards(){
 
 	//Guards ---------------------------------------------- END
 
+}
+
+void MainScene::medicInteractions(){
+		
+	RenderMeshClass::RenderText;
+
+	if (Player::getInstance()->getPlayerPosition().x >= 10 && Player::getInstance()->getPlayerPosition().x <= 14 && Player::getInstance()->getPlayerPosition().z <= 10 && Player::getInstance()->getPlayerPosition().z >= 5){
+	
+		if (counter_medic == 0){
+
+			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("Ah, Commander! I see that you have finished booting up!"), Color(0, 1, 0), 2.f, 15, 36, &projectionStack, &viewStack, &modelStack, m_parameters);
+			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("You might be a little disoriented, but you should be fine."), Color(0, 1, 0), 2.f, 15, 34, &projectionStack, &viewStack, &modelStack, m_parameters);
+			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("[Press F to continue]"), Color(0, 1, 0), 2.f, 15, 32, &projectionStack, &viewStack, &modelStack, m_parameters);
+		}
+	}
+
+	if (Application::IsKeyPressed('F')){
+
+		counter_medic = 1;
+	}
+
+	if (counter_medic == 1){
+
+		if (Player::getInstance()->getPlayerPosition().x >= 10 && Player::getInstance()->getPlayerPosition().x <= 14 && Player::getInstance()->getPlayerPosition().z <= 10 && Player::getInstance()->getPlayerPosition().z >= 5){
+
+			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("Excellent! You seem to be just fine!"), Color(0, 1, 0), 2.f, 10, 38, &projectionStack, &viewStack, &modelStack, m_parameters);
+			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("Now, then, you should get going to see the Captain, that one guy with a hat."), Color(0, 1, 0), 2.f, 10, 36, &projectionStack, &viewStack, &modelStack, m_parameters);
+			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("He should have some information that could help you in your search!"), Color(0, 1, 0), 2.f, 10, 34, &projectionStack, &viewStack, &modelStack, m_parameters);
+			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("[Use W, A, S, D keys to move]"), Color(0, 1, 0), 2.f, 10, 32, &projectionStack, &viewStack, &modelStack, m_parameters);
+
+		}
+	}
 }
 
 //int MainScene::GetBlueprintNumber()

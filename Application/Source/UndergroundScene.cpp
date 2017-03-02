@@ -22,6 +22,7 @@
 #include "Blueprints.h"
 #include "Inventory.h"
 
+#include "UG_MinionAI.h"
 
 //UndergroundScene::Text_Data UndergroundScene::Text[TEXT_TYPE::Text_Count];
 //unsigned UndergroundScene::m_parameters[U_TOTAL];
@@ -35,7 +36,7 @@ std::vector<EnvironmentObj*> UndergroundScene::Env_Obj;
 Teleporter* UndergroundScene::Stairs;
 //std::vector<NPC*> UndergroundScene::CampNPC;
 
-
+UG_MinionAI* UndergroundScene::UG_EnemyPool[6];
 
 
 UndergroundScene::UndergroundScene()
@@ -244,19 +245,17 @@ void UndergroundScene::Init()
 	//Furniture ------ End
 
 	//Blueprint 3 ----- Start
-	EnvironmentObj* Blueprint = new EnvironmentObj(MeshBuilder::GenerateOBJ("Blueprint", "OBJ//Blueprint3.obj"));
-	Blueprint->CollisionMesh_->textureID = LoadTGA("Image//BlueprintUV.tga");
+	//EnvironmentObj* Blueprint = new EnvironmentObj(MeshBuilder::GenerateOBJ("Blueprint", "OBJ//Blueprint3.obj"));
+	//Blueprint->CollisionMesh_->textureID = LoadTGA("Image//BlueprintUV.tga");
 
-	Env_Obj.push_back(Blueprint);
+	//Env_Obj.push_back(Blueprint);
 	//Blueprint 3 ----- End
 
 	for (auto it : Env_Obj)
 		Player::addCollisionObject(it);
 
-
-
+	initEnemies();
 	UI::getInstance()->Init();
-
 
 	camera = new Camera3;
 	camera->Init(Vector3(0, 0, 7), Vector3(0, 0, 0), Vector3(0, 1, 0));
@@ -295,11 +294,6 @@ void UndergroundScene::Update(double dt)
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); //wireframe mode
 	}
 
-	//if (Application::IsKeyPressed('1'))
-	//{
-	//	SceneManager::getInstance()->SetNextSceneID(0);
-	//	SceneManager::getInstance()->SetNextScene();
-	//}
 
 	//bool fpsonce = false;
 	if (Application::IsKeyPressed('V')// && fpsonce == false 
@@ -332,6 +326,34 @@ void UndergroundScene::Update(double dt)
 		//{
 		//	CampNPC.at(i)->update(dt);
 		//}
+	}
+
+	for (size_t i = 0; i < (sizeof UG_EnemyPool) / sizeof(*UG_EnemyPool); ++i)
+	{
+		if (UG_EnemyPool[i]->active)
+		{
+			if (UG_EnemyPool[i]->getHp() <= 0)//REMOVE THE ENEMY FROM PLAYER ENEMY VECTOR SO PLAYER WILL NOT DETECT A DEAD ENEMY AS ENEMY
+			{
+				UG_EnemyPool[i]->active = false;
+				auto it = std::find(Player::getInstance()->enemies_.begin(), Player::getInstance()->enemies_.end(), UG_EnemyPool[i]);
+				if (it != Player::getInstance()->enemies_.end())
+					std::swap(*it, Player::getInstance()->enemies_.back());
+				//goatMinionPool[i]->CollisionMesh_->pos = Vector3(0, -5, 0);
+				Player::getInstance()->enemies_.back() = NULL;
+				Player::getInstance()->enemies_.pop_back();
+
+				//for Collision
+				Player::getInstance()->removeCollisionObject(UG_EnemyPool[i]);
+			}
+			else//UPDATE ALIVE ENEMY
+				UG_EnemyPool[i]->update(dt);
+		}
+		else
+		{
+			UG_EnemyPool[i]->deadTime += dt;
+			if (UG_EnemyPool[i]->deadTime > 10)
+				UG_EnemyPool[i]->resetMinion();
+		}
 	}
 
 	FramesPerSec = 1 / dt;
@@ -367,6 +389,11 @@ void UndergroundScene::Render()
 		RenderMeshClass::RenderMesh(Env_Obj.at(i)->CollisionMesh_, true, &projectionStack, &viewStack, &modelStack, m_parameters);
 		modelStack.PopMatrix();
 	}
+	for (size_t i = 0; i < (sizeof UG_EnemyPool) / sizeof(*UG_EnemyPool); i++)
+	{
+		if (UG_EnemyPool[i]->active)
+			UG_EnemyPool[i]->render(&projectionStack, &viewStack, &modelStack, m_parameters);
+	}
 	
 	//WHY IS INTERACTION FUNCTION HERE.
 	Interactions();
@@ -375,11 +402,12 @@ void UndergroundScene::Render()
 	//	CampNPC.at(i)->render(&projectionStack, &viewStack, &modelStack, m_parameters);
 	//}
 
-	RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("Blueprints: ") + std::to_string(Blueprints::GetBlueprintNumber()) + std::string("/3"), Color(1, 0, 0), 2.f, 68, 57, &projectionStack, &viewStack, &modelStack, m_parameters);
+	RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("Blueprints: ") + std::to_string(Blueprints::GetBlueprintNumber()) + std::string("/3"), Color(0, 1, 0), 2.f, 68, 57, &projectionStack, &viewStack, &modelStack, m_parameters);
 
-	UI::getInstance()->renderPause(&projectionStack, &viewStack, &modelStack, m_parameters);
 	Player::getInstance()->render(&projectionStack, &viewStack, &modelStack, m_parameters);
-	RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::to_string(FramesPerSec), Color(1, 0, 0), 1.5f, 45, 38, &projectionStack, &viewStack, &modelStack, m_parameters);
+	RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::to_string(FramesPerSec), Color(0, 1, 0), 1.5f, 45, 38, &projectionStack, &viewStack, &modelStack, m_parameters);
+	UI::getInstance()->renderPause(&projectionStack, &viewStack, &modelStack, m_parameters);
+	Inventory::getInstance()->Render(&projectionStack, &viewStack, &modelStack, m_parameters);
 }
 
 
@@ -388,7 +416,7 @@ void UndergroundScene::Interactions()
 	//Return to World Scene
 	if (Player::getInstance()->getPlayerPosition().x >= -39 && Player::getInstance()->getPlayerPosition().x <= -33 && Player::getInstance()->getPlayerPosition().z <= 33 && Player::getInstance()->getPlayerPosition().z >= 26)
 	{
-		RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("[Press SPACE to exit.]"), Color(1, 0, 0), 2.f, 30, 30, &projectionStack, &viewStack, &modelStack, m_parameters);
+		RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("[Press SPACE to exit.]"), Color(0, 1, 0), 2.f, 30, 30, &projectionStack, &viewStack, &modelStack, m_parameters);
 		if (Application::IsKeyPressed(VK_SPACE))
 		{
 			SceneManager::getInstance()->SetNextSceneID(SceneManager::SCENES::WORLDSCENE);
@@ -403,7 +431,7 @@ void UndergroundScene::Interactions()
 
 		if (Blueprint3 == false){
 
-			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("[Press SPACE to scan.]"), Color(1, 0, 0), 2.f, 30, 30, &projectionStack, &viewStack, &modelStack, m_parameters);
+			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("[Press SPACE to scan.]"), Color(0, 1, 0), 2.f, 30, 30, &projectionStack, &viewStack, &modelStack, m_parameters);
 			if (Application::IsKeyPressed(VK_SPACE))
 			{
 				Blueprint3 = true;
@@ -412,9 +440,9 @@ void UndergroundScene::Interactions()
 		}
 		if (Blueprint3 == true){
 
-			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("*Object scanned*"), Color(1, 0, 0), 2.f, 10, 37, &projectionStack, &viewStack, &modelStack, m_parameters);
-			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("*Discovered: This appears to be a blueprint for a part of a machine."), Color(1, 0, 0), 2.f, 10, 35, &projectionStack, &viewStack, &modelStack, m_parameters);
-			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("Committing to memory... Blueprint saved*"), Color(1, 0, 0), 2.f, 10, 33, &projectionStack, &viewStack, &modelStack, m_parameters);
+			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("*Object scanned*"), Color(0, 1, 0), 2.f, 10, 37, &projectionStack, &viewStack, &modelStack, m_parameters);
+			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("*Discovered: This appears to be a blueprint for a part of a machine."), Color(0, 1, 0), 2.f, 10, 35, &projectionStack, &viewStack, &modelStack, m_parameters);
+			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("Committing to memory... Blueprint saved*"), Color(0, 1, 0), 2.f, 10, 33, &projectionStack, &viewStack, &modelStack, m_parameters);
 		}
 	}
 }
@@ -479,4 +507,18 @@ void UndergroundScene::RenderSkybox()
 	modelStack.PopMatrix();
 
 
+}
+
+void UndergroundScene::initEnemies()
+{
+	for (size_t i = 0; i < (sizeof UG_EnemyPool) / sizeof(*UG_EnemyPool); ++i)
+	{
+		UG_MinionAI* tempEnemy = new UG_MinionAI();
+
+		UG_EnemyPool[i] = tempEnemy;
+		UG_EnemyPool[i]->active = true;
+
+		//Player::getInstance()->addCollisionObject(tempEnemy);
+		//Player::getInstance()->enemies_.push_back(tempEnemy);
+	}
 }

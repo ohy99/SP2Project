@@ -84,6 +84,8 @@ void GoatMinion::update(double dt)
 		else
 			doHitCD += dt;
 	}
+
+	updateShowDmgTaken(dt);
 }
 void GoatMinion::render(MS* projectionStack, MS* viewStack, MS* modelStack, unsigned * m_parameters)
 {
@@ -99,6 +101,9 @@ void GoatMinion::render(MS* projectionStack, MS* viewStack, MS* modelStack, unsi
 	modelStack->Rotate((CollisionMesh_->dir.x < 0 ? -1.0f : 1.0f) * Math::RadianToDegree(acos(CollisionMesh_->dir.Dot(Vector3(0.f, 0.f, 1.f)))), 0.f, 1.f, 0.f);
 	modelStack->Scale(0.3f, 0.3f, 0.3f);
 	RenderMeshClass::RenderText(&Scene::Text[Scene::TEXT_TYPE::Chiller], std::to_string(hp_), Color(1, 0, 0), projectionStack, viewStack, modelStack, m_parameters);
+
+	renderShowDmgTaken(projectionStack, viewStack, modelStack, m_parameters);
+	
 	modelStack->PopMatrix();
 }
 void GoatMinion::isHitUpdate(int dmg)
@@ -106,6 +111,8 @@ void GoatMinion::isHitUpdate(int dmg)
 	hp_ -= dmg;
 	if (hp_ < 0)
 		hp_ = 0;
+
+	isHitShowDmgTaken(dmg);
 }
 
 int GoatMinion::getDmg()

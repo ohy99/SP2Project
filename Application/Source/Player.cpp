@@ -59,12 +59,15 @@ Player::Player() : GameObject("Player"), wasFPressed(false)
 		bulletMesh[i]->CollisionMesh_->material.kSpecular = 0.8f;
 		bulletMesh[i]->CollisionMesh_->collisionEnabled = false;
 		bulletMesh[i]->aliveTime = 0.0;
-		bulletMesh[i]->deadTime = 1.0;//this time is used to render the bullet hit texture quad
+		bulletMesh[i]->deadTime = 0.5;//this time is used to render the bullet hit texture quad
 	}
 	bulletHitQuad = MeshBuilder::GenerateQuad("bullethit", Color(1, 1, 1), 1.f, 1.f);
-	//bulletHitQuad->textureID = LoadTGA("");
+	bulletHitQuad->textureID = LoadTGA("IMAGE//BULLETHOLE.tga");
 	
-
+	radarPlayer = MeshBuilder::GenerateSphere("", Color(0, 1, 0), 10, 10, 1);
+	radarEnemy = MeshBuilder::GenerateSphere("", Color(1, 0, 0), 10, 10, 1);
+	radar_mesh = MeshBuilder::GenerateQuad("", Color(1, 1, 1), 1, 1);
+	radar_mesh->textureID = LoadTGA("IMAGE//RadarUV.tga");
 
 	RangeWeapon* temp_rangedWeap = new RangeWeapon("PISTOL", 30, 50, 45, 45, 9);
 	temp_rangedWeap->setRangeWeapon(250, 0.025f, 2.f);
@@ -85,7 +88,7 @@ Player::Player() : GameObject("Player"), wasFPressed(false)
 
 	currentWeapon_ = weapons_[WEAPON_TYPE::MELEE];
 
-	radarDetectRadius = 25;
+	radarDetectRadius = 50;
 	//std::vector<Vector3> PositionOfEnemiesInProximity;
 }
 Player::~Player()
@@ -109,6 +112,9 @@ Player::~Player()
 	delete Crosshair;
 	delete[] bulletMesh;
 	delete bulletHitQuad;
+	delete radarPlayer;
+	delete radarEnemy;
+	delete radar_mesh;
 }
 Player* Player::getInstance() 
 { 
@@ -181,17 +187,17 @@ void Player::render(MS* projectionStack, MS* viewStack, MS* modelStack, unsigned
 	if (PointedAtTeleporter)
 	{
 		RenderMeshClass::RenderTextOnScreen(&Scene::Text[Scene::TEXT_TYPE::Century], "[Press SPACE to Teleport into the " + 
-			Pointed_Obj->getName() + ".]", Color(1, 0, 0), 2.f, 28, 24,
+			Pointed_Obj->getName() + ".]", Color(0, 1, 0), 2.f, 28, 24,
 			projectionStack, viewStack, modelStack, m_parameters);
 	}
 	else if (Pointed_Obj)
 		RenderMeshClass::RenderTextOnScreen(&Scene::Text[Scene::TEXT_TYPE::Century], Pointed_Obj->getName(), Color(0, 1, 0), 2, 35, 55, projectionStack, viewStack, modelStack, m_parameters);
 
-	RenderMeshClass::RenderTextOnScreen(&Scene::Text[Scene::TEXT_TYPE::Century], std::to_string(hp_), Color(0, 1, 0), 2, 0, 55, projectionStack, viewStack, modelStack, m_parameters);
+	RenderMeshClass::RenderTextOnScreen(&Scene::Text[Scene::TEXT_TYPE::Century], std::string("HP:") + std::to_string(hp_), Color(0, 1, 0), 2, 0, 56, projectionStack, viewStack, modelStack, m_parameters);
 
-	RenderMeshClass::RenderTextOnScreen(&Scene::Text[Scene::TEXT_TYPE::Century], std::to_string(pos_.x), Color(1, 0, 0), 1.8, 69, 54, projectionStack, viewStack, modelStack, m_parameters);
-	RenderMeshClass::RenderTextOnScreen(&Scene::Text[Scene::TEXT_TYPE::Century], std::to_string(pos_.y), Color(1, 0, 0), 1.8, 69, 52, projectionStack, viewStack, modelStack, m_parameters);
-	RenderMeshClass::RenderTextOnScreen(&Scene::Text[Scene::TEXT_TYPE::Century], std::to_string(pos_.z), Color(1, 0, 0), 1.8, 69, 50, projectionStack, viewStack, modelStack, m_parameters);
+	RenderMeshClass::RenderTextOnScreen(&Scene::Text[Scene::TEXT_TYPE::Century], std::to_string(pos_.x), Color(0, 1, 0), 1.8, 69, 54, projectionStack, viewStack, modelStack, m_parameters);
+	RenderMeshClass::RenderTextOnScreen(&Scene::Text[Scene::TEXT_TYPE::Century], std::to_string(pos_.y), Color(0, 1, 0), 1.8, 69, 52, projectionStack, viewStack, modelStack, m_parameters);
+	RenderMeshClass::RenderTextOnScreen(&Scene::Text[Scene::TEXT_TYPE::Century], std::to_string(pos_.z), Color(0, 1, 0), 1.8, 69, 50, projectionStack, viewStack, modelStack, m_parameters);
 
 	if //(currentWeapon_ == weapons_[WEAPON_TYPE::PISTOL] || currentWeapon_ == weapons_[WEAPON_TYPE::RIFLE])
 		(currWeap >= WEAPON_TYPE::PISTOL)
@@ -603,7 +609,9 @@ void Player::updateBulletTrail(double dt)
 }
 void Player::renderBulletTrail(MS* projectionStack, MS* viewStack, MS* modelStack, unsigned * m_parameters)
 {
-	
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
 	for (size_t i = 0; i < (sizeof(bulletMesh) / sizeof(*bulletMesh)); i++)
 	{
 		if (bulletMesh[i]->active)//render active bullets
@@ -622,8 +630,8 @@ void Player::renderBulletTrail(MS* projectionStack, MS* viewStack, MS* modelStac
 				modelStack->PushMatrix();
 				modelStack->Translate(bulletMesh[i]->hitPos.x, bulletMesh[i]->hitPos.y, bulletMesh[i]->hitPos.z);
 				modelStack->Rotate(bulletMesh[i]->angleRotate + 180.f, bulletMesh[i]->angleRAxis.x, bulletMesh[i]->angleRAxis.y, bulletMesh[i]->angleRAxis.z);
-				modelStack->Scale(0.25f, 0.25f, 1.f);
-				RenderMeshClass::RenderMesh(bulletHitQuad, true, projectionStack, viewStack, modelStack, m_parameters);
+				modelStack->Scale(0.1f, 0.1f, 1.f);
+				RenderMeshClass::RenderMesh(bulletHitQuad, false, projectionStack, viewStack, modelStack, m_parameters);
 				modelStack->PopMatrix();
 			}
 		}
@@ -706,22 +714,58 @@ void Player::updateRadar()
 		if ((it->CollisionMesh_->pos - Player::CollisionMesh_->pos).LengthSquared() < radarDetectRadius * radarDetectRadius)//not using sqrt would be faster
 		{
 			PositionOfEnemiesInProximity.push_back(it->CollisionMesh_->pos - Player::CollisionMesh_->pos);
+			//PositionOfEnemiesInProximity.push_back(it->CollisionMesh_->pos - FPSCam::getInstance()->getDir());
 		}
 	}
 }
 void Player::renderRadar(MS* projectionStack, MS* viewStack, MS* modelStack, unsigned * m_parameters)
 {
+	static float Rscale = 2.f;
+	Vector3 origin((float)Application::getWindowWidth() * 0.125f, (float)Application::getWindowHeight() * 0.15f, 0);
+
+	RenderMeshClass::RenderMeshOnScreen(radar_mesh, origin.x, origin.y, origin.z,
+		(float)Application::getWindowWidth() * 0.2f, (float)Application::getWindowWidth() * 0.2f, projectionStack, viewStack, modelStack, m_parameters);
+
 	//This is the player location
-	RenderMeshClass::RenderMeshOnScreen(bulletHitQuad, (float)Application::getWindowWidth() * 0.5f, (float)Application::getWindowHeight() * 0.5f
-		, 1, 0.01f *(float)Application::getWindowWidth(), 0.01f * (float)Application::getWindowHeight(), projectionStack, viewStack, modelStack, m_parameters);
+	RenderMeshClass::RenderMeshOnScreen(radarPlayer, origin.x, origin.y
+		, 1, (float)Application::getWindowWidth() * 0.005f, (float)Application::getWindowWidth() * 0.005f, projectionStack, viewStack, modelStack, m_parameters);
+
 	for (auto it: PositionOfEnemiesInProximity)
 	{
-		modelStack->PushMatrix();
-		//modelStack->Translate();
-		RenderMeshClass::RenderMeshOnScreen(bulletHitQuad, (float)Application::getWindowWidth() * 0.5f + it.x, (float)Application::getWindowHeight() * 0.5f + it.z
-			, 1.5f, 0.01f *(float)Application::getWindowWidth(), 0.01f * (float)Application::getWindowHeight(), projectionStack, viewStack, modelStack, m_parameters);
-		modelStack->PopMatrix();
+		RenderMeshClass::RMoS_RadarUse(radarEnemy, origin, it,
+			FPSCam::getInstance()->getDir(), 
+			0.005f * (float)Application::getWindowWidth(), 0.005f * (float)Application::getWindowWidth(), Rscale,
+			projectionStack, viewStack, modelStack, m_parameters);
 	}
+}
+
+void RenderMeshClass::RMoS_RadarUse(Mesh* mesh, Vector3 origin, Vector3 dirRelativeToOrigin, Vector3 dir, int sizex, int sizey, float scale, MS* projectionStack, MS* viewStack, MS* modelStack, unsigned * m_parameters)
+{
+	glDisable(GL_DEPTH_TEST);
+	Mtx44 ortho;
+	ortho.SetToOrtho(0, Application::getWindowWidth(), 0, Application::getWindowHeight(), -10, 10); //size of screen UI
+	projectionStack->PushMatrix();
+	projectionStack->LoadMatrix(ortho);
+	viewStack->PushMatrix();
+	viewStack->LoadIdentity(); //No need camera for ortho mode
+	modelStack->PushMatrix();
+	modelStack->LoadIdentity();
+	//to do: scale and translate accordingly
+
+	
+	modelStack->Translate(origin.x, origin.y, origin.z);
+
+
+	Vector3 wad = FPSCam::getInstance()->getDir();
+	wad.y = 0;
+	Vector3 wad2 = Vector3(dirRelativeToOrigin.x, 0, dirRelativeToOrigin.z);
+	try{
+		wad.Normalize(); wad2.Normalize();
+	}
+	catch (DivideByZero){
+		wad.Set(0, 0, 1); wad2.Set(0, 0, 1);
+	}
+<<<<<<< HEAD
 }
 
 void Player::checkIfTalkedWithNPC()
@@ -740,4 +784,28 @@ void Player::checkIfTalkedWithNPC()
 
 	if (!isFPressed && wasFPressed)
 		wasFPressed = isFPressed;
+=======
+
+	float angle = Math::RadianToDegree(acos(wad.Dot(wad2)));
+	float distance = dirRelativeToOrigin.Length();
+	Vector3 wad3;
+	try{
+		wad3 = wad.Cross(wad2).Normalized();
+	}
+	catch (DivideByZero){
+		wad3.Set(0, 1, 0);
+	}
+
+	modelStack->Rotate(angle, 0, 0, wad3.y);
+	//modelStack->Scale(1, scale, 1);
+	modelStack->Translate(0, distance * scale, 1);
+	modelStack->Scale(sizex, sizey, 1);
+
+
+	RenderMeshClass::RenderMesh(mesh, false, projectionStack, viewStack, modelStack, m_parameters); //UI should not have light
+	projectionStack->PopMatrix();
+	viewStack->PopMatrix();
+	modelStack->PopMatrix();
+	glEnable(GL_DEPTH_TEST);
+>>>>>>> 5c9363a0c2279e8b480099cc2c4f1fca928c25d9
 }

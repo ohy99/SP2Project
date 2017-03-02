@@ -24,8 +24,6 @@
 #include "SandStorm.h"
 #include "MinionAI.h"
 
-#include "MinionAI.h"
-
 //WorldScene::Text_Data WorldScene::Text[TEXT_TYPE::Text_Count];
 //unsigned WorldScene::m_parameters[U_TOTAL];
 MS WorldScene::modelStack, WorldScene::viewStack, WorldScene::projectionStack;
@@ -55,11 +53,12 @@ WorldScene::~WorldScene()
 void WorldScene::Init()
 {
 	// Init VBO here
-	//Player::getInstance()->setPosition(Vector3(0, 0, 0));
+	Player::getInstance()->setPosition(Vector3(94, 0, -7));
 
 	glClearColor(0.0f, 0.5f, 0.66f, 0.0f);
 
 	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_ALPHA_TEST);
 	glEnable(GL_CULL_FACE);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -102,13 +101,14 @@ void WorldScene::Init()
 	wasEscPressed = false;
 	isPause = false;
 	//MainMenu.Init();
+	countDownBackToBase = 5.0;
 
 	UI::getInstance()->Init();
 
 	camera = new Camera3;
 	camera->Init(Vector3(0, 0, 7), Vector3(0, 0, 0), Vector3(0, 1, 0));
 
-
+	
 
 	Mtx44 projection;
 	projection.SetToPerspective(45.f, 4.f / 3.f, 0.1f, 1000.f);
@@ -127,24 +127,6 @@ void WorldScene::Update(double dt)
 	glfwGetWindowSize(Application::m_window, &width, &height);
 	isEscPressed = Application::IsKeyPressed(VK_ESCAPE);
 
-
-	if (Application::IsKeyPressed(VK_NUMPAD1) || Application::IsKeyPressed('1'))
-	{
-		glEnable(GL_CULL_FACE);
-	}
-	if (Application::IsKeyPressed(VK_NUMPAD2) || Application::IsKeyPressed('2'))
-	{
-		glDisable(GL_CULL_FACE);
-	}
-	if (Application::IsKeyPressed(VK_NUMPAD3) || Application::IsKeyPressed('3'))
-	{
-		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); //default fill mode
-	}
-	if (Application::IsKeyPressed(VK_NUMPAD4) || Application::IsKeyPressed('4'))
-	{
-		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); //wireframe mode
-	}
-
 	//bool fpsonce = false;
 	if (Application::IsKeyPressed('V')// && fpsonce == false)
 		|| !debugMode)
@@ -154,14 +136,42 @@ void WorldScene::Update(double dt)
 		//	fpsonce = true;
 	}
 
-	Player::getInstance()->update(dt, camera);
 	Inventory::getInstance()->Update(dt);
 	UI::getInstance()->Update(dt);
 
 
+<<<<<<< HEAD
 
 	if (!UI::getInstance()->isPauseOpen() && !Inventory::getInstance()->isInventoryOpen())
 	{
+=======
+
+	//for (size_t i = 0; i < CampNPC.size(); i++)
+	//{
+	//	CampNPC.at(i)->update(dt);
+	//}
+
+	if (Player::getInstance()->getHp() <= 0){
+
+		isDead = true;
+		countDownBackToBase -= dt;
+
+		if (countDownBackToBase <= 0.0){
+
+			SceneManager::getInstance()->SetNextSceneID(SceneManager::SCENES::CAMPSCENE);
+			SceneManager::getInstance()->SetNextScene();
+			Player::getInstance()->setPosition(Vector3(12, 0, 11));
+		}
+	}
+	else{
+
+		isDead = false;
+		Player::getInstance()->update(dt, camera);
+	}
+
+	if (!UI::getInstance()->isPauseOpen() && !Inventory::getInstance()->isInventoryOpen()){
+	
+>>>>>>> 5c9363a0c2279e8b480099cc2c4f1fca928c25d9
 		double c_posx, c_posy;
 		glfwGetCursorPos(Application::m_window, &c_posx, &c_posy);
 		glfwSetCursorPos(Application::m_window, width / 2, height / 2);
@@ -174,42 +184,50 @@ void WorldScene::Update(double dt)
 
 		camera->Update(dt, dx, dy);
 	}
+<<<<<<< HEAD
 
 		for (size_t i = 0; i < (sizeof WS_EnemyPool) / sizeof(*WS_EnemyPool); ++i)
-		{
-			if (WS_EnemyPool[i]->active)
-			{
-				if (WS_EnemyPool[i]->getHp() <= 0)//REMOVE THE ENEMY FROM PLAYER ENEMY VECTOR SO PLAYER WILL NOT DETECT A DEAD ENEMY AS ENEMY
-				{
-					WS_EnemyPool[i]->active = false;
-					auto it = std::find(Player::getInstance()->enemies_.begin(), Player::getInstance()->enemies_.end(), WS_EnemyPool[i]);
-					if (it != Player::getInstance()->enemies_.end())
-						std::swap(*it, Player::getInstance()->enemies_.back());
-					//goatMinionPool[i]->CollisionMesh_->pos = Vector3(0, -5, 0);
-					Player::getInstance()->enemies_.back() = NULL;
-					Player::getInstance()->enemies_.pop_back();
+=======
 
-					//for Collision
-					Player::getInstance()->removeCollisionObject(WS_EnemyPool[i]);
-				}
-				else//UPDATE ALIVE ENEMY
-					WS_EnemyPool[i]->update(dt);
-			}
-			else
-			{
-				WS_EnemyPool[i]->deadTime += dt;
-				if (WS_EnemyPool[i]->deadTime > 10)
-					WS_EnemyPool[i]->resetMinion();
-			}
-		}
-		if (Blueprints::GetBlueprintNumber())//if i got one or more blueprints
-		{
-			//trigger global event
-			SandStorm::getInstance()->update(dt);
-		}
 
-	
-	//MainMenu.Update(dt);
+
+
+	for (size_t i = 0; i < (sizeof WS_EnemyPool) / sizeof(*WS_EnemyPool); ++i)
+	{
+		if (WS_EnemyPool[i]->active)
+
+>>>>>>> 5c9363a0c2279e8b480099cc2c4f1fca928c25d9
+		{
+			if (WS_EnemyPool[i]->getHp() <= 0)//REMOVE THE ENEMY FROM PLAYER ENEMY VECTOR SO PLAYER WILL NOT DETECT A DEAD ENEMY AS ENEMY
+			{
+				WS_EnemyPool[i]->active = false;
+				auto it = std::find(Player::getInstance()->enemies_.begin(), Player::getInstance()->enemies_.end(), WS_EnemyPool[i]);
+				if (it != Player::getInstance()->enemies_.end())
+					std::swap(*it, Player::getInstance()->enemies_.back());
+				//goatMinionPool[i]->CollisionMesh_->pos = Vector3(0, -5, 0);
+				Player::getInstance()->enemies_.back() = NULL;
+				Player::getInstance()->enemies_.pop_back();
+
+				//for Collision
+				Player::getInstance()->removeCollisionObject(WS_EnemyPool[i]);
+			}
+			else//UPDATE ALIVE ENEMY
+				WS_EnemyPool[i]->update(dt);
+		}
+		else
+		{
+			WS_EnemyPool[i]->deadTime += dt;
+			if (WS_EnemyPool[i]->deadTime > 10)
+				WS_EnemyPool[i]->resetMinion();
+		}
+	}
+
+	if (Blueprints::GetBlueprintNumber())//if i got one or more blueprints
+	{
+		//trigger global event
+		SandStorm::getInstance()->update(dt);
+	}
+
 }
 
 void WorldScene::Render()
@@ -262,17 +280,24 @@ void WorldScene::Render()
 
 	Interactions();
 
-	RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("Blueprints: ") + std::to_string(Blueprints::GetBlueprintNumber()) + std::string("/3"), Color(1, 0, 0), 2.f, 68, 57, &projectionStack, &viewStack, &modelStack, m_parameters);
+	RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("Blueprints: ") + std::to_string(Blueprints::GetBlueprintNumber()) + std::string("/3"), Color(0, 1, 0), 2.f, 68, 57, &projectionStack, &viewStack, &modelStack, m_parameters);
 
 	RenderMeshClass::RenderMesh(meshList[GEO_AXES], false, &projectionStack, &viewStack, &modelStack, m_parameters);
 	//MinionAI::MinionAI().render(&projectionStack, &viewStack, &modelStack, m_parameters);
 
 	Player::getInstance()->render(&projectionStack, &viewStack, &modelStack, m_parameters);
+	
+	if (isDead){
+
+		RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], "You Died!", Color(0, 1, 0), 2.5f, 32, 48, &projectionStack, &viewStack, &modelStack, m_parameters);
+		RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], "Respawn Back to Base in " + std::to_string((int)countDownBackToBase), Color(0, 1, 0), 2.f, 31, 46, &projectionStack, &viewStack, &modelStack, m_parameters);
+	}
 
 	RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::to_string(FramesPerSec), Color(1, 0, 0), 1.5f, 45, 38, &projectionStack, &viewStack, &modelStack, m_parameters);
 
 	UI::getInstance()->renderPause(&projectionStack, &viewStack, &modelStack, m_parameters);
 	Inventory::getInstance()->Render(&projectionStack, &viewStack, &modelStack, m_parameters);
+
 
 }
 
@@ -283,7 +308,7 @@ void WorldScene::Interactions(){
 	//Teleporter to Camp base -- Main Scene
 	if (Player::getInstance()->getPlayerPosition().x >= 92 && Player::getInstance()->getPlayerPosition().x <= 97 && Player::getInstance()->getPlayerPosition().z <= -8 && Player::getInstance()->getPlayerPosition().z >= -15){
 
-		RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("[Press SPACE to teleport to Camp Base.]"), Color(1, 0, 0), 2.f, 28, 30, &projectionStack, &viewStack, &modelStack, m_parameters);
+		RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("[Press SPACE to teleport to Camp Base.]"), Color(0, 1, 0), 2.f, 28, 30, &projectionStack, &viewStack, &modelStack, m_parameters);
 	}
 
 	if (Application::IsKeyPressed(VK_SPACE)){
@@ -301,7 +326,7 @@ void WorldScene::Interactions(){
 	//Door to Underground Scene
 	if (Player::getInstance()->getPlayerPosition().x >= -88 && Player::getInstance()->getPlayerPosition().x <= -86 && Player::getInstance()->getPlayerPosition().z <= -68 && Player::getInstance()->getPlayerPosition().z >= -70)
 	{
-		RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("[Press SPACE to enter]"), Color(1, 0, 0), 2.f, 28, 30, &projectionStack, &viewStack, &modelStack, m_parameters);
+		RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("[Press SPACE to enter]"), Color(0, 1, 0), 2.f, 28, 30, &projectionStack, &viewStack, &modelStack, m_parameters);
 	}
 
 	if (Application::IsKeyPressed(VK_SPACE))
@@ -320,7 +345,7 @@ void WorldScene::Interactions(){
 
 		if (counter_text_tablet == 0){
 		
-			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("[Press SPACE to scan.]"), Color(1, 0, 0), 2.f, 30, 30, &projectionStack, &viewStack, &modelStack, m_parameters);
+			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("[Press SPACE to scan.]"), Color(0, 1, 0), 2.f, 30, 30, &projectionStack, &viewStack, &modelStack, m_parameters);
 		}
 		if (Application::IsKeyPressed(VK_SPACE)){
 
@@ -328,12 +353,12 @@ void WorldScene::Interactions(){
 		}
 		if (counter_text_tablet == 1){
 
-			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("*Data extracted*"), Color(1, 0, 0), 2.f, 10, 37, &projectionStack, &viewStack, &modelStack, m_parameters);
-			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("*Discovered: This tablet holds information of a machine that can"), Color(1, 0, 0), 2.f, 10, 35, &projectionStack, &viewStack, &modelStack, m_parameters);
-			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("apparently help to rejuvenate the Earth."), Color(1, 0, 0), 2.f, 10, 33, &projectionStack, &viewStack, &modelStack, m_parameters);
-			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("There are apparently three parts to the blueprints required to make this device."), Color(1, 0, 0), 2.f, 10, 31, &projectionStack, &viewStack, &modelStack, m_parameters);
-			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("One of the locations is recorded in this device. A hidden lab at somewhere"), Color(1, 0, 0), 2.f, 10, 29, &projectionStack, &viewStack, &modelStack, m_parameters);
-			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("around coordinates: x;-80, y;-80 *"), Color(1, 0, 0), 2.f, 10, 27, &projectionStack, &viewStack, &modelStack, m_parameters);
+			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("*Data extracted*"), Color(0, 1, 0), 2.f, 10, 37, &projectionStack, &viewStack, &modelStack, m_parameters);
+			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("*Discovered: This tablet holds information of a machine that can"), Color(0, 1, 0), 2.f, 10, 35, &projectionStack, &viewStack, &modelStack, m_parameters);
+			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("apparently help to rejuvenate the Earth."), Color(0, 1, 0), 2.f, 10, 33, &projectionStack, &viewStack, &modelStack, m_parameters);
+			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("There are apparently three parts to the blueprints required to make this device."), Color(0, 1, 0), 2.f, 10, 31, &projectionStack, &viewStack, &modelStack, m_parameters);
+			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("One of the locations is recorded in this device. A hidden lab at somewhere"), Color(0, 1, 0), 2.f, 10, 29, &projectionStack, &viewStack, &modelStack, m_parameters);
+			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("around coordinates: x;-80, y;-80 *"), Color(0, 1, 0), 2.f, 10, 27, &projectionStack, &viewStack, &modelStack, m_parameters);
 
 		}
 	}
@@ -344,7 +369,7 @@ void WorldScene::Interactions(){
 	
 		if (counter_text_robot == 0){
 
-			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("[Press SPACE to scan.]"), Color(1, 0, 0), 2.f, 30, 30, &projectionStack, &viewStack, &modelStack, m_parameters);
+			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("[Press SPACE to scan.]"), Color(0, 1, 0), 2.f, 30, 30, &projectionStack, &viewStack, &modelStack, m_parameters);
 		}
 		if (Application::IsKeyPressed(VK_SPACE)){
 
@@ -352,10 +377,10 @@ void WorldScene::Interactions(){
 		}
 		if (counter_text_robot == 1){
 
-			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("*Data extracted*"), Color(1, 0, 0), 2.f, 10, 37, &projectionStack, &viewStack, &modelStack, m_parameters);
-			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("*Discovered: This robot appears to be a research assistant "), Color(1, 0, 0), 2.f, 10, 35, &projectionStack, &viewStack, &modelStack, m_parameters);
-			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("from a time before Earth was abandoned. One registered area of interest."), Color(1, 0, 0), 2.f, 10, 33, &projectionStack, &viewStack, &modelStack, m_parameters);
-			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("New coordinates found: x; 54, y;-84*"), Color(1, 0, 0), 2.f, 10, 31, &projectionStack, &viewStack, &modelStack, m_parameters);
+			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("*Data extracted*"), Color(0, 1, 0), 2.f, 10, 37, &projectionStack, &viewStack, &modelStack, m_parameters);
+			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("*Discovered: This robot appears to be a research assistant "), Color(0, 1, 0), 2.f, 10, 35, &projectionStack, &viewStack, &modelStack, m_parameters);
+			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("from a time before Earth was abandoned. One registered area of interest."), Color(0, 1, 0), 2.f, 10, 33, &projectionStack, &viewStack, &modelStack, m_parameters);
+			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("New coordinates found: x; 54, y;-84*"), Color(0, 1, 0), 2.f, 10, 31, &projectionStack, &viewStack, &modelStack, m_parameters);
 		}
 	}
 
@@ -371,8 +396,8 @@ void WorldScene::Interactions(){
 		}
 		if (counter_text_fakeBlueprints == 1){
 
-			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("*Object scanned*"), Color(1, 0, 0), 2.f, 15, 35, &projectionStack, &viewStack, &modelStack, m_parameters);
-			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("*This appears to be a receipt for barrels of oil. False alarm.* "), Color(1, 0, 0), 2.f, 15, 33, &projectionStack, &viewStack, &modelStack, m_parameters);
+			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("*Object scanned*"), Color(0, 1, 0), 2.f, 15, 35, &projectionStack, &viewStack, &modelStack, m_parameters);
+			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("*This appears to be a receipt for barrels of oil. False alarm.* "), Color(0, 1, 0), 2.f, 15, 33, &projectionStack, &viewStack, &modelStack, m_parameters);
 		}
 	}
 
@@ -382,7 +407,7 @@ void WorldScene::Interactions(){
 
 		if (Blueprint1 == false){
 
-			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("[Press SPACE to scan.]"), Color(1, 0, 0), 2.f, 30, 30, &projectionStack, &viewStack, &modelStack, m_parameters);
+			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("[Press SPACE to scan.]"), Color(0, 1, 0), 2.f, 30, 30, &projectionStack, &viewStack, &modelStack, m_parameters);
 			if (Application::IsKeyPressed(VK_SPACE))
 			{
 				Blueprint1 = true;
@@ -391,9 +416,9 @@ void WorldScene::Interactions(){
 		}
 		if (Blueprint1 == true){
 
-			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("*Object scanned*"), Color(1, 0, 0), 2.f, 10, 37, &projectionStack, &viewStack, &modelStack, m_parameters);
-			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("*Discovered: This appears to be a blueprint for a part of a machine."), Color(1, 0, 0), 2.f, 10, 35, &projectionStack, &viewStack, &modelStack, m_parameters);
-			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("Committing to memory... Blueprint saved*"), Color(1, 0, 0), 2.f, 10, 33, &projectionStack, &viewStack, &modelStack, m_parameters);
+			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("*Object scanned*"), Color(0, 1, 0), 2.f, 10, 37, &projectionStack, &viewStack, &modelStack, m_parameters);
+			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("*Discovered: This appears to be a blueprint for a part of a machine."), Color(0, 1, 0), 2.f, 10, 35, &projectionStack, &viewStack, &modelStack, m_parameters);
+			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("Committing to memory... Blueprint saved*"), Color(0, 1, 0), 2.f, 10, 33, &projectionStack, &viewStack, &modelStack, m_parameters);
 		}
 	}
 
@@ -402,7 +427,7 @@ void WorldScene::Interactions(){
 		
 		if (Blueprint2 == false){
 			
-			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("[Press SPACE to scan.]"), Color(1, 0, 0), 2.f, 30, 30, &projectionStack, &viewStack, &modelStack, m_parameters);
+			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("[Press SPACE to scan.]"), Color(0, 1, 0), 2.f, 30, 30, &projectionStack, &viewStack, &modelStack, m_parameters);
 
 			if (Application::IsKeyPressed(VK_SPACE)){
 
@@ -412,9 +437,9 @@ void WorldScene::Interactions(){
 		}
 		if (Blueprint2 == true){
 
-			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("*Object scanned*"), Color(1, 0, 0), 2.f, 10, 37, &projectionStack, &viewStack, &modelStack, m_parameters);
-			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("*Discovered: This appears to be a blueprint for a part of a machine."), Color(1, 0, 0), 2.f, 10, 35, &projectionStack, &viewStack, &modelStack, m_parameters);
-			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("Committing to memory... Blueprint saved*"), Color(1, 0, 0), 2.f, 10, 33, &projectionStack, &viewStack, &modelStack, m_parameters);
+			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("*Object scanned*"), Color(0, 1, 0), 2.f, 10, 37, &projectionStack, &viewStack, &modelStack, m_parameters);
+			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("*Discovered: This appears to be a blueprint for a part of a machine."), Color(0, 1, 0), 2.f, 10, 35, &projectionStack, &viewStack, &modelStack, m_parameters);
+			RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("Committing to memory... Blueprint saved*"), Color(0, 1, 0), 2.f, 10, 33, &projectionStack, &viewStack, &modelStack, m_parameters);
 		}
 	}
 }
@@ -428,6 +453,8 @@ void WorldScene::Exit()
 	}
 	//delete camera;
 	Player::getInstance()->clearCollisionObj();
+
+	//delete[] WS_EnemyPool;
 
 	// Cleanup VBO here
 	glDeleteVertexArrays(1, &m_vertexArrayID);

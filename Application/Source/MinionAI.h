@@ -8,7 +8,7 @@
 
 class MinionAI : public EnemyAI
 {
-	int minDmg_, maxDmg_;
+	int minDmg_, maxDmg_, Dmg_;
 	int hp_;
 	double doHitCD;
 	const double doHitDelay;
@@ -21,6 +21,7 @@ public:
 	virtual ~MinionAI();
 
 	bool active;
+	bool test = false;
 
 	virtual void update(double dt);
 	virtual void render(MS* projectionStack, MS* viewStack, MS* modelStack, unsigned * m_parameters);

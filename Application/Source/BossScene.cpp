@@ -92,30 +92,37 @@ void BossScene::Init()
 	skyBoxDistance = skyBoxScale * 0.5f * 0.99f;
 	//Left Skybox 
 	meshList[GEO_LEFT] = MeshBuilder::GenerateQuad("Left", Color(1, 1, 1), skyBoxScale, skyBoxScale);
-	meshList[GEO_LEFT]->textureID = LoadTGA("Image//BossSceneSkyBoxLeft.tga");
+	//meshList[GEO_LEFT]->textureID = LoadTGA("Image//BossScene//BossSceneSkyBoxLeft.tga");
+	meshList[GEO_LEFT]->textureID = LoadTGA("Image//BossScene//SBSides.tga");
+
 
 	//Right Skybox 
 	meshList[GEO_RIGHT] = MeshBuilder::GenerateQuad("Right", Color(1, 1, 1), skyBoxScale, skyBoxScale);
-	meshList[GEO_RIGHT]->textureID = LoadTGA("Image//BossSceneSkyBoxRight.tga");
+	//meshList[GEO_RIGHT]->textureID = LoadTGA("Image//BossScene//BossSceneSkyBoxRight.tga");
+	meshList[GEO_RIGHT]->textureID = LoadTGA("Image//BossScene//SBSides.tga");
 
 	//Front Skybox 
 	meshList[GEO_FRONT] = MeshBuilder::GenerateQuad("Front", Color(1, 1, 1), skyBoxScale, skyBoxScale);
-	meshList[GEO_FRONT]->textureID = LoadTGA("Image//BossSceneSkyBoxFront.tga");
+	//meshList[GEO_FRONT]->textureID = LoadTGA("Image//BossScene//BossSceneSkyBoxFront.tga");
+	meshList[GEO_FRONT]->textureID = LoadTGA("Image//BossScene//SBSides.tga");
 
 	//Back Skybox 
 	meshList[GEO_BACK] = MeshBuilder::GenerateQuad("Back", Color(1, 1, 1), skyBoxScale, skyBoxScale);
-	meshList[GEO_BACK]->textureID = LoadTGA("Image//BossSceneSkyBoxBack.tga");
+	//meshList[GEO_BACK]->textureID = LoadTGA("Image//BossScene//BossSceneSkyBoxBack.tga");
+	meshList[GEO_BACK]->textureID = LoadTGA("Image//BossScene//SBSides.tga");
 
 	//Top Skybox 
 	meshList[GEO_TOP] = MeshBuilder::GenerateQuad("Top", Color(1, 1, 1), skyBoxScale, skyBoxScale);
-	meshList[GEO_TOP]->textureID = LoadTGA("Image//BossSceneSkyBoxTop.tga");
+	//meshList[GEO_TOP]->textureID = LoadTGA("Image//BossScene//BossSceneSkyBoxTop.tga");
+	meshList[GEO_TOP]->textureID = LoadTGA("Image//BossScene//SBBottom.tga");
 
 	//Bottom Skybox 
 	meshList[GEO_BOTTOM] = MeshBuilder::GenerateQuad("Bottom", Color(1, 1, 1), skyBoxScale, skyBoxScale);
-	meshList[GEO_BOTTOM]->textureID = LoadTGA("Image//BossSceneSkyBoxBottom.tga");
+	//meshList[GEO_BOTTOM]->textureID = LoadTGA("Image//BossScene//BossSceneSkyBoxBottom.tga");
+	meshList[GEO_BOTTOM]->textureID = LoadTGA("Image//BossScene//SBBottom.tga");
 	//Skybox -------------
 	meshList[GROUND] = MeshBuilder::GenerateQuad("Ground Mesh", Color(0.1f, 0.1f, 0.1f), skyBoxScale, skyBoxScale);
-//	meshList[GROUND]->textureID = LoadTGA("Image//");
+	meshList[GROUND]->textureID = LoadTGA("Image//BossScene//SBBottom.tga");
 
 
 	for (auto it : Env_Obj)
@@ -130,6 +137,7 @@ void BossScene::Init()
 
 	fpsonce = false;
 	playerDied = false;
+	bossDieded = false;
 	countDownbackToBase = 5.0;
 	//camera = new Camera3;
 	//camera->Init(Vector3(0, 0, 7), Vector3(0, 0, 0), Vector3(0, 1, 0));
@@ -138,7 +146,7 @@ void BossScene::Init()
 	Player::getInstance()->CollisionMesh_->pos.Set(0, 0, 5);
 	Player::addCollisionObject(GoatBoss::getInstance());
 	Player::enemies_.push_back(GoatBoss::getInstance());
-	deadBossBackToBaseTimer = 0.0;
+	deadBossBackToBaseTimer = 10.0;
 
 	Mtx44 projection;
 	projection.SetToPerspective(45.f, 4.f / 3.f, 0.1f, 1000.f);
@@ -174,6 +182,7 @@ void BossScene::Update(double dt)
 			GoatBoss::getInstance()->resetBoss();
 			SceneManager::getInstance()->SetNextSceneID(SceneManager::SCENES::CAMPSCENE);
 			SceneManager::getInstance()->SetNextScene();
+			Player::getInstance()->setPosition(Vector3(12, 0, 11));
 		}
 	}
 	else
@@ -196,12 +205,14 @@ void BossScene::Update(double dt)
 	if (GoatBoss::getInstance()->Bhp_status == GoatBoss::getInstance()->BHP_DEAD)
 	{
 		//boss dead.
-		deadBossBackToBaseTimer += dt;
-		if (deadBossBackToBaseTimer >= 10)
+		bossDieded = true;
+		deadBossBackToBaseTimer -= dt;
+		if (deadBossBackToBaseTimer <= 0)
 		{
 			GoatBoss::getInstance()->resetBoss();
 			SceneManager::getInstance()->SetNextSceneID(SceneManager::SCENES::CAMPSCENE);
 			SceneManager::getInstance()->SetNextScene();
+			Player::getInstance()->setPosition(Vector3(12, 0, 11));
 		}
 	}
 
@@ -240,6 +251,11 @@ void BossScene::Render()
 		RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], "Oh Nos You Died!", Color(1, 0, 0), 2.5f, 32, 50, &projectionStack, &viewStack, &modelStack, m_parameters);
 		RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], "Back to Base in " + std::to_string((int)countDownbackToBase), Color(1, 0, 0), 2.f, 31, 47, &projectionStack, &viewStack, &modelStack, m_parameters);
 	}
+	if (bossDieded)
+	{
+		RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], "Congratulation You WON!", Color(1, 0, 0), 2.5f, 30, 50, &projectionStack, &viewStack, &modelStack, m_parameters);
+		RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], "Back to Base in " + std::to_string((int)deadBossBackToBaseTimer), Color(1, 0, 0), 2.f, 31, 47, &projectionStack, &viewStack, &modelStack, m_parameters);
+	}
 	RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::to_string(FramesPerSec), Color(1, 0, 0), 1.5f, 45, 38, &projectionStack, &viewStack, &modelStack, m_parameters);
 }
 
@@ -260,6 +276,7 @@ void BossScene::Exit()
 	//delete camera;
 	Player::getInstance()->clearCollisionObj();
 	fpsonce = false;
+
 
 	// Cleanup VBO here
 	glDeleteVertexArrays(1, &m_vertexArrayID);
