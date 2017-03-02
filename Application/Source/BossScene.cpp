@@ -137,6 +137,7 @@ void BossScene::Init()
 
 	fpsonce = false;
 	playerDied = false;
+	bossDieded = false;
 	countDownbackToBase = 5.0;
 	//camera = new Camera3;
 	//camera->Init(Vector3(0, 0, 7), Vector3(0, 0, 0), Vector3(0, 1, 0));
@@ -145,7 +146,7 @@ void BossScene::Init()
 	Player::getInstance()->CollisionMesh_->pos.Set(0, 0, 5);
 	Player::addCollisionObject(GoatBoss::getInstance());
 	Player::enemies_.push_back(GoatBoss::getInstance());
-	deadBossBackToBaseTimer = 0.0;
+	deadBossBackToBaseTimer = 10.0;
 
 	Mtx44 projection;
 	projection.SetToPerspective(45.f, 4.f / 3.f, 0.1f, 1000.f);
@@ -181,6 +182,7 @@ void BossScene::Update(double dt)
 			GoatBoss::getInstance()->resetBoss();
 			SceneManager::getInstance()->SetNextSceneID(SceneManager::SCENES::CAMPSCENE);
 			SceneManager::getInstance()->SetNextScene();
+			Player::getInstance()->setPosition(Vector3(12, 0, 11));
 		}
 	}
 	else
@@ -203,12 +205,14 @@ void BossScene::Update(double dt)
 	if (GoatBoss::getInstance()->Bhp_status == GoatBoss::getInstance()->BHP_DEAD)
 	{
 		//boss dead.
-		deadBossBackToBaseTimer += dt;
-		if (deadBossBackToBaseTimer >= 10)
+		bossDieded = true;
+		deadBossBackToBaseTimer -= dt;
+		if (deadBossBackToBaseTimer <= 0)
 		{
 			GoatBoss::getInstance()->resetBoss();
 			SceneManager::getInstance()->SetNextSceneID(SceneManager::SCENES::CAMPSCENE);
 			SceneManager::getInstance()->SetNextScene();
+			Player::getInstance()->setPosition(Vector3(12, 0, 11));
 		}
 	}
 
@@ -247,6 +251,11 @@ void BossScene::Render()
 		RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], "Oh Nos You Died!", Color(1, 0, 0), 2.5f, 32, 50, &projectionStack, &viewStack, &modelStack, m_parameters);
 		RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], "Back to Base in " + std::to_string((int)countDownbackToBase), Color(1, 0, 0), 2.f, 31, 47, &projectionStack, &viewStack, &modelStack, m_parameters);
 	}
+	if (bossDieded)
+	{
+		RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], "Congratulation You WON!", Color(1, 0, 0), 2.5f, 30, 50, &projectionStack, &viewStack, &modelStack, m_parameters);
+		RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], "Back to Base in " + std::to_string((int)deadBossBackToBaseTimer), Color(1, 0, 0), 2.f, 31, 47, &projectionStack, &viewStack, &modelStack, m_parameters);
+	}
 	RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::to_string(FramesPerSec), Color(1, 0, 0), 1.5f, 45, 38, &projectionStack, &viewStack, &modelStack, m_parameters);
 }
 
@@ -267,6 +276,7 @@ void BossScene::Exit()
 	//delete camera;
 	Player::getInstance()->clearCollisionObj();
 	fpsonce = false;
+
 
 	// Cleanup VBO here
 	glDeleteVertexArrays(1, &m_vertexArrayID);

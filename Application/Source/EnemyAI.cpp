@@ -29,10 +29,14 @@ void EnemyAI::updateShowDmgTaken(double dt){
 void EnemyAI::renderShowDmgTaken(MS* projectionStack, MS* viewStack, MS* modelStack, unsigned * m_parameters) {
 	for (auto it : dmgTakenVector)
 	{
+		Color dmgcolor(1, 0, 0);
+		if (it.dmg <= 0)
+			dmgcolor = Color(0, 1, 0);
+
 		modelStack->PushMatrix();
 		modelStack->Translate(0, it.tY, 0);
 		modelStack->Scale(it.Dscale, it.Dscale, 1);
-		RenderMeshClass::RenderText(&Scene::Text[Scene::TEXT_TYPE::Chiller], std::to_string(it.dmg), Color(1, 0, 0), projectionStack, viewStack, modelStack, m_parameters);
+		RenderMeshClass::RenderText(&Scene::Text[Scene::TEXT_TYPE::Chiller], std::to_string(it.dmg), dmgcolor, projectionStack, viewStack, modelStack, m_parameters);
 		modelStack->PopMatrix();
 	}
 }
