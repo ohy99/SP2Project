@@ -130,6 +130,7 @@ void GoatMinion::resetGoat()
 	doHitCD = 0.0;
 	hp_ = 100;
 	active = true;
+	dmgTakenVector.clear();
 	for (auto it : CollisionObj)
 		it = NULL;
 	CollisionObj.clear();

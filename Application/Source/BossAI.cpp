@@ -131,7 +131,7 @@ void GoatBoss::update(double dt)
 				this->attSpdDelayMultiplier = 0.5f;
 				if (hasSecondWind)
 				{
-					this->hp_ += 0.5f * maxHp_;
+					this->hp_ += (int)(0.5f * (float)maxHp_);
 					hasSecondWind = false;
 				}
 			}
@@ -144,6 +144,10 @@ void GoatBoss::update(double dt)
 		goatMinionPool[i]->setDmgMultipler(this->dmgMultiplier);
 		goatMinionPool[i]->setMoveSpd(this->moveSpd);
 	}
+
+	updateShowDmgTaken(dt);
+
+
 	//IF BOSS IS DEADDED DO NOT UPDATE
 	if (Bhp_status == BHP_DEAD)
 		return;
@@ -208,7 +212,7 @@ void GoatBoss::update(double dt)
 
 
 
-	updateShowDmgTaken(dt);
+
 
 }
 void GoatBoss::render(MS* projectionStack, MS* viewStack, MS* modelStack, unsigned * m_parameters)
@@ -324,7 +328,7 @@ void GoatBoss::isHitUpdate(int dmg)
 	if (hp_ < 0)
 		hp_ = 0;
 
-	isHitShowDmgTaken(dmg);
+	isHitShowDmgTaken((int)((1.0f - resistance_) * (float)dmg));
 }
 
 
@@ -366,12 +370,12 @@ Projectile* GoatBoss::getInactiveProjectile()
 
 int GoatBoss::getProjectileDmg()
 {
-	return (rand() % (MaxProjDmg_ - MinProjDmg_ + 1) + MinProjDmg_) * dmgMultiplier;
+	return (int)((float)(rand() % (MaxProjDmg_ - MinProjDmg_ + 1) + MinProjDmg_) * dmgMultiplier);
 }
 
 int GoatBoss::getGSDmg()
 {
-	return (rand() % (maxGsDmg_ - minGsDmg_ + 1) + minGsDmg_) * dmgMultiplier;
+	return (int)((float)(rand() % (maxGsDmg_ - minGsDmg_ + 1) + minGsDmg_) * dmgMultiplier);
 }
 
 void GoatBoss::resetBoss()

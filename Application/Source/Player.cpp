@@ -14,7 +14,7 @@
 
 #define DEFAULTMESHDIR Vector3(0,0,1)
 
-Player* Player::Instance_ = 0;
+Player* Player::Instance_ = NULL;
 std::vector<GameObject*> Player::CollisionObjects;
 
 std::vector<EnemyAI*> Player::enemies_;
@@ -39,11 +39,12 @@ Player::Player() : GameObject("Player"), wasSpacePressed(false)
 
 	//Weapon* weapons_[Weapon_types::wt_Count];
 	//Weapon* currentWeapon_; 
-	PMesh[MESH_TYPE::Body] = MeshBuilder::GenerateOBJ("", "OBJ//goat.obj");
+	PMesh[MESH_TYPE::Body] = MeshBuilder::GenerateOBJ("", "OBJ//playerHitBox.obj");
 	PMesh[MESH_TYPE::Body]->collisionEnabled = true;
 	PMesh[MESH_TYPE::Body]->up = Vector3(0, 1, 0);
 	PMesh[MESH_TYPE::Body]->dir = Vector3(0, 0, 1);
 	PMesh[MESH_TYPE::Body]->right = Vector3(1, 0, 0);
+	CollisionMesh_ = PMesh[MESH_TYPE::Body];
 	dir_.Set(0, 0, 1);
 
 	hp_ = 1000;
@@ -180,7 +181,7 @@ void Player::render(MS* projectionStack, MS* viewStack, MS* modelStack, unsigned
 
 	renderBulletTrail(projectionStack, viewStack, modelStack, m_parameters);
 
-	RenderMeshClass::RenderMeshOnScreen(Crosshair, (float)Application::getWindowWidth() * 0.5f, (float)Application::getWindowHeight() *0.5f, 5, 50, 50, projectionStack, viewStack, modelStack, m_parameters);
+	RenderMeshClass::RenderMeshOnScreen(Crosshair, (int)((float)Application::getWindowWidth() * 0.5f), (int)((float)Application::getWindowHeight() *0.5f), 5, 50, 50, projectionStack, viewStack, modelStack, m_parameters);
 	//Crosshair
 	renderRadar(projectionStack, viewStack, modelStack, m_parameters);
 
@@ -195,9 +196,9 @@ void Player::render(MS* projectionStack, MS* viewStack, MS* modelStack, unsigned
 
 	RenderMeshClass::RenderTextOnScreen(&Scene::Text[Scene::TEXT_TYPE::Century], std::string("HP:") + std::to_string(hp_), Color(0, 1, 0), 2, 0, 56, projectionStack, viewStack, modelStack, m_parameters);
 
-	RenderMeshClass::RenderTextOnScreen(&Scene::Text[Scene::TEXT_TYPE::Century], std::to_string(pos_.x), Color(0, 1, 0), 1.8, 69, 54, projectionStack, viewStack, modelStack, m_parameters);
-	RenderMeshClass::RenderTextOnScreen(&Scene::Text[Scene::TEXT_TYPE::Century], std::to_string(pos_.y), Color(0, 1, 0), 1.8, 69, 52, projectionStack, viewStack, modelStack, m_parameters);
-	RenderMeshClass::RenderTextOnScreen(&Scene::Text[Scene::TEXT_TYPE::Century], std::to_string(pos_.z), Color(0, 1, 0), 1.8, 69, 50, projectionStack, viewStack, modelStack, m_parameters);
+	RenderMeshClass::RenderTextOnScreen(&Scene::Text[Scene::TEXT_TYPE::Century], std::to_string(pos_.x), Color(0, 1, 0), 1.8f, 69, 54, projectionStack, viewStack, modelStack, m_parameters);
+	RenderMeshClass::RenderTextOnScreen(&Scene::Text[Scene::TEXT_TYPE::Century], std::to_string(pos_.y), Color(0, 1, 0), 1.8f, 69, 52, projectionStack, viewStack, modelStack, m_parameters);
+	RenderMeshClass::RenderTextOnScreen(&Scene::Text[Scene::TEXT_TYPE::Century], std::to_string(pos_.z), Color(0, 1, 0), 1.8f, 69, 50, projectionStack, viewStack, modelStack, m_parameters);
 
 	if //(currentWeapon_ == weapons_[WEAPON_TYPE::PISTOL] || currentWeapon_ == weapons_[WEAPON_TYPE::RIFLE])
 		(currWeap >= WEAPON_TYPE::PISTOL)
@@ -577,8 +578,8 @@ void Player::updateBulletTrail(double dt)
 			if (!bulletMesh[i]->isHit)
 			{
 				bulletMesh[i]->scale += (5.f) * (float)dt;
-				bulletMesh[i]->CollisionMesh_->pos += bulletMesh[i]->CollisionMesh_->dir * bulletMesh[i]->getSpeed() * (float)dt;
-				bulletMesh[i]->tDir += bulletMesh[i]->getSpeed() * (float)dt;
+				bulletMesh[i]->CollisionMesh_->pos += bulletMesh[i]->CollisionMesh_->dir * (float)bulletMesh[i]->getSpeed() * (float)dt;
+				bulletMesh[i]->tDir += (float)bulletMesh[i]->getSpeed() * (float)dt;
 			}
 			else
 			{
@@ -742,17 +743,17 @@ void Player::renderRadar(MS* projectionStack, MS* viewStack, MS* modelStack, uns
 	Vector3 origin((float)Application::getWindowWidth() * 0.125f, (float)Application::getWindowHeight() * 0.15f, 0);
 
 	RenderMeshClass::RenderMeshOnScreen(radar_mesh, origin.x, origin.y, origin.z,
-		(float)Application::getWindowWidth() * 0.2f, (float)Application::getWindowWidth() * 0.2f, projectionStack, viewStack, modelStack, m_parameters);
+		(int)((float)Application::getWindowWidth() * 0.2f), (int)((float)Application::getWindowWidth() * 0.2f), projectionStack, viewStack, modelStack, m_parameters);
 
 	//This is the player location
 	RenderMeshClass::RenderMeshOnScreen(radarPlayer, origin.x, origin.y
-		, 1, (float)Application::getWindowWidth() * 0.005f, (float)Application::getWindowWidth() * 0.005f, projectionStack, viewStack, modelStack, m_parameters);
+		, 1, (int)((float)Application::getWindowWidth() * 0.005f), (int)((float)Application::getWindowWidth() * 0.005f), projectionStack, viewStack, modelStack, m_parameters);
 
 	for (auto it: PositionOfEnemiesInProximity)
 	{
 		RenderMeshClass::RMoS_RadarUse(radarEnemy, origin, it,
 			FPSCam::getInstance()->getDir(), 
-			0.005f * (float)Application::getWindowWidth(), 0.005f * (float)Application::getWindowWidth(), Rscale,
+			(int)(0.005f * (float)Application::getWindowWidth()), (int)(0.005f * (float)Application::getWindowWidth()), Rscale,
 			projectionStack, viewStack, modelStack, m_parameters);
 	}
 }

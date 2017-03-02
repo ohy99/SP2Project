@@ -146,78 +146,22 @@ void UndergroundScene::Init()
 	meshList[GEO_BOTTOM]->textureID = LoadTGA("Image//sky1_down.tga");
 	//Skybox ------------- Base Camp End
 
-	//Walls ----------------------------- Start
-	EnvironmentObj* Walls1 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Wall", "OBJ//Walls1.obj"));
-	Walls1->CollisionMesh_->textureID = LoadTGA("Image//Mossy_Wall.tga");
-	EnvironmentObj* Walls2 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Wall", "OBJ//Walls2.obj"));
-	Walls2->CollisionMesh_->textureID = LoadTGA("Image//Mossy_Wall.tga");
-	EnvironmentObj* Walls3 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Wall", "OBJ//Walls3.obj"));
-	Walls3->CollisionMesh_->textureID = LoadTGA("Image//Mossy_Wall.tga");
-	EnvironmentObj* Walls4 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Wall", "OBJ//Walls4.obj"));
-	Walls4->CollisionMesh_->textureID = LoadTGA("Image//Mossy_Wall.tga");
-	EnvironmentObj* Walls5 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Wall", "OBJ//Walls5.obj"));
-	Walls5->CollisionMesh_->textureID = LoadTGA("Image//Mossy_Wall.tga");
-	EnvironmentObj* Walls6 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Wall", "OBJ//Walls6.obj"));
-	Walls6->CollisionMesh_->textureID = LoadTGA("Image//Mossy_Wall.tga");
-	EnvironmentObj* Walls7 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Wall", "OBJ//Walls7.obj"));
-	Walls7->CollisionMesh_->textureID = LoadTGA("Image//Mossy_Wall.tga");
-	EnvironmentObj* Walls8 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Wall", "OBJ//Walls8.obj"));
-	Walls8->CollisionMesh_->textureID = LoadTGA("Image//Mossy_Wall.tga");
-	EnvironmentObj* Walls9 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Wall", "OBJ//Walls9.obj"));
-	Walls9->CollisionMesh_->textureID = LoadTGA("Image//Mossy_Wall.tga");
-	EnvironmentObj* Walls10 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Wall", "OBJ//Walls10.obj"));
-	Walls10->CollisionMesh_->textureID = LoadTGA("Image//Mossy_Wall.tga");
-	EnvironmentObj* Walls11 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Wall", "OBJ//Walls11.obj"));
-	Walls11->CollisionMesh_->textureID = LoadTGA("Image//Mossy_Wall.tga");
-	EnvironmentObj* Walls12 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Wall", "OBJ//Walls12.obj"));
-	Walls12->CollisionMesh_->textureID = LoadTGA("Image//Mossy_Wall.tga");
-	EnvironmentObj* Walls13 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Wall", "OBJ//Walls13.obj"));
-	Walls13->CollisionMesh_->textureID = LoadTGA("Image//Mossy_Wall.tga");
-	EnvironmentObj* Walls14 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Wall", "OBJ//Walls14.obj"));
-	Walls14->CollisionMesh_->textureID = LoadTGA("Image//Mossy_Wall_Door.tga");
 
-	Env_Obj.push_back(Walls1);
-	Env_Obj.push_back(Walls2);
-	Env_Obj.push_back(Walls3);
-	Env_Obj.push_back(Walls4);
-	Env_Obj.push_back(Walls5);
-	Env_Obj.push_back(Walls6);
-	Env_Obj.push_back(Walls7);
-	Env_Obj.push_back(Walls8);
-	Env_Obj.push_back(Walls9);
-	Env_Obj.push_back(Walls10);
-	Env_Obj.push_back(Walls11);
-	Env_Obj.push_back(Walls12);
-	Env_Obj.push_back(Walls13);
-	Env_Obj.push_back(Walls14);
-
-	//Walls ----------------------------- End
 
 	//Ceiling --- Start
-
 	EnvironmentObj* Ceiling = new EnvironmentObj(MeshBuilder::GenerateOBJ("Ceiling", "OBJ//Ceiling.obj"));
 	Ceiling->CollisionMesh_->textureID = LoadTGA("Image//Mossy_Ceiling.tga");
 
 	Env_Obj.push_back(Ceiling);
-
 	//Ceiling --- End
+
+
 
 	//Stairs --- Start
 	EnvironmentObj* Stairs = new EnvironmentObj(MeshBuilder::GenerateOBJ("Stairs", "OBJ//Stairs.obj"));
 	Stairs->CollisionMesh_->textureID = LoadTGA("Image//Mossy_Wall.tga");
 
 	Env_Obj.push_back(Stairs);
-	//Stairs = new Teleporter(MeshBuilder::GenerateOBJ("Stairs", "OBJ//Stairs.obj"), 1);
-	//Stairs->CollisionMesh_->textureID = LoadTGA("Image//Mossy_Ground.tga");
-
-	//meshList[GEO_STAIRS] = MeshBuilder::GenerateOBJ("Stairs", "OBJ//Stairs.obj");
-	//meshList[GEO_STAIRS]->material.kAmbient.Set(0.6f, 0.6f, 0.6f);
-	//meshList[GEO_STAIRS]->material.kDiffuse.Set(0.3f, 0.3f, 0.3f);
-	//meshList[GEO_STAIRS]->material.kSpecular.Set(0.1f, 0.1f, 0.1f);
-	//meshList[GEO_STAIRS]->material.kShininess = 1.0f;
-	//meshList[GEO_STAIRS]->textureID = LoadTGA("Image//Mossy_Ground.tga");
-
-	//Player::getInstance()->Teleport.push_back(Stairs);
 	//Stairs --- End
 
 	//Furniture ------ Start
@@ -245,6 +189,12 @@ void UndergroundScene::Init()
 	Env_Obj.push_back(Wardrobe);
 	//Furniture ------ End
 
+
+
+	initWalls();
+
+
+
 	//Blueprint 3 ----- Start
 	Item* Blueprint = new Item("Blueprint2");
 	Blueprint->CollisionMesh_ = MeshBuilder::GenerateOBJ("Blueprint", "OBJ//Blueprint3.obj");
@@ -255,7 +205,10 @@ void UndergroundScene::Init()
 	Blueprint->CollisionMesh_->Hitbox_Max += Vector3(0.5f, 0.5f, 0.5f);
 	//Blueprint 3 ----- End
 
+<<<<<<< HEAD
 	Item_Obj.push_back(Blueprint);
+=======
+>>>>>>> 35606b5622f8e01cce745ee44ac53e2f0a4fcb8d
 
 	for (auto it : Env_Obj)
 		Player::addCollisionObject(it);
@@ -264,6 +217,9 @@ void UndergroundScene::Init()
 		Player::Items.push_back(it);
 
 	initEnemies();
+
+	countDownBackToBase = 5.0;
+
 	UI::getInstance()->Init();
 
 	camera = new Camera3;
@@ -286,22 +242,22 @@ void UndergroundScene::Update(double dt)
 	glfwGetWindowSize(Application::m_window, &width, &height);
 
 
-	if (Application::IsKeyPressed(VK_NUMPAD1) || Application::IsKeyPressed('1'))
-	{
-		glEnable(GL_CULL_FACE);
-	}
-	if (Application::IsKeyPressed(VK_NUMPAD2) || Application::IsKeyPressed('2'))
-	{
-		glDisable(GL_CULL_FACE);
-	}
-	if (Application::IsKeyPressed(VK_NUMPAD3) || Application::IsKeyPressed('3'))
-	{
-		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); //default fill mode
-	}
-	if (Application::IsKeyPressed(VK_NUMPAD4) || Application::IsKeyPressed('4'))
-	{
-		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); //wireframe mode
-	}
+	//if (Application::IsKeyPressed(VK_NUMPAD1) || Application::IsKeyPressed('1'))
+	//{
+	//	glEnable(GL_CULL_FACE);
+	//}
+	//if (Application::IsKeyPressed(VK_NUMPAD2) || Application::IsKeyPressed('2'))
+	//{
+	//	glDisable(GL_CULL_FACE);
+	//}
+	//if (Application::IsKeyPressed(VK_NUMPAD3) || Application::IsKeyPressed('3'))
+	//{
+	//	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); //default fill mode
+	//}
+	//if (Application::IsKeyPressed(VK_NUMPAD4) || Application::IsKeyPressed('4'))
+	//{
+	//	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); //wireframe mode
+	//}
 
 
 	//bool fpsonce = false;
@@ -316,6 +272,23 @@ void UndergroundScene::Update(double dt)
 	Inventory::getInstance()->Update(dt);
 	UI::getInstance()->Update(dt);
 
+	if (Player::getInstance()->getHp() <= 0){
+
+		isDead = true;
+		countDownBackToBase -= dt;
+		
+		if (countDownBackToBase <= 0.0){
+
+			SceneManager::getInstance()->SetNextSceneID(SceneManager::SCENES::CAMPSCENE);
+			SceneManager::getInstance()->SetNextScene();
+			Player::getInstance()->setPosition(Vector3(12, 0, 11));
+		}
+	}
+	else{
+
+		isDead = false;
+		Player::getInstance()->update(dt, camera);
+	}
 
 	if (!UI::getInstance()->isPauseOpen() && !Inventory::getInstance()->isInventoryOpen())
 	{
@@ -402,12 +375,18 @@ void UndergroundScene::Render()
 			UG_EnemyPool[i]->render(&projectionStack, &viewStack, &modelStack, m_parameters);
 	}
 	
-	//WHY IS INTERACTION FUNCTION HERE.
 	Interactions();
+
 	//for (size_t i = 0; i < CampNPC.size(); i++)
 	//{
 	//	CampNPC.at(i)->render(&projectionStack, &viewStack, &modelStack, m_parameters);
 	//}
+
+	if (isDead){
+
+		RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], "You Died!", Color(0, 1, 0), 2.5f, 32, 48, &projectionStack, &viewStack, &modelStack, m_parameters);
+		RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], "Respawn Back to Base in " + std::to_string((int)countDownBackToBase), Color(0, 1, 0), 2.f, 31, 46, &projectionStack, &viewStack, &modelStack, m_parameters);
+	}
 
 	RenderMeshClass::RenderTextOnScreen(&Text[TEXT_TYPE::Century], std::string("Blueprints: ") + std::to_string(Blueprints::GetBlueprintNumber()) + std::string("/3"), Color(0, 1, 0), 2.f, 68, 57, &projectionStack, &viewStack, &modelStack, m_parameters);
 
@@ -481,6 +460,7 @@ void UndergroundScene::Exit()
 	glDeleteVertexArrays(1, &m_vertexArrayID);
 	glDeleteProgram(m_programID);
 }
+
 void UndergroundScene::RenderSkybox()
 {
 	modelStack.PushMatrix();
@@ -527,6 +507,53 @@ void UndergroundScene::RenderSkybox()
 	modelStack.PopMatrix();
 
 
+}
+
+void UndergroundScene::initWalls(){
+
+	EnvironmentObj* Walls1 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Wall", "OBJ//Walls1.obj"));
+	Walls1->CollisionMesh_->textureID = LoadTGA("Image//Mossy_Wall.tga");
+	EnvironmentObj* Walls2 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Wall", "OBJ//Walls2.obj"));
+	Walls2->CollisionMesh_->textureID = LoadTGA("Image//Mossy_Wall.tga");
+	EnvironmentObj* Walls3 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Wall", "OBJ//Walls3.obj"));
+	Walls3->CollisionMesh_->textureID = LoadTGA("Image//Mossy_Wall.tga");
+	EnvironmentObj* Walls4 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Wall", "OBJ//Walls4.obj"));
+	Walls4->CollisionMesh_->textureID = LoadTGA("Image//Mossy_Wall.tga");
+	EnvironmentObj* Walls5 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Wall", "OBJ//Walls5.obj"));
+	Walls5->CollisionMesh_->textureID = LoadTGA("Image//Mossy_Wall.tga");
+	EnvironmentObj* Walls6 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Wall", "OBJ//Walls6.obj"));
+	Walls6->CollisionMesh_->textureID = LoadTGA("Image//Mossy_Wall.tga");
+	EnvironmentObj* Walls7 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Wall", "OBJ//Walls7.obj"));
+	Walls7->CollisionMesh_->textureID = LoadTGA("Image//Mossy_Wall.tga");
+	EnvironmentObj* Walls8 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Wall", "OBJ//Walls8.obj"));
+	Walls8->CollisionMesh_->textureID = LoadTGA("Image//Mossy_Wall.tga");
+	EnvironmentObj* Walls9 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Wall", "OBJ//Walls9.obj"));
+	Walls9->CollisionMesh_->textureID = LoadTGA("Image//Mossy_Wall.tga");
+	EnvironmentObj* Walls10 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Wall", "OBJ//Walls10.obj"));
+	Walls10->CollisionMesh_->textureID = LoadTGA("Image//Mossy_Wall.tga");
+	EnvironmentObj* Walls11 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Wall", "OBJ//Walls11.obj"));
+	Walls11->CollisionMesh_->textureID = LoadTGA("Image//Mossy_Wall.tga");
+	EnvironmentObj* Walls12 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Wall", "OBJ//Walls12.obj"));
+	Walls12->CollisionMesh_->textureID = LoadTGA("Image//Mossy_Wall.tga");
+	EnvironmentObj* Walls13 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Wall", "OBJ//Walls13.obj"));
+	Walls13->CollisionMesh_->textureID = LoadTGA("Image//Mossy_Wall.tga");
+	EnvironmentObj* Walls14 = new EnvironmentObj(MeshBuilder::GenerateOBJ("Wall", "OBJ//Walls14.obj"));
+	Walls14->CollisionMesh_->textureID = LoadTGA("Image//Mossy_Wall_Door.tga");
+
+	Env_Obj.push_back(Walls1);
+	Env_Obj.push_back(Walls2);
+	Env_Obj.push_back(Walls3);
+	Env_Obj.push_back(Walls4);
+	Env_Obj.push_back(Walls5);
+	Env_Obj.push_back(Walls6);
+	Env_Obj.push_back(Walls7);
+	Env_Obj.push_back(Walls8);
+	Env_Obj.push_back(Walls9);
+	Env_Obj.push_back(Walls10);
+	Env_Obj.push_back(Walls11);
+	Env_Obj.push_back(Walls12);
+	Env_Obj.push_back(Walls13);
+	Env_Obj.push_back(Walls14);
 }
 
 void UndergroundScene::initEnemies()

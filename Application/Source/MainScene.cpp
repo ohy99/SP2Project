@@ -619,6 +619,10 @@ void MainScene::Interactions(){
 			return;
 		}
 	}
+<<<<<<< HEAD
+=======
+	
+>>>>>>> 35606b5622f8e01cce745ee44ac53e2f0a4fcb8d
 }
 
 void MainScene::RenderBaseCamp(){

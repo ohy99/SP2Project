@@ -1,5 +1,5 @@
-#ifndef UNDERGROUND_SCENE_H
-#define UNDERGROUND_SCENE_H
+#ifndef UNDERGROUNDSCENE_H
+#define UNDERGROUNDSCENE_H
 
 #include "Scene.h"
 #include "SceneManager.h"
@@ -87,9 +87,13 @@ private:
 
 	Blueprints *blueprints;
 	bool Blueprint3 = false;
+	bool isDead;
+
+	double countDownBackToBase;
 
 	void Interactions();
 	void initEnemies();
+	void initWalls();
 
 	double x, y;
 	//void RenderText(Text_Data* TextData, std::string text, Color color);

@@ -141,7 +141,7 @@ void Camera::Update(double dt)
 			dir = rotation * dir;
 			up = rotation * up;
 			target = position + dir;
-			Cam_Phi += (CAMERA_SPEED * dt);
+			Cam_Phi += (CAMERA_SPEED * (float)dt);
 		}
 		
 	}
@@ -155,7 +155,7 @@ void Camera::Update(double dt)
 			dir = rotation * dir;
 			up = rotation * up;
 			target = position + dir;
-			Cam_Phi += (-CAMERA_SPEED * dt);
+			Cam_Phi += (-CAMERA_SPEED * (float)dt);
 		}
 	}
 
@@ -167,7 +167,7 @@ void Camera::Update(double dt)
 			dir = rotation * dir;
 			up = rotation * up;
 			target = position + dir;
-			Cam_Theta += (CAMERA_SPEED * dt);
+			Cam_Theta += (CAMERA_SPEED * (float)dt);
 
 	}
 	else if (Application::IsKeyPressed(VK_RIGHT))
@@ -178,7 +178,7 @@ void Camera::Update(double dt)
 			dir = rotation * dir;
 			up = rotation * up;
 			target = position + dir;
-			Cam_Theta += (-CAMERA_SPEED * dt);
+			Cam_Theta += (-CAMERA_SPEED * (float)dt);
 	}
 
 }
@@ -204,8 +204,8 @@ void Camera::Update(double dt, double dx, double dy)
 
 	float horizontalDISAngle = 0;
 	float verticalDISAngle = 0;
-	horizontalDISAngle += mouseSpeed * dx; //taking displacement as pi
-	verticalDISAngle += mouseSpeed * dy;
+	horizontalDISAngle += mouseSpeed * (float)dx; //taking displacement as pi
+	verticalDISAngle += mouseSpeed * (float)dy;
 
 	target.Set(
 		target.x + cos(verticalDISAngle) * sin(horizontalDISAngle),

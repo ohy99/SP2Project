@@ -95,7 +95,7 @@ void Camera3::Update(double dt)
 			rotation.SetToRotation(pitch, Right.x, Right.y, Right.z);
 			dir = rotation * dir;
 			up = rotation * up;
-			Cam_Phi += (CAMERA_SPEED * dt);
+			Cam_Phi += (CAMERA_SPEED * (float)dt);
 		}
 
 	}
@@ -108,7 +108,7 @@ void Camera3::Update(double dt)
 			rotation.SetToRotation(pitch, Right.x, Right.y, Right.z);
 			dir = rotation * dir;
 			up = rotation * up;
-			Cam_Phi += (-CAMERA_SPEED * dt);
+			Cam_Phi += (-CAMERA_SPEED * (float)dt);
 		}
 	}
 
@@ -119,7 +119,7 @@ void Camera3::Update(double dt)
 		rotation.SetToRotation(yaw, up.x, up.y, up.z);
 		dir = rotation * dir;
 		up = rotation * up;
-		Cam_Theta += (CAMERA_SPEED * dt);
+		Cam_Theta += (CAMERA_SPEED * (float)dt);
 
 	}
 	else if (Application::IsKeyPressed(VK_RIGHT))
@@ -129,7 +129,7 @@ void Camera3::Update(double dt)
 		rotation.SetToRotation(yaw, up.x, up.y, up.z);
 		dir = rotation * dir;
 		up = rotation * up;
-		Cam_Theta += (-CAMERA_SPEED * dt);
+		Cam_Theta += (-CAMERA_SPEED * (float)dt);
 	}
 
 }
@@ -159,8 +159,8 @@ void Camera3::Update(double dt, double dx, double dy)
 
 	float horizontalDISAngle = 0;
 	float verticalDISAngle = 0;
-	horizontalDISAngle += mouseSpeed * dx; //taking displacement as pi
-	verticalDISAngle += mouseSpeed * dy;
+	horizontalDISAngle += mouseSpeed * (float)dx; //taking displacement as pi
+	verticalDISAngle += mouseSpeed * (float)dy;
 	Cam_Phi += Math::RadianToDegree(verticalDISAngle);
 
 	if (Cam_Theta + Math::RadianToDegree(horizontalDISAngle) > 360.0f)

@@ -34,7 +34,7 @@ void UG_MinionAI::update(double dt)
 		doHitCD = 0.0;
 
 		//IF DISTANCE FROM MINION TO PLAYER IS LESS THAN 5 UNITS AWAY  OR  Minion is hit by player
-		if ((Player::getInstance()->CollisionMesh_->pos - this->CollisionMesh_->pos).Length() < 10 || this->chasePlayer)
+		if ((Player::getInstance()->CollisionMesh_->pos - this->CollisionMesh_->pos).Length() < 30 || this->chasePlayer)
 		{
 			runToPlayer(dt);
 			chasePlayer = true;
@@ -51,6 +51,8 @@ void UG_MinionAI::update(double dt)
 		else
 			doHitCD += dt;
 	}
+
+	updateShowDmgTaken(dt);
 }
 
 void UG_MinionAI::render(MS* projectionStack, MS* viewStack, MS* modelStack, unsigned * m_parameters)
@@ -67,6 +69,9 @@ void UG_MinionAI::render(MS* projectionStack, MS* viewStack, MS* modelStack, uns
 	modelStack->Rotate((CollisionMesh_->dir.x < 0 ? -1.0f : 1.0f) * Math::RadianToDegree(acos(CollisionMesh_->dir.Dot(Vector3(0.f, 0.f, 1.f)))), 0.f, 1.f, 0.f);
 	modelStack->Scale(0.3f, 0.3f, 0.3f);
 	RenderMeshClass::RenderText(&Scene::Text[Scene::TEXT_TYPE::Chiller], std::to_string(hp_), Color(1, 0, 0), projectionStack, viewStack, modelStack, m_parameters);
+
+	renderShowDmgTaken(projectionStack, viewStack, modelStack, m_parameters);
+
 	modelStack->PopMatrix();
 }
 
@@ -77,6 +82,8 @@ void UG_MinionAI::isHitUpdate(int dmg)
 		hp_ = 0;
 	//isHit = true;
 	chasePlayer = true;
+
+	isHitShowDmgTaken(dmg);
 }
 
 int UG_MinionAI::getDmg()
@@ -98,7 +105,7 @@ void UG_MinionAI::resetMinion()
 	chasePlayer = false;
 	//isHit = false;
 	deadTime = 0.0;
-
+	dmgTakenVector.clear();
 	active = true;
 
 	CollisionMesh_->collisionEnabled = true;

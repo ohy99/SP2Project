@@ -121,7 +121,7 @@ void MinionAI::resetMinion()
 	chasePlayer = false;
 	//isHit = false;
 	deadTime = 0.0;
-
+	dmgTakenVector.clear();
 	active = true;
 
 	CollisionMesh_->collisionEnabled = true;

@@ -42,7 +42,9 @@ int SceneManager::nextSceneID = 0;
 Scene::Text_Data Scene::Text[Scene::TEXT_TYPE::Text_Count];
 unsigned Scene::m_parameters[U_TOTAL];
 unsigned Scene::m_programID;
-bool Scene::debugMode = true;
+
+//SET DEBUGMODE TO TRUE OR FALSE HERE==============================
+bool Scene::debugMode = false;
 
 bool Application::closeWindow = false;
 
